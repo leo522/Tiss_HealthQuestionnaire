@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.FamilyHistory>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭病史</title>
+</head>
+<body class="p-4 font-sans">
+
+    <h3 class="text-lg md:text-xl font-bold mb-4">家庭病史 Family History (二等親內)</h3>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">項目 - 常規部分 General Parts</th>
+                    <th class="border border-gray-300 px-4 py-2">否 No</th>
+                    <th class="border border-gray-300 px-4 py-2">是 Yes</th>
+                    <th class="border border-gray-300 px-4 py-2">未知 Unknown</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2">
+                            <span class="block font-medium">@item.GeneralPartsZh</span>
+                            <span class="block text-sm text-gray-600">@item.GeneralPartsEn</span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <input type="radio" name="familyHistory_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600">
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <input type="radio" name="familyHistory_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <input type="radio" name="familyHistory_@item.ID" value="unknown" class="form-radio h-5 w-5 text-blue-600">
+                        </td>
+                    </tr>
+                }
+                <tr class="hover:bg-gray-100">
+                    <td class="border border-gray-300 px-4 py-2">其他 Others：</td>
+                    <td colspan="3" class="border border-gray-300 px-4 py-2">
+                        <input type="text" name="otherFamilyHistory" class="w-full p-2 border border-gray-300 rounded" placeholder="請描述...">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

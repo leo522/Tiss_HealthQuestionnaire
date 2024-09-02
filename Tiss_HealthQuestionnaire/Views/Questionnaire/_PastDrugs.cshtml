@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastDrugs>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>過去一年常規使用的藥物</title>
+    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4">藥物史：過去一年常規使用的藥物 Regularly Used Drugs in the Past Year</h3>
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 p-2 bg-gray-200">項目 Item</th>
+                    <th class="border border-gray-300 p-2 bg-gray-200">是否使用過 Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="border border-gray-300 p-2">
+                            @item.ItemZh<br />@item.ItemEn
+                        </td>
+                        <td class="border border-gray-300 p-2">
+                            <input type="checkbox" name="usedDrugs_@item.ID" class="checkbox"> 是
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="border border-gray-300 p-2">其他 Others，請詳述：</td>
+                    <td class="border border-gray-300 p-2">
+                        <input type="text" name="otherDrugs" class="border rounded p-1 w-full" placeholder="請描述...">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <p>是否有申請治療用豁免？ (Therapeutic Use Exemption, TUE)</p>
+            <label class="mr-4"><input type="radio" name="tue" value="yes"> 是</label>
+            <label><input type="radio" name="tue" value="no"> 否</label>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastSupplements>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+    <title>過去一年常規使用的補充品</title>
+</head>
+<body class="p-4">
+    <h3 class="text-xl font-bold mb-4">補充品：過去一年常規使用的補充品 Regularly Used Supplements in the Past Year</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 p-2 bg-gray-200">項目 Item</th>
+                    <th class="border border-gray-300 p-2 bg-gray-200">是否使用過 Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-2">
+                            <span class="block font-medium">@item.ItemZh</span>
+                            <span class="block text-sm text-gray-600">@item.ItemEn</span>
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            <input type="checkbox" name="usedSupplements_@item.ID" class="mr-2"> 是
+                        </td>
+                    </tr>
+                }
+                <tr class="hover:bg-gray-50">
+                    <td class="border border-gray-300 p-2">其他 Others，請詳述：</td>
+                    <td class="border border-gray-300 p-2">
+                        <input type="text" name="otherSupplements" class="border rounded p-2 w-full" placeholder="請填寫...">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

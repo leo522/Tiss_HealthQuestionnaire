@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.FemaleQuestionnaire>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>女性健康問卷(選填)</title> 
+</head>
+<body class="p-4 font-sans">
+
+    <h3 class="text-lg md:text-xl font-bold mb-4">女性問卷 (選填)</h3>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+            <thead>
+                <tr class="bg-100">
+                    <th class="border border-gray-300 px-4 py-2">問題 Question</th>
+                    <th class="border border-gray-300 px-4 py-2">答案 Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in Model)
+                {
+                    <tr class="hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2">
+                            <span class="block font-medium">@question.QuestionZh</span>
+                            <span class="block text-sm text-gray-600">@question.QuestionEn</span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            @if (question.ID == 1) // 第1題
+                            {
+                                <div class="space-y-2">
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="10以下" class="mr-2">10歲 (含) 以下</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="11" class="mr-2">11歲</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="12" class="mr-2">12歲</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="13" class="mr-2">13歲</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="14" class="mr-2">14歲</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="15" class="mr-2">15歲</label>
+                                    <label class="block"><input type="radio" name="firstCycleAge" value="16以上" class="mr-2">16歲 (含) 以上</label>
+                                </div>
+                            }
+                            else if (question.ID == 2) // 第2題
+                            {
+                                <div class="space-y-2">
+                                    <label class="block"><input type="checkbox" name="missedCycle" value="yes" class="mr-2">是 Yes</label>
+                                    <label class="block"><input type="checkbox" name="missedCycle" value="no" class="mr-2">否 No</label>
+                                </div>
+                            }
+                            else if (question.ID == 3) // 第3題
+                            {
+                                <div class="space-y-2">
+                                    <label class="block"><input type="checkbox" name="currentCycle" value="yes" class="mr-2">是 Yes</label>
+                                    <label class="block"><input type="checkbox" name="currentCycle" value="no" class="mr-2">否 No</label>
+                                    <label class="block"><input type="checkbox" name="noCycle" value="noCycle" class="mr-2">目前無生理期</label>
+                                </div>
+                            }
+                            else if (question.ID == 4) // 第4題
+                            {
+                                <div class="space-y-2">
+                                    <label class="block"><input type="checkbox" name="hormoneTherapy" value="yes" class="mr-2">是 Yes</label>
+                                    <label class="block"><input type="checkbox" name="hormoneTherapy" value="no" class="mr-2">否 No</label>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

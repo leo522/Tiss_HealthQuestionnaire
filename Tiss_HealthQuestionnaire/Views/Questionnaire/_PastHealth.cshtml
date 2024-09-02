@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHealth>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+</head>
+<body class="p-4">
+    <h2 class="text-xl font-bold mb-4">過去兩年內的健康檢查是否有異常項目?</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 p-2">項目 Item</th>
+                    <th class="border border-gray-300 p-2">否 No</th>
+                    <th class="border border-gray-300 p-2">是 Yes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-2">
+                            <span class="block font-medium">@item.ItemZh</span>
+                            <span class="block text-sm text-gray-600">@item.ItemEn</span>
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            <input type="radio" name="pastHealth_@item.ID" value="no" class="mr-2"> 否
+                        </td>
+                        <td class="border border-gray-300 p-2">
+                            <input type="radio" name="pastHealth_@item.ID" value="yes" class="mr-2"> 是
+                            <div class="space-y-1 mt-2">
+                                <input type="text" name="item1_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
+                                <input type="text" name="item2_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
+                                <input type="text" name="item3_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

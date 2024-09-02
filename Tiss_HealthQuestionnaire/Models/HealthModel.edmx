@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HealthQuestionnaireModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AllergicHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="AthleteUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AthleteID" Type="int" Nullable="false" />
+          <Property Name="AthleteNumber" Type="int" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="Email" Type="nvarchar" MaxLength="20" />
+          <Property Name="SportSpecialty" Type="nvarchar" MaxLength="10" />
+          <Property Name="Registered" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="FamilyHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="FemaleQuestionnaire">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="QuestionEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="PasswordReset">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ExpiryDate" Type="datetime" Nullable="false" />
+          <Property Name="UserAccount" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="changeDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PastDrugs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="PastHealth">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="PastHealthAnswers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="SpecialIty" Type="nvarchar" MaxLength="50" />
+          <Property Name="FillerName" Type="nvarchar" MaxLength="20" />
+          <Property Name="AnswerOptionID" Type="bit" />
+          <Property Name="RemarkAnswer" Type="nvarchar" MaxLength="255" />
+          <Property Name="DateOfAnswer" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PastHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="PastSupplements">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="PresentIllness">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="SurgeryHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
+          <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <Association Name="FK__PastHealt__Quest__5165187F">
+          <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
+          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastHealth">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastHealt__UserI__52593CB8">
+          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="0..1" />
+          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HealthQuestionnaireModelStoreContainer">
+          <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastDrugs" EntityType="Self.PastDrugs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastHealth" EntityType="Self.PastHealth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastHealthAnswers" EntityType="Self.PastHealthAnswers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastHistory" EntityType="Self.PastHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastSupplements" EntityType="Self.PastSupplements" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
+            <End Role="PastHealth" EntitySet="PastHealth" />
+            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastHealt__UserI__52593CB8" Association="Self.FK__PastHealt__UserI__52593CB8">
+            <End Role="AthleteUser" EntitySet="AthleteUser" />
+            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HealthQuestionnaireModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AllergicHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AthleteUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AthleteID" Type="Int32" Nullable="false" />
+          <Property Name="AthleteNumber" Type="Int32" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="Email" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SportSpecialty" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Registered" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PastHealthAnswers" Relationship="Self.FK__PastHealt__UserI__52593CB8" FromRole="AthleteUser" ToRole="PastHealthAnswers" />
+        </EntityType>
+        <EntityType Name="FamilyHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FemaleQuestionnaire">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PasswordReset">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserAccount" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="changeDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="PastDrugs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PastHealth">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PastHealthAnswers" Relationship="Self.FK__PastHealt__Quest__5165187F" FromRole="PastHealth" ToRole="PastHealthAnswers" />
+        </EntityType>
+        <EntityType Name="PastHealthAnswers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="SpecialIty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FillerName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AnswerOptionID" Type="Boolean" />
+          <Property Name="RemarkAnswer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfAnswer" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AthleteUser" Relationship="Self.FK__PastHealt__UserI__52593CB8" FromRole="PastHealthAnswers" ToRole="AthleteUser" />
+          <NavigationProperty Name="PastHealth" Relationship="Self.FK__PastHealt__Quest__5165187F" FromRole="PastHealthAnswers" ToRole="PastHealth" />
+        </EntityType>
+        <EntityType Name="PastHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PastSupplements">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PresentIllness">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SurgeryHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__PastHealt__UserI__52593CB8">
+          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="0..1" />
+          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastHealt__Quest__5165187F">
+          <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
+          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastHealth">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HealthQuestionnaireEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" />
+          <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" />
+          <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" />
+          <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" />
+          <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" />
+          <EntitySet Name="PastDrugs" EntityType="Self.PastDrugs" />
+          <EntitySet Name="PastHealth" EntityType="Self.PastHealth" />
+          <EntitySet Name="PastHealthAnswers" EntityType="Self.PastHealthAnswers" />
+          <EntitySet Name="PastHistory" EntityType="Self.PastHistory" />
+          <EntitySet Name="PastSupplements" EntityType="Self.PastSupplements" />
+          <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" />
+          <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" />
+          <AssociationSet Name="FK__PastHealt__UserI__52593CB8" Association="Self.FK__PastHealt__UserI__52593CB8">
+            <End Role="AthleteUser" EntitySet="AthleteUser" />
+            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
+            <End Role="PastHealth" EntitySet="PastHealth" />
+            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HealthQuestionnaireModelStoreContainer" CdmEntityContainer="HealthQuestionnaireEntities">
+          <EntitySetMapping Name="AllergicHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AllergicHistory">
+              <MappingFragment StoreEntitySet="AllergicHistory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AthleteUser">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleteUser">
+              <MappingFragment StoreEntitySet="AthleteUser">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
+                <ScalarProperty Name="AthleteNumber" ColumnName="AthleteNumber" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SportSpecialty" ColumnName="SportSpecialty" />
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FamilyHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.FamilyHistory">
+              <MappingFragment StoreEntitySet="FamilyHistory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
+                <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FemaleQuestionnaire">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.FemaleQuestionnaire">
+              <MappingFragment StoreEntitySet="FemaleQuestionnaire">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionZh" ColumnName="QuestionZh" />
+                <ScalarProperty Name="QuestionEn" ColumnName="QuestionEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PasswordReset">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PasswordReset">
+              <MappingFragment StoreEntitySet="PasswordReset">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="UserAccount" ColumnName="UserAccount" />
+                <ScalarProperty Name="changeDate" ColumnName="changeDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastDrugs">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastDrugs">
+              <MappingFragment StoreEntitySet="PastDrugs">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastHealth">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHealth">
+              <MappingFragment StoreEntitySet="PastHealth">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastHealthAnswers">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHealthAnswers">
+              <MappingFragment StoreEntitySet="PastHealthAnswers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SpecialIty" ColumnName="SpecialIty" />
+                <ScalarProperty Name="FillerName" ColumnName="FillerName" />
+                <ScalarProperty Name="AnswerOptionID" ColumnName="AnswerOptionID" />
+                <ScalarProperty Name="RemarkAnswer" ColumnName="RemarkAnswer" />
+                <ScalarProperty Name="DateOfAnswer" ColumnName="DateOfAnswer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHistory">
+              <MappingFragment StoreEntitySet="PastHistory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
+                <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastSupplements">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastSupplements">
+              <MappingFragment StoreEntitySet="PastSupplements">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PresentIllness">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PresentIllness">
+              <MappingFragment StoreEntitySet="PresentIllness">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
+                <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SurgeryHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SurgeryHistory">
+              <MappingFragment StoreEntitySet="SurgeryHistory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
+                <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

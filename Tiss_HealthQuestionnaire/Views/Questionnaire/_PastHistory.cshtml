@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHistory>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>過去病史</title>
+    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4">過去病史 Past history (近六個月內是否曾發生下列問題)</h3>
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 p-2 bg-gray-200">項目 - 常規部分 General Parts</th>
+                    <th class="border border-gray-300 p-2 bg-gray-200 text-center">否 No</th>
+                    <th class="border border-gray-300 p-2 bg-gray-200 text-center">是 Yes</th>
+                    <th class="border border-gray-300 p-2 bg-gray-200 text-center">未知 Unknown</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="border border-gray-300 p-2">
+                            <span class="block font-medium">@item.GeneralPartsZh</span>
+                            <span class="block text-sm text-gray-600">@item.GeneralPartsEn</span>
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            <input type="radio" name="pastHistory_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600"> 否
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            <input type="radio" name="pastHistory_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600"> 是
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            <input type="radio" name="pastHistory_@item.ID" value="unknown" class="form-radio h-5 w-5 text-blue-600"> 未知
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="border border-gray-300 p-2">其他 Others：</td>
+                    <td colspan="3" class="border border-gray-300 p-2">
+                        <input type="text" name="otherPastHistory" class="border rounded p-1 w-full" placeholder="請描述...">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
