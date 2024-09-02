@@ -12,7 +12,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         public ActionResult Main()
-        { 
+        {
+            ViewBag.GenderList = _db.Gender.ToList(); //性別
             return View();
         }
 
@@ -85,6 +86,67 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var femaleQuestionnaire = _db.FemaleQuestionnaire.ToList();
             return PartialView("_FemaleQuestionnaire", femaleQuestionnaire);
+        }
+        #endregion
+
+        #region 問卷存檔
+
+        [HttpPost]
+        public ActionResult SaveHealth()
+        {
+            var dtos = new HealthQuestionnaireEntities
+            {
+
+            };
+
+            return RedirectToAction("QuestionnaireDone", "Questionnaire");
+        }
+        #endregion
+
+        #region 問卷完成頁
+        public ActionResult QuestionnaireDone(QuestionnaireResponseViewModel model)
+        {
+            var response = new QuestionnaireResponse
+            {
+                AthleteID = model.AthleteID,
+                GenderID = model.GenderID,
+                FillingDate = DateTime.Now,
+                Specialty = model.Specialty,
+                FillName = model.FillName
+            };
+
+            _db.QuestionnaireResponse.Add(response);
+            _db.SaveChanges();
+
+            // 存檔各問卷的回覆
+            SaveQuestionnaireDetails(response.ID, model.PastHealthAnswers, "PastHealth");
+            SaveQuestionnaireDetails(response.ID, model.AllergicHistoryAnswers, "AllergicHistory");
+            SaveQuestionnaireDetails(response.ID, model.FamilyHistoryAnswers, "FamilyHistory");
+            SaveQuestionnaireDetails(response.ID, model.PastHistoryAnswers, "PastHistory");
+            SaveQuestionnaireDetails(response.ID, model.SurgeryHistoryAnswers, "SurgeryHistory");
+            SaveQuestionnaireDetails(response.ID, model.PresentIllnessAnswers, "PresentIllness");
+            SaveQuestionnaireDetails(response.ID, model.PastDrugsAnswers, "PastDrugs");
+            SaveQuestionnaireDetails(response.ID, model.PastSupplementsAnswers, "PastSupplements");
+            SaveQuestionnaireDetails(response.ID, model.FemaleQuestionnaireAnswers, "FemaleQuestionnaire");
+
+            _db.SaveChanges();
+
+            return RedirectToAction("Main");
+        }
+
+        private void SaveQuestionnaireDetails(int responseID, List<QuestionnaireAnswer> answers, string questionnaireType)
+        {
+            foreach (var answer in answers)
+            {
+                var detail = new QuestionnaireResponseDetails
+                {
+                    ResponseID = responseID,
+                    QuestionnaireType = questionnaireType,
+                    QuestionID = answer.QuestionID,
+                    Answer = answer.Answer
+                };
+                _db.QuestionnaireResponseDetails.Add(detail);
+            }
         }
         #endregion
     }

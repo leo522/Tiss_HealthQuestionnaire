@@ -37,5 +37,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PastSupplements> PastSupplements { get; set; }
         public virtual DbSet<PresentIllness> PresentIllness { get; set; }
         public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
+        public virtual DbSet<Gender> Gender { get; set; }
+        public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
+        public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
     }
 }

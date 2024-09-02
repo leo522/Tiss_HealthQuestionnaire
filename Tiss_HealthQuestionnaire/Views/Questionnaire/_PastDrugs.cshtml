@@ -18,6 +18,12 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td class="border border-gray-300 p-2">其他 Others，請詳述：</td>
+                    <td class="border border-gray-300 p-2">
+                        <input type="text" name="otherDrugs" class="border rounded p-1 w-full" placeholder="請描述...">
+                    </td>
+                </tr>
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -29,20 +35,8 @@
                         </td>
                     </tr>
                 }
-                <tr>
-                    <td class="border border-gray-300 p-2">其他 Others，請詳述：</td>
-                    <td class="border border-gray-300 p-2">
-                        <input type="text" name="otherDrugs" class="border rounded p-1 w-full" placeholder="請描述...">
-                    </td>
-                </tr>
             </tbody>
         </table>
-
-        <div class="mt-4">
-            <p>是否有申請治療用豁免？ (Therapeutic Use Exemption, TUE)</p>
-            <label class="mr-4"><input type="radio" name="tue" value="yes"> 是</label>
-            <label><input type="radio" name="tue" value="no"> 否</label>
-        </div>
     </div>
 </body>
 </html>

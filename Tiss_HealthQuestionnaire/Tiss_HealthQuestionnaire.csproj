@@ -148,6 +148,9 @@
     <Compile Include="Models\FemaleQuestionnaire.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Gender.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\HealthModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,6 +187,13 @@
     <Compile Include="Models\PresentIllness.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionnaireResponse.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuestionnaireResponseDetails.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
     <Compile Include="Models\SurgeryHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -272,6 +282,7 @@
     <Content Include="Views\Questionnaire\_PastSupplements.cshtml" />
     <Content Include="Views\Questionnaire\_PresentIllness.cshtml" />
     <Content Include="Views\Questionnaire\_SurgeryHistory.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireDone.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

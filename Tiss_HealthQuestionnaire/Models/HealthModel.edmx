@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HealthQuestionnaireModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HealthQuestionnaireModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AllergicHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -44,6 +44,15 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestionZh" Type="nvarchar" MaxLength="150" />
           <Property Name="QuestionEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GenderID" Type="int" />
+          <Property Name="Male" Type="bit" />
+          <Property Name="Female" Type="bit" />
         </EntityType>
         <EntityType Name="PasswordReset">
           <Key>
@@ -109,6 +118,27 @@
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="QuestionnaireResponse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AthleteID" Type="int" Nullable="false" />
+          <Property Name="GenderID" Type="int" />
+          <Property Name="FillingDate" Type="datetime" Nullable="false" />
+          <Property Name="Specialty" Type="nvarchar" MaxLength="50" />
+          <Property Name="FillName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="QuestionnaireResponseDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResponseID" Type="int" Nullable="false" />
+          <Property Name="QuestionnaireType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="Answer" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="SurgeryHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -141,11 +171,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Questionn__Athle__60A75C0F">
+          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="1" />
+          <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="AthleteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Gende__619B8048">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="0..1" />
+          <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="GenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Respo__6477ECF3">
+          <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="1" />
+          <End Role="QuestionnaireResponseDetails" Type="Self.QuestionnaireResponseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponseDetails">
+              <PropertyRef Name="ResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="HealthQuestionnaireModelStoreContainer">
           <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastDrugs" EntityType="Self.PastDrugs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHealth" EntityType="Self.PastHealth" Schema="dbo" store:Type="Tables" />
@@ -153,6 +220,8 @@
           <EntitySet Name="PastHistory" EntityType="Self.PastHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastSupplements" EntityType="Self.PastSupplements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionnaireResponse" EntityType="Self.QuestionnaireResponse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionnaireResponseDetails" EntityType="Self.QuestionnaireResponseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
             <End Role="PastHealth" EntitySet="PastHealth" />
@@ -162,9 +231,20 @@
             <End Role="AthleteUser" EntitySet="AthleteUser" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
           </AssociationSet>
+          <AssociationSet Name="FK__Questionn__Athle__60A75C0F" Association="Self.FK__Questionn__Athle__60A75C0F">
+            <End Role="AthleteUser" EntitySet="AthleteUser" />
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questionn__Gende__619B8048" Association="Self.FK__Questionn__Gende__619B8048">
+            <End Role="Gender" EntitySet="Gender" />
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questionn__Respo__6477ECF3" Association="Self.FK__Questionn__Respo__6477ECF3">
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+            <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HealthQuestionnaireModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -192,6 +272,7 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PastHealthAnswers" Relationship="Self.FK__PastHealt__UserI__52593CB8" FromRole="AthleteUser" ToRole="PastHealthAnswers" />
+          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" FromRole="AthleteUser" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="FamilyHistory">
           <Key>
@@ -329,7 +410,93 @@
             <End Role="PastHealth" EntitySet="PastHealth" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
           </AssociationSet>
+          <EntitySet Name="Gender" EntityType="HealthQuestionnaireModel.Gender" />
+          <EntitySet Name="QuestionnaireResponse" EntityType="HealthQuestionnaireModel.QuestionnaireResponse" />
+          <EntitySet Name="QuestionnaireResponseDetails" EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" />
+          <AssociationSet Name="FK__Questionn__Athle__60A75C0F" Association="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F">
+            <End Role="AthleteUser" EntitySet="AthleteUser" />
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questionn__Gende__619B8048" Association="HealthQuestionnaireModel.FK__Questionn__Gende__619B8048">
+            <End Role="Gender" EntitySet="Gender" />
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questionn__Respo__6477ECF3" Association="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3">
+            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+            <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GenderID" Type="Int32" />
+          <Property Name="Male" Type="Boolean" />
+          <Property Name="Female" Type="Boolean" />
+          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK__Questionn__Gende__619B8048" FromRole="Gender" ToRole="QuestionnaireResponse" />
+        </EntityType>
+        <EntityType Name="QuestionnaireResponse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AthleteID" Type="Int32" Nullable="false" />
+          <Property Name="GenderID" Type="Int32" />
+          <Property Name="FillingDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Specialty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FillName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AthleteUser" Relationship="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" FromRole="QuestionnaireResponse" ToRole="AthleteUser" />
+          <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK__Questionn__Gende__619B8048" FromRole="QuestionnaireResponse" ToRole="Gender" />
+          <NavigationProperty Name="QuestionnaireResponseDetails" Relationship="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" FromRole="QuestionnaireResponse" ToRole="QuestionnaireResponseDetails" />
+        </EntityType>
+        <EntityType Name="QuestionnaireResponseDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResponseID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionnaireType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="Answer" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" FromRole="QuestionnaireResponseDetails" ToRole="QuestionnaireResponse" />
+        </EntityType>
+        <Association Name="FK__Questionn__Athle__60A75C0F">
+          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="AthleteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Gende__619B8048">
+          <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="GenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Respo__6477ECF3">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponseDetails" Role="QuestionnaireResponseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponseDetails">
+              <PropertyRef Name="ResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -457,6 +624,39 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
                 <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gender">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Gender">
+              <MappingFragment StoreEntitySet="Gender">
+                <ScalarProperty Name="Female" ColumnName="Female" />
+                <ScalarProperty Name="Male" ColumnName="Male" />
+                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionnaireResponse">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireResponse">
+              <MappingFragment StoreEntitySet="QuestionnaireResponse">
+                <ScalarProperty Name="FillName" ColumnName="FillName" />
+                <ScalarProperty Name="Specialty" ColumnName="Specialty" />
+                <ScalarProperty Name="FillingDate" ColumnName="FillingDate" />
+                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+                <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionnaireResponseDetails">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireResponseDetails">
+              <MappingFragment StoreEntitySet="QuestionnaireResponseDetails">
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuestionnaireType" ColumnName="QuestionnaireType" />
+                <ScalarProperty Name="ResponseID" ColumnName="ResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
