@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.MedicalFamilyHistoryViewModel>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <form>
+            <!-- 遍歷每個問題 -->
+            @foreach (var item in Model)
+            {
+                <div class="mb-6">
+                    <!-- 顯示問題 -->
+                    <div class="text-lg font-bold">@item.Question</div>
+
+                    <!-- 無選項 -->
+                    <div class="flex items-center mb-2">
+                        <input type="radio" id="no_@(item.Question)" name="@item.Question" value="no" class="form-radio h-4 w-4">
+                        <label for="no_@(item.Question)" class="ml-2">無</label>
+                    </div>
+
+                    <!-- 有選項 -->
+                    <div class="flex items-center mb-2">
+                        <input type="radio" id="yes_@(item.Question)" name="@item.Question" value="yes" class="form-radio h-4 w-4">
+                        <label for="yes_@(item.Question)" class="ml-2">有</label>
+                    </div>
+
+                    <!-- 症狀選項 -->
+                    @if (item.Symptoms != null && item.Symptoms.Any())
+                    {
+                        <div class="ml-6">
+                            <div class="flex flex-wrap">
+                                @foreach (var symptom in item.Symptoms)
+                                {
+                                    <div class="flex items-center mr-4 mb-2">
+                                        <input type="checkbox" id="symptom_@(symptom)" name="symptom_@(item.Question)" value="@symptom" class="form-checkbox h-4 w-4">
+                                        <label for="symptom_@(symptom)" class="ml-2">@symptom</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </form>
+    </div>
+</body>
+</html>

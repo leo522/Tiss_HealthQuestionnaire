@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.TreatmentMethod>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">3.治療方式</h2>
+
+        <div class="space-y-2">
+            @foreach (var method in Model)
+            {
+                <div class="flex items-center">
+                    <input type="checkbox" id="treatment_@method.Id" name="treatment_@method.Id" class="mr-2">
+                    <label for="treatment_@method.Id">@method.Method</label>
+                </div>
+            }
+            <div class="flex items-center">
+                <input type="checkbox" id="treatment_other" name="treatment_other" class="mr-2">
+                <label for="treatment_other">其他：</label>
+                <input type="text" class="border-b border-gray-400 ml-2" placeholder="請輸入其他治療方式">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

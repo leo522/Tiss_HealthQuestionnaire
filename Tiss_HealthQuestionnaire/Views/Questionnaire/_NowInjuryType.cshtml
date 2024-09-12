@@ -1,0 +1,174 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryType>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">2.傷勢類型</h2>
+
+        <div class="grid grid-cols-3 gap-4">
+            <!-- 肌肉/肌腱類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">肌肉/肌腱</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.MuscleTendon))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="muscleTendon_@item.Id" class="mr-2 injury-checkbox">
+                                @item.MuscleTendon
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 骨類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">骨類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.Bone))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="bone_@item.Id" class="mr-2 injury-checkbox">
+                                @item.Bone
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 韌帶類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">韌帶類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.Ligament))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="ligament_@item.Id" class="mr-2 injury-checkbox">
+                                @item.Ligament
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 神經類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">神經類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.Nerve))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="nerve_@item.Id" class="mr-2 injury-checkbox">
+                                @item.Nerve
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 軟骨/滑膜/滑囊類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">軟骨/滑膜/滑囊類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.CartilageSynoviumBursa))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="cartilageSynoviumBursa_@item.Id" class="mr-2 injury-checkbox">
+                                @item.CartilageSynoviumBursa
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 表皮組織 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">表皮組織</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.EpidermalTissue))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="epidermalTissue_@item.Id" class="mr-2 injury-checkbox">
+                                @item.EpidermalTissue
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 血管類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">血管類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.BloodVessel))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="bloodVessel_@item.Id" class="mr-2 injury-checkbox">
+                                @item.BloodVessel
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- 器官/四肢類 -->
+            <div>
+                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">器官/四肢類</h3>
+                @foreach (var item in Model)
+                {
+                    if (!String.IsNullOrEmpty(item.OrganLimb))
+                    {
+                        <div>
+                            <label>
+                                <input type="checkbox" name="organLimb_@item.Id" class="mr-2 injury-checkbox">
+                                @item.OrganLimb
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- 治療方式表單（最初是隱藏的） -->
+        <div id="treatment-method-section" class="hidden mt-4">
+            <!-- 這裡是下一個部分視圖的容器 -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // 當用戶在 "傷勢類型" 部分選擇複選框時顯示 "治療方式" 部分
+            $('.injury-checkbox').change(function () {
+                if ($('.injury-checkbox:checked').length > 0) {
+                    // 動態載入治療方式的部分視圖
+                    $.get('/Questionnaire/NowTreatmentMethod', function (data) {
+                        $('#treatment-method-section').html(data).removeClass('hidden');
+                    });
+                } else {
+                    $('#treatment-method-section').addClass('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -29,6 +29,28 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="CardiovascularScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ConcussionScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CurrentInjury">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="PartEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="FamilyHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -53,6 +75,34 @@
           <Property Name="GenderID" Type="int" />
           <Property Name="Male" Type="bit" />
           <Property Name="Female" Type="bit" />
+        </EntityType>
+        <EntityType Name="InjuryStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InjuryPart" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="InjuryType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MuscleTendon" Type="nvarchar" MaxLength="30" />
+          <Property Name="Bone" Type="nvarchar" MaxLength="30" />
+          <Property Name="Ligament" Type="nvarchar" MaxLength="30" />
+          <Property Name="Nerve" Type="nvarchar" MaxLength="30" />
+          <Property Name="CartilageSynoviumBursa" Type="nvarchar" MaxLength="30" />
+          <Property Name="EpidermalTissue" Type="nvarchar" MaxLength="30" />
+          <Property Name="BloodVessel" Type="nvarchar" MaxLength="20" />
+          <Property Name="OrganLimb" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="MedicalandFamilyHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Symptom" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="PasswordReset">
           <Key>
@@ -102,6 +152,14 @@
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="PastInjuryPartRecovery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="PartEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="PastSupplements">
           <Key>
             <PropertyRef Name="ID" />
@@ -146,6 +204,21 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Treatment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="20" />
+          <Property Name="ItemEn" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Method" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <Association Name="FK__PastHealt__Quest__5165187F">
           <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
@@ -210,19 +283,28 @@
         <EntityContainer Name="HealthQuestionnaireModelStoreContainer">
           <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardiovascularScreening" EntityType="Self.CardiovascularScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConcussionScreening" EntityType="Self.ConcussionScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentInjury" EntityType="Self.CurrentInjury" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InjuryStatus" EntityType="Self.InjuryStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InjuryType" EntityType="Self.InjuryType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MedicalandFamilyHistory" EntityType="Self.MedicalandFamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastDrugs" EntityType="Self.PastDrugs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHealth" EntityType="Self.PastHealth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHealthAnswers" EntityType="Self.PastHealthAnswers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHistory" EntityType="Self.PastHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastInjuryPartRecovery" EntityType="Self.PastInjuryPartRecovery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastSupplements" EntityType="Self.PastSupplements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireResponse" EntityType="Self.QuestionnaireResponse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireResponseDetails" EntityType="Self.QuestionnaireResponseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Treatment" EntityType="Self.Treatment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TreatmentMethod" EntityType="Self.TreatmentMethod" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
             <End Role="PastHealth" EntitySet="PastHealth" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
@@ -425,6 +507,15 @@
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
           </AssociationSet>
+          <EntitySet Name="CardiovascularScreening" EntityType="HealthQuestionnaireModel.CardiovascularScreening" />
+          <EntitySet Name="ConcussionScreening" EntityType="HealthQuestionnaireModel.ConcussionScreening" />
+          <EntitySet Name="CurrentInjury" EntityType="HealthQuestionnaireModel.CurrentInjury" />
+          <EntitySet Name="InjuryStatus" EntityType="HealthQuestionnaireModel.InjuryStatus" />
+          <EntitySet Name="InjuryType" EntityType="HealthQuestionnaireModel.InjuryType" />
+          <EntitySet Name="MedicalandFamilyHistory" EntityType="HealthQuestionnaireModel.MedicalandFamilyHistory" />
+          <EntitySet Name="PastInjuryPartRecovery" EntityType="HealthQuestionnaireModel.PastInjuryPartRecovery" />
+          <EntitySet Name="Treatment" EntityType="HealthQuestionnaireModel.Treatment" />
+          <EntitySet Name="TreatmentMethod" EntityType="HealthQuestionnaireModel.TreatmentMethod" />
         </EntityContainer>
         <EntityType Name="Gender">
           <Key>
@@ -497,6 +588,79 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CardiovascularScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConcussionScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CurrentInjury">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PartEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="InjuryStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InjuryPart" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="InjuryType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MuscleTendon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Bone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Ligament" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Nerve" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CartilageSynoviumBursa" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="EpidermalTissue" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BloodVessel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OrganLimb" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MedicalandFamilyHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Symptom" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PastInjuryPartRecovery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PartEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Treatment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -657,6 +821,88 @@
                 <ScalarProperty Name="QuestionnaireType" ColumnName="QuestionnaireType" />
                 <ScalarProperty Name="ResponseID" ColumnName="ResponseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardiovascularScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CardiovascularScreening">
+              <MappingFragment StoreEntitySet="CardiovascularScreening">
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConcussionScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ConcussionScreening">
+              <MappingFragment StoreEntitySet="ConcussionScreening">
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentInjury">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjury">
+              <MappingFragment StoreEntitySet="CurrentInjury">
+                <ScalarProperty Name="PartEn" ColumnName="PartEn" />
+                <ScalarProperty Name="PartZh" ColumnName="PartZh" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InjuryStatus">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.InjuryStatus">
+              <MappingFragment StoreEntitySet="InjuryStatus">
+                <ScalarProperty Name="InjuryPart" ColumnName="InjuryPart" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InjuryType">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.InjuryType">
+              <MappingFragment StoreEntitySet="InjuryType">
+                <ScalarProperty Name="OrganLimb" ColumnName="OrganLimb" />
+                <ScalarProperty Name="BloodVessel" ColumnName="BloodVessel" />
+                <ScalarProperty Name="EpidermalTissue" ColumnName="EpidermalTissue" />
+                <ScalarProperty Name="CartilageSynoviumBursa" ColumnName="CartilageSynoviumBursa" />
+                <ScalarProperty Name="Nerve" ColumnName="Nerve" />
+                <ScalarProperty Name="Ligament" ColumnName="Ligament" />
+                <ScalarProperty Name="Bone" ColumnName="Bone" />
+                <ScalarProperty Name="MuscleTendon" ColumnName="MuscleTendon" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MedicalandFamilyHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.MedicalandFamilyHistory">
+              <MappingFragment StoreEntitySet="MedicalandFamilyHistory">
+                <ScalarProperty Name="Symptom" ColumnName="Symptom" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastInjuryPartRecovery">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastInjuryPartRecovery">
+              <MappingFragment StoreEntitySet="PastInjuryPartRecovery">
+                <ScalarProperty Name="PartEn" ColumnName="PartEn" />
+                <ScalarProperty Name="PartZh" ColumnName="PartZh" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Treatment">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Treatment">
+              <MappingFragment StoreEntitySet="Treatment">
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TreatmentMethod">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TreatmentMethod">
+              <MappingFragment StoreEntitySet="TreatmentMethod">
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

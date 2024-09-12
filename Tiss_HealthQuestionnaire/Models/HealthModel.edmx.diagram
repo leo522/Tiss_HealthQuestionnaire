@@ -25,6 +25,15 @@
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Gende__619B8048" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.CardiovascularScreening" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ConcussionScreening" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.CurrentInjury" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.InjuryStatus" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.InjuryType" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.MedicalandFamilyHistory" Width="1.5" PointX="11.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.PastInjuryPartRecovery" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.Treatment" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.TreatmentMethod" Width="1.5" PointX="10.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

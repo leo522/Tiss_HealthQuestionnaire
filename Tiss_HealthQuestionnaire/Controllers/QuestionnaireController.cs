@@ -17,6 +17,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return View();
         }
 
+        #region 第一部份問卷
+
+
         #region 過去健康檢查病史
         public ActionResult PastHealth()
         {
@@ -87,6 +90,156 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var femaleQuestionnaire = _db.FemaleQuestionnaire.ToList();
             return PartialView("_FemaleQuestionnaire", femaleQuestionnaire);
         }
+        #endregion
+
+        #endregion
+
+        #region 第二部份問卷
+
+        #region 過去傷害狀況 (已復原)
+        public ActionResult PastInjuryRestored() //過去有的症狀或疼痛部位
+        {
+            try
+            {
+                var pastInjury = _db.InjuryStatus.ToList();
+
+                // 根據需求設置一個是否需要單一選項的屬性
+                // 將數據轉換成 InjuryStatusViewModel
+                var injuryList = pastInjury.Select(injury => new InjuryStatusViewModel
+                {
+                    Id = injury.Id,
+                    InjuryPart = injury.InjuryPart,
+                    IsSingleSelect = (injury.InjuryPart == "頭部/臉" || injury.InjuryPart == "頸椎" ||
+                                      injury.InjuryPart == "胸椎" || injury.InjuryPart == "腰椎" ||
+                                      injury.InjuryPart == "胸骨/肋骨" || injury.InjuryPart == "腹部" ||
+                                      injury.InjuryPart == "骨盆/薦椎")
+                }).ToList();
+
+                return PartialView("_PastInjury", injuryList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ActionResult PastInjuryType() //過去傷勢類型
+        {
+            var InjuryType = _db.InjuryType.ToList();
+            return PartialView("_PastInjuryType", InjuryType);
+        }
+
+        public ActionResult PastTreatmentMethod() //過去治療方式
+        {
+            var treatmentMethod = _db.TreatmentMethod.ToList();
+            return PartialView("_PastTreatmentMethod", treatmentMethod);
+        }
+        #endregion
+
+        #region 目前傷害狀況
+        public ActionResult NowInjuryRestored() //目前有的症狀或疼痛部位
+        {
+            try
+            {
+                var nowInjury = _db.InjuryStatus.ToList();
+
+                // 將資料轉換為 InjuryStatusViewModel
+                var injuryList = nowInjury.Select(injury => new InjuryStatusViewModel
+                {
+                    Id = injury.Id,
+                    InjuryPart = injury.InjuryPart,
+                    IsSingleSelect = (injury.InjuryPart == "頭部/臉" || injury.InjuryPart == "頸椎" ||
+                                      injury.InjuryPart == "胸椎" || injury.InjuryPart == "腰椎" ||
+                                      injury.InjuryPart == "胸骨/肋骨" || injury.InjuryPart == "腹部" ||
+                                      injury.InjuryPart == "骨盆/薦椎")
+                }).ToList();
+
+                // 傳遞轉換後的 injuryList 到 Partial View
+                return PartialView("_NowInjuryRestored", injuryList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ActionResult NowInjuryType() //目前傷勢類型
+        {
+            var InjuryType = _db.InjuryType.ToList();
+            return PartialView("_NowInjuryType", InjuryType);
+        }
+
+        public ActionResult NowTreatmentMethod() //目前治療方式
+        {
+            var treatmentMethod = _db.TreatmentMethod.ToList();
+            return PartialView("_NowTreatmentMethod", treatmentMethod);
+        }
+        #endregion
+
+        #region 醫療史與家族史
+        public ActionResult MedicalFamilyHistory()
+        {
+            var viewModel = new List<MedicalFamilyHistoryViewModel>
+{
+    new MedicalFamilyHistoryViewModel
+    {
+        Question = "您是否曾經在運動中有胸口疼痛、異常疲累、昏厥、心臟雜音、高血壓症狀？",
+        Symptoms = _db.MedicalandFamilyHistory.Where(s => s.Id <= 5).Select(s => s.Symptom).ToList()
+    },
+    new MedicalFamilyHistoryViewModel
+    {
+        Question = "您的親人是否曾經於50歲前因心臟問題死亡或失能？",
+        Symptoms = new List<string>() // 沒有相關症狀
+    },
+    new MedicalFamilyHistoryViewModel
+    {
+        Question = "您是否曾經被檢查出心臟雜音、股動脈脈搏異常、馬凡氏症候群、肱動脈血壓異常？",
+        Symptoms = _db.MedicalandFamilyHistory.Where(s => s.Id > 5).Select(s => s.Symptom).ToList()
+    }
+};
+            return View("_MedicalFamilyHistory", viewModel);
+        }
+
+        #endregion
+
+        #region 心血管篩檢
+        public ActionResult CardiovascularScreening()
+        {
+            // 從資料庫中讀取所有的問卷問題
+            var questions = _db.CardiovascularScreening.ToList();
+
+            // 為每個問題手動生成項次
+            var viewModel = questions.Select((q, index) => new CardiovascularScreeningViewModel
+            {
+                OrderNumber = index + 1,  // 自動遞增項次
+                Question = q.Question
+            }).ToList();
+
+            return PartialView("_CardiovascularScreening", viewModel);
+        }
+        #endregion
+
+        #region 腦震盪篩檢
+        public ActionResult ConcussionScreening()
+        {
+            // 從資料庫中讀取問卷問題
+            var questions = _db.ConcussionScreening.ToList();
+
+            // 為每個問題手動生成項次
+            var viewModel = questions.Select((q, index) => new ConcussionScreeningViewModel
+            {
+                OrderNumber = index + 1,  // 自動遞增項次
+                Question = q.Question
+            }).ToList();
+
+            return PartialView("_ConcussionScreening", viewModel);
+        }
+        #endregion
+
+        #region 骨科篩檢
+
+        #endregion
+
         #endregion
 
         #region 問卷存檔

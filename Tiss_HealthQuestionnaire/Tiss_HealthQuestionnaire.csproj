@@ -131,6 +131,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PreExerciseHealthController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -140,6 +141,17 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AthleteUser.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CardiovascularScreening.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CardiovascularScreeningViewModel.cs" />
+    <Compile Include="Models\ConcussionScreening.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConcussionScreeningViewModel.cs" />
+    <Compile Include="Models\CurrentInjury.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FamilyHistory.cs">
@@ -166,6 +178,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HealthModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\InjuryStatus.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InjuryStatusViewModel.cs" />
+    <Compile Include="Models\InjuryType.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MedicalandFamilyHistory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
     <Compile Include="Models\PasswordReset.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -179,6 +202,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PastHistory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PastInjuryPartRecovery.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PastSupplements.cs">
@@ -195,6 +221,12 @@
     </Compile>
     <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
     <Compile Include="Models\SurgeryHistory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Treatment.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TreatmentMethod.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -220,6 +252,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\favicon.svg" />
+    <Content Include="img\問卷404.jpg" />
+    <Content Include="img\問卷404_2.jpg" />
     <Content Include="Models\HealthModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>HealthModel.Context.cs</LastGenOutput>
@@ -283,10 +317,20 @@
     <Content Include="Views\Questionnaire\_PresentIllness.cshtml" />
     <Content Include="Views\Questionnaire\_SurgeryHistory.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDone.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\Questionnaire\_CardiovascularScreening.cshtml" />
+    <Content Include="Views\Questionnaire\_ConcussionScreening.cshtml" />
+    <Content Include="Views\Questionnaire\_MedicalFamilyHistory.cshtml" />
+    <Content Include="Views\Questionnaire\_NowInjuryRestored.cshtml" />
+    <Content Include="Views\Questionnaire\_NowInjuryType.cshtml" />
+    <Content Include="Views\Questionnaire\_NowTreatmentMethod.cshtml" />
+    <Content Include="Views\Questionnaire\_PastTreatmentMethod.cshtml" />
+    <Content Include="Views\Questionnaire\_PastInjury.cshtml" />
+    <Content Include="Views\Questionnaire\_PastInjuryType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Error\" />
+    <Folder Include="Views\PreExerciseHealth\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

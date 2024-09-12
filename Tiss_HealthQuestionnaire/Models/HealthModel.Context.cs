@@ -40,5 +40,14 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
         public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
+        public virtual DbSet<CardiovascularScreening> CardiovascularScreening { get; set; }
+        public virtual DbSet<ConcussionScreening> ConcussionScreening { get; set; }
+        public virtual DbSet<CurrentInjury> CurrentInjury { get; set; }
+        public virtual DbSet<InjuryStatus> InjuryStatus { get; set; }
+        public virtual DbSet<InjuryType> InjuryType { get; set; }
+        public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
+        public virtual DbSet<PastInjuryPartRecovery> PastInjuryPartRecovery { get; set; }
+        public virtual DbSet<Treatment> Treatment { get; set; }
+        public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
     }
 }

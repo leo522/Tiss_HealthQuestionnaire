@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.CardiovascularScreeningViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <table class="table-auto border-collapse border border-gray-300 w-full">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">項次</th>
+                    <th class="border border-gray-300 px-4 py-2">是否曾經</th>
+                    <th class="border border-gray-300 px-4 py-2">有</th>
+                    <th class="border border-gray-300 px-4 py-2">無</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- 使用 OrderNumber 顯示項次 -->
+                        <td class="border border-gray-300 px-4 py-2 text-center">@item.OrderNumber</td>
+
+                        <!-- 問題 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                        <!-- 有選項 -->
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-4 w-4">
+                        </td>
+
+                        <!-- 無選項 -->
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-4 w-4">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

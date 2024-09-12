@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryStatusViewModel>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="p-4">
+        <h1 class="text-xl font-bold mb-4">1.目前有的症狀或疼痛部位:</h1>
+
+        <!-- 無/有 選項 -->
+        <div class="space-y-2">
+            <div class="flex items-center">
+                <input type="radio" id="noInjury" name="injuryStatus" class="mr-2" value="no">
+                <label for="noInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
+            </div>
+            <div class="flex items-center">
+                <input type="radio" id="hasInjury" name="injuryStatus" class="mr-2" value="yes">
+                <label for="hasInjury" class="mr-4">有，請詳述有症狀的部位</label>
+            </div>
+        </div>
+
+        <!-- 部位選擇 -->
+        <div class="mt-4 grid grid-cols-3 gap-4 injury-details hidden">
+            @foreach (var item in Model)
+            {
+                <div>
+                    <div class="font-semibold">@item.InjuryPart</div>
+
+                    <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
+                    @if (item.IsSingleSelect)
+                    {
+                        <!-- 單一勾選項目 -->
+                        <input type="checkbox" name="injury_@item.Id" class="mr-2">
+                    }
+                    else
+                    {
+                        <!-- 左右勾選項目 -->
+                        <div class="flex space-x-2">
+                            <label>左</label>
+                            <input type="checkbox" name="injuryLeft_@item.Id" class="mr-2">
+                            <label>右</label>
+                            <input type="checkbox" name="injuryRight_@item.Id" class="mr-2">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- 傷勢類型表單（最初是隱藏的） -->
+        <div id="injury-type-section" class="hidden mt-4">
+            <!-- 這裡是下一個部分視圖的容器 -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // 當 "有" 被選中時顯示症狀部位和傷勢類型
+            $('#hasInjury').change(function () {
+                $('.injury-details').removeClass('hidden');
+            });
+
+            // 當 "無" 被選中時隱藏症狀部位和傷勢類型
+            $('#noInjury').change(function () {
+                $('.injury-details').addClass('hidden');
+                $('#injury-type-section').addClass('hidden');
+            });
+
+            // 當用戶完成填寫時，動態顯示傷勢類型部分
+            $('.injury-details input[type="checkbox"]').change(function () {
+                if ($('.injury-details input[type="checkbox"]:checked').length > 0) {
+                    // 動態載入傷勢類型的部分視圖
+                    $.get('/Questionnaire/NowInjuryType', function (data) {
+                        $('#injury-type-section').html(data).removeClass('hidden');
+                    });
+                } else {
+                    $('#injury-type-section').addClass('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
