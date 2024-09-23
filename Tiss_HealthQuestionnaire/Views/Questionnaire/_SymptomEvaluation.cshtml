@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .light-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .light-green {
+            background-color: #38a169; /* Tailwind green-500 */
+        }
+
+        .light-yellow {
+            background-color: #ecc94b; /* Tailwind yellow-400 */
+        }
+
+        .light-red {
+            background-color: #e53e3e; /* Tailwind red-500 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">燈號</th> <!-- 用於放置燈號 -->
+                    <th class="border border-gray-300 px-4 py-2">項次</th>
+                    <th class="border border-gray-300 px-4 py-2">症狀</th>
+                    <th class="border border-gray-300 px-4 py-2">0</th>
+                    <th class="border border-gray-300 px-4 py-2">1</th>
+                    <th class="border border-gray-300 px-4 py-2">2</th>
+                    <th class="border border-gray-300 px-4 py-2">3</th>
+                    <th class="border border-gray-300 px-4 py-2">4</th>
+                    <th class="border border-gray-300 px-4 py-2">5</th>
+                    <th class="border border-gray-300 px-4 py-2">6</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- 燈號顯示 -->
+                        <td class="border border-gray-300 px-4 py-2">
+                            <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
+                        </td>
+
+                        <!-- 項次 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+
+                        <!-- 症狀項目 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                        <!-- 分數選項 -->
+                        @for (int i = 0; i <= 6; i++)
+                        {
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="radio" name="score_@item.OrderNumber" value="@i" class="form-radio h-4 w-4 score-option" data-indicator="#indicator_@item.OrderNumber">
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- 總計部分 -->
+        <div class="flex flex-col mt-4 space-y-2">
+            <div class="flex items-center">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">症狀總數：</span>
+                <div class="flex items-center">
+                    <span id="totalSymptoms" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
+                    <span class="mr-1">/</span>
+                    <span class="text-lg font-semibold">22</span>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">症狀分數：</span>
+                <div class="flex items-center">
+                    <span id="totalScore" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
+                    <span class="mr-1">/</span>
+                    <span class="text-lg font-semibold">132</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="/Questionnaire/CognitiveScreening" method="get">
+        <button type="submit" class="btn btn-outline-primary">接續下一頁</button>
+    </form>
+    <script>
+        $(document).ready(function () {
+            // 監聽所有的 radio 按鈕
+            $('.score-option').on('change', function () {
+                updateTotals();
+                updateWarnings($(this));
+            });
+
+            function updateTotals() {
+                let totalSymptoms = 0;
+                let totalScore = 0;
+
+                // 遍歷所有的症狀分數選項
+                $('input[type="radio"]:checked').each(function () {
+                    let score = parseInt($(this).val());
+                    if (score > 0) {
+                        totalSymptoms += 1; // 每次有選擇大於 0 的分數就計算一個症狀
+                    }
+                    totalScore += score; // 累加所有選擇的分數
+                });
+
+                // 更新顯示的總計數值
+                $('#totalSymptoms').text(totalSymptoms);
+                $('#totalScore').text(totalScore);
+            }
+
+            function updateWarnings(selectedRadio) {
+                let score = parseInt(selectedRadio.val());
+                let indicator = $(selectedRadio.data('indicator'));
+
+                // 移除舊的顏色
+                indicator.removeClass('light-green light-yellow light-red');
+
+                // 根據分數設定燈號顏色
+                if (score >= 0 && score <= 1) {
+                    indicator.addClass('light-green'); // 綠燈
+                } else if (score >= 2 && score <= 4) {
+                    indicator.addClass('light-yellow'); // 黃燈
+                } else if (score >= 5 && score <= 6) {
+                    indicator.addClass('light-red'); // 紅燈
+                }
+            }
+        });
+    </script>
+</body>
+</html>

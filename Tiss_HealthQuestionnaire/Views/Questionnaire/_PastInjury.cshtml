@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryStatusViewModel>
+﻿@*@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryStatusViewModel>*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryStatusViewModel>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -28,10 +29,10 @@
             @foreach (var item in Model)
             {
                 <div>
-                    <div class="font-semibold">@item.InjuryPart</div>
+                    <div class="font-semibold">@item.PastInjuryPart</div>
 
                     <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
-                    @if (item.IsSingleSelect)
+                    @if (item.PastIsSingleSelect)
                     {
                         <!-- 單一勾選項目 -->
                         <input type="checkbox" name="injury_@item.Id" class="mr-2">

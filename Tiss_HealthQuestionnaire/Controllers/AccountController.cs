@@ -21,73 +21,127 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 註冊
         public ActionResult Register()
         {
+            ViewBag.GenderList = _db.Gender.ToList();
+
+            int nextAthleteID = 1; // 初始編號
+            var maxAthleteID = _db.AthleteUser.Max(a => (int?)a.AthleteID);
+            if (maxAthleteID.HasValue)
+            {
+                nextAthleteID = maxAthleteID.Value + 1;
+            }
+
+            string formattedAthleteID = nextAthleteID.ToString("D5");
+
+            Session["NextAthleteID"] = formattedAthleteID;
+
+            ViewBag.AthleteID = formattedAthleteID;
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult Register(int athleteID, string UserName, string pwd, string Email)
+        public ActionResult Register(string athleteNumber, string userName, string pwd, string email, int genderID, string sportSpecialization, DateTime birthDate)
         {
             try
             {
-                if (pwd.Length < 6)
+                // 確認從 Session 獲取保存的 AthleteID
+                if (Session["NextAthleteID"] == null)
+                {
+                    ViewBag.ErrorMessage = "註冊過程中發生錯誤，請重新嘗試。";
+                    ViewBag.GenderList = _db.Gender.ToList();
+                    return View();
+                }
+
+                // 檢查從 Session 中獲取的 AthleteID 是否為數字
+                if (!int.TryParse(Session["NextAthleteID"].ToString(), out int athleteID))
+                {
+                    ViewBag.ErrorMessage = "編號格式錯誤，請重新註冊。";
+                    ViewBag.GenderList = _db.Gender.ToList();
+                    return View();
+                }
+
+                // 密碼長度驗證
+                if (string.IsNullOrWhiteSpace(pwd) || pwd.Length < 6)
                 {
                     ViewBag.ErrorMessage = "密碼長度至少要6位數";
+                    ViewBag.GenderList = _db.Gender.ToList();
                     return View();
                 }
 
-                if (_db.AthleteUser.Any(u => u.Name == UserName))
+                // 檢查帳號是否已存在
+                if (_db.AthleteUser.Any(u => u.Name == userName))
                 {
                     ViewBag.ErrorMessage = "該帳號已存在";
+                    ViewBag.GenderList = _db.Gender.ToList();
                     return View();
                 }
 
-                // 驗證編號
-                var employee = _db.AthleteUser.FirstOrDefault(e => e.AthleteID == athleteID && e.Registered == false);
-                if (employee == null)
-                {
-                    ViewBag.ErrorMessage = "無效的員工編號或該員工已經註冊";
-                    return View();
-                }
-
-                //Email格式驗證
+                // Email 格式驗證
                 var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-                if (!emailRegex.IsMatch(Email))
+                if (!emailRegex.IsMatch(email))
                 {
-                    ViewBag.ErrorMessage = "無效的Email格式";
+                    ViewBag.ErrorMessage = "無效的 Email 格式";
+                    ViewBag.GenderList = _db.Gender.ToList();
+                    return View();
+                }
+
+                // 檢查 AthleteNumber 是否有提供
+                if (string.IsNullOrWhiteSpace(athleteNumber))
+                {
+                    ViewBag.ErrorMessage = "選手編號必須填寫。";
+                    ViewBag.GenderList = _db.Gender.ToList();
                     return View();
                 }
 
                 // 密碼加密處理
-                var Pwd = ComputeSha256Hash(pwd);
+                var encryptedPwd = ComputeSha256Hash(pwd);
+
+                // 準備插入新用戶
                 var newUser = new AthleteUser
                 {
-                    Name = UserName,
-                    Password = Pwd,
-                    Email = Email,
+                    AthleteID = athleteID,
+                    AthleteNumber = athleteNumber,
+                    Name = userName,
+                    Password = encryptedPwd,
+                    Email = email,
+                    SportSpecialization = sportSpecialization,
+                    BirthDate = birthDate,
                     CreatedDate = DateTime.Now,
                     IsActive = true,
+                    Registered = false,
+                    GenderID = genderID,
                 };
 
-
+                // 新增至資料庫並儲存
                 _db.AthleteUser.Add(newUser);
                 _db.SaveChanges();
 
-                // 發送Email通知管理員
-                var adminEmail = "00048@tiss.org.tw";
-                var emailBody = $"新使用者註冊，請審核：<br/>帳號: {UserName}<br/>Email: {Email}<br/>註冊時間: {DateTime.Now}<br/><a href='{Url.Action("PendingRegistrations", "Tiss", null, Request.Url.Scheme)}'>點擊這裡審核</a>";
-                SendEmail(adminEmail, "新使用者註冊通知", emailBody);
-
-                // 設定訊息給 TempData
-                TempData["RegisterMessage"] = "您的帳號已註冊成功，待管理員審核後將發送通知到您的Email。";
+                // 註冊完成後清除 Session 中的編號
+                Session.Remove("NextAthleteID");
 
                 return RedirectToAction("Login");
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+                }
+                ViewBag.ErrorMessage = "資料驗證失敗，請檢查所有必填欄位是否正確填寫。";
+                ViewBag.GenderList = _db.Gender.ToList();
+                return View();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("其他錯誤: " + ex.Message);
+                ViewBag.GenderList = _db.Gender.ToList();
+                return View();
             }
-            return View();
         }
+
         #endregion
 
         #region 密碼加密
@@ -110,36 +164,39 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 登入
         public ActionResult Login()
         {
+            Session.Clear(); // 每次進入登入頁面時，清除所有現有的 Session 狀態
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(string UserName, string pwd)
+        public ActionResult Login(string athleteNumber, string pwd)
         {
             try
             {
                 // 將使用者輸入的密碼進行SHA256加密
                 string hashedPwd = ComputeSha256Hash(pwd);
-                var dto = _db.AthleteUser.FirstOrDefault(u => u.Name == UserName && u.Password == hashedPwd);
+                var dto = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber && u.Password == hashedPwd);
 
                 if (dto != null)
                 {
-                    // 驗證成功，更新最後登入時間
-                    //dto.LastLoginDate = DateTime.Now;
+                    // 驗證成功，更新最後登入時間（如需要）
                     _db.SaveChanges();
 
                     // 設定 Session 狀態為已登入
                     Session["LoggedIn"] = true;
                     Session["UserName"] = dto.Name;
 
-                    // 檢查是否有記錄的返回頁面
-                    string returnUrl = Session["ReturnUrl"] != null ? Session["ReturnUrl"].ToString() : Url.Action("Login", "Account");
-
-                    // 清除返回頁面的 Session 記錄
-                    Session.Remove("ReturnUrl");
-
-                    // 重定向到記錄的返回頁面
-                    return Redirect(returnUrl);
+                    // 確認返回的 URL 是否存在並且為您所期望的頁面，否則直接導向到指定的控制器動作
+                    string returnUrl = Session["ReturnUrl"] as string;
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        // 如果沒有指定的 returnUrl 或者 returnUrl 不符合條件，重導向到 Main 動作
+                        return RedirectToAction("Main", "Questionnaire");
+                    }
                 }
                 else
                 {
@@ -184,7 +241,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     Email = Email,
                     Token = resetToken,
-                    ExpiryDate = DateTime.Now.AddMinutes(5), // 設定有效時間為5分鐘
+                    ExpiryDate = DateTime.Now.AddMinutes(10), // 設定有效時間為10分鐘
                     UserAccount = user.Name,
                     changeDate = DateTime.Now
                 };
@@ -192,9 +249,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 _db.SaveChanges();
 
                 // 發送重置密碼郵件
-                var resetLink = Url.Action("ResetPassword", "Tiss", new { token = resetToken }, Request.Url.Scheme);
+                var resetLink = Url.Action("ResetPassword", "Account", new { token = resetToken }, Request.Url.Scheme);
 
-                var emailBody = $"請點擊以下連結重置您的密碼：{resetLink}，連結有效時間為5分鐘";
+                var emailBody = $"請點擊以下連結重置您的密碼：{resetLink}，連結有效時間為10分鐘";
 
                 SendEmail(Email, "重置密碼", emailBody);
 

@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="e6216aa7f6fe40b686cc34cc6102827b" Name="Diagram1">
         <EntityTypeShape EntityType="HealthQuestionnaireModel.AllergicHistory" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.AthleteUser" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.FamilyHistory" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.FemaleQuestionnaire" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PasswordReset" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
@@ -17,12 +16,10 @@
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PastSupplements" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PresentIllness" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.SurgeryHistory" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
-        <AssociationConnector Association="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8" ManuallyRouted="false" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F" ManuallyRouted="false" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.Gender" Width="1.5" PointX="3.375" PointY="9.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireResponse" Width="1.5" PointX="5.625" PointY="10" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" Width="1.5" PointX="7.875" PointY="10.25" />
-        <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Gende__619B8048" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.CardiovascularScreening" Width="1.5" PointX="10.75" PointY="0.75" />
@@ -34,6 +31,18 @@
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PastInjuryPartRecovery" Width="1.5" PointX="2.75" PointY="12.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.Treatment" Width="1.5" PointX="12.75" PointY="9.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.TreatmentMethod" Width="1.5" PointX="10.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.OrthopaedicScreening" Width="1.5" PointX="5.375" PointY="13.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.CognitiveScreening" Width="1.5" PointX="7.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.CognitiveScreeningScores" Width="1.5" PointX="13.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.DelayedRecall" Width="1.5" PointX="14.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ImmediateMemory" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.PastInjuryStatus" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.PastInjuryType" Width="1.5" PointX="2.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.PastTreatmentMethod" Width="1.5" PointX="15.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.SymptomEvaluation" Width="1.5" PointX="9.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.AthleteUser" Width="1.5" PointX="0.75" PointY="5.125" />
+        <AssociationConnector Association="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8" />
+        <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

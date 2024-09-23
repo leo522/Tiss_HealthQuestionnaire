@@ -12,18 +12,11 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PastHealthAnswers
+    public partial class CognitiveScreening
     {
         public int ID { get; set; }
-        public Nullable<int> QuestionID { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public string SpecialIty { get; set; }
-        public string FillerName { get; set; }
-        public Nullable<bool> AnswerOptionID { get; set; }
-        public string RemarkAnswer { get; set; }
-        public Nullable<System.DateTime> DateOfAnswer { get; set; }
-    
-        public virtual PastHealth PastHealth { get; set; }
-        public virtual AthleteUser AthleteUser { get; set; }
+        public string Question { get; set; }
+        public Nullable<int> AnswerOption1 { get; set; }
+        public Nullable<int> AnswerOption2 { get; set; }
     }
 }

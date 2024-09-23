@@ -26,7 +26,6 @@ namespace Tiss_HealthQuestionnaire.Models
         }
     
         public virtual DbSet<AllergicHistory> AllergicHistory { get; set; }
-        public virtual DbSet<AthleteUser> AthleteUser { get; set; }
         public virtual DbSet<FamilyHistory> FamilyHistory { get; set; }
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
         public virtual DbSet<PasswordReset> PasswordReset { get; set; }
@@ -49,5 +48,15 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PastInjuryPartRecovery> PastInjuryPartRecovery { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
+        public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
+        public virtual DbSet<CognitiveScreening> CognitiveScreening { get; set; }
+        public virtual DbSet<CognitiveScreeningScores> CognitiveScreeningScores { get; set; }
+        public virtual DbSet<DelayedRecall> DelayedRecall { get; set; }
+        public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
+        public virtual DbSet<PastInjuryStatus> PastInjuryStatus { get; set; }
+        public virtual DbSet<PastInjuryType> PastInjuryType { get; set; }
+        public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
+        public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
+        public virtual DbSet<AthleteUser> AthleteUser { get; set; }
     }
 }

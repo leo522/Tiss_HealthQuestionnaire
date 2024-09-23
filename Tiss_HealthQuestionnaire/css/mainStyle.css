@@ -1,0 +1,6 @@
+﻿/*頁籤顏色*/
+.tablinks.active {
+    background-color: #3fd9ab;
+    color: #000;
+    border-bottom: 2px solid #1a202c;
+}

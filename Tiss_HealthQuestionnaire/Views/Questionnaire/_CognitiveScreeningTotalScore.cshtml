@@ -1,0 +1,56 @@
+﻿@model Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_CognitiveScreeningTotalScore</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-xl font-bold mb-4">(六) 認知篩檢 (Cognitive Screening) 分數總合</h2>
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">項目</th>
+                    <th class="border border-gray-300 px-4 py-2">分數</th>
+                    <th class="border border-gray-300 px-4 py-2">最大分數</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 定位 (Orientation) -->
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">定位 (Orientation)</td>
+                    <td class="border border-gray-300 px-4 py-2">@Model.OrientationScore</td>
+                    <td class="border border-gray-300 px-4 py-2">/5</td>
+                </tr>
+                <!-- 短期記憶 (Immediate Memory) -->
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">短期記憶 (Immediate Memory)</td>
+                    <td class="border border-gray-300 px-4 py-2">@Model.ImmediateMemoryScore</td>
+                    <td class="border border-gray-300 px-4 py-2">/30</td>
+                </tr>
+                <!-- 專注力 (Concentration) -->
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">專注力 (Concentration)</td>
+                    <td class="border border-gray-300 px-4 py-2">@Model.ConcentrationScore</td>
+                    <td class="border border-gray-300 px-4 py-2">/4</td>
+                </tr>
+                <!-- 延遲記憶 (Delayed Recall) -->
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">延遲記憶 (Delayed Recall)</td>
+                    <td class="border border-gray-300 px-4 py-2">@Model.DelayedRecallScore</td>
+                    <td class="border border-gray-300 px-4 py-2">/10</td>
+                </tr>
+                <!-- 總分 -->
+                <tr class="font-bold">
+                    <td class="border border-gray-300 px-4 py-2">總分</td>
+                    <td class="border border-gray-300 px-4 py-2">@Model.TotalScore</td>
+                    <td class="border border-gray-300 px-4 py-2">/49</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

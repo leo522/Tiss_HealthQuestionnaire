@@ -23,15 +23,16 @@ namespace Tiss_HealthQuestionnaire.Models
     
         public int ID { get; set; }
         public int AthleteID { get; set; }
-        public Nullable<int> AthleteNumber { get; set; }
+        public string AthleteNumber { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
-        public Nullable<System.DateTime> BirthDate { get; set; }
+        public System.DateTime BirthDate { get; set; }
         public string Email { get; set; }
-        public string SportSpecialty { get; set; }
+        public string SportSpecialization { get; set; }
         public Nullable<bool> Registered { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public int GenderID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PastHealthAnswers> PastHealthAnswers { get; set; }

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.OrthopaedicScreeningViewModel>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">項次</th>
+                    <th class="border border-gray-300 px-4 py-2">指示操作</th>
+                    <th class="border border-gray-300 px-4 py-2">觀察重點</th>
+                    <th class="border border-gray-300 px-4 py-2">結果</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- 項次 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+
+                        <!-- 指示操作 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.Instructions</td>
+
+                        <!-- 觀察重點 -->
+                        <td class="border border-gray-300 px-4 py-2">@item.ObservationPoints</td>
+
+                        <!-- 結果選項 -->
+                        <td class="border border-gray-300 px-4 py-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="result_@item.OrderNumber" value="normal" class="form-radio h-4 w-4">
+                                <span class="ml-2">正常</span>
+                            </label>
+                            <label class="inline-flex items-center ml-4">
+                                <input type="radio" name="result_@item.OrderNumber" value="abnormal" class="form-radio h-4 w-4">
+                                <span class="ml-2">異常</span>
+                            </label>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
