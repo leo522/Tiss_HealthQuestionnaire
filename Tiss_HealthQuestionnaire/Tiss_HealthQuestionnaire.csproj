@@ -142,6 +142,9 @@
     <Compile Include="Models\AthleteUser.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AthleticTrainer.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CardiovascularScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -250,6 +253,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SymptomEvaluation.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Test_AthleticTrainer.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Treatment.cs">

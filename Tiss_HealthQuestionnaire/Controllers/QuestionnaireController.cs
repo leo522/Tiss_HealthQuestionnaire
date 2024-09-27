@@ -408,6 +408,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 防護員AT-測試
+        public JsonResult AT()
+        {
+            var currentUser = User.Identity.Name;
+            var isAthleticTrainer = _db.Test_AthleticTrainer.Any(u => u.ATName == currentUser);
+
+            return Json(new { role = isAthleticTrainer ? "AthleticTrainer" : "Unknown" }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
         #endregion
 
         #region 問卷存檔

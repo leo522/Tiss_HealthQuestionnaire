@@ -178,6 +178,18 @@
             // 默認打開第一個 tab
             $('.tablinks:first').click();
         });
+
+        function openProtectedTab(evt, tabName, url) {
+            // 假設這裡有一個後端API可以返回使用者角色
+            $.get('/Questionnaire/AT', function (data) {
+                if (data.role === 'AthleticTrainer') {
+                    openTab(evt, tabName, url);  // 使用者是防護員則打開頁籤
+                } else {
+                    alert('您必須是防護員才能填寫此問卷。');
+                    window.location.href = '/Account/Login';  // 重定向到登入頁面
+                }
+            });
+        }
     </script>
 </body>
 </html>

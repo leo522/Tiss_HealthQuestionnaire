@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e6216aa7f6fe40b686cc34cc6102827b" Name="Diagram1">
+      <Diagram DiagramId="e6216aa7f6fe40b686cc34cc6102827b" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="HealthQuestionnaireModel.AllergicHistory" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.FamilyHistory" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.FemaleQuestionnaire" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
@@ -43,6 +43,8 @@
         <EntityTypeShape EntityType="HealthQuestionnaireModel.AthleteUser" Width="1.5" PointX="0.75" PointY="5.125" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Athle__60A75C0F" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.AthleticTrainer" Width="1.5" PointX="5.375" PointY="16.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.Test_AthleticTrainer" Width="1.5" PointX="16.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

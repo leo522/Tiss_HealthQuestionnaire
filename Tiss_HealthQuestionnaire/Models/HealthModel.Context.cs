@@ -58,5 +58,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
         public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
         public virtual DbSet<AthleteUser> AthleteUser { get; set; }
+        public virtual DbSet<AthleticTrainer> AthleticTrainer { get; set; }
+        public virtual DbSet<Test_AthleticTrainer> Test_AthleticTrainer { get; set; }
     }
 }

@@ -30,6 +30,19 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="GenderID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="AthleticTrainer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ATName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Department" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Expertise" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="CardiovascularScreening">
           <Key>
             <PropertyRef Name="Id" />
@@ -302,6 +315,16 @@
           <Property Name="ItemScore5" Type="int" />
           <Property Name="ItemScore6" Type="int" />
         </EntityType>
+        <EntityType Name="Test_AthleticTrainer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ATName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Treatment">
           <Key>
             <PropertyRef Name="ID" />
@@ -383,6 +406,7 @@
         <EntityContainer Name="HealthQuestionnaireModelStoreContainer">
           <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AthleticTrainer" EntityType="Self.AthleticTrainer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardiovascularScreening" EntityType="Self.CardiovascularScreening" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CognitiveScreening" EntityType="Self.CognitiveScreening" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CognitiveScreeningScores" EntityType="Self.CognitiveScreeningScores" Schema="dbo" store:Type="Tables" />
@@ -412,6 +436,7 @@
           <EntitySet Name="QuestionnaireResponseDetails" EntityType="Self.QuestionnaireResponseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SymptomEvaluation" EntityType="Self.SymptomEvaluation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Test_AthleticTrainer" EntityType="Self.Test_AthleticTrainer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Treatment" EntityType="Self.Treatment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TreatmentMethod" EntityType="Self.TreatmentMethod" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
@@ -604,6 +629,8 @@
             <End Role="AthleteUser" EntitySet="AthleteUser" />
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
           </AssociationSet>
+          <EntitySet Name="AthleticTrainer" EntityType="HealthQuestionnaireModel.AthleticTrainer" />
+          <EntitySet Name="Test_AthleticTrainer" EntityType="HealthQuestionnaireModel.Test_AthleticTrainer" />
         </EntityContainer>
         <EntityType Name="Gender">
           <Key>
@@ -876,6 +903,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AthleticTrainer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ATName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Department" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Expertise" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Test_AthleticTrainer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ATName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1223,6 +1273,31 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="AthleteNumber" ColumnName="AthleteNumber" />
                 <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AthleticTrainer">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleticTrainer">
+              <MappingFragment StoreEntitySet="AthleticTrainer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Expertise" ColumnName="Expertise" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ATName" ColumnName="ATName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_AthleticTrainer">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Test_AthleticTrainer">
+              <MappingFragment StoreEntitySet="Test_AthleticTrainer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ATName" ColumnName="ATName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
