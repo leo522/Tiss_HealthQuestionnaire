@@ -1,19 +1,214 @@
-﻿@{
-    Layout = null;
+﻿@*協調與平衡測驗*@
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <title>_CoordinationAndBalanceExamination</title>
+    <title>協調與平衡測驗</title>
 </head>
 <body>
-    <div>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-xl font-bold mb-4">協調與平衡測驗 (Coordination and Balance Examination)</h2>
+
+        <!-- 第一部分：改良版平衡姿勢檢測 -->
+        <h3 class="text-lg font-semibold mb-2">1. 改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)：</h3>
+
+        <!-- 測試腳與測試平面輸入 -->
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">測試腳 (非慣用腳)：</label>
+            <label class="inline-flex items-center">
+                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" name="testFoot" value="左"> 左
+            </label>
+            <label class="inline-flex items-center ml-4">
+                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" name="testFoot" value="右"> 右
+            </label>
+        </div>
+
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">測試平面 (硬地/訓練場)：</label>
+            <input type="text" class="form-input border rounded w-full px-3 py-2" placeholder="請輸入測試平面">
+        </div>
+
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
+            <input type="text" class="form-input border rounded w-full px-3 py-2" placeholder="請輸入腳穿著狀況">
+        </div>
+
+        <!-- 錯誤扣分表格 -->
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">閉上眼 · 雙手插腰完成以下動作 (20 秒)</th>
+                    <th class="border border-gray-300 px-4 py-2">錯誤扣分</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">雙腳站立</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">腳跟前後站立 (慣用腳在前)</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">單腳站立 (非慣用腳)</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2 font-semibold">總錯誤次數</td>
+                    <td class="border border-gray-300 px-4 py-2 font-semibold">
+                        <span id="totalErrorCount">0</span> / 30
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- 說明文字 -->
+        <div class="mt-4">
+            <p class="text-sm">錯誤動作：手移開腰、眼睛張開、跌倒(不穩)、髖外展超過 30 度、腳後跟(前足)抬起、無法維持姿勢超過 5 秒。</p>
+        </div>
+
+        <!-- 第二部分：腳跟碰腳尖快速走路 -->
+        <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：記錄三公尺線內來回往返時間</h3>
+
+        <!-- 記錄時間表格 -->
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">第一次</th>
+                    <th class="border border-gray-300 px-4 py-2">第二次</th>
+                    <th class="border border-gray-300 px-4 py-2">第三次</th>
+                    <th class="border border-gray-300 px-4 py-2">平均時間</th>
+                    <th class="border border-gray-300 px-4 py-2">最快時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2" id="averageTime">秒</td>
+                    <td class="border border-gray-300 px-4 py-2" id="fastestTime">秒</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 表單按鈕 -->
+        <div class="flex justify-between space-x-4 mt-4">
+            <form action="/Questionnaire/Concentration" method="get">
+                <button type="submit" class="btn btn-warning">回上一頁</button>
+            </form>
+            <form action="/Questionnaire/DelayedRecall" method="get">
+                <button type="submit" class="btn btn-primary">接續下一頁</button>
+            </form>
+        </div>
     </div>
-    <form action="/Questionnaire/DelayedRecall" method="get">
-        <button type="submit" class="btn btn-outline-primary">接續下一頁</button>
-    </form>
+
+    <script>
+        $(document).ready(function () {
+            // 初始化並加載保存的數據
+            loadScores();
+
+            // 監聽錯誤扣分的輸入變更事件
+            $('.error-input').on('input', function () {
+                updateErrorCount();
+                saveScores();
+            });
+
+            // 監聽時間輸入的輸入變更事件
+            $('.time-input').on('input', function () {
+                updateTimes();
+                saveScores();
+            });
+
+            // 更新總錯誤次數
+            function updateErrorCount() {
+                let totalErrorCount = 0;
+                $('.error-input').each(function () {
+                    const value = parseInt($(this).val());
+                    if (!isNaN(value)) {
+                        totalErrorCount += value;
+                    }
+                });
+                $('#totalErrorCount').text(totalErrorCount);
+
+                // 保存總錯誤次數到 sessionStorage
+                sessionStorage.setItem('TotalErrorCount', totalErrorCount);
+            }
+
+            // 更新平均時間與最快時間
+            function updateTimes() {
+                const times = $('.time-input').map(function () {
+                    const val = parseFloat($(this).val());
+                    return isNaN(val) ? 0 : val;
+                }).get();
+
+                // 計算平均時間
+                const validTimes = times.filter(time => time > 0); // 過濾掉為 0 的時間
+                const averageTime = (validTimes.reduce((a, b) => a + b, 0) / (validTimes.length || 1)).toFixed(2);
+                $('#averageTime').text(isNaN(averageTime) ? "0 秒" : averageTime + ' 秒');
+                sessionStorage.setItem('AverageTime', averageTime);
+
+                // 計算最快時間
+                const fastestTime = validTimes.length > 0 ? Math.min(...validTimes).toFixed(2) : 0;
+                $('#fastestTime').text(isNaN(fastestTime) ? "0 秒" : fastestTime + ' 秒');
+                sessionStorage.setItem('FastestTime', fastestTime);
+            }
+
+            // 保存輸入的數據和計算結果到 sessionStorage
+            function saveScores() {
+                $('.error-input, .time-input').each(function (index) {
+                    sessionStorage.setItem(`inputValue_${index}`, $(this).val());
+                });
+            }
+
+            // 加載 sessionStorage 中的數據
+            function loadScores() {
+                $('.error-input, .time-input').each(function (index) {
+                    const savedValue = sessionStorage.getItem(`inputValue_${index}`);
+                    if (savedValue !== null) {
+                        $(this).val(savedValue);
+                    }
+                });
+
+                // 加載總錯誤次數
+                const savedTotalErrorCount = sessionStorage.getItem('TotalErrorCount');
+                if (savedTotalErrorCount !== null) {
+                    $('#totalErrorCount').text(savedTotalErrorCount);
+                }
+
+                // 加載平均時間和最快時間
+                const savedAverageTime = sessionStorage.getItem('AverageTime');
+                const savedFastestTime = sessionStorage.getItem('FastestTime');
+                if (savedAverageTime !== null) {
+                    $('#averageTime').text(savedAverageTime + ' 秒');
+                }
+                if (savedFastestTime !== null) {
+                    $('#fastestTime').text(savedFastestTime + ' 秒');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

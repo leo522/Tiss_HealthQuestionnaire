@@ -75,7 +75,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 開刀史
+        #region 手術病史
         public ActionResult SurgeryHistory()
         {
             var surgeryHistory = _db.SurgeryHistory.ToList();
@@ -281,13 +281,35 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 骨科篩檢
+        public ActionResult OrthopaedicScreening()
+        {
+            // 從資料庫中讀取問卷問題
+            var questions = _db.OrthopaedicScreening.ToList();
+
+            // 將資料轉換為 ViewModel
+            var viewModel = questions.Select((q, index) => new OrthopaedicScreeningViewModel
+            {
+                OrderNumber = index + 1,  // 自動遞增項次
+                Instructions = q.Instructions,
+                ObservationPoints = q.ObservationPoints
+            }).ToList();
+
+            return PartialView("_OrthopaedicScreening", viewModel);
+        }
+        #endregion
+
         #region 腦震盪篩檢-防護員評估
         /// <summary>
         /// 第三部分 認知篩檢-定位
         /// </summary>
         /// <returns></returns>
+
         public ActionResult CognitiveScreening()
         {
+            string loggedInUserName = Session["UserName"] as string;
+            bool isAthleticTrainer = _db.Test_AthleticTrainer.Any(at => at.ATName == loggedInUserName && at.IsActive);
+
             // 從資料庫中讀取問卷問題
             var questions = _db.CognitiveScreening.ToList();
 
@@ -311,10 +333,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var questions = _db.ImmediateMemory.ToList();
 
             // 為每個問題手動生成項次並轉換成 ViewModel
-            var viewModel = questions.Select((q, index) => new CognitiveScreeningViewModel
+            var viewModel = questions.Select((q, index) => new ImmediateMemoryViewModel
             {
                 OrderNumber = index + 1,  // 自動遞增項次
-                Question = q.Word    // 顯示問題
+                Word = q.Word             // 顯示的詞彙
             }).ToList();
 
             return PartialView("_ImmediateMemory", viewModel);
@@ -324,10 +346,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// 第三部分 認知篩檢-專注力
         /// </summary>
         /// <returns></returns>
-        //public ActionResult Concentration()
-        //{
-        //    return PartialView("_Concentration", viewModel);
-        //}
+        public ActionResult Concentration()
+        {
+            // 模擬數據或從資料庫中獲取資料
+            var viewModel = new List<ConcentrationViewModel>
+{
+    new ConcentrationViewModel { OrderNumber = 1, ListA = "4-9-3", ListB = "5-2-6", ListC = "1-4-2" },
+    new ConcentrationViewModel { OrderNumber = 2, ListA = "6-2-9", ListB = "4-1-5", ListC = "6-5-8" },
+    new ConcentrationViewModel { OrderNumber = 3, ListA = "3-8-1-4", ListB = "1-7-9-5", ListC = "6-8-3-1" },
+    new ConcentrationViewModel { OrderNumber = 4, ListA = "3-2-7-9", ListB = "4-9-6-8", ListC = "3-4-8-1" }
+};
+
+            return PartialView("_Concentration", viewModel);
+        }
 
         /// <summary>
         /// 協調與平衡測驗
@@ -344,7 +375,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// <returns></returns>
         public ActionResult DelayedRecall()
         {
-            return PartialView("_DelayedRecall");
+            // 從資料庫中讀取問卷問題
+            var questions = _db.DelayedRecall.ToList();
+
+            // 將問題列表傳送到前端作為 ViewModel
+            var viewModel = questions.Select((q, index) => new DelayedRecallViewModel
+            {
+                OrderNumber = index + 1,
+                Word = q.Word
+
+            }).ToList();
+
+            return PartialView("_DelayedRecall", viewModel);
         }
 
         /// <summary>
@@ -369,7 +411,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             return PartialView("_CognitiveScreeningTotalScore", viewModel);
         }
-        
+
         // 根據項目名稱取得對應的最大分數
         private int GetMaxScore(string itemScreening)
         {
@@ -390,35 +432,167 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #endregion
 
-        #region 骨科篩檢
-        public ActionResult OrthopaedicScreening()
-        {
-            // 從資料庫中讀取問卷問題
-            var questions = _db.OrthopaedicScreening.ToList();
+        #region 防護員AT驗證身分-測試
 
-            // 將資料轉換為 ViewModel
-            var viewModel = questions.Select((q, index) => new OrthopaedicScreeningViewModel
+        // 驗證防護員身份
+        [HttpPost]
+        public JsonResult ValidateAthleticTrainer(string userName, string password)
+        {
+            // 驗證防護員帳號和密碼
+            var trainer = _db.Test_AthleticTrainer.FirstOrDefault(at => at.ATName == userName && at.IsActive);
+
+            if (trainer != null && VerifyPassword(password, trainer.ATNumber)) // 假設有密碼加密驗證方法 VerifyPassword
             {
-                OrderNumber = index + 1,  // 自動遞增項次
-                Instructions = q.Instructions,
-                ObservationPoints = q.ObservationPoints
-            }).ToList();
+                return Json(new { success = true });
+            }
 
-            return PartialView("_OrthopaedicScreening", viewModel);
+            return Json(new { success = false });
         }
-        #endregion
 
-        #region 防護員AT-測試
-        public JsonResult AT()
+        private bool VerifyPassword(string inputPassword, string storedPassword)
         {
-            var currentUser = User.Identity.Name;
-            var isAthleticTrainer = _db.Test_AthleticTrainer.Any(u => u.ATName == currentUser);
-
-            return Json(new { role = isAthleticTrainer ? "AthleticTrainer" : "Unknown" }, JsonRequestBehavior.AllowGet);
+            // 假設這是一個驗證密碼的邏輯，根據實際情況實作
+            return inputPassword == storedPassword; // 實際應用中應進行加密驗證
         }
 
         #endregion
 
+        #endregion
+
+        #region 問卷填完預覽頁
+        public ActionResult Preview(QuestionnaireViewModel model)
+        {
+            return View("_PreviewTotal", model); // 從表單收集的數據進行處理
+        }
+
+        [HttpPost]
+        public ActionResult Preview(QuestionnaireViewModel model, FormCollection form)
+        {
+            //處理填寫者基本信息
+            model.Specialist = form["specialist"];
+            model.FillName = form["fillName"];
+            model.AtheNum = form["atheNum"];
+            model.Gender = int.Parse(form["gender"]);
+            model.FillDate = DateTime.Parse(form["fillDate"]);
+
+            //動態收集表單的所有數據到 FormData
+            foreach (var key in form.AllKeys)
+            {
+                model.FormData[key] = form[key];
+            }
+
+            //過去健康檢查病史的文字敘述內容
+            var pastHealthItems = _db.PastHealth.ToList();
+            foreach (var item in pastHealthItems)
+            {
+                string item1Key = $"item1_{item.ID}";
+                string item2Key = $"item2_{item.ID}";
+                string item3Key = $"item3_{item.ID}";
+
+                model.PastHealthDetails.Add(new PastHealthDetailViewModel
+                {
+                    ItemId = item.ID,
+                    Item1 = form[item1Key],
+                    Item2 = form[item2Key],
+                    Item3 = form[item3Key]
+                });
+            }
+
+            //收集過敏史數據
+            var allergicItems = _db.AllergicHistory.ToList();
+            foreach (var item in allergicItems)
+            {
+                string isAllergicKey = $"allergy_{item.ID}";
+                string descriptionKey = $"details_{item.ID}";
+
+                model.AllergicHistoryDetails.Add(new AllergicHistoryDetailViewModel
+                {
+                    ItemId = item.ID,
+                    ItemZh = item.ItemZh,  //將過敏項目的中文名綁定
+                    ItemEn = item.ItemEn,  //將過敏項目的英文名綁定
+                    IsAllergic = form[isAllergicKey],
+                    AllergyDescription = form[descriptionKey]
+                });
+            }
+
+            //收集家族病史的數據
+            var familyHistoryItems = _db.FamilyHistory.ToList();
+            foreach (var item in familyHistoryItems)
+            {
+                string optionKey = $"familyHistory_{item.ID}";
+                string otherKey = "otherFamilyHistory";
+
+                model.FamilyHistoryDetails.Add(new FamilyHistoryViewModel
+                {
+                    ItemId = item.ID,
+                    GeneralPartsZh = item.GeneralPartsZh,
+                    GeneralPartsEn = item.GeneralPartsEn,
+                    FamilyHistoryOption = form[optionKey],
+                    OtherFamilyHistory = form[otherKey]
+                });
+            }
+
+            //收集過去病史的數據
+            var pastHistoryItems = _db.PastHistory.ToList();
+            foreach (var item in pastHistoryItems)
+            {
+                string optionKey = $"pastHistory_{item.ID}";
+
+                model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
+                {
+                    ItemId = item.ID,
+                    GeneralPartsZh = item.GeneralPartsZh,
+                    GeneralPartsEn = item.GeneralPartsEn,
+                    PastHistoryOption = form[optionKey]
+                });
+            }
+
+            //收集手術病史的數據
+            var surgeryItems = _db.SurgeryHistory.ToList();
+            foreach (var item in surgeryItems)
+            {
+                string operationOptionKey = $"surgeryHistory_{item.ID}";
+
+                model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                {
+                    ItemId = item.ID,
+                    PartsOfBodyZh = item.PartsOfBodyZh,
+                    PartsOfBodyEn = item.PartsOfBodyEn,
+                    OperationOption = form[operationOptionKey]
+                });
+            }
+
+            //收集現在病史的數據
+            var presentIllnessItems = _db.PresentIllness.ToList();
+            foreach (var item in presentIllnessItems)
+            {
+                string therapyKey = $"presentIllness_{item.ID}";
+
+                model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                {
+                    ItemId = item.ID,
+                    PartsOfBodyZh = item.PartsOfBodyZh,
+                    PartsOfBodyEn = item.PartsOfBodyEn,
+                    ReceivingOtherTherapies = form[therapyKey]
+                });
+            }
+
+            //收集營養品數據
+            var supplementsItems = _db.PastSupplements.ToList();
+            foreach (var item in supplementsItems)
+            {
+                string usedKey = $"usedSupplements_{item.ID}";
+                model.PastSupplementsDetails.Add(new PastSupplementsDetailViewModel
+                {
+                    ItemId = item.ID,
+                    ItemZh = item.ItemZh,
+                    ItemEn = item.ItemEn,
+                    IsUsed = form[usedKey] != null
+                });
+            }
+
+            return View("_PreviewTotal", model);
+        }
         #endregion
 
         #region 問卷存檔

@@ -21,7 +21,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="muscleTendon_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="NowmuscleTendon_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.MuscleTendon
                             </label>
                         </div>
@@ -38,7 +38,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="bone_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Nowbone_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.Bone
                             </label>
                         </div>
@@ -55,7 +55,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="ligament_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Nowligament_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.Ligament
                             </label>
                         </div>
@@ -72,7 +72,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="nerve_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Nownerve_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.Nerve
                             </label>
                         </div>
@@ -89,7 +89,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="cartilageSynoviumBursa_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="NowcartilageSynoviumBursa_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.CartilageSynoviumBursa
                             </label>
                         </div>
@@ -106,7 +106,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="epidermalTissue_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="NowepidermalTissue_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.EpidermalTissue
                             </label>
                         </div>
@@ -123,7 +123,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="bloodVessel_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="NowbloodVessel_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.BloodVessel
                             </label>
                         </div>
@@ -140,7 +140,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="organLimb_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="NoworganLimb_@item.Id" class="mr-2 Nowinjury-checkbox">
                                 @item.OrganLimb
                             </label>
                         </div>
@@ -150,7 +150,7 @@
         </div>
 
         <!-- 治療方式表單（最初是隱藏的） -->
-        <div id="treatment-method-section" class="hidden mt-4">
+        <div id="Nowtreatment-method-section" class="hidden mt-4">
             <!-- 這裡是下一個部分視圖的容器 -->
         </div>
     </div>
@@ -158,14 +158,14 @@
     <script>
         $(document).ready(function () {
             // 當用戶在 "傷勢類型" 部分選擇複選框時顯示 "治療方式" 部分
-            $('.injury-checkbox').change(function () {
-                if ($('.injury-checkbox:checked').length > 0) {
+            $('.Nowinjury-checkbox').change(function () {
+                if ($('.Nowinjury-checkbox:checked').length > 0) {
                     // 動態載入治療方式的部分視圖
                     $.get('/Questionnaire/NowTreatmentMethod', function (data) {
-                        $('#treatment-method-section').html(data).removeClass('hidden');
+                        $('#Nowtreatment-method-section').html(data).removeClass('hidden');
                     });
                 } else {
-                    $('#treatment-method-section').addClass('hidden');
+                    $('#Nowtreatment-method-section').addClass('hidden');
                 }
             });
         });

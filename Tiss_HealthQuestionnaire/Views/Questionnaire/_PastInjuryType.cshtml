@@ -21,7 +21,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="muscleTendon_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="PastmuscleTendon_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.MuscleTendon
                             </label>
                         </div>
@@ -38,7 +38,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="bone_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Pastbone_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.Bone
                             </label>
                         </div>
@@ -55,7 +55,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="ligament_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Pastligament_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.Ligament
                             </label>
                         </div>
@@ -72,7 +72,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="nerve_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="Pastnerve_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.Nerve
                             </label>
                         </div>
@@ -89,7 +89,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="cartilageSynoviumBursa_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="PastcartilageSynoviumBursa_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.CartilageSynoviumBursa
                             </label>
                         </div>
@@ -106,7 +106,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="epidermalTissue_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="PastepidermalTissue_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.EpidermalTissue
                             </label>
                         </div>
@@ -123,7 +123,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="bloodVessel_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="PastbloodVessel_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.BloodVessel
                             </label>
                         </div>
@@ -140,7 +140,7 @@
                     {
                         <div>
                             <label>
-                                <input type="checkbox" name="organLimb_@item.Id" class="mr-2 injury-checkbox">
+                                <input type="checkbox" name="PastorganLimb_@item.Id" class="mr-2 Pastinjury-checkbox">
                                 @item.OrganLimb
                             </label>
                         </div>
@@ -158,8 +158,8 @@
     <script>
         $(document).ready(function () {
             // 當用戶在 "傷勢類型" 部分選擇複選框時顯示 "治療方式" 部分
-            $('.injury-checkbox').change(function () {
-                if ($('.injury-checkbox:checked').length > 0) {
+            $('.Pastinjury-checkbox').change(function () {
+                if ($('.Pastinjury-checkbox:checked').length > 0) {
                     // 動態載入治療方式的部分視圖
                     $.get('/Questionnaire/PastTreatmentMethod', function (data) {
                         $('#treatment-method-section').html(data).removeClass('hidden');

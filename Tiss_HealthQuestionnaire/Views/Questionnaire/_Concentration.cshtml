@@ -1,17 +1,150 @@
-﻿
+﻿@*專注力*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcentrationViewModel>
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>_Concentration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
 </head>
 <body>
-    <div>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-xl font-bold mb-4">3. 專注力 (Concentration): 數字顛倒測驗 (測驗四次，0錯誤；1正確)</h2>
+        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">List A</th>
+                    <th class="border border-gray-300 px-4 py-2">List B</th>
+                    <th class="border border-gray-300 px-4 py-2">List C</th>
+                    <th class="border border-gray-300 px-4 py-2">Y</th>
+                    <th class="border border-gray-300 px-4 py-2">N</th>
+                    <th class="border border-gray-300 px-4 py-2">0</th>
+                    <th class="border border-gray-300 px-4 py-2">1</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- List A -->
+                        <td class="border border-gray-300 px-4 py-2">@item.ListA</td>
+
+                        <!-- List B -->
+                        <td class="border border-gray-300 px-4 py-2">@item.ListB</td>
+
+                        <!-- List C -->
+                        <td class="border border-gray-300 px-4 py-2">@item.ListC</td>
+
+                        <!-- Y 選項 -->
+                        <td class="border border-gray-300 px-4 py-2">
+                            <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-4 w-4 concentration-option"> Y
+                        </td>
+
+                        <!-- N 選項 -->
+                        <td class="border border-gray-300 px-4 py-2">
+                            <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-4 w-4 concentration-option"> N
+                        </td>
+
+                        <!-- 分數 0 -->
+                        <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td>
+
+                        <!-- 分數 1 -->
+                        <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="border border-gray-300 px-4 py-2 font-semibold text-right">總分</td>
+                    <td class="border border-gray-300 px-4 py-2" id="totalScore">/ 4</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- 表單按鈕 -->
+        <div class="flex justify-between space-x-4 mt-4">
+            <form action="/Questionnaire/ImmediateMemory" method="get">
+                <button type="submit" class="btn btn-warning">回上一頁</button>
+            </form>
+            <form action="/Questionnaire/CoordinationAndBalanceExamination" method="get">
+                <button type="submit" class="btn btn-primary">接續下一頁</button>
+            </form>
+        </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // 初始化並加載保存的分數
+            loadScores();
+
+            // 監聽所有 Y/N 選項變更事件
+            $('.concentration-option').on('change', function () {
+                updateScores();
+                saveScores();
+            });
+
+            // 計算並更新分數
+            function updateScores() {
+                let totalScore = 0;
+
+                $('.concentration-option:checked').each(function () {
+                    const value = parseInt($(this).val());
+                    const orderNumber = $(this).attr('name').split('_')[1]; // 取得項次編號
+
+                    // 更新 0 和 1 的分數欄位
+                    if (value === 1) {
+                        $(`#score1_${orderNumber}`).text('1');
+                        $(`#score0_${orderNumber}`).text('0');
+                    } else {
+                        $(`#score1_${orderNumber}`).text('0');
+                        $(`#score0_${orderNumber}`).text('0');
+                    }
+
+                    // 累加總分
+                    totalScore += value;
+                });
+
+                // 更新顯示總分
+                $('#totalScore').text(totalScore + ' / 4');
+
+                // 保存總分到 sessionStorage
+                sessionStorage.setItem('ConcentrationScore', totalScore);
+            }
+
+            // 保存每個選項的選中狀態到 sessionStorage
+            function saveScores() {
+                $('input[type="radio"]').each(function () {
+                    if ($(this).is(':checked')) {
+                        sessionStorage.setItem($(this).attr('name'), $(this).val());
+                    }
+                });
+            }
+
+            // 從 sessionStorage 加載分數和選中狀態
+            function loadScores() {
+                // 加載每個選項的選中狀態
+                $('input[type="radio"]').each(function () {
+                    const savedValue = sessionStorage.getItem($(this).attr('name'));
+                    if (savedValue !== null && $(this).val() === savedValue) {
+                        $(this).prop('checked', true);
+                    }
+                });
+
+                // 加載總分
+                const savedScore = sessionStorage.getItem('ConcentrationScore');
+                if (savedScore !== null) {
+                    $('#totalScore').text(savedScore + ' / 4');
+                }
+
+                // 更新每次的分數顯示
+                updateScores();
+            }
+        });
+    </script>
 </body>
 </html>

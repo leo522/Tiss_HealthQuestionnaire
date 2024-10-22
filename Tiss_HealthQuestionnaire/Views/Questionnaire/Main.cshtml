@@ -13,7 +13,7 @@
 </head>
 <body class="bg-gray-100 p-4">
     <div class="container mx-auto">
-        <form id="questionnaireForm" method="post" action="/Questionnaire/SaveQuestionnaireResponse">
+        <form id="questionnaireForm" method="post" action="/Questionnaire/Preview">
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
                 <div class="flex flex-col md:flex-row items-center mb-4">
                     <label class="mr-2">
@@ -34,13 +34,14 @@
                     <label class="mr-2">
                         性別：
                         <input type="text" name="genderDisplay" class="border rounded p-1"
-                               value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly disabled />
+                               value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly />
+                        <input type="hidden" name="gender" value="@(ViewBag.GenderID)" />
                     </label>
                     <label class="mr-2">
                         填表日期：
                         <input type="date" name="fillDate" class="border rounded p-1" required />
                     </label>
-                    <button class="btn btn-success ml-auto bg-green-500 text-white rounded px-4 py-2">存檔</button>
+                    <button type="button" class="btn btn-success ml-auto bg-green-500 text-white rounded px-4 py-2" id="previewButton">預覽送出</button>
                 </div>
             </div>
 
@@ -65,7 +66,7 @@
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             onclick="openTab(event, 'SurgeryHistory', '/Questionnaire/SurgeryHistory')">
-                        開刀史
+                        手術病史
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             onclick="openTab(event, 'PresentIllness', '/Questionnaire/PresentIllness')">
@@ -103,92 +104,186 @@
                         腦震盪篩檢-選手自填
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            onclick="openTab(event, 'CognitiveScreening', '/Questionnaire/CognitiveScreening')">
-                        腦震盪篩檢-防護員評估
-                    </button>
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             onclick="openTab(event, 'OrthopaedicScreening', '/Questionnaire/OrthopaedicScreening')">
                         骨科篩檢
+                    </button>
+                    <!-- 防護員專屬頁籤按鈕 -->
+                    <button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                            onclick="showTrainerAuthModal(event,  'CognitiveScreening', '/Questionnaire/CognitiveScreening')">
+                        腦震盪篩檢-醫療團隊評估
                     </button>
                 </div>
             </div>
 
             <div id="tabContent"></div> <!-- 頁籤內容會在點擊時載入 -->
         </form>
+
+        <!-- 預覽對話框 -->
+        <!--<div id="previewModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+                <h3 class="text-lg font-semibold mb-4">預覽填寫內容</h3>
+                <div id="previewContent" class="mb-4">-->
+        <!-- 預覽內容將會被載入到這裡 -->
+        <!--</div>
+                <button id="closePreviewModal" class="btn btn-secondary">關閉</button>
+            </div>
+        </div>-->
+        <!-- 身份驗證對話框 -->
+        <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
+                <form id="trainerAuthForm">
+                    <div class="form-group mb-2">
+                        <label for="trainerUserName">醫療團隊帳號</label>
+                        <input type="text" class="form-control" id="trainerUserName" name="trainerUserName" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="trainerPassword">密碼</label>
+                        <input type="password" class="form-control" id="trainerPassword" name="trainerPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">驗證</button>
+                </form>
+                <button id="closeModal" class="mt-2 text-red-500">取消</button>
+            </div>
+        </div>
     </div>
     <script>
+        $(document).ready(function () {
+            // 預設打開第一個頁籤，防止頁籤重複觸發
+            if (!$('.tablinks.active').length) {
+                $('.tablinks:first').trigger('click');
+            }
+
+            // 頁籤切換時保存表單數據
+            $('.tablinks').click(function () {
+                saveFormDataToSession();
+            });
+
+            // 載入頁面時恢復表單數據
+            loadFormDataFromSession();
+        });
+
+        $('#previewButton').click(function (e) {
+            e.preventDefault(); // 阻止默認行為
+
+            // 檢查填表日期是否選擇
+            const fillDate = $('input[name="fillDate"]').val();
+            if (!fillDate) {
+                // 使用 SweetAlert2 彈出警告
+                Swal.fire({
+                    icon: 'warning',
+                    title: '日期未選擇',
+                    text: '請選擇填表日期！',
+                    confirmButtonText: '確定'
+                });
+                return; // 終止函數執行
+            }
+            saveFormDataToSession(); // 提交表單前保存數據
+            $('#questionnaireForm').submit(); // 提交表單進行預覽
+        });
+
+        // 彈出醫療團隊身份驗證對話框
+        function showTrainerAuthModal(evt, tabName, url) {
+            evt.preventDefault();
+            document.getElementById('athleticTrainerModal').classList.remove('hidden');
+
+            // 綁定表單提交事件
+            $('#trainerAuthForm').off('submit').on('submit', function (e) {
+                e.preventDefault();
+                authenticateTrainer(url, tabName);
+            });
+
+            // 綁定取消按鈕事件
+            $('#closeModal').off('click').on('click', function () {
+                document.getElementById('athleticTrainerModal').classList.add('hidden');
+            });
+        }
+
+        // 驗證醫療團隊身份
+        function authenticateTrainer(url, tabName) {
+            const userName = $('#trainerUserName').val();
+            const password = $('#trainerPassword').val();
+
+            $.post('/Questionnaire/ValidateAthleticTrainer', { userName: userName, password: password }, function (response) {
+                if (response.success) {
+                    document.getElementById('athleticTrainerModal').classList.add('hidden');
+                    openTab(null, tabName, url); // 成功驗證後進入頁籤
+                } else {
+                    alert('身份驗證失敗，請確認帳號與密碼。');
+                }
+            }).fail(function () {
+                alert('驗證時發生錯誤，請稍後再試。');
+            });
+        }
+
+        // 開啟頁籤並載入部分視圖內容
         function openTab(evt, tabName, url) {
+            const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
+
             // 隱藏所有的 tabcontent
             $('.tabcontent').hide();
 
             // 移除所有 tablinks 的 active 類
             $('.tablinks').removeClass('active');
 
-            // 添加 active 類到當前選擇的 tablink
-            $(evt.currentTarget).addClass('active');
+            // 如果有事件且 currentTarget 存在，添加 active 類到當前選擇的 tablink
+            if (evt && evt.currentTarget) {
+                $(evt.currentTarget).addClass('active');
+            } else {
+                // 當沒有事件物件時，手動設置 active 類
+                $(`button[onclick*="${safeTabName}"]`).addClass('active');
+            }
 
             // 判斷是否已經載入過該 tab 的內容
-            if ($('#' + tabName).length === 0) {
-                // 載入內容並顯示
+            if ($('#' + safeTabName).length === 0) {
+                // 使用 AJAX 請求獲取部分視圖內容
                 $.get(url, function (data) {
-                    $('<div>', { id: tabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
-                    bindPartialViewScripts(); // 綁定加載的部分視圖中的事件
-                });
-            } else {
-                // 直接顯示已載入的內容
-                $('#' + tabName).show();
-            }
-
-            evt.preventDefault(); // 防止默認行為
-        }
-
-        function bindPartialViewScripts() {
-            // 綁定所有來自部分視圖的事件
-            $('input[type="radio"]').on('change', function () {
-                checkCompletion();
-            });
-
-            function checkCompletion() {
-                let allAnswered = true;
-
-                // 檢查所有問題是否都有選擇
-                $('table input[type="radio"]').each(function () {
-                    let name = $(this).attr('name');
-                    if ($('input[name="' + name + '"]:checked').length === 0) {
-                        allAnswered = false;
-                        return false; // 停止迴圈
+                    if (typeof data === 'object' && data.success === false) {
+                        alert(data.message); // 顯示後端返回的自定義錯誤訊息
+                    } else {
+                        $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
+                    }
+                }).fail(function (xhr) {
+                    if (xhr.status === 403 || xhr.status === 401) {
+                        alert('只有防護員可以訪問此頁面。');
+                    } else {
+                        alert('載入頁面時發生錯誤，請稍後再試。');
                     }
                 });
-
-                // 檢查是否有選擇「是否服用藥物」選項
-                if ($('input[name="medication"]:checked').length === 0) {
-                    allAnswered = false;
-                }
-
-                // 如果所有問題都填完了，顯示下一頁按鈕
-                if (allAnswered) {
-                    $('#nextPageForm').show();
-                } else {
-                    $('#nextPageForm').hide();
-                }
+            } else {
+                $('#' + safeTabName).show(); // 直接顯示已載入的內容
             }
+
+            // 防止默認行為，只有當 evt 存在時才執行
+            if (evt) evt.preventDefault();
         }
 
-        $(document).ready(function () {
-            // 默認打開第一個 tab
-            $('.tablinks:first').click();
-        });
-
-        function openProtectedTab(evt, tabName, url) {
-            // 假設這裡有一個後端API可以返回使用者角色
-            $.get('/Questionnaire/AT', function (data) {
-                if (data.role === 'AthleticTrainer') {
-                    openTab(evt, tabName, url);  // 使用者是防護員則打開頁籤
-                } else {
-                    alert('您必須是防護員才能填寫此問卷。');
-                    window.location.href = '/Account/Login';  // 重定向到登入頁面
-                }
+        // 保存表單數據到 sessionStorage
+        function saveFormDataToSession() {
+            const formData = $('#questionnaireForm').serializeArray();
+            const formDataObj = {};
+            $.each(formData, function () {
+                formDataObj[this.name] = this.value;
             });
+            sessionStorage.setItem('formData', JSON.stringify(formDataObj)); // 存儲到 sessionStorage
+        }
+
+        // 從 sessionStorage 恢復表單數據
+        function loadFormDataFromSession() {
+            const savedData = sessionStorage.getItem('formData');
+            if (savedData) {
+                const formDataObj = JSON.parse(savedData);
+                for (let key in formDataObj) {
+                    if (formDataObj.hasOwnProperty(key)) {
+                        const $input = $('[name="' + key + '"]');
+                        if ($input.attr('type') === 'radio' || $input.attr('type') === 'checkbox') {
+                            $input.filter('[value="' + formDataObj[key] + '"]').prop('checked', true);
+                        } else {
+                            $input.val(formDataObj[key]);
+                        }
+                    }
+                }
+            }
         }
     </script>
 </body>

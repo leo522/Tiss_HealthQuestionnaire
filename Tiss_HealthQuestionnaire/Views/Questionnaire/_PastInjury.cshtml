@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryStatusViewModel>*@
+﻿@*過去傷害狀況(已復原)*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryStatusViewModel>
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -15,11 +15,11 @@
         <!-- 無/有 選項 -->
         <div class="space-y-2">
             <div class="flex items-center">
-                <input type="radio" id="noInjury" name="injuryStatus" class="mr-2" value="no">
+                <input type="radio" id="pastnoInjury" name="pastInjuryStatus" class="mr-2" value="no">
                 <label for="noInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
             </div>
             <div class="flex items-center">
-                <input type="radio" id="hasInjury" name="injuryStatus" class="mr-2" value="yes">
+                <input type="radio" id="pasthasInjury" name="pastInjuryStatus" class="mr-2" value="yes">
                 <label for="hasInjury" class="mr-4">有，請詳述有症狀的部位</label>
             </div>
         </div>
@@ -35,16 +35,16 @@
                     @if (item.PastIsSingleSelect)
                     {
                         <!-- 單一勾選項目 -->
-                        <input type="checkbox" name="injury_@item.Id" class="mr-2">
+                        <input type="checkbox" name="pastinjury_@item.Id" class="mr-2">
                     }
                     else
                     {
                         <!-- 左右勾選項目 -->
                         <div class="flex space-x-2">
                             <label>左</label>
-                            <input type="checkbox" name="injuryLeft_@item.Id" class="mr-2">
+                            <input type="checkbox" name="pastinjuryLeft_@item.Id" class="mr-2">
                             <label>右</label>
-                            <input type="checkbox" name="injuryRight_@item.Id" class="mr-2">
+                            <input type="checkbox" name="pastinjuryRight_@item.Id" class="mr-2">
                         </div>
                     }
                 </div>
@@ -60,12 +60,12 @@
     <script>
         $(document).ready(function () {
             // 當 "有" 被選中時顯示症狀部位和傷勢類型
-            $('#hasInjury').change(function () {
+            $('#pasthasInjury').change(function () {
                 $('.injury-details').removeClass('hidden');
             });
 
             // 當 "無" 被選中時隱藏症狀部位和傷勢類型
-            $('#noInjury').change(function () {
+            $('#pastnoInjury').change(function () {
                 $('.injury-details').addClass('hidden');
                 $('#injury-type-section').addClass('hidden');
             });

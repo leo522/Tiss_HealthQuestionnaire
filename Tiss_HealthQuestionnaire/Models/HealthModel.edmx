@@ -321,6 +321,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ATName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ATNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -925,6 +926,7 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ATNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1294,6 +1296,7 @@
           <EntitySetMapping Name="Test_AthleticTrainer">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.Test_AthleticTrainer">
               <MappingFragment StoreEntitySet="Test_AthleticTrainer">
+                <ScalarProperty Name="ATNumber" ColumnName="ATNumber" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />

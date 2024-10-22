@@ -156,6 +156,7 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CognitiveScreeningViewModel.cs" />
+    <Compile Include="Models\ConcentrationViewModel.cs" />
     <Compile Include="Models\ConcussionScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -166,6 +167,7 @@
     <Compile Include="Models\DelayedRecall.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DelayedRecallViewModel.cs" />
     <Compile Include="Models\FamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -193,6 +195,7 @@
     <Compile Include="Models\ImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImmediateMemoryViewModel.cs" />
     <Compile Include="Models\InjuryStatus.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -249,6 +252,7 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
+    <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\SurgeryHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -326,6 +330,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="SweetAlert2\sweetalert.min.js" />
+    <Content Include="SweetAlert2\sweetalert2%4011.js" />
+    <Content Include="SweetAlert2\sweetalert2.all.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -374,6 +381,7 @@
     <Content Include="Views\Questionnaire\_ImmediateMemory.cshtml" />
     <Content Include="Views\Questionnaire\_OrthopaedicScreening.cshtml" />
     <Content Include="Views\Questionnaire\_SymptomEvaluation.cshtml" />
+    <Content Include="Views\Questionnaire\_PreviewTotal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

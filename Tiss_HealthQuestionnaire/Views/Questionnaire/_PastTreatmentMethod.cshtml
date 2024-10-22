@@ -15,13 +15,13 @@
             @foreach (var method in Model)
             {
                 <div class="flex items-center">
-                    <input type="checkbox" id="treatment_@method.Id" name="treatment_@method.Id" class="mr-2">
-                    <label for="treatment_@method.Id">@method.Method</label>
+                    <input type="checkbox" id="Pasttreatment_@method.Id" name="Pasttreatment_@method.Id" class="mr-2">
+                    <label for="Pasttreatment_@method.Id">@method.Method</label>
                 </div>
             }
             <div class="flex items-center">
-                <input type="checkbox" id="treatment_other" name="treatment_other" class="mr-2">
-                <label for="treatment_other">其他：</label>
+                <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="mr-2">
+                <label for="Pasttreatment_other">其他：</label>
                 <input type="text" class="border-b border-gray-400 ml-2" placeholder="請輸入其他治療方式">
             </div>
         </div>
