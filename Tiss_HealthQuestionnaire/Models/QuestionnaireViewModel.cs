@@ -37,13 +37,13 @@ namespace Tiss_HealthQuestionnaire.Models
             return value == "yes" ? "是 Yes" : "否 No";
         }
 
-        // 動態存放所有問卷數據
+        //動態存放所有問卷數據
         public Dictionary<string, string> FormData { get; set; } = new Dictionary<string, string>();
 
         //過去健康檢查病史的文字敘述
         public List<PastHealthDetailViewModel> PastHealthDetails { get; set; } = new List<PastHealthDetailViewModel>();
 
-        // 過敏史
+        //過敏史
         public List<AllergicHistoryDetailViewModel> AllergicHistoryDetails { get; set; } = new List<AllergicHistoryDetailViewModel>();
 
         //家族病史
@@ -55,14 +55,40 @@ namespace Tiss_HealthQuestionnaire.Models
         //手術病史
         public List<SurgeryHistoryDetailViewModel> SurgeryHistoryDetails { get; set; } = new List<SurgeryHistoryDetailViewModel>();
 
-        // 現在病史
+        //現在病史
         public List<PresentIllnessDetailViewModel> PresentIllnessDetails { get; set; } = new List<PresentIllnessDetailViewModel>();
 
         //藥物史
         public List<PastDrugsDetailViewModel> PastDrugsDetails { get; set; } = new List<PastDrugsDetailViewModel>();
 
-        // 營養品詳細
+        //營養品詳細
         public List<PastSupplementsDetailViewModel> PastSupplementsDetails { get; set; } = new List<PastSupplementsDetailViewModel>();
+
+        //女性問卷
+        public List<FemaleQuestionnaireDetailViewModel> FemaleQuestionnaireDetails { get; set; } = new List<FemaleQuestionnaireDetailViewModel>();
+
+        //顯示過去傷害狀況(已復原)
+        public List<PastInjuryStatuSViewModel> PastInjuryDetails { get; set; } = new List<PastInjuryStatuSViewModel>();
+        public List<PastTreatmentMethoDViewModel> PastTreatmentDetails { get; set; } = new List<PastTreatmentMethoDViewModel>();
+
+        //目前傷害狀況
+        public List<InjuryStatuSViewModel> NowInjuryDetails { get; set; } = new List<InjuryStatuSViewModel>();
+        public List<TreatmentMethoDViewModel> NowTreatmentDetails { get; set; } = new List<TreatmentMethoDViewModel>();
+
+        //心血管篩檢
+        public List<CardiovascularScreeningViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningViewModel>();
+
+        //腦震盪篩檢(選手自填)
+        public class QuestionnairRViewModel
+        {
+            public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
+            public string MedicationAnswer { get; set; }
+            public string MedicationDetails { get; set; }
+            public string Notes { get; set; }
+        }
+
+        //骨科篩檢
+        public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
     }
 
     public class PastHealthDetailViewModel //過去健康檢查病史
@@ -133,5 +159,61 @@ namespace Tiss_HealthQuestionnaire.Models
         public string ItemEn { get; set; } // 補充品項目英文名稱
         public bool IsUsed { get; set; }   // 是否使用過（true 或 false）
         public string OtherSupplements { get; set; } // 其他補充品描述
+    }
+
+    public class FemaleQuestionnaireDetailViewModel //女性問卷
+    {
+        public int QuestionId { get; set; }    // 項目ID
+        public string QuestionZh { get; set; } // 補充品項目中文名稱
+        public string QuestionEn { get; set; } // 補充品項目英文名稱
+        public string Answer { get; set; }
+    }
+
+    public class PastInjuryStatuSViewModel //顯示過去傷害狀況(已復原)
+    {
+        public string PastInjuryPart { get; set; }
+        public bool PastIsSingleSelect { get; set; }
+        public bool LeftSide { get; set; }
+        public bool RightSide { get; set; }
+    }
+
+    public class PastTreatmentMethoDViewModel //顯示過去傷害狀況(治療方法)
+    {
+        public string Method { get; set; }
+    }
+
+    public class InjuryStatuSViewModel //顯示目前傷害狀況
+    {
+        public string InjuryPart { get; set; }
+        public bool IsSingleSelect { get; set; }
+        public bool LeftSide { get; set; }
+        public bool RightSide { get; set; }
+    }
+
+    public class TreatmentMethoDViewModel //顯示目前傷害狀況(治療方法)
+    {
+        public string Method { get; set; }
+    }
+
+    public class CardiovascularScreeningViewModel //心血管篩檢
+    {
+        public string Questions { get; set; }
+        public string Answer { get; set; }
+    }
+
+    public class ConcussionScreeningViewModel //腦震盪篩檢（選手自填）
+    {
+        public int OrderNumbers { get; set; }
+        public string Questions { get; set; }
+        public string Answer { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class OrthopaedicScreeninGViewModel //骨科篩檢
+    {
+        public int OrderNumber { get; set; }
+        public string Instructions { get; set; }
+        public string ObservationPoints { get; set; }
+        public string Result { get; set; }  // 正常或異常
     }
 }

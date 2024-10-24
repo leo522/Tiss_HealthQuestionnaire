@@ -591,6 +591,159 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 });
             }
 
+            //收集女性問卷數據
+            var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
+            foreach (var item in femaleQuestionnaireItems)
+            {
+                string answerKey = $"femaleQuestion_{item.ID}";
+                string answerValue = form[answerKey];
+
+                model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
+                {
+                    QuestionId = item.ID,
+                    QuestionZh = item.QuestionZh,
+                    QuestionEn = item.QuestionEn,
+                    Answer = answerValue
+                });
+            }
+
+            //收集過去傷害狀況(已復原)的數據
+            var pastInjuryItems = _db.PastInjuryStatus.ToList();
+            foreach (var item in pastInjuryItems)
+            {
+                string partKey = $"pastinjury_{item.Id}";
+                string leftPartKey = $"pastinjuryLeft_{item.Id}";
+                string rightPartKey = $"pastinjuryRight_{item.Id}";
+                bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
+
+                if (hasInjury)
+                {
+                    model.PastInjuryDetails.Add(new PastInjuryStatuSViewModel
+                    {
+                        PastInjuryPart = item.InjuryPart,
+                        //PastIsSingleSelect = item.PastIsSingleSelect,
+                        LeftSide = form[leftPartKey] != null,
+                        RightSide = form[rightPartKey] != null
+                    });
+                }
+            }
+
+            //收集治療方式
+            var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
+            foreach (var method in PasttreatmentMethods)
+            {
+                string methodKey = $"Pasttreatment_{method.Id}";
+                if (form[methodKey] != null)
+                {
+                    model.PastTreatmentDetails.Add(new PastTreatmentMethoDViewModel
+                    {
+                        Method = method.Method
+                    });
+                }
+            }
+
+            //收集目前傷害狀況的數據
+            var injuryItems = _db.InjuryStatus.ToList();
+            foreach (var item in injuryItems)
+            {
+                string partKey = $"Nowinjury_{item.Id}";
+                string leftPartKey = $"NowinjuryLeft_{item.Id}";
+                string rightPartKey = $"NowinjuryRight_{item.Id}";
+                bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
+
+                if (hasInjury)
+                {
+                    model.NowInjuryDetails.Add(new InjuryStatuSViewModel
+                    {
+                        InjuryPart = item.InjuryPart,
+                        //IsSingleSelect = item.IsSingleSelect,
+                        LeftSide = form[leftPartKey] != null,
+                        RightSide = form[rightPartKey] != null
+                    });
+                }
+            }
+
+            // 收集目前治療方式
+            var treatmentMethods = _db.TreatmentMethod.ToList();
+            foreach (var method in treatmentMethods)
+            {
+                string methodKey = $"Nowtreatment_{method.Id}";
+                if (form[methodKey] != null)
+                {
+                    model.NowTreatmentDetails.Add(new TreatmentMethoDViewModel
+                    {
+                        Method = method.Method
+                    });
+                }
+            }
+
+            // 收集心血管篩檢的數據
+            var cardiovascularScreenings = _db.CardiovascularScreening.ToList();
+            foreach (var item in cardiovascularScreenings)
+            {
+                string answerKey = $"question_{item.Id}";
+                var answer = form[answerKey];
+
+                if (!string.IsNullOrEmpty(answer))
+                {
+                    model.CardiovascularScreeningDetails.Add(new CardiovascularScreeningViewModel
+                    {
+                        Questions = item.Question,
+                        Answer = answer
+                    });
+                }
+            }
+
+
+            // 收集腦震盪篩檢(選手自填)的數據
+            var concussionScreenings = _db.CognitiveScreening.ToList();
+            foreach (var item in concussionScreenings)
+            {
+                string answerKey = $"question_{item.ID}";
+                var answer = form[answerKey];
+
+                if (!string.IsNullOrEmpty(answer))
+                {
+                    model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                    {
+                        OrderNumbers = item.ID,
+                        Questions = item.Question,
+                        Answer = answer
+                    });
+                }
+            }
+
+            // 收集是否正在服用藥物的數據
+            var medicationAnswer = form["medication"];
+            if (!string.IsNullOrEmpty(medicationAnswer))
+            {
+                model.MedicationAnswer = medicationAnswer;
+                model.MedicationDetails = form["medicationDetails"];
+            }
+
+            // 收集備註
+            model.Notes = form["notes"];
+
+
+            // 收集骨科篩檢的數據
+            var orthopaedicScreenings = _db.OrthopaedicScreening.ToList();
+            foreach (var item in orthopaedicScreenings)
+            {
+                string resultKey = $"result_{item.Id}";
+                var result = form[resultKey];
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    model.OrthopaedicScreeningDetails.Add(new OrthopaedicScreeninGViewModel
+                    {
+                        OrderNumber = item.Id,
+                        Instructions = item.Instructions,
+                        ObservationPoints = item.ObservationPoints,
+                        Result = result
+                    });
+                }
+            }
+
             return View("_PreviewTotal", model);
         }
         #endregion
