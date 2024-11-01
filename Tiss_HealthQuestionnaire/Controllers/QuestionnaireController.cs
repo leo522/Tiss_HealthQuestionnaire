@@ -592,19 +592,22 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
 
             //收集女性問卷數據
-            var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
-            foreach (var item in femaleQuestionnaireItems)
+            if (model.Gender ==2)
             {
-                string answerKey = $"femaleQuestion_{item.ID}";
-                string answerValue = form[answerKey];
-
-                model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
+                var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
+                foreach (var item in femaleQuestionnaireItems)
                 {
-                    QuestionId = item.ID,
-                    QuestionZh = item.QuestionZh,
-                    QuestionEn = item.QuestionEn,
-                    Answer = answerValue
-                });
+                    string answerKey = $"femaleQuestion_{item.ID}";
+                    string answerValue = form[answerKey];
+
+                    model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
+                    {
+                        QuestionId = item.ID,
+                        QuestionZh = item.QuestionZh,
+                        QuestionEn = item.QuestionEn,
+                        Answer = answerValue
+                    });
+                }
             }
 
             //收集過去傷害狀況(已復原)的數據
@@ -706,8 +709,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
                     {
-                        OrderNumbers = item.ID,
-                        Questions = item.Question,
+                        OrderNumber = item.ID,
+                        Question = item.Question,
                         Answer = answer
                     });
                 }

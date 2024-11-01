@@ -79,13 +79,11 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<CardiovascularScreeningViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningViewModel>();
 
         //腦震盪篩檢(選手自填)
-        public class QuestionnairRViewModel
-        {
             public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
             public string MedicationAnswer { get; set; }
             public string MedicationDetails { get; set; }
             public string Notes { get; set; }
-        }
+
 
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
@@ -195,20 +193,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Method { get; set; }
     }
 
-    public class CardiovascularScreeningViewModel //心血管篩檢
-    {
-        public string Questions { get; set; }
-        public string Answer { get; set; }
-    }
-
-    public class ConcussionScreeningViewModel //腦震盪篩檢（選手自填）
-    {
-        public int OrderNumbers { get; set; }
-        public string Questions { get; set; }
-        public string Answer { get; set; }
-        public string Notes { get; set; }
-    }
-
     public class OrthopaedicScreeninGViewModel //骨科篩檢
     {
         public int OrderNumber { get; set; }
@@ -216,4 +200,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string ObservationPoints { get; set; }
         public string Result { get; set; }  // 正常或異常
     }
+
+
 }
