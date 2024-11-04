@@ -1,49 +1,49 @@
-﻿@*定位*@
+﻿@*認知篩檢-定位*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel>
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
+    <div class="p-4">
         <h2 class="text-xl font-bold mb-4">1. 定位 (Orientation): (0錯誤；1正確)</h2>
-        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">項次</th>
-                    <th class="border border-gray-300 px-4 py-2">問題</th>
-                    <th class="border border-gray-300 px-4 py-2">0</th>
-                    <th class="border border-gray-300 px-4 py-2">1</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <!-- 項次 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
 
-                        <!-- 問題 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                        <!-- 0選項 -->
-                        <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="answer_@item.OrderNumber" value="0" class="form-radio h-4 w-4 score-option">
-                        </td>
-
-                        <!-- 1選項 -->
-                        <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="answer_@item.OrderNumber" value="1" class="form-radio h-4 w-4 score-option">
-                        </td>
+        <!-- 問卷表格 -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 text-center">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">項次</th>
+                        <th class="border border-gray-300 px-4 py-2">問題</th>
+                        <th class="border border-gray-300 px-4 py-2">0</th>
+                        <th class="border border-gray-300 px-4 py-2">1</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-100">
+                            <!-- 項次 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+
+                            <!-- 問題 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                            <!-- 0選項 -->
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="radio" name="answer_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 score-option">
+                            </td>
+
+                            <!-- 1選項 -->
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="radio" name="answer_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 score-option">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
         <!-- 總計部分 -->
         <div class="flex items-center mt-4">
@@ -52,11 +52,13 @@
             <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span>
             <span class="ml-2">/ 5</span>
         </div>
-    </div>
-    <form action="/Questionnaire/ImmediateMemory" method="get">
-        <button type="submit" class="btn btn-primary">接續下一頁</button>
-    </form>
 
+        <form action="/Questionnaire/ImmediateMemory" method="get" class="mt-4">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
+        </form>
+    </div>
+
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 初始化分數

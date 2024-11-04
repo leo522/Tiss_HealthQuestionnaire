@@ -1,19 +1,15 @@
-﻿@*協調與平衡測驗*@
+﻿@*認知篩檢-協調與平衡測驗*@
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <title>協調與平衡測驗</title>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
+    <div class="p-4">
         <h2 class="text-xl font-bold mb-4">協調與平衡測驗 (Coordination and Balance Examination)</h2>
 
         <!-- 第一部分：改良版平衡姿勢檢測 -->
@@ -23,53 +19,53 @@
         <div class="mb-4">
             <label class="block mb-2 font-semibold">測試腳 (非慣用腳)：</label>
             <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" name="testFoot" value="左"> 左
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="testFoot" value="左"> 左
             </label>
             <label class="inline-flex items-center ml-4">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" name="testFoot" value="右"> 右
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="testFoot" value="右"> 右
             </label>
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">測試平面 (硬地/訓練場)：</label>
-            <input type="text" class="form-input border rounded w-full px-3 py-2" placeholder="請輸入測試平面">
+            <input type="text" class="border border-gray-300 rounded w-full px-3 py-2" placeholder="請輸入測試平面">
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
-            <input type="text" class="form-input border rounded w-full px-3 py-2" placeholder="請輸入腳穿著狀況">
+            <input type="text" class="border border-gray-300 rounded w-full px-3 py-2" placeholder="請輸入腳穿著狀況">
         </div>
 
         <!-- 錯誤扣分表格 -->
-        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+        <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
-                <tr class="bg-gray-200">
+                <tr class="bg-gray-100">
                     <th class="border border-gray-300 px-4 py-2">閉上眼 · 雙手插腰完成以下動作 (20 秒)</th>
                     <th class="border border-gray-300 px-4 py-2">錯誤扣分</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr class="hover:bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2">雙腳站立</td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
                     </td>
                 </tr>
-                <tr>
+                <tr class="hover:bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2">腳跟前後站立 (慣用腳在前)</td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
                     </td>
                 </tr>
-                <tr>
+                <tr class="hover:bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2">單腳站立 (非慣用腳)</td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center error-input" min="0" max="10" value="0"> / 10
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
                     </td>
                 </tr>
             </tbody>
             <tfoot>
-                <tr>
+                <tr class="bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2 font-semibold">總錯誤次數</td>
                     <td class="border border-gray-300 px-4 py-2 font-semibold">
                         <span id="totalErrorCount">0</span> / 30
@@ -87,9 +83,9 @@
         <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：記錄三公尺線內來回往返時間</h3>
 
         <!-- 記錄時間表格 -->
-        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+        <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
-                <tr class="bg-gray-200">
+                <tr class="bg-gray-100">
                     <th class="border border-gray-300 px-4 py-2">第一次</th>
                     <th class="border border-gray-300 px-4 py-2">第二次</th>
                     <th class="border border-gray-300 px-4 py-2">第三次</th>
@@ -98,15 +94,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr class="hover:bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="form-input w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
+                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
                     </td>
                     <td class="border border-gray-300 px-4 py-2" id="averageTime">秒</td>
                     <td class="border border-gray-300 px-4 py-2" id="fastestTime">秒</td>
@@ -117,14 +113,15 @@
         <!-- 表單按鈕 -->
         <div class="flex justify-between space-x-4 mt-4">
             <form action="/Questionnaire/Concentration" method="get">
-                <button type="submit" class="btn btn-warning">回上一頁</button>
+                <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">回上一頁</button>
             </form>
             <form action="/Questionnaire/DelayedRecall" method="get">
-                <button type="submit" class="btn btn-primary">接續下一頁</button>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
             </form>
         </div>
     </div>
 
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 初始化並加載保存的數據
@@ -152,8 +149,6 @@
                     }
                 });
                 $('#totalErrorCount').text(totalErrorCount);
-
-                // 保存總錯誤次數到 sessionStorage
                 sessionStorage.setItem('TotalErrorCount', totalErrorCount);
             }
 
@@ -164,26 +159,22 @@
                     return isNaN(val) ? 0 : val;
                 }).get();
 
-                // 計算平均時間
-                const validTimes = times.filter(time => time > 0); // 過濾掉為 0 的時間
+                const validTimes = times.filter(time => time > 0);
                 const averageTime = (validTimes.reduce((a, b) => a + b, 0) / (validTimes.length || 1)).toFixed(2);
                 $('#averageTime').text(isNaN(averageTime) ? "0 秒" : averageTime + ' 秒');
                 sessionStorage.setItem('AverageTime', averageTime);
 
-                // 計算最快時間
                 const fastestTime = validTimes.length > 0 ? Math.min(...validTimes).toFixed(2) : 0;
                 $('#fastestTime').text(isNaN(fastestTime) ? "0 秒" : fastestTime + ' 秒');
                 sessionStorage.setItem('FastestTime', fastestTime);
             }
 
-            // 保存輸入的數據和計算結果到 sessionStorage
             function saveScores() {
                 $('.error-input, .time-input').each(function (index) {
                     sessionStorage.setItem(`inputValue_${index}`, $(this).val());
                 });
             }
 
-            // 加載 sessionStorage 中的數據
             function loadScores() {
                 $('.error-input, .time-input').each(function (index) {
                     const savedValue = sessionStorage.getItem(`inputValue_${index}`);
@@ -192,13 +183,11 @@
                     }
                 });
 
-                // 加載總錯誤次數
                 const savedTotalErrorCount = sessionStorage.getItem('TotalErrorCount');
                 if (savedTotalErrorCount !== null) {
                     $('#totalErrorCount').text(savedTotalErrorCount);
                 }
 
-                // 加載平均時間和最快時間
                 const savedAverageTime = sessionStorage.getItem('AverageTime');
                 const savedFastestTime = sessionStorage.getItem('FastestTime');
                 if (savedAverageTime !== null) {

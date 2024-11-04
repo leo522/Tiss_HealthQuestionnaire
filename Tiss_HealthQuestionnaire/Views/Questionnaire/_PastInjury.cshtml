@@ -15,12 +15,12 @@
         <!-- 無/有 選項 -->
         <div class="space-y-2">
             <div class="flex items-center">
-                <input type="radio" id="pastnoInjury" name="pastInjuryStatus" class="mr-2" value="no">
-                <label for="noInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
+                <input type="radio" id="pastnoInjury" name="pastInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="no">
+                <label for="pastnoInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
             </div>
             <div class="flex items-center">
-                <input type="radio" id="pasthasInjury" name="pastInjuryStatus" class="mr-2" value="yes">
-                <label for="hasInjury" class="mr-4">有，請詳述有症狀的部位</label>
+                <input type="radio" id="pasthasInjury" name="pastInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="yes">
+                <label for="pasthasInjury" class="mr-4">有，請詳述有症狀的部位</label>
             </div>
         </div>
 
@@ -29,22 +29,26 @@
             @foreach (var item in Model)
             {
                 <div>
-                    <div class="font-semibold">@item.PastInjuryPart</div>
+                    <div class="font-medium">@item.PastInjuryPart</div>
 
                     <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
                     @if (item.PastIsSingleSelect)
                     {
                         <!-- 單一勾選項目 -->
-                        <input type="checkbox" name="pastinjury_@item.Id" class="mr-2">
+                        <input type="checkbox" name="pastinjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
                     }
                     else
                     {
                         <!-- 左右勾選項目 -->
-                        <div class="flex space-x-2">
-                            <label>左</label>
-                            <input type="checkbox" name="pastinjuryLeft_@item.Id" class="mr-2">
-                            <label>右</label>
-                            <input type="checkbox" name="pastinjuryRight_@item.Id" class="mr-2">
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="pastinjuryLeft_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>左</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="pastinjuryRight_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>右</span>
+                            </label>
                         </div>
                     }
                 </div>

@@ -1,13 +1,9 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
-
+﻿@*症狀自我評估*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src="~/Scripts/bootstrap.js"></script>
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .light-indicator {
             width: 16px;
@@ -17,61 +13,64 @@
         }
 
         .light-green {
-            background-color: #38a169; /* Tailwind green-500 */
+            background-color: #38a169;
         }
-
+        /* Tailwind green-500 */
         .light-yellow {
-            background-color: #ecc94b; /* Tailwind yellow-400 */
+            background-color: #ecc94b;
         }
-
+        /* Tailwind yellow-400 */
         .light-red {
-            background-color: #e53e3e; /* Tailwind red-500 */
+            background-color: #e53e3e;
         }
+        /* Tailwind red-500 */
     </style>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
-        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">燈號</th> <!-- 用於放置燈號 -->
-                    <th class="border border-gray-300 px-4 py-2">項次</th>
-                    <th class="border border-gray-300 px-4 py-2">症狀</th>
-                    <th class="border border-gray-300 px-4 py-2">0</th>
-                    <th class="border border-gray-300 px-4 py-2">1</th>
-                    <th class="border border-gray-300 px-4 py-2">2</th>
-                    <th class="border border-gray-300 px-4 py-2">3</th>
-                    <th class="border border-gray-300 px-4 py-2">4</th>
-                    <th class="border border-gray-300 px-4 py-2">5</th>
-                    <th class="border border-gray-300 px-4 py-2">6</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <!-- 燈號顯示 -->
-                        <td class="border border-gray-300 px-4 py-2">
-                            <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
-                        </td>
+    <div class="p-4">
+        <h1 class="text-xl font-bold mb-4">症狀自我評估 Self-assessment of Symptoms</h1>
 
-                        <!-- 項次 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
-
-                        <!-- 症狀項目 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                        <!-- 分數選項 -->
+        <!-- 問卷表格 -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 text-center">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">燈號</th>
+                        <th class="border border-gray-300 px-4 py-2">項次</th>
+                        <th class="border border-gray-300 px-4 py-2">症狀</th>
                         @for (int i = 0; i <= 6; i++)
                         {
-                            <td class="border border-gray-300 px-4 py-2">
-                                <input type="radio" name="score_@item.OrderNumber" value="@i" class="form-radio h-4 w-4 score-option" data-indicator="#indicator_@item.OrderNumber">
-                            </td>
+                            <th class="border border-gray-300 px-4 py-2">@i</th>
                         }
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-100">
+                            <!-- 燈號顯示 -->
+                            <td class="border border-gray-300 px-4 py-2">
+                                <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
+                            </td>
+
+                            <!-- 項次 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+
+                            <!-- 症狀項目 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                            <!-- 分數選項 -->
+                            @for (int i = 0; i <= 6; i++)
+                            {
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <input type="radio" name="score_@item.OrderNumber" value="@i" class="form-radio h-5 w-5 text-blue-600 score-option" data-indicator="#indicator_@item.OrderNumber">
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
         <!-- 總計部分 -->
         <div class="flex flex-col mt-4 space-y-2">
@@ -94,10 +93,13 @@
                 </div>
             </div>
         </div>
+
+        <form action="/Questionnaire/CognitiveScreening" method="get" class="mt-4">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
+        </form>
     </div>
-    <form action="/Questionnaire/CognitiveScreening" method="get">
-        <button type="submit" class="btn btn-outline-primary">接續下一頁</button>
-    </form>
+
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 監聽所有的 radio 按鈕

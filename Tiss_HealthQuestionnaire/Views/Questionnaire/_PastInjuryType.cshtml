@@ -1,28 +1,30 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryType>
+﻿@*過去傷害狀況(已復原)-傷勢類型*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryType>
 @{
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">2.傷勢類型</h2>
+        <h2 class="text-xl font-bold mb-4">2.傷勢類型 Injury Types</h2>
 
         <div class="grid grid-cols-3 gap-4">
             <!-- 肌肉/肌腱類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">肌肉/肌腱</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">肌肉/肌腱</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.MuscleTendon))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="PastmuscleTendon_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.MuscleTendon
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="PastmuscleTendon_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.MuscleTendon</span>
                             </label>
                         </div>
                     }
@@ -31,15 +33,15 @@
 
             <!-- 骨類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">骨類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">骨類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.Bone))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Pastbone_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.Bone
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="Pastbone_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.Bone</span>
                             </label>
                         </div>
                     }
@@ -48,15 +50,15 @@
 
             <!-- 韌帶類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">韌帶類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">韌帶類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.Ligament))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Pastligament_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.Ligament
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="Pastligament_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.Ligament</span>
                             </label>
                         </div>
                     }
@@ -65,15 +67,15 @@
 
             <!-- 神經類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">神經類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">神經類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.Nerve))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Pastnerve_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.Nerve
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="Pastnerve_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.Nerve</span>
                             </label>
                         </div>
                     }
@@ -82,15 +84,15 @@
 
             <!-- 軟骨/滑膜/滑囊類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">軟骨/滑膜/滑囊類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">軟骨/滑膜/滑囊類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.CartilageSynoviumBursa))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="PastcartilageSynoviumBursa_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.CartilageSynoviumBursa
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="PastcartilageSynoviumBursa_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.CartilageSynoviumBursa</span>
                             </label>
                         </div>
                     }
@@ -99,15 +101,15 @@
 
             <!-- 表皮組織 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">表皮組織</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">表皮組織</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.EpidermalTissue))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="PastepidermalTissue_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.EpidermalTissue
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="PastepidermalTissue_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.EpidermalTissue</span>
                             </label>
                         </div>
                     }
@@ -116,15 +118,15 @@
 
             <!-- 血管類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">血管類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">血管類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.BloodVessel))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="PastbloodVessel_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.BloodVessel
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="PastbloodVessel_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.BloodVessel</span>
                             </label>
                         </div>
                     }
@@ -133,15 +135,15 @@
 
             <!-- 器官/四肢類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">器官/四肢類</h3>
+                <h3 class="font-bold mb-2 border-b border-gray-400">器官/四肢類</h3>
                 @foreach (var item in Model)
                 {
                     if (!String.IsNullOrEmpty(item.OrganLimb))
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="PastorganLimb_@item.Id" class="mr-2 Pastinjury-checkbox">
-                                @item.OrganLimb
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="PastorganLimb_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>@item.OrganLimb</span>
                             </label>
                         </div>
                     }

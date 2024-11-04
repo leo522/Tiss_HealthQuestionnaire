@@ -1,32 +1,32 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.MedicalFamilyHistoryViewModel>
-@{
-    Layout = null;
-}
+﻿@*藥物史*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.MedicalFamilyHistoryViewModel>
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
+    <title>藥物史</title>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
+    <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">藥物史</h2>
+
         <form>
             <!-- 遍歷每個問題 -->
             @foreach (var item in Model)
             {
                 <div class="mb-6">
                     <!-- 顯示問題 -->
-                    <div class="text-lg font-bold">@item.Question</div>
+                    <div class="text-lg font-semibold mb-2">@item.Question</div>
 
                     <!-- 無選項 -->
                     <div class="flex items-center mb-2">
-                        <input type="radio" id="no_@(item.Question)" name="@item.Question" value="no" class="form-radio h-4 w-4">
+                        <input type="radio" id="no_@(item.Question)" name="@item.Question" value="no" class="form-radio h-5 w-5 text-blue-600">
                         <label for="no_@(item.Question)" class="ml-2">無</label>
                     </div>
 
                     <!-- 有選項 -->
                     <div class="flex items-center mb-2">
-                        <input type="radio" id="yes_@(item.Question)" name="@item.Question" value="yes" class="form-radio h-4 w-4">
+                        <input type="radio" id="yes_@(item.Question)" name="@item.Question" value="yes" class="form-radio h-5 w-5 text-blue-600">
                         <label for="yes_@(item.Question)" class="ml-2">有</label>
                     </div>
 
@@ -38,7 +38,7 @@
                                 @foreach (var symptom in item.Symptoms)
                                 {
                                     <div class="flex items-center mr-4 mb-2">
-                                        <input type="checkbox" id="symptom_@(symptom)" name="symptom_@(item.Question)" value="@symptom" class="form-checkbox h-4 w-4">
+                                        <input type="checkbox" id="symptom_@(symptom)" name="symptom_@(item.Question)" value="@symptom" class="form-checkbox h-5 w-5 text-blue-600">
                                         <label for="symptom_@(symptom)" class="ml-2">@symptom</label>
                                     </div>
                                 }

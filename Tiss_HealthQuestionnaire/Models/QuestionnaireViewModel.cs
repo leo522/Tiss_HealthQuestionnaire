@@ -73,6 +73,8 @@ namespace Tiss_HealthQuestionnaire.Models
 
         //目前傷害狀況
         public List<InjuryStatuSViewModel> NowInjuryDetails { get; set; } = new List<InjuryStatuSViewModel>();
+
+        //目前傷害狀況-治療方法
         public List<TreatmentMethoDViewModel> NowTreatmentDetails { get; set; } = new List<TreatmentMethoDViewModel>();
 
         //心血管篩檢
@@ -80,10 +82,9 @@ namespace Tiss_HealthQuestionnaire.Models
 
         //腦震盪篩檢(選手自填)
         public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
-            public string MedicationAnswer { get; set; }
-            public string MedicationDetails { get; set; }
-            public string Notes { get; set; }
-
+        public string MedicationAnswer { get; set; }
+        public string MedicationDetails { get; set; }
+        public string Notes { get; set; }
 
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
@@ -226,6 +227,4 @@ namespace Tiss_HealthQuestionnaire.Models
         public string ObservationPoints { get; set; }
         public string Result { get; set; }  // 正常或異常
     }
-
-
 }

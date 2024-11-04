@@ -1,151 +1,112 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryType>
+﻿@*目前傷害狀況-傷勢類型*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryType>
 @{
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
     <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">2.傷勢類型</h2>
+        <h2 class="text-xl font-bold mb-4">2.傷勢類型 Injury Types</h2>
 
         <div class="grid grid-cols-3 gap-4">
             <!-- 肌肉/肌腱類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">肌肉/肌腱</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.MuscleTendon))
+                <h3 class="font-bold mb-2 border-b border-gray-400">肌肉/肌腱</h3>
+                <select name="NowmuscleTendon" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.MuscleTendon)).Select(i => i.MuscleTendon).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="NowmuscleTendon_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.MuscleTendon
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 骨類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">骨類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.Bone))
+                <h3 class="font-bold mb-2 border-b border-gray-400">骨類</h3>
+                <select name="Nowbone" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Bone)).Select(i => i.Bone).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Nowbone_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.Bone
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 韌帶類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">韌帶類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.Ligament))
+                <h3 class="font-bold mb-2 border-b border-gray-400">韌帶類</h3>
+                <select name="Nowligament" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Ligament)).Select(i => i.Ligament).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Nowligament_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.Ligament
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 神經類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">神經類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.Nerve))
+                <h3 class="font-bold mb-2 border-b border-gray-400">神經類</h3>
+                <select name="Nownerve" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Nerve)).Select(i => i.Nerve).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="Nownerve_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.Nerve
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 軟骨/滑膜/滑囊類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">軟骨/滑膜/滑囊類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.CartilageSynoviumBursa))
+                <h3 class="font-bold mb-2 border-b border-gray-400">軟骨/滑膜/滑囊類</h3>
+                <select name="NowcartilageSynoviumBursa" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.CartilageSynoviumBursa)).Select(i => i.CartilageSynoviumBursa).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="NowcartilageSynoviumBursa_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.CartilageSynoviumBursa
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 表皮組織 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">表皮組織</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.EpidermalTissue))
+                <h3 class="font-bold mb-2 border-b border-gray-400">表皮組織</h3>
+                <select name="NowepidermalTissue" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="NowepidermalTissue_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.EpidermalTissue
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 血管類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">血管類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.BloodVessel))
+                <h3 class="font-bold mb-2 border-b border-gray-400">血管類</h3>
+                <select name="NowbloodVessel" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.BloodVessel)).Select(i => i.BloodVessel).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="NowbloodVessel_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.BloodVessel
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
 
             <!-- 器官/四肢類 -->
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400 inline-block">器官/四肢類</h3>
-                @foreach (var item in Model)
-                {
-                    if (!String.IsNullOrEmpty(item.OrganLimb))
+                <h3 class="font-bold mb-2 border-b border-gray-400">器官/四肢類</h3>
+                <select name="NoworganLimb" class="w-full border border-gray-300 p-2 rounded">
+                    <option value="">請選擇</option>
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.OrganLimb)).Select(i => i.OrganLimb).Distinct())
                     {
-                        <div>
-                            <label>
-                                <input type="checkbox" name="NoworganLimb_@item.Id" class="mr-2 Nowinjury-checkbox">
-                                @item.OrganLimb
-                            </label>
-                        </div>
+                        <option value="@item">@item</option>
                     }
-                }
+                </select>
             </div>
         </div>
 
@@ -157,9 +118,9 @@
 
     <script>
         $(document).ready(function () {
-            // 當用戶在 "傷勢類型" 部分選擇複選框時顯示 "治療方式" 部分
-            $('.Nowinjury-checkbox').change(function () {
-                if ($('.Nowinjury-checkbox:checked').length > 0) {
+            // 當用戶在 "傷勢類型" 部分選擇項目時顯示 "治療方式" 部分
+            $('select').change(function () {
+                if ($('select').filter(function () { return this.value; }).length > 0) {
                     // 動態載入治療方式的部分視圖
                     $.get('/Questionnaire/NowTreatmentMethod', function (data) {
                         $('#Nowtreatment-method-section').html(data).removeClass('hidden');

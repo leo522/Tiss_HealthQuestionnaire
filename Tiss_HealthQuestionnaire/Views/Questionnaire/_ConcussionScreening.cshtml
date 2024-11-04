@@ -1,74 +1,74 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
+﻿@*腦震盪篩檢-選手自填*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src="~/Scripts/bootstrap.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
-        <span>
-            (一) 選手背景：您是否曾經有下列病史(症狀)
-        </span>
+    <div class="p-4">
+        <h1 class="text-xl font-bold mb-4">(一) 選手背景：您是否曾經有下列病史(症狀)</h1>
+
         <!-- 問卷表格 -->
-        <table class="table-auto border-collapse border border-gray-300 w-full">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">項次</th>
-                    <th class="border border-gray-300 px-4 py-2">是否曾經</th>
-                    <th class="border border-gray-300 px-4 py-2">有</th>
-                    <th class="border border-gray-300 px-4 py-2">無</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <!-- 項次 -->
-                        <td class="border border-gray-300 px-4 py-2 text-center">@item.OrderNumber</td>
-
-                        <!-- 問題 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                        <!-- 有選項 -->
-                        <td class="border border-gray-300 px-4 py-2 text-center">
-                            <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-4 w-4">
-                        </td>
-
-                        <!-- 無選項 -->
-                        <td class="border border-gray-300 px-4 py-2 text-center">
-                            <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-4 w-4">
-                        </td>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                        <th class="border border-gray-300 px-4 py-2">是否曾經</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">有</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">無</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-100">
+                            <!-- 項次 -->
+                            <td class="border border-gray-300 px-4 py-2 text-center">@item.OrderNumber</td>
+
+                            <!-- 問題 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                            <!-- 有選項 -->
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                            </td>
+
+                            <!-- 無選項 -->
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-5 w-5 text-blue-600">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
         <!-- 新增項目：現在是否服用藥物 -->
         <div class="flex items-center mt-8 mb-4">
-            <span class="mr-4">● 現在是否服用藥物：</span>
+            <span class="mr-4 font-medium">● 現在是否服用藥物：</span>
             <label class="inline-flex items-center mr-4">
-                <input type="radio" name="medication" value="no" class="form-radio h-4 w-4">
+                <input type="radio" name="medication" value="no" class="form-radio h-5 w-5 text-blue-600">
                 <span class="ml-2">無</span>
             </label>
             <label class="inline-flex items-center mr-4">
-                <input type="radio" name="medication" value="yes" class="form-radio h-4 w-4">
+                <input type="radio" name="medication" value="yes" class="form-radio h-5 w-5 text-blue-600">
                 <span class="ml-2">有</span>
             </label>
             <span class="ml-2">(請述明)</span>
-            <input type="text" name="medicationDetails" class="border ml-2 px-2 py-1 w-64">
+            <input type="text" name="medicationDetails" class="border border-gray-300 rounded px-2 py-1 w-64 ml-2">
         </div>
 
         <!-- 新增項目：備註 -->
         <div class="flex items-start mb-4">
-            <span class="mr-4">● 備註：</span>
-            <input type="text" name="notes" class="border flex-grow px-2 py-1">
+            <span class="mr-4 font-medium">● 備註：</span>
+            <input type="text" name="notes" class="border border-gray-300 rounded flex-grow px-2 py-1">
         </div>
+
+        <form action="/Questionnaire/SymptomEvaluation" method="get">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
+        </form>
     </div>
-    <form action="/Questionnaire/SymptomEvaluation" method="get">
-        <button type="submit" class="btn btn-outline-primary">接續下一頁</button>
-    </form>
 </body>
 </html>

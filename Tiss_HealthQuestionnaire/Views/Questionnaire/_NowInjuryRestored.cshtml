@@ -4,24 +4,23 @@
     Layout = null;
 }
 <!DOCTYPE html>
-
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
     <div class="p-4">
-        <h1 class="text-xl font-bold mb-4">1.目前有的症狀或疼痛部位:</h1>
+        <h1 class="text-xl font-bold mb-4">1.目前有的症狀或疼痛部位</h1>
 
         <!-- 無/有 選項 -->
         <div class="space-y-2">
             <div class="flex items-center">
-                <input type="radio" id="NownoInjury" name="NowInjuryStatus" class="mr-2" value="no">
-                <label for="NownoInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
+                <input type="radio" id="NownoInjury" name="NowInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="no">
+                <label for="NownoInjury" class="text-gray-800 mr-4">無 (若勾無，以下不必填寫)</label>
             </div>
             <div class="flex items-center">
-                <input type="radio" id="NowhasInjury" name="NowInjuryStatus" class="mr-2" value="yes">
-                <label for="NowhasInjury" class="mr-4">有，請詳述有症狀的部位</label>
+                <input type="radio" id="NowhasInjury" name="NowInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="yes">
+                <label for="NowhasInjury" class="text-gray-800 mr-4">有，請詳述有症狀的部位</label>
             </div>
         </div>
 
@@ -30,22 +29,26 @@
             @foreach (var item in Model)
             {
                 <div>
-                    <div class="font-semibold">@item.InjuryPart</div>
+                    <div class="font-medium">@item.InjuryPart</div>
 
                     <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
                     @if (item.IsSingleSelect)
                     {
                         <!-- 單一勾選項目 -->
-                        <input type="checkbox" name="Nowinjury_@item.Id" class="mr-2">
+                        <input type="checkbox" name="Nowinjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
                     }
                     else
                     {
                         <!-- 左右勾選項目 -->
-                        <div class="flex space-x-2">
-                            <label>左</label>
-                            <input type="checkbox" name="NowinjuryLeft_@item.Id" class="mr-2">
-                            <label>右</label>
-                            <input type="checkbox" name="NowinjuryRight_@item.Id" class="mr-2">
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="NowinjuryLeft_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>左</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="NowinjuryRight_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <span>右</span>
+                            </label>
                         </div>
                     }
                 </div>

@@ -1,26 +1,23 @@
-﻿@*延遲記憶*@
+﻿@*認知篩檢-延遲記憶*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecallViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <title>延遲記憶 (Delayed Recall)</title>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
+    <div class="p-4">
         <h2 class="text-xl font-bold mb-4">延遲記憶 (Delayed Recall)</h2>
         <p class="mb-4">請選手回想複誦上述提到的十個詞彙。(0 錯誤；1 正確)</p>
 
         <!-- 延遲記憶表格 -->
-        <table class="table-auto border-collapse border border-gray-300 w-full text-center">
+        <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
-                <tr class="bg-gray-200">
+                <tr class="bg-gray-100">
                     <th class="border border-gray-300 px-4 py-2">詞彙</th>
                     <th class="border border-gray-300 px-4 py-2">分數</th>
                 </tr>
@@ -28,24 +25,24 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr class="hover:bg-gray-100">
                         <!-- 詞彙 -->
                         <td class="border border-gray-300 px-4 py-2">@item.Word</td>
 
                         <!-- 分數選項 -->
                         <td class="border border-gray-300 px-4 py-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-4 w-4"> 0
+                                <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600"> 0
                             </label>
                             <label class="inline-flex items-center ml-4">
-                                <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-4 w-4"> 1
+                                <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600"> 1
                             </label>
                         </td>
                     </tr>
                 }
             </tbody>
             <tfoot>
-                <tr>
+                <tr class="bg-gray-100">
                     <td class="border border-gray-300 px-4 py-2 font-semibold">總分</td>
                     <td class="border border-gray-300 px-4 py-2 font-semibold">
                         <span id="totalScore">0</span> / 10
@@ -57,20 +54,21 @@
         <!-- 測驗開始時間 -->
         <div class="mt-4">
             <label class="block mb-2 font-semibold">測驗開始時間：</label>
-            <input type="text" class="form-input border rounded w-full px-3 py-2" placeholder="請輸入測驗開始時間">
+            <input type="text" class="border border-gray-300 rounded w-full px-3 py-2" placeholder="請輸入測驗開始時間">
         </div>
 
         <!-- 表單按鈕 -->
         <div class="flex justify-between space-x-4 mt-4">
             <form action="/Questionnaire/CoordinationAndBalanceExamination" method="get" class="mt-4">
-                <button type="submit" class="btn btn-warning">回上一頁</button>
+                <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">回上一頁</button>
             </form>
             <form action="/Questionnaire/CognitiveScreeningTotalScore" method="get" class="mt-4">
-                <button type="submit" class="btn btn-primary">查看總分</button>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">查看總分</button>
             </form>
         </div>
     </div>
 
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 初始化並加載保存的數據

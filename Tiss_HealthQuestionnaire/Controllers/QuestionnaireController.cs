@@ -620,18 +620,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                     // 為每個問題項目設定選項對應的中英文描述
                     var answerOptions = new Dictionary<string, string>
-        {
-            { "10以下", "10歲 (含) 以下" },
-            { "11", "11歲" },
-            { "12", "12歲" },
-            { "13", "13歲" },
-            { "14", "14歲" },
-            { "15", "15歲" },
-            { "16以上", "16歲 (含) 以上" },
-            { "yes", "是 Yes" },
-            { "no", "否 No" },
-            { "noCycle", "目前無生理期" }
-        };
+                {
+                    { "10以下", "10歲 (含) 以下" },
+                    { "11", "11歲" },
+                    { "12", "12歲" },
+                    { "13", "13歲" },
+                    { "14", "14歲" },
+                    { "15", "15歲" },
+                    { "16以上", "16歲 (含) 以上" },
+                    { "yes", "是 Yes" },
+                    { "no", "否 No" },
+                    { "noCycle", "目前無生理期" }
+                };
 
                     model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
                     {

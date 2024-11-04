@@ -1,42 +1,45 @@
-﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PresentIllness>
+﻿@*現在病史*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.PresentIllness>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @*<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">*@
-    <title>現在病史</title>
 </head>
-<body class="p-4">
-    <h3 class="text-xl font-bold mb-4">現在病史 Present Illness</h3>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-300">
-            <thead>
-                <tr>
-                    <th class="border border-gray-300 p-2 bg-gray-200">部位 Parts of the Body</th>
-                    <th class="border border-gray-300 p-2 bg-gray-200">是否正在接受其他治療 Receiving Other Therapies</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="hover:bg-gray-50">
-                        <td class="border border-gray-300 p-2">
-                            <span class="block font-medium">@item.PartsOfBodyZh</span>
-                            <span class="block text-sm text-gray-600">@item.PartsOfBodyEn</span>
-                        </td>
-                        <td class="border border-gray-300 p-2 text-center">
-                            <label class="mr-4">
-                                <input type="radio" name="presentIllness_@item.ID" value="yes" class="mr-1"> 是
-                            </label>
-                            <label>
-                                <input type="radio" name="presentIllness_@item.ID" value="no" class="mr-1"> 否
-                            </label>
-                        </td>
+<body>
+    <div class="p-4">
+        <h3 class="text-xl font-bold mb-4">現在病史 Present Illness</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">部位 Parts of the Body</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">是否正在接受其他治療 Receiving Other Therapies</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-100">
+                            <td class="border border-gray-300 px-4 py-2">
+                                <span class="block font-medium">@item.PartsOfBodyZh</span>
+                                <span class="block text-sm text-gray-600">@item.PartsOfBodyEn</span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="presentIllness_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                                    <span class="ml-2">是</span>
+                                </label>
+                                <label class="inline-flex items-center ml-4">
+                                    <input type="radio" name="presentIllness_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600">
+                                    <span class="ml-2">否</span>
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
