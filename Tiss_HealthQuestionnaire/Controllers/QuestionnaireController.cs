@@ -9,7 +9,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 {
     public class QuestionnaireController : Controller
     {
-        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
+        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities(); //資料庫
 
         #region 主頁
         public ActionResult Main()
@@ -577,6 +577,24 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 });
             }
 
+            //收集藥物史數據
+            var pastDrugsItems = _db.PastDrugs.ToList();
+            foreach (var item in pastDrugsItems)
+            {
+                string usedKey = $"usedDrugs_{item.ID}";
+                string isUsed = form[usedKey] == "on" ? "yes" : "no";
+                string otherDrugs = form["otherDrugs"];
+
+                model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
+                {
+                    ItemId = item.ID,
+                    ItemZh = item.ItemZh,
+                    ItemEn = item.ItemEn,
+                    IsUsed = isUsed,
+                    OtherDrugs = otherDrugs
+                });
+            }
+
             //收集營養品數據
             var supplementsItems = _db.PastSupplements.ToList();
             foreach (var item in supplementsItems)
@@ -592,20 +610,36 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
 
             //收集女性問卷數據
-            if (model.Gender ==2)
+            if (model.Gender == 2) // 女性
             {
                 var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
                 foreach (var item in femaleQuestionnaireItems)
                 {
                     string answerKey = $"femaleQuestion_{item.ID}";
-                    string answerValue = form[answerKey];
+                    string answerValue = form[answerKey]; // 收集回答值
+
+                    // 為每個問題項目設定選項對應的中英文描述
+                    var answerOptions = new Dictionary<string, string>
+        {
+            { "10以下", "10歲 (含) 以下" },
+            { "11", "11歲" },
+            { "12", "12歲" },
+            { "13", "13歲" },
+            { "14", "14歲" },
+            { "15", "15歲" },
+            { "16以上", "16歲 (含) 以上" },
+            { "yes", "是 Yes" },
+            { "no", "否 No" },
+            { "noCycle", "目前無生理期" }
+        };
 
                     model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
                     {
-                        QuestionId = item.ID,
+                        ID = item.ID,
                         QuestionZh = item.QuestionZh,
                         QuestionEn = item.QuestionEn,
-                        Answer = answerValue
+                        Answer = answerValue, // 將答案傳遞給 Answer 屬性
+                        AnswerOptions = answerOptions // 設定中英文對照選項
                     });
                 }
             }
@@ -631,7 +665,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
             }
 
-            //收集治療方式
+            //收集過去治療方式
             var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
             foreach (var method in PasttreatmentMethods)
             {
@@ -645,7 +679,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
             }
 
-            //收集目前傷害狀況的數據
+            // 收集目前傷害狀況
             var injuryItems = _db.InjuryStatus.ToList();
             foreach (var item in injuryItems)
             {
@@ -656,15 +690,61 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 if (hasInjury)
                 {
-                    model.NowInjuryDetails.Add(new InjuryStatuSViewModel
+                    var injuryViewModel = new InjuryStatuSViewModel
                     {
                         InjuryPart = item.InjuryPart,
-                        //IsSingleSelect = item.IsSingleSelect,
                         LeftSide = form[leftPartKey] != null,
-                        RightSide = form[rightPartKey] != null
-                    });
+                        RightSide = form[rightPartKey] != null,
+                        InjuryTypes = new List<string>()
+                    };
+
+                    // 根據 ID 從表單收集每個傷勢類型下拉選單的值
+                    string muscleTendonType = form[$"NowmuscleTendon_{item.Id}"];
+                    string boneType = form[$"Nowbone_{item.Id}"];
+                    string ligamentType = form[$"Nowligament_{item.Id}"];
+                    string nerveType = form[$"Nownerve_{item.Id}"];
+                    string cartilageType = form[$"NowcartilageSynoviumBursa_{item.Id}"];
+                    string epidermalType = form[$"NowepidermalTissue_{item.Id}"];
+                    string bloodVesselType = form[$"NowbloodVessel_{item.Id}"];
+                    string organLimbType = form[$"NoworganLimb_{item.Id}"];
+
+                    if (!string.IsNullOrEmpty(muscleTendonType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"肌肉/肌腱: {muscleTendonType}");
+                    }
+                    if (!string.IsNullOrEmpty(boneType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"骨頭: {boneType}");
+                    }
+                    if (!string.IsNullOrEmpty(ligamentType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"韌帶: {ligamentType}");
+                    }
+                    if (!string.IsNullOrEmpty(nerveType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"神經: {nerveType}");
+                    }
+                    if (!string.IsNullOrEmpty(cartilageType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"軟骨/滑膜/滑囊: {cartilageType}");
+                    }
+                    if (!string.IsNullOrEmpty(epidermalType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"表皮組織: {epidermalType}");
+                    }
+                    if (!string.IsNullOrEmpty(bloodVesselType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"血管: {bloodVesselType}");
+                    }
+                    if (!string.IsNullOrEmpty(organLimbType))
+                    {
+                        injuryViewModel.InjuryTypes.Add($"器官/四肢: {organLimbType}");
+                    }
+
+                    model.NowInjuryDetails.Add(injuryViewModel);
                 }
             }
+
 
             // 收集目前治療方式
             var treatmentMethods = _db.TreatmentMethod.ToList();
@@ -685,18 +765,30 @@ namespace Tiss_HealthQuestionnaire.Controllers
             foreach (var item in cardiovascularScreenings)
             {
                 string answerKey = $"question_{item.Id}";
-                var answer = form[answerKey];
+                var answer = form[answerKey] ?? "no"; // 如果沒有填寫，預設為 "no"
 
-                if (!string.IsNullOrEmpty(answer))
+                // 使用 if-else 來進行中英文對照的轉換
+                string displayAnswer;
+                if (answer == "yes")
                 {
-                    model.CardiovascularScreeningDetails.Add(new CardiovascularScreeningViewModel
-                    {
-                        Questions = item.Question,
-                        Answer = answer
-                    });
+                    displayAnswer = "是 Yes";
                 }
-            }
+                else if (answer == "no")
+                {
+                    displayAnswer = "否 No";
+                }
+                else
+                {
+                    displayAnswer = "未回答"; // 如果沒有回答，顯示預設文本
+                }
 
+                model.CardiovascularScreeningDetails.Add(new CardiovascularScreeningDetailViewModel
+                {
+                    OrderNumber = item.Id,   // 使用資料庫的項次
+                    Question = item.Question,
+                    Answer = displayAnswer // 將轉換後的答案傳遞給 Answer 屬性
+                });
+            }
 
             // 收集腦震盪篩檢(選手自填)的數據
             var concussionScreenings = _db.CognitiveScreening.ToList();
@@ -726,7 +818,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             // 收集備註
             model.Notes = form["notes"];
-
 
             // 收集骨科篩檢的數據
             var orthopaedicScreenings = _db.OrthopaedicScreening.ToList();

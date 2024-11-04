@@ -9,12 +9,12 @@
 </head>
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">問卷總預覽</h2>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">問卷總預覽</h1>
 
-        <!-- 基本信息部分 -->
+        <!-- 個人基本信息部分 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">個人基本資料</h3>
-            <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">個人基本資料</h2>
+            <div class="grid grid-cols-2 gap-6 text-gray-700 text-xl">
                 <p><strong>專項:</strong> @Model.Specialist</p>
                 <p><strong>填表人:</strong> @Model.FillName</p>
                 <p><strong>選手編號:</strong> @Model.AtheNum</p>
@@ -23,47 +23,45 @@
             </div>
         </div>
 
-        <!--過去健康檢查病史 -->
+        <!-- 過去健康檢查病史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">健康問卷填寫狀況</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去健康檢查病史:</h2>
             <div class="bg-gray-50 p-6 rounded-lg shadow-md text-gray-700">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">過去健康檢查病史:</h3>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-gray-700">
-                    <p>@Model.ConvertYesNoToLocalizedString(Model.PastHealthHistory)</p>
+                <!-- 顯示主問題 -->
+                <p class="mb-4"><strong>過去兩年內的健康檢查是否有異常項目?</strong> @Model.ConvertYesNoToLocalizedString(Model.PastHealthHistory)</p>
 
-                    <!-- 如果選擇了 "是"，顯示詳細數據 -->
-                    @if (Model.PastHealthHistory == "yes" && Model.PastHealthDetails != null && Model.PastHealthDetails.Any())
-                    {
-                        <h4 class="text-lg font-bold mb-4">過去健康檢查病史:</h4>
-                        <table class="min-w-full bg-white border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="border border-gray-300 p-2">項目 (Item)</th>
-                                    <th class="border border-gray-300 p-2">Item 1</th>
-                                    <th class="border border-gray-300 p-2">Item 2</th>
-                                    <th class="border border-gray-300 p-2">Item 3</th>
+                <!-- 如果選擇了 "是"，顯示詳細數據 -->
+                @if (Model.PastHealthHistory == "yes" && Model.PastHealthDetails != null && Model.PastHealthDetails.Any())
+                {
+                    <h4 class="text-lg font-bold mb-4">詳細異常項目:</h4>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目 (Item)</th>
+                                <th class="border border-gray-300 px-4 py-2">Item 1</th>
+                                <th class="border border-gray-300 px-4 py-2">Item 2</th>
+                                <th class="border border-gray-300 px-4 py-2">Item 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in Model.PastHealthDetails)
+                            {
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">@detail.ItemZh (@detail.ItemEn)</td>
+                                    <td class="border border-gray-300 px-4 py-2">@detail.Item1</td>
+                                    <td class="border border-gray-300 px-4 py-2">@detail.Item2</td>
+                                    <td class="border border-gray-300 px-4 py-2">@detail.Item3</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detail in Model.PastHealthDetails)
-                                {
-                                    <tr>
-                                        <td class="border border-gray-300 p-2">@detail.ItemZh (@detail.ItemEn)</td>
-                                        <td class="border border-gray-300 p-2">@detail.Item1</td>
-                                        <td class="border border-gray-300 p-2">@detail.Item2</td>
-                                        <td class="border border-gray-300 p-2">@detail.Item3</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                </div>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
 
         <!-- 顯示過敏史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">過敏史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過敏史:</h2>
             @if (Model.AllergicHistoryDetails != null && Model.AllergicHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -90,7 +88,7 @@
 
         <!-- 顯示家族病史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">家族病史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">家族病史:</h2>
             @if (Model.FamilyHistoryDetails != null && Model.FamilyHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -126,7 +124,7 @@
 
         <!-- 顯示過去病史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">過去病史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去病史:</h2>
             @if (Model.PastHistoryDetails != null && Model.PastHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -154,7 +152,7 @@
 
         <!-- 顯示手術病史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">手術病史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">手術病史:</h2>
             @if (Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -182,7 +180,7 @@
 
         <!-- 顯示現在病史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">現在病史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">現在病史:</h2>
             @if (Model.PresentIllnessDetails != null && Model.PresentIllnessDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -210,7 +208,7 @@
 
         <!-- 顯示藥物史 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">藥物史:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">藥物史:</h2>
             @if (Model.PastDrugsDetails != null && Model.PastDrugsDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -245,7 +243,7 @@
 
         <!-- 顯示營養品 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">營養品:</h3>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">營養品:</h2>
             @if (Model.PastSupplementsDetails != null && Model.PastSupplementsDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -280,8 +278,8 @@
 
         <!-- 顯示女性問卷 -->
         <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-4">女性問卷 (選填):</h3>
-            @if (Model.FemaleQuestionnaireDetails != null && Model.FemaleQuestionnaireDetails.Any())
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">女性問卷:</h2>
+            @if (Model.FemaleQuestionnaireDetails != null)
             {
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead>
@@ -294,8 +292,47 @@
                         @foreach (var detail in Model.FemaleQuestionnaireDetails)
                         {
                             <tr>
-                                <td class="border border-gray-300 p-2">@detail.QuestionZh (@detail.QuestionEn)</td>
-                                <td class="border border-gray-300 p-2">@detail.Answer</td>
+                                <td class="border border-gray-300 p-2">
+                                    <span class="block font-medium">@detail.QuestionZh</span>
+                                    <span class="block text-sm text-gray-600">(@detail.QuestionEn)</span>
+                                </td>
+                                <td class="border border-gray-300 p-2">
+                                    @{
+                                        var displayAnswer = string.IsNullOrEmpty(detail.DisplayAnswer) ? "-" : detail.DisplayAnswer;
+                                    }
+                                    @displayAnswer
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-gray-500">沒有女性問卷資料。</p>
+            }
+        </div>
+
+        <!-- 顯示過去傷害狀況(已復原) -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況(已復原):</h2>
+            @if (Model.PastInjuryDetails != null && Model.PastInjuryDetails.Any())
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">部位 (Part)</th>
+                            <th class="border border-gray-300 p-2">左邊 (Left)</th>
+                            <th class="border border-gray-300 p-2">右邊 (Right)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var injury in Model.PastInjuryDetails)
+                        {
+                            <tr>
+                                <td class="border border-gray-300 p-2">@injury.PastInjuryPart</td>
+                                <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.LeftSide ? "yes" : "no")</td>
+                                <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.RightSide ? "yes" : "no")</td>
                             </tr>
                         }
                     </tbody>
@@ -303,190 +340,102 @@
             }
         </div>
 
-    </div>
+        <!-- 顯示過去治療方式 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">過去治療方式:</h3>
+            @if (Model.PastTreatmentDetails != null && Model.PastTreatmentDetails.Any())
+            {
+                <ul class="list-disc list-inside">
+                    @foreach (var treatment in Model.PastTreatmentDetails)
+                    {
+                        <li>@treatment.Method</li>
+                    }
+                </ul>
+            }
+        </div>
 
-    <!-- 傷害與篩檢部分 -->
-    <div class="mb-8">
-        <h3 class="text-2xl font-semibold text-blue-600 mb-4">傷害與篩檢問卷填寫狀況</h3>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-md text-gray-700">
-            <!-- 顯示過去傷害狀況(已復原) -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">過去傷害狀況(已復原):</h3>
-                @if (Model.PastInjuryDetails != null && Model.PastInjuryDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">部位 (Part)</th>
-                                <th class="border border-gray-300 p-2">左邊 (Left)</th>
-                                <th class="border border-gray-300 p-2">右邊 (Right)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var injury in Model.PastInjuryDetails)
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2">@injury.PastInjuryPart</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.LeftSide ? "yes" : "no")</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.RightSide ? "yes" : "no")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
-
-            <!-- 顯示治療方式 -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">治療方式:</h3>
-                @if (Model.PastTreatmentDetails != null && Model.PastTreatmentDetails.Any())
-                {
-                    <ul class="list-disc list-inside">
-                        @foreach (var treatment in Model.PastTreatmentDetails)
+        <!-- 顯示目前傷害狀況 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況:</h3>
+            @if (Model.NowInjuryDetails != null && Model.NowInjuryDetails.Any())
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">部位 (Part)</th>
+                            <th class="border border-gray-300 p-2">左邊 (Left)</th>
+                            <th class="border border-gray-300 p-2">右邊 (Right)</th>
+                            <th class="border border-gray-300 p-2">傷勢類型 (Injury Types)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var injury in Model.NowInjuryDetails)
                         {
-                            <li>@treatment.Method</li>
-                        }
-                    </ul>
-                }
-            </div>
-
-            <!-- 顯示目前傷害狀況 -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">目前傷害狀況:</h3>
-                @if (Model.NowInjuryDetails != null && Model.NowInjuryDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">部位 (Part)</th>
-                                <th class="border border-gray-300 p-2">左邊 (Left)</th>
-                                <th class="border border-gray-300 p-2">右邊 (Right)</th>
+                            <tr>
+                                <td class="border border-gray-300 p-2">@injury.InjuryPart</td>
+                                <td class="border border-gray-300 p-2">@((injury.LeftSide) ? "是 Yes" : "否 No")</td>
+                                <td class="border border-gray-300 p-2">@((injury.RightSide) ? "是 Yes" : "否 No")</td>
+                                <td class="border border-gray-300 p-2">
+                                    @if (injury.InjuryTypes != null && injury.InjuryTypes.Any())
+                                    {
+                                        <ul>
+                                            @foreach (var type in injury.InjuryTypes)
+                                            {
+                                                <li>@type</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span>無</span> <!-- 當傷勢類型為空時顯示 "無" -->
+                                    }
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var injury in Model.NowInjuryDetails)
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2">@injury.InjuryPart</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.LeftSide ? "yes" : "no")</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(injury.RightSide ? "yes" : "no")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
 
-            <!-- 顯示治療方式 -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">治療方式:</h3>
-                @if (Model.NowTreatmentDetails != null && Model.NowTreatmentDetails.Any())
-                {
-                    <ul class="list-disc list-inside">
-                        @foreach (var treatment in Model.NowTreatmentDetails)
+        <!-- 顯示目前治療方式 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">目前治療方式:</h3>
+            @if (Model.NowTreatmentDetails != null && Model.NowTreatmentDetails.Any())
+            {
+                <ul class="list-disc list-inside">
+                    @foreach (var treatment in Model.NowTreatmentDetails)
+                    {
+                        <li>@treatment.Method</li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <!-- 顯示心血管篩檢 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">心血管篩檢:</h3>
+            @if (Model.CardiovascularScreeningDetails != null && Model.CardiovascularScreeningDetails.Any())
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">項次 (Order Number)</th>
+                            <th class="border border-gray-300 p-2">問題 (Question)</th>
+                            <th class="border border-gray-300 p-2">答案 (Answer)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.CardiovascularScreeningDetails)
                         {
-                            <li>@treatment.Method</li>
+                            <tr>
+                                <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
+                                <td class="border border-gray-300 p-2">@detail.Question</td>
+                                <td class="border border-gray-300 p-2">@detail.Answer</td> <!-- 直接顯示 Answer -->
+                            </tr>
                         }
-                    </ul>
-                }
-            </div>
-
-            <!-- 顯示心血管篩檢 -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">心血管篩檢:</h3>
-                @if (Model.CardiovascularScreeningDetails != null && Model.CardiovascularScreeningDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">項次 (Order Number)</th>
-                                <th class="border border-gray-300 p-2">問題 (Question)</th>
-                                <th class="border border-gray-300 p-2">答案 (Answer)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var detail in Model.CardiovascularScreeningDetails)
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
-                                    <td class="border border-gray-300 p-2">@detail.Question</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(detail.Answer)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
-
-            <!-- 顯示腦震盪篩檢(選手自填)-->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">腦震盪篩檢（選手自填）:</h3>
-                @if (Model.ConcussionScreeningDetails != null && Model.ConcussionScreeningDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">項次 (Order Number)</th>
-                                <th class="border border-gray-300 p-2">問題 (Question)</th>
-                                <th class="border border-gray-300 p-2">答案 (Answer)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var detail in Model.ConcussionScreeningDetails)
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
-                                    <td class="border border-gray-300 p-2">@detail.Question</td>
-                                    <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(detail.Answer)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-
-                <!-- 顯示是否正在服用藥物 -->
-                <p><strong>是否服用藥物:</strong> @Model.ConvertYesNoToLocalizedString(Model.MedicationAnswer)</p>
-                @if (Model.MedicationAnswer == "yes")
-                {
-                    <p><strong>藥物詳情:</strong> @Model.MedicationDetails</p>
-                }
-
-                <!-- 顯示備註 -->
-                <p><strong>備註:</strong> @Model.Notes</p>
-            </div>
-
-            <!-- 顯示骨科篩檢 -->
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold text-blue-600 mb-4">骨科篩檢:</h3>
-                @if (Model.OrthopaedicScreeningDetails != null && Model.OrthopaedicScreeningDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">項次 (Order Number)</th>
-                                <th class="border border-gray-300 p-2">指示操作 (Instructions)</th>
-                                <th class="border border-gray-300 p-2">觀察重點 (Observation Points)</th>
-                                <th class="border border-gray-300 p-2">結果 (Result)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var detail in Model.OrthopaedicScreeningDetails)
-                            {
-                                var resultText = detail.Result == "normal" ? "正常 Normal"
-                                                : "異常 Abnormal";
-                                <tr>
-                                    <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
-                                    <td class="border border-gray-300 p-2">@detail.Instructions</td>
-                                    <td class="border border-gray-300 p-2">@detail.ObservationPoints</td>
-                                    <td class="border border-gray-300 p-2">@resultText</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
-
-            <p><strong>腦震盪篩檢（醫療團隊評估）:</strong> @Model.CognitiveScreening</p>
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 

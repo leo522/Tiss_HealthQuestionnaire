@@ -76,10 +76,10 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<TreatmentMethoDViewModel> NowTreatmentDetails { get; set; } = new List<TreatmentMethoDViewModel>();
 
         //心血管篩檢
-        public List<CardiovascularScreeningViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningViewModel>();
+        public List<CardiovascularScreeningDetailViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningDetailViewModel>();
 
         //腦震盪篩檢(選手自填)
-            public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
+        public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
             public string MedicationAnswer { get; set; }
             public string MedicationDetails { get; set; }
             public string Notes { get; set; }
@@ -161,10 +161,28 @@ namespace Tiss_HealthQuestionnaire.Models
 
     public class FemaleQuestionnaireDetailViewModel //女性問卷
     {
-        public int QuestionId { get; set; }    // 項目ID
-        public string QuestionZh { get; set; } // 補充品項目中文名稱
-        public string QuestionEn { get; set; } // 補充品項目英文名稱
-        public string Answer { get; set; }
+        public int ID { get; set; } // 問題的唯一識別碼
+        public string QuestionZh { get; set; } // 問題的中文描述
+        public string QuestionEn { get; set; } // 問題的英文描述
+        public string Answer { get; set; } // 單選題的答案代碼
+
+        // 保存可選項目，鍵為選項代碼，值為選項描述（中英文）
+        public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
+
+        // 顯示選擇的答案（中英文對照）
+        public string DisplayAnswer
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Answer))
+                {
+                    return "未回答"; // 如果沒有回答，顯示預設
+                }
+
+                // 檢查 AnswerOptions 是否為 null 並確認包含 Answer 的鍵
+                return AnswerOptions != null && AnswerOptions.ContainsKey(Answer) ? AnswerOptions[Answer] : Answer;
+            }
+        }
     }
 
     public class PastInjuryStatuSViewModel //顯示過去傷害狀況(已復原)
@@ -180,12 +198,20 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Method { get; set; }
     }
 
+    public class CardiovascularScreeningDetailViewModel //心血管篩檢
+    {
+        public int OrderNumber { get; set; } // 項次
+        public string Question { get; set; }  // 問題描述
+        public string Answer { get; set; }    // 答案
+    }
+
     public class InjuryStatuSViewModel //顯示目前傷害狀況
     {
-        public string InjuryPart { get; set; }
-        public bool IsSingleSelect { get; set; }
-        public bool LeftSide { get; set; }
-        public bool RightSide { get; set; }
+        public string InjuryPart { get; set; } // 部位
+        public bool IsSingleSelect { get; set; } // 是否單選
+        public bool LeftSide { get; set; } // 左邊
+        public bool RightSide { get; set; } // 右邊
+        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型
     }
 
     public class TreatmentMethoDViewModel //顯示目前傷害狀況(治療方法)
