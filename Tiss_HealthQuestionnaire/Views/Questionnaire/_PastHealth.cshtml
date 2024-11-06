@@ -1,5 +1,4 @@
-﻿@*過去健康檢查病史*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHealth>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHealth>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -27,19 +26,24 @@
                                 <span class="block text-sm text-gray-600">@item.ItemEn</span>
                             </td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
-                                <input type="radio" id="pastHealth_@item.ID" name="PastHealthHistory" value="no" class="form-radio h-5 w-5 text-blue-600" required>
-                                <label for="pastHealth_@item.ID">否</label>
+                                <!-- 根據 IsNo 的布林值設置 checked -->
+                                <input type="radio" id="pastHealth_no_@item.ID" name="PastHealthHistory_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600" @(item.IsNo.HasValue && item.IsNo.Value ? "checked" : "")>
+                                <label for="pastHealth_no_@item.ID">否</label>
                             </td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
-                                <input type="radio" id="pastHealth_@item.ID" name="PastHealthHistory" value="yes" class="form-radio h-5 w-5 text-blue-600" required> 是
+                                <!-- 根據 IsYes 的布林值設置 checked -->
+                                <input type="radio" id="pastHealth_yes_@item.ID" name="PastHealthHistory_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600" @(item.IsYes.HasValue && item.IsYes.Value ? "checked" : "")>
+                                <label for="pastHealth_yes_@item.ID">是</label>
+
                                 <div class="space-y-1 mt-2">
-                                    <input type="text" name="item1_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
-                                    <input type="text" name="item2_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
-                                    <input type="text" name="item3_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫...">
+                                    <input type="text" name="item1_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫..." @(item.IsYes.HasValue && item.IsYes.Value ? "" : "disabled")>
+                                    <input type="text" name="item2_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫..." @(item.IsYes.HasValue && item.IsYes.Value ? "" : "disabled")>
+                                    <input type="text" name="item3_@item.ID" class="border rounded p-2 w-full" placeholder="請填寫..." @(item.IsYes.HasValue && item.IsYes.Value ? "" : "disabled")>
                                 </div>
                             </td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         </div>

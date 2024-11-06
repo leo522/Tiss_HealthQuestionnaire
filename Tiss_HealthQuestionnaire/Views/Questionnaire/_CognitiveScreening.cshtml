@@ -1,4 +1,7 @@
 ﻿@*認知篩檢-定位*@
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel>
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -53,9 +56,14 @@
             <span class="ml-2">/ 5</span>
         </div>
 
-        <form action="/Questionnaire/ImmediateMemory" method="get" class="mt-4">
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
-        </form>
+        <div class="flex justify-between space-x-4 mt-4">
+            <form action="/Questionnaire/SymptomEvaluation" method="get" class="mt-4">
+                <button type="submit" class="btn btn-warning">回上一頁</button>
+            </form>
+            <form action="/Questionnaire/ImmediateMemory" method="get" class="mt-4">
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
+            </form>
+        </div>
     </div>
 
     <script src="~/Scripts/jquery-3.7.0.min.js"></script>

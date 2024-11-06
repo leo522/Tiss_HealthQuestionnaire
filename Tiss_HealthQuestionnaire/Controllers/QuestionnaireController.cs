@@ -11,6 +11,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
     {
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities(); //資料庫
 
+
         #region 主頁
         public ActionResult Main()
         {
@@ -468,158 +469,166 @@ namespace Tiss_HealthQuestionnaire.Controllers
         [HttpPost]
         public ActionResult Preview(QuestionnaireViewModel model, FormCollection form)
         {
-            //處理填寫者基本信息
-            model.Specialist = form["specialist"];
-            model.FillName = form["fillName"];
-            model.AtheNum = form["atheNum"];
-            model.Gender = int.Parse(form["gender"]);
-            model.FillDate = DateTime.Parse(form["fillDate"]);
-
-            //動態收集表單的所有數據到 FormData
-            foreach (var key in form.AllKeys)
+            try
             {
-                model.FormData[key] = form[key];
-            }
+                //處理填寫者基本信息
+                model.Specialist = form["specialist"];
+                model.FillName = form["fillName"];
+                model.AtheNum = form["atheNum"];
+                model.Gender = int.Parse(form["gender"]);
+                model.FillDate = DateTime.Parse(form["fillDate"]);
 
-            //過去健康檢查病史的文字敘述內容
-            var pastHealthItems = _db.PastHealth.ToList();
-            foreach (var item in pastHealthItems)
-            {
-                string item1Key = $"item1_{item.ID}";
-                string item2Key = $"item2_{item.ID}";
-                string item3Key = $"item3_{item.ID}";
-
-                model.PastHealthDetails.Add(new PastHealthDetailViewModel
+                //動態收集表單的所有數據到 FormData
+                foreach (var key in form.AllKeys)
                 {
-                    ItemId = item.ID,
-                    Item1 = form[item1Key],
-                    Item2 = form[item2Key],
-                    Item3 = form[item3Key]
-                });
-            }
+                    //model.FormData[key] = form[key];
+                    model.FormData[key] = string.IsNullOrEmpty(form[key]) ? "未回答" : form[key];
+                }
 
-            //收集過敏史數據
-            var allergicItems = _db.AllergicHistory.ToList();
-            foreach (var item in allergicItems)
-            {
-                string isAllergicKey = $"allergy_{item.ID}";
-                string descriptionKey = $"details_{item.ID}";
-
-                model.AllergicHistoryDetails.Add(new AllergicHistoryDetailViewModel
+                //過去健康檢查病史
+                var pastHealthItems = _db.PastHealth.ToList();
+                foreach (var item in pastHealthItems)
                 {
-                    ItemId = item.ID,
-                    ItemZh = item.ItemZh,  //將過敏項目的中文名綁定
-                    ItemEn = item.ItemEn,  //將過敏項目的英文名綁定
-                    IsAllergic = form[isAllergicKey],
-                    AllergyDescription = form[descriptionKey]
-                });
-            }
+                    var no = $"pastHealth_no_{item.ID}";
+                    var yes = $"pastHealth_yes_{item.ID}";
+                    string item1Key = $"item1_{item.ID}";
+                    string item2Key = $"item2_{item.ID}";
+                    string item3Key = $"item3_{item.ID}";
 
-            //收集家族病史的數據
-            var familyHistoryItems = _db.FamilyHistory.ToList();
-            foreach (var item in familyHistoryItems)
-            {
-                string optionKey = $"familyHistory_{item.ID}";
-                string otherKey = "otherFamilyHistory";
+                    model.PastHealthDetails.Add(new PastHealthDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        // 根據 'yes' 或 'no' 的選擇來設置
+                        ItemZh = string.IsNullOrEmpty(form[no]) ? "未回答" : (form[no] == "no" ? "否" : "未回答"),
+                        // 填寫的項目，如果選擇 "是" 則填寫，不然禁用
+                        Item1 = string.IsNullOrEmpty(form[item1Key]) ? "未回答" : form[item1Key],
+                        Item2 = string.IsNullOrEmpty(form[item2Key]) ? "未回答" : form[item2Key],
+                        Item3 = string.IsNullOrEmpty(form[item3Key]) ? "未回答" : form[item3Key],
+                    });
+                }
 
-                model.FamilyHistoryDetails.Add(new FamilyHistoryViewModel
+                //收集過敏史數據
+                var allergicItems = _db.AllergicHistory.ToList();
+                foreach (var item in allergicItems)
                 {
-                    ItemId = item.ID,
-                    GeneralPartsZh = item.GeneralPartsZh,
-                    GeneralPartsEn = item.GeneralPartsEn,
-                    FamilyHistoryOption = form[optionKey],
-                    OtherFamilyHistory = form[otherKey]
-                });
-            }
+                    string isAllergicKey = $"allergy_{item.ID}";
+                    string descriptionKey = $"details_{item.ID}";
 
-            //收集過去病史的數據
-            var pastHistoryItems = _db.PastHistory.ToList();
-            foreach (var item in pastHistoryItems)
-            {
-                string optionKey = $"pastHistory_{item.ID}";
+                    model.AllergicHistoryDetails.Add(new AllergicHistoryDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        ItemZh = item.ItemZh,  //將過敏項目的中文名綁定
+                        ItemEn = item.ItemEn,  //將過敏項目的英文名綁定
+                        IsAllergic = string.IsNullOrEmpty(form[isAllergicKey]) ? "未回答" : form[isAllergicKey],
+                        AllergyDescription = string.IsNullOrEmpty(form[descriptionKey]) ? "未回答" : form[descriptionKey]
+                    });
+                }
 
-                model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
+                //收集家族病史的數據
+                var familyHistoryItems = _db.FamilyHistory.ToList();
+                foreach (var item in familyHistoryItems)
                 {
-                    ItemId = item.ID,
-                    GeneralPartsZh = item.GeneralPartsZh,
-                    GeneralPartsEn = item.GeneralPartsEn,
-                    PastHistoryOption = form[optionKey]
-                });
-            }
+                    string optionKey = $"familyHistory_{item.ID}";
+                    string otherKey = "otherFamilyHistory";
 
-            //收集手術病史的數據
-            var surgeryItems = _db.SurgeryHistory.ToList();
-            foreach (var item in surgeryItems)
-            {
-                string operationOptionKey = $"surgeryHistory_{item.ID}";
+                    model.FamilyHistoryDetails.Add(new FamilyHistoryViewModel
+                    {
+                        ItemId = item.ID,
+                        GeneralPartsZh = item.GeneralPartsZh,
+                        GeneralPartsEn = item.GeneralPartsEn,
+                        FamilyHistoryOption = form[optionKey],
+                        OtherFamilyHistory = form[otherKey]
+                    });
+                }
 
-                model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                //收集過去病史的數據
+                var pastHistoryItems = _db.PastHistory.ToList();
+                foreach (var item in pastHistoryItems)
                 {
-                    ItemId = item.ID,
-                    PartsOfBodyZh = item.PartsOfBodyZh,
-                    PartsOfBodyEn = item.PartsOfBodyEn,
-                    OperationOption = form[operationOptionKey]
-                });
-            }
+                    string optionKey = $"pastHistory_{item.ID}";
 
-            //收集現在病史的數據
-            var presentIllnessItems = _db.PresentIllness.ToList();
-            foreach (var item in presentIllnessItems)
-            {
-                string therapyKey = $"presentIllness_{item.ID}";
+                    model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        GeneralPartsZh = item.GeneralPartsZh,
+                        GeneralPartsEn = item.GeneralPartsEn,
+                        PastHistoryOption = form[optionKey]
+                    });
+                }
 
-                model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                //收集手術病史的數據
+                var surgeryItems = _db.SurgeryHistory.ToList();
+                foreach (var item in surgeryItems)
                 {
-                    ItemId = item.ID,
-                    PartsOfBodyZh = item.PartsOfBodyZh,
-                    PartsOfBodyEn = item.PartsOfBodyEn,
-                    ReceivingOtherTherapies = form[therapyKey]
-                });
-            }
+                    string operationOptionKey = $"surgeryHistory_{item.ID}";
 
-            //收集藥物史數據
-            var pastDrugsItems = _db.PastDrugs.ToList();
-            foreach (var item in pastDrugsItems)
-            {
-                string usedKey = $"usedDrugs_{item.ID}";
-                string isUsed = form[usedKey] == "on" ? "yes" : "no";
-                string otherDrugs = form["otherDrugs"];
+                    model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        PartsOfBodyZh = item.PartsOfBodyZh,
+                        PartsOfBodyEn = item.PartsOfBodyEn,
+                        OperationOption = form[operationOptionKey]
+                    });
+                }
 
-                model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
+                //收集現在病史的數據
+                var presentIllnessItems = _db.PresentIllness.ToList();
+                foreach (var item in presentIllnessItems)
                 {
-                    ItemId = item.ID,
-                    ItemZh = item.ItemZh,
-                    ItemEn = item.ItemEn,
-                    IsUsed = isUsed,
-                    OtherDrugs = otherDrugs
-                });
-            }
+                    string therapyKey = $"presentIllness_{item.ID}";
 
-            //收集營養品數據
-            var supplementsItems = _db.PastSupplements.ToList();
-            foreach (var item in supplementsItems)
-            {
-                string usedKey = $"usedSupplements_{item.ID}";
-                model.PastSupplementsDetails.Add(new PastSupplementsDetailViewModel
+                    model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        PartsOfBodyZh = item.PartsOfBodyZh,
+                        PartsOfBodyEn = item.PartsOfBodyEn,
+                        ReceivingOtherTherapies = form[therapyKey]
+                    });
+                }
+
+                //收集藥物史數據
+                var pastDrugsItems = _db.PastDrugs.ToList();
+                foreach (var item in pastDrugsItems)
                 {
-                    ItemId = item.ID,
-                    ItemZh = item.ItemZh,
-                    ItemEn = item.ItemEn,
-                    IsUsed = form[usedKey] != null
-                });
-            }
+                    string usedKey = $"usedDrugs_{item.ID}";
+                    string isUsed = form[usedKey] == "on" ? "yes" : "no";
+                    string otherDrugs = form["otherDrugs"];
 
-            //收集女性問卷數據
-            if (model.Gender == 2) // 女性
-            {
-                var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
-                foreach (var item in femaleQuestionnaireItems)
+                    model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        ItemZh = item.ItemZh,
+                        ItemEn = item.ItemEn,
+                        IsUsed = isUsed,
+                        OtherDrugs = otherDrugs
+                    });
+                }
+
+                //收集營養品數據
+                var supplementsItems = _db.PastSupplements.ToList();
+                foreach (var item in supplementsItems)
                 {
-                    string answerKey = $"femaleQuestion_{item.ID}";
-                    string answerValue = form[answerKey]; // 收集回答值
+                    string usedKey = $"usedSupplements_{item.ID}";
+                    model.PastSupplementsDetails.Add(new PastSupplementsDetailViewModel
+                    {
+                        ItemId = item.ID,
+                        ItemZh = item.ItemZh,
+                        ItemEn = item.ItemEn,
+                        IsUsed = form[usedKey] != null
+                    });
+                }
 
-                    // 為每個問題項目設定選項對應的中英文描述
-                    var answerOptions = new Dictionary<string, string>
+                //收集女性問卷數據
+                if (model.Gender == 2) // 女性
+                {
+                    var femaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
+                    foreach (var item in femaleQuestionnaireItems)
+                    {
+                        string answerKey = $"femaleQuestion_{item.ID}";
+                        string answerValue = form[answerKey]; // 收集回答值
+
+                        // 為每個問題項目設定選項對應的中英文描述
+                        var answerOptions = new Dictionary<string, string>
                 {
                     { "10以下", "10歲 (含) 以下" },
                     { "11", "11歲" },
@@ -633,212 +642,217 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     { "noCycle", "目前無生理期" }
                 };
 
-                    model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
-                    {
-                        ID = item.ID,
-                        QuestionZh = item.QuestionZh,
-                        QuestionEn = item.QuestionEn,
-                        Answer = answerValue, // 將答案傳遞給 Answer 屬性
-                        AnswerOptions = answerOptions // 設定中英文對照選項
-                    });
-                }
-            }
-
-            //收集過去傷害狀況(已復原)的數據
-            var pastInjuryItems = _db.PastInjuryStatus.ToList();
-            foreach (var item in pastInjuryItems)
-            {
-                string partKey = $"pastinjury_{item.Id}";
-                string leftPartKey = $"pastinjuryLeft_{item.Id}";
-                string rightPartKey = $"pastinjuryRight_{item.Id}";
-                bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
-
-                if (hasInjury)
-                {
-                    model.PastInjuryDetails.Add(new PastInjuryStatuSViewModel
-                    {
-                        PastInjuryPart = item.InjuryPart,
-                        //PastIsSingleSelect = item.PastIsSingleSelect,
-                        LeftSide = form[leftPartKey] != null,
-                        RightSide = form[rightPartKey] != null
-                    });
-                }
-            }
-
-            //收集過去治療方式
-            var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
-            foreach (var method in PasttreatmentMethods)
-            {
-                string methodKey = $"Pasttreatment_{method.Id}";
-                if (form[methodKey] != null)
-                {
-                    model.PastTreatmentDetails.Add(new PastTreatmentMethoDViewModel
-                    {
-                        Method = method.Method
-                    });
-                }
-            }
-
-            // 收集目前傷害狀況
-            var injuryItems = _db.InjuryStatus.ToList();
-            foreach (var item in injuryItems)
-            {
-                string partKey = $"Nowinjury_{item.Id}";
-                string leftPartKey = $"NowinjuryLeft_{item.Id}";
-                string rightPartKey = $"NowinjuryRight_{item.Id}";
-                bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
-
-                if (hasInjury)
-                {
-                    var injuryViewModel = new InjuryStatuSViewModel
-                    {
-                        InjuryPart = item.InjuryPart,
-                        LeftSide = form[leftPartKey] != null,
-                        RightSide = form[rightPartKey] != null,
-                        InjuryTypes = new List<string>()
-                    };
-
-                    // 根據 ID 從表單收集每個傷勢類型下拉選單的值
-                    string muscleTendonType = form[$"NowmuscleTendon_{item.Id}"];
-                    string boneType = form[$"Nowbone_{item.Id}"];
-                    string ligamentType = form[$"Nowligament_{item.Id}"];
-                    string nerveType = form[$"Nownerve_{item.Id}"];
-                    string cartilageType = form[$"NowcartilageSynoviumBursa_{item.Id}"];
-                    string epidermalType = form[$"NowepidermalTissue_{item.Id}"];
-                    string bloodVesselType = form[$"NowbloodVessel_{item.Id}"];
-                    string organLimbType = form[$"NoworganLimb_{item.Id}"];
-
-                    if (!string.IsNullOrEmpty(muscleTendonType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"肌肉/肌腱: {muscleTendonType}");
+                        model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
+                        {
+                            ID = item.ID,
+                            QuestionZh = item.QuestionZh,
+                            QuestionEn = item.QuestionEn,
+                            Answer = answerValue, // 將答案傳遞給 Answer 屬性
+                            AnswerOptions = answerOptions // 設定中英文對照選項
+                        });
                     }
-                    if (!string.IsNullOrEmpty(boneType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"骨頭: {boneType}");
-                    }
-                    if (!string.IsNullOrEmpty(ligamentType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"韌帶: {ligamentType}");
-                    }
-                    if (!string.IsNullOrEmpty(nerveType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"神經: {nerveType}");
-                    }
-                    if (!string.IsNullOrEmpty(cartilageType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"軟骨/滑膜/滑囊: {cartilageType}");
-                    }
-                    if (!string.IsNullOrEmpty(epidermalType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"表皮組織: {epidermalType}");
-                    }
-                    if (!string.IsNullOrEmpty(bloodVesselType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"血管: {bloodVesselType}");
-                    }
-                    if (!string.IsNullOrEmpty(organLimbType))
-                    {
-                        injuryViewModel.InjuryTypes.Add($"器官/四肢: {organLimbType}");
-                    }
-
-                    model.NowInjuryDetails.Add(injuryViewModel);
-                }
-            }
-
-
-            // 收集目前治療方式
-            var treatmentMethods = _db.TreatmentMethod.ToList();
-            foreach (var method in treatmentMethods)
-            {
-                string methodKey = $"Nowtreatment_{method.Id}";
-                if (form[methodKey] != null)
-                {
-                    model.NowTreatmentDetails.Add(new TreatmentMethoDViewModel
-                    {
-                        Method = method.Method
-                    });
-                }
-            }
-
-            // 收集心血管篩檢的數據
-            var cardiovascularScreenings = _db.CardiovascularScreening.ToList();
-            foreach (var item in cardiovascularScreenings)
-            {
-                string answerKey = $"question_{item.Id}";
-                var answer = form[answerKey] ?? "no"; // 如果沒有填寫，預設為 "no"
-
-                // 使用 if-else 來進行中英文對照的轉換
-                string displayAnswer;
-                if (answer == "yes")
-                {
-                    displayAnswer = "是 Yes";
-                }
-                else if (answer == "no")
-                {
-                    displayAnswer = "否 No";
-                }
-                else
-                {
-                    displayAnswer = "未回答"; // 如果沒有回答，顯示預設文本
                 }
 
-                model.CardiovascularScreeningDetails.Add(new CardiovascularScreeningDetailViewModel
+                //收集過去傷害狀況(已復原)的數據
+                var pastInjuryItems = _db.PastInjuryStatus.ToList();
+                foreach (var item in pastInjuryItems)
                 {
-                    OrderNumber = item.Id,   // 使用資料庫的項次
-                    Question = item.Question,
-                    Answer = displayAnswer // 將轉換後的答案傳遞給 Answer 屬性
-                });
-            }
+                    string partKey = $"pastinjury_{item.Id}";
+                    string leftPartKey = $"pastinjuryLeft_{item.Id}";
+                    string rightPartKey = $"pastinjuryRight_{item.Id}";
+                    bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
 
-            // 收集腦震盪篩檢(選手自填)的數據
-            var concussionScreenings = _db.CognitiveScreening.ToList();
-            foreach (var item in concussionScreenings)
-            {
-                string answerKey = $"question_{item.ID}";
-                var answer = form[answerKey];
-
-                if (!string.IsNullOrEmpty(answer))
-                {
-                    model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                    if (hasInjury)
                     {
-                        OrderNumber = item.ID,
+                        model.PastInjuryDetails.Add(new PastInjuryStatuSViewModel
+                        {
+                            PastInjuryPart = item.InjuryPart,
+                            //PastIsSingleSelect = item.PastIsSingleSelect,
+                            LeftSide = form[leftPartKey] != null,
+                            RightSide = form[rightPartKey] != null
+                        });
+                    }
+                }
+
+                //收集過去治療方式
+                var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
+                foreach (var method in PasttreatmentMethods)
+                {
+                    string methodKey = $"Pasttreatment_{method.Id}";
+                    if (form[methodKey] != null)
+                    {
+                        model.PastTreatmentDetails.Add(new PastTreatmentMethoDViewModel
+                        {
+                            Method = method.Method
+                        });
+                    }
+                }
+
+                // 收集目前傷害狀況
+                var injuryItems = _db.InjuryStatus.ToList();
+                foreach (var item in injuryItems)
+                {
+                    string partKey = $"Nowinjury_{item.Id}";
+                    string leftPartKey = $"NowinjuryLeft_{item.Id}";
+                    string rightPartKey = $"NowinjuryRight_{item.Id}";
+                    bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
+
+                    if (hasInjury)
+                    {
+                        var injuryViewModel = new InjuryStatuSViewModel
+                        {
+                            InjuryPart = item.InjuryPart,
+                            LeftSide = form[leftPartKey] != null,
+                            RightSide = form[rightPartKey] != null,
+                            InjuryTypes = new List<string>()
+                        };
+
+                        // 根據 ID 從表單收集每個傷勢類型下拉選單的值
+                        string muscleTendonType = form[$"NowmuscleTendon_{item.Id}"];
+                        string boneType = form[$"Nowbone_{item.Id}"];
+                        string ligamentType = form[$"Nowligament_{item.Id}"];
+                        string nerveType = form[$"Nownerve_{item.Id}"];
+                        string cartilageType = form[$"NowcartilageSynoviumBursa_{item.Id}"];
+                        string epidermalType = form[$"NowepidermalTissue_{item.Id}"];
+                        string bloodVesselType = form[$"NowbloodVessel_{item.Id}"];
+                        string organLimbType = form[$"NoworganLimb_{item.Id}"];
+
+                        if (!string.IsNullOrEmpty(muscleTendonType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"肌肉/肌腱: {muscleTendonType}");
+                        }
+                        if (!string.IsNullOrEmpty(boneType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"骨頭: {boneType}");
+                        }
+                        if (!string.IsNullOrEmpty(ligamentType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"韌帶: {ligamentType}");
+                        }
+                        if (!string.IsNullOrEmpty(nerveType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"神經: {nerveType}");
+                        }
+                        if (!string.IsNullOrEmpty(cartilageType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"軟骨/滑膜/滑囊: {cartilageType}");
+                        }
+                        if (!string.IsNullOrEmpty(epidermalType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"表皮組織: {epidermalType}");
+                        }
+                        if (!string.IsNullOrEmpty(bloodVesselType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"血管: {bloodVesselType}");
+                        }
+                        if (!string.IsNullOrEmpty(organLimbType))
+                        {
+                            injuryViewModel.InjuryTypes.Add($"器官/四肢: {organLimbType}");
+                        }
+
+                        model.NowInjuryDetails.Add(injuryViewModel);
+                    }
+                }
+
+
+                // 收集目前治療方式
+                var treatmentMethods = _db.TreatmentMethod.ToList();
+                foreach (var method in treatmentMethods)
+                {
+                    string methodKey = $"Nowtreatment_{method.Id}";
+                    if (form[methodKey] != null)
+                    {
+                        model.NowTreatmentDetails.Add(new TreatmentMethoDViewModel
+                        {
+                            Method = method.Method
+                        });
+                    }
+                }
+
+                // 收集心血管篩檢的數據
+                var cardiovascularScreenings = _db.CardiovascularScreening.ToList();
+                foreach (var item in cardiovascularScreenings)
+                {
+                    string answerKey = $"question_{item.Id}";
+                    var answer = form[answerKey] ?? "no"; // 如果沒有填寫，預設為 "no"
+
+                    // 使用 if-else 來進行中英文對照的轉換
+                    string displayAnswer;
+                    if (answer == "yes")
+                    {
+                        displayAnswer = "是 Yes";
+                    }
+                    else if (answer == "no")
+                    {
+                        displayAnswer = "否 No";
+                    }
+                    else
+                    {
+                        displayAnswer = "未回答"; // 如果沒有回答，顯示預設文本
+                    }
+
+                    model.CardiovascularScreeningDetails.Add(new CardiovascularScreeningDetailViewModel
+                    {
+                        OrderNumber = item.Id,   // 使用資料庫的項次
                         Question = item.Question,
-                        Answer = answer
+                        Answer = displayAnswer // 將轉換後的答案傳遞給 Answer 屬性
                     });
                 }
-            }
 
-            // 收集是否正在服用藥物的數據
-            var medicationAnswer = form["medication"];
-            if (!string.IsNullOrEmpty(medicationAnswer))
-            {
-                model.MedicationAnswer = medicationAnswer;
-                model.MedicationDetails = form["medicationDetails"];
-            }
-
-            // 收集備註
-            model.Notes = form["notes"];
-
-            // 收集骨科篩檢的數據
-            var orthopaedicScreenings = _db.OrthopaedicScreening.ToList();
-            foreach (var item in orthopaedicScreenings)
-            {
-                string resultKey = $"result_{item.Id}";
-                var result = form[resultKey];
-
-                if (!string.IsNullOrEmpty(result))
+                // 收集腦震盪篩檢(選手自填)的數據
+                var concussionScreenings = _db.CognitiveScreening.ToList();
+                foreach (var item in concussionScreenings)
                 {
-                    model.OrthopaedicScreeningDetails.Add(new OrthopaedicScreeninGViewModel
-                    {
-                        OrderNumber = item.Id,
-                        Instructions = item.Instructions,
-                        ObservationPoints = item.ObservationPoints,
-                        Result = result
-                    });
-                }
-            }
+                    string answerKey = $"question_{item.ID}";
+                    var answer = form[answerKey];
 
-            return View("_PreviewTotal", model);
+                    if (!string.IsNullOrEmpty(answer))
+                    {
+                        model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                        {
+                            OrderNumber = item.ID,
+                            Question = item.Question,
+                            Answer = answer
+                        });
+                    }
+                }
+
+                // 收集是否正在服用藥物的數據
+                var medicationAnswer = form["medication"];
+                if (!string.IsNullOrEmpty(medicationAnswer))
+                {
+                    model.MedicationAnswer = medicationAnswer;
+                    model.MedicationDetails = form["medicationDetails"];
+                }
+
+                // 收集備註
+                model.Notes = form["notes"];
+
+                // 收集骨科篩檢的數據
+                var orthopaedicScreenings = _db.OrthopaedicScreening.ToList();
+                foreach (var item in orthopaedicScreenings)
+                {
+                    string resultKey = $"result_{item.Id}";
+                    var result = form[resultKey];
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        model.OrthopaedicScreeningDetails.Add(new OrthopaedicScreeninGViewModel
+                        {
+                            OrderNumber = item.Id,
+                            Instructions = item.Instructions,
+                            ObservationPoints = item.ObservationPoints,
+                            Result = result
+                        });
+                    }
+                }
+                return View("_PreviewTotal", model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
         #endregion
 

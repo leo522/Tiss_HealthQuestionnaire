@@ -198,6 +198,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsNo" Type="bit" />
         </EntityType>
         <EntityType Name="PastHealthAnswers">
           <Key>
@@ -516,6 +518,8 @@
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PastHealthAnswers" Relationship="Self.FK__PastHealt__Quest__5165187F" FromRole="PastHealth" ToRole="PastHealthAnswers" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" />
         </EntityType>
         <EntityType Name="PastHealthAnswers">
           <Key>
@@ -985,6 +989,8 @@
           <EntitySetMapping Name="PastHealth">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHealth">
               <MappingFragment StoreEntitySet="PastHealth">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />

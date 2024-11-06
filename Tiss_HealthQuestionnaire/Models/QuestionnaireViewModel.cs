@@ -90,32 +90,51 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
     }
 
+    #region 各個model
+
     public class PastHealthDetailViewModel //過去健康檢查病史
     {
         public int ItemId { get; set; }    // 項目的ID
-        public string ItemZh { get; set; }
-        public string ItemEn { get; set; }
-        public string Item1 { get; set; }  // 第一個輸入框的內容
-        public string Item2 { get; set; }  // 第二個輸入框的內容
-        public string Item3 { get; set; }  // 第三個輸入框的內容
+        public string ItemZh { get; set; } = "未回答"; // 中文
+        public string ItemEn { get; set; } = "未回答"; // 英文
+        public string Item1 { get; set; } = "未回答";  // 第一個輸入框的內容
+        public string Item2 { get; set; } = "未回答";  // 第二個輸入框的內容
+        public string Item3 { get; set; } = "未回答";  // 第三個輸入框的內容
+        //public string Answer { get; set; } // 單選題的答案代碼
+        //public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
+
+        //// 顯示選擇的答案（中英文對照）
+        //public string DisplayAnswer
+        //{
+        //    get
+        //    {
+        //        if (string.IsNullOrEmpty(Answer))
+        //        {
+        //            return "未回答"; // 如果沒有回答，顯示預設
+        //        }
+
+        //        // 檢查 AnswerOptions 是否為 null 並確認包含 Answer 的鍵
+        //        return AnswerOptions != null && AnswerOptions.ContainsKey(Answer) ? AnswerOptions[Answer] : Answer;
+        //    }
+        //}
     }
 
     public class AllergicHistoryDetailViewModel //過敏史
     {
         public int ItemId { get; set; }    // 項目的ID
-        public string ItemZh { get; set; }
-        public string ItemEn { get; set; }
-        public string IsAllergic { get; set; }  // 是否過敏（"yes" 或 "no"）
-        public string AllergyDescription { get; set; }  // 過敏詳情描述
+        public string ItemZh { get; set; } = "未回答";
+        public string ItemEn { get; set; } = "未回答";
+        public string IsAllergic { get; set; } = "未回答";  // 是否過敏（"yes" 或 "no"）
+        public string AllergyDescription { get; set; } = "未回答";  // 過敏詳情描述
     }
 
     public class FamilyHistoryViewModel //家族病史的每個項目
     {
         public int ItemId { get; set; }
-        public string GeneralPartsZh { get; set; }
-        public string GeneralPartsEn { get; set; }
-        public string FamilyHistoryOption { get; set; } // 可為 "yes", "no", 或 "unknown"
-        public string OtherFamilyHistory { get; set; }  // 其他家族病史
+        public string GeneralPartsZh { get; set; } = "未回答";
+        public string GeneralPartsEn { get; set; } = "未回答";
+        public string FamilyHistoryOption { get; set; } = "未回答"; // 可為 "yes", "no", 或 "unknown"
+        public string OtherFamilyHistory { get; set; } = "未回答";  // 其他家族病史
     }
 
     public class PastHistoryDetailViewModel //過去病史
@@ -227,4 +246,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public string ObservationPoints { get; set; }
         public string Result { get; set; }  // 正常或異常
     }
+    #endregion
 }
