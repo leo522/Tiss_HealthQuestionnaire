@@ -95,8 +95,8 @@ namespace Tiss_HealthQuestionnaire.Models
     public class PastHealthDetailViewModel //過去健康檢查病史
     {
         public int ItemId { get; set; }    // 項目的ID
-        public string ItemZh { get; set; } = "未回答"; // 中文
-        public string ItemEn { get; set; } = "未回答"; // 英文
+        public string ItemZh { get; set; } // 中文
+        public string ItemEn { get; set; }  // 英文
         public string Item1 { get; set; } = "未回答";  // 第一個輸入框的內容
         public string Item2 { get; set; } = "未回答";  // 第二個輸入框的內容
         public string Item3 { get; set; } = "未回答";  // 第三個輸入框的內容
@@ -122,8 +122,8 @@ namespace Tiss_HealthQuestionnaire.Models
     public class AllergicHistoryDetailViewModel //過敏史
     {
         public int ItemId { get; set; }    // 項目的ID
-        public string ItemZh { get; set; } = "未回答";
-        public string ItemEn { get; set; } = "未回答";
+        public string ItemZh { get; set; } 
+        public string ItemEn { get; set; }
         public string IsAllergic { get; set; } = "未回答";  // 是否過敏（"yes" 或 "no"）
         public string AllergyDescription { get; set; } = "未回答";  // 過敏詳情描述
     }
@@ -131,10 +131,13 @@ namespace Tiss_HealthQuestionnaire.Models
     public class FamilyHistoryViewModel //家族病史的每個項目
     {
         public int ItemId { get; set; }
-        public string GeneralPartsZh { get; set; } = "未回答";
-        public string GeneralPartsEn { get; set; } = "未回答";
+        public string GeneralPartsZh { get; set; }
+        public string GeneralPartsEn { get; set; }
         public string FamilyHistoryOption { get; set; } = "未回答"; // 可為 "yes", "no", 或 "unknown"
         public string OtherFamilyHistory { get; set; } = "未回答";  // 其他家族病史
+        public bool? IsNo { get; set; }        
+        public bool? IsYes { get; set; }        
+        public bool? IsUnknown { get; set; }    
     }
 
     public class PastHistoryDetailViewModel //過去病史

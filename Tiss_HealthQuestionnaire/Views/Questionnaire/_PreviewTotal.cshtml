@@ -24,66 +24,52 @@
         </div>
 
         <!-- 過去健康檢查病史 -->
-        <!-- 過去健康檢查病史 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去健康檢查病史:</h2>
-            <div class="bg-gray-50 p-6 rounded-lg shadow-md text-gray-700">
-                <!-- 顯示主問題 -->
-                <p class="mb-4">
-                    <strong>過去兩年內的健康檢查是否有異常項目?</strong>
-                    @if (Model.PastHealthHistory == null || (Model.PastHealthHistory != "yes" && Model.PastHealthHistory != "no"))
-                    {
-                        <span>未回答</span>
-                    }
-                    else
-                    {
-                        @Model.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
-                    }
-                </p>
+            <!-- 顯示主問題 -->
+            <p class="mb-4">
+                <strong>過去兩年內的健康檢查是否有異常項目?</strong>
+                @Model.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
+            </p>
 
-                <!-- 如果選擇了 "是"，顯示詳細數據 -->
-                @if (Model.PastHealthHistory == "yes")
-                {
-                    if (Model.PastHealthDetails == null || !Model.PastHealthDetails.Any())
-                    {
-                        <p>未回答異常項目。</p>
-                    }
-                    else
-                    {
-                        <h4 class="text-lg font-bold mb-4">詳細異常項目:</h4>
-                        <table class="min-w-full bg-white border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="border border-gray-300 px-4 py-2">項目 1</th>
-                                    <th class="border border-gray-300 px-4 py-2">項目 2</th>
-                                    <th class="border border-gray-300 px-4 py-2">項目 3</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detail in Model.PastHealthDetails)
-                                {
-                                    <tr>
-                                        <td class="border border-gray-300 px-4 py-2">@detail.Item1</td>
-                                        <td class="border border-gray-300 px-4 py-2">@detail.Item2</td>
-                                        <td class="border border-gray-300 px-4 py-2">@detail.Item3</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                }
-                else if (Model.PastHealthHistory == "no")
-                {
-                    <p>無異常項目。</p>
-                }
-            </div>
+            <!-- 如果選擇了 "是"，顯示詳細數據 -->
+            @if (Model.PastHealthHistory == "yes" && Model.PastHealthDetails != null && Model.PastHealthDetails.Any())
+            {
+                <h4 class="text-lg font-bold mb-4">詳細異常項目:</h4>
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">項目 1</th>
+                            <th class="border border-gray-300 px-4 py-2">項目 2</th>
+                            <th class="border border-gray-300 px-4 py-2">項目 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.PastHealthDetails)
+                        {
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">@detail.Item1</td>
+                                <td class="border border-gray-300 px-4 py-2">@detail.Item2</td>
+                                <td class="border border-gray-300 px-4 py-2">@detail.Item3</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <!-- 如果選擇 "否" 或未選擇，顯示無異常或未回答提示 -->
+                <p class="text-gray-500 italic">無異常項目或未回答。</p>
+            }
         </div>
-
 
         <!-- 顯示過敏史 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">過敏史:</h2>
-            @if (Model.AllergicHistoryDetails != null && Model.AllergicHistoryDetails.Any())
+
+            @Model.ConvertYesNoToLocalizedString(Model.AllergicHistory)
+
+            @if (Model.AllergicHistory == "yes" && Model.AllergicHistoryDetails != null && Model.AllergicHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead>
@@ -97,13 +83,17 @@
                         @foreach (var detail in Model.AllergicHistoryDetails)
                         {
                             <tr>
-                                <td class="border border-gray-300 p-2">@detail.ItemZh (@detail.ItemEn)</td> <!-- 渲染中英文過敏項目 -->
+                                <td class="border border-gray-300 p-2">@detail.ItemZh</td> <!-- 渲染中英文過敏項目 -->
                                 <td class="border border-gray-300 p-2">@Model.ConvertYesNoToLocalizedString(detail.IsAllergic)</td>
                                 <td class="border border-gray-300 p-2">@detail.AllergyDescription</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            }
+            else
+            {
+                <p class="text-gray-500 italic">無異常項目或未回答。</p>
             }
         </div>
 
@@ -130,40 +120,15 @@
                             </tr>
                         }
 
-                        <!-- 顯示其他家族病史 -->
-                        @if (!string.IsNullOrEmpty(Model.FamilyHistoryDetails.FirstOrDefault()?.OtherFamilyHistory))
+                        <!-- 顯示其他家族病史，如果存在「其他」描述 -->
+                        @{
+                            var otherDetail = Model.FamilyHistoryDetails.FirstOrDefault(d => d.ItemId == 10 && !string.IsNullOrEmpty(d.OtherFamilyHistory));
+                        }
+                        @if (otherDetail != null)
                         {
                             <tr>
                                 <td class="border border-gray-300 p-2">其他 Others:</td>
-                                <td class="border border-gray-300 p-2">@Model.FamilyHistoryDetails.FirstOrDefault()?.OtherFamilyHistory</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
-
-        <!-- 顯示過去病史 -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去病史:</h2>
-            @if (Model.PastHistoryDetails != null && Model.PastHistoryDetails.Any())
-            {
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 p-2">項目 (Item)</th>
-                            <th class="border border-gray-300 p-2">選擇 (Option)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detail in Model.PastHistoryDetails)
-                        {
-                            var optionText = detail.PastHistoryOption == "yes" ? "是 Yes"
-                                             : detail.PastHistoryOption == "no" ? "否 No"
-                                             : "未知 Unknown";
-                            <tr>
-                                <td class="border border-gray-300 p-2">@detail.GeneralPartsZh (@detail.GeneralPartsEn)</td>
-                                <td class="border border-gray-300 p-2">@optionText</td>
+                                <td class="border border-gray-300 p-2">@otherDetail.OtherFamilyHistory</td>
                             </tr>
                         }
                     </tbody>
@@ -327,6 +292,10 @@
                         }
                     </tbody>
                 </table>
+            }
+            else
+            {
+                <p class="text-gray-500">沒有女性問卷資料。</p>
             }
         </div>
 

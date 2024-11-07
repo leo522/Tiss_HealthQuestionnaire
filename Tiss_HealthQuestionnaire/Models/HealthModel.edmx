@@ -12,6 +12,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsNo" Type="bit" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -103,6 +105,9 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsNo" Type="bit" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsUnknown" Type="bit" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -474,6 +479,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" />
         </EntityType>
         <EntityType Name="FamilyHistory">
           <Key>
@@ -482,6 +489,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsNo" Type="Boolean" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsUnknown" Type="Boolean" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -941,6 +951,8 @@
           <EntitySetMapping Name="AllergicHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.AllergicHistory">
               <MappingFragment StoreEntitySet="AllergicHistory">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
@@ -950,6 +962,9 @@
           <EntitySetMapping Name="FamilyHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.FamilyHistory">
               <MappingFragment StoreEntitySet="FamilyHistory">
+                <ScalarProperty Name="IsUnknown" ColumnName="IsUnknown" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
                 <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
