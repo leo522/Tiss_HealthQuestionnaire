@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -95,7 +96,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 藥物史
         public ActionResult PastDrugs()
         {
-            var pastDrugs = _db.PastDrugs.ToList();
+            var pastDrugs = _db.PastDrugs.Where(drug => drug.ID != 13).ToList();
+
             return PartialView("_PastDrugs", pastDrugs);
         }
         #endregion
@@ -611,9 +613,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 foreach (var item in familyHistoryItems)
                 {
                     var selectedValue = form[$"familyHistory_{item.ID}"];
+       
+                    var familyHistoryOption = "未回答"; //處理 "是"、"否"、"未知" 等選項
 
-                    // 處理 "是"、"否"、"未知" 等選項
-                    var familyHistoryOption = "未回答";
                     if (selectedValue == "yes")
                     {
                         item.IsYes = true;
@@ -659,69 +661,218 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     _db.Entry(item).State = EntityState.Modified;
                 }
 
-
                 //收集過去病史的數據
                 var pastHistoryItems = _db.PastHistory.ToList();
                 foreach (var item in pastHistoryItems)
                 {
-                    string optionKey = $"pastHistory_{item.ID}";
+                    var selectedValue = form[$"pastHistory_{item.ID}"];
+
+                    var pastHistoryOption = "未回答";
+
+                    if (selectedValue == "yes")
+                    {
+                        item.IsYes = true;
+                        item.IsNo = false;
+                        item.IsUnknown = false;
+                        pastHistoryOption = "yes";
+                    }
+                    else if (selectedValue == "no")
+                    {
+                        item.IsYes = false;
+                        item.IsNo = true;
+                        item.IsUnknown = false;
+                        pastHistoryOption = "no";
+                    }
+                    else if (selectedValue == "unknown")
+                    {
+                        item.IsYes = false;
+                        item.IsNo = false;
+                        item.IsUnknown = true;
+                        pastHistoryOption = "unknown";
+                    }
+                    else
+                    {
+                        item.IsYes = false;
+                        item.IsNo = false;
+                        item.IsUnknown = false;
+                    }
+
+                    // 判斷是否為「其他」項目並處理描述
+                    string otherPastHistory = item.ID == 10 ? form["PastHistoryOption"] ?? "未回答" : null;
+
 
                     model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
                     {
                         ItemId = item.ID,
                         GeneralPartsZh = item.GeneralPartsZh,
                         GeneralPartsEn = item.GeneralPartsEn,
-                        PastHistoryOption = form[optionKey]
+                        PastHistoryOption = pastHistoryOption,
+                        OtherPastHistory = otherPastHistory,
                     });
+                    
+                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
 
-                //收集手術病史的數據
+                #region 開刀史
+
                 var surgeryItems = _db.SurgeryHistory.ToList();
                 foreach (var item in surgeryItems)
                 {
-                    string operationOptionKey = $"surgeryHistory_{item.ID}";
+                    var selectedValue = form[$"surgeryHistory_{item.ID}"];
 
-                    model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                    if (selectedValue == "yes")
                     {
-                        ItemId = item.ID,
-                        PartsOfBodyZh = item.PartsOfBodyZh,
-                        PartsOfBodyEn = item.PartsOfBodyEn,
-                        OperationOption = form[operationOptionKey]
-                    });
+                        item.IsYes = true;
+                        item.IsNo = false;
+
+                        string isSurgery_Key = $"surgery_{item.ID}";
+
+                        model.SurgeryHistory = "yes";
+
+                        model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            OperationOption = "是",
+                        });
+                    }
+                    else if (selectedValue == "no")
+                    {
+                        item.IsYes = false;
+                        item.IsNo = true;
+
+                        string isSurgery_Key = $"surgery_{item.ID}";
+
+                        model.SurgeryHistory = "no";
+
+                        model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            OperationOption = "否",
+                        });
+                    }
+                    else
+                    {
+                        item.IsYes = false;
+                        item.IsNo = false;
+
+                        model.SurgeryHistory = "未回答";
+
+                        model.SurgeryHistoryDetails.Add(new SurgeryHistoryDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            OperationOption = "未回答"
+                        });
+                    }
+                    _db.Entry(item).State = EntityState.Modified;
                 }
 
-                //收集現在病史的數據
+                #endregion
+
+                #region 現在病史
+
                 var presentIllnessItems = _db.PresentIllness.ToList();
                 foreach (var item in presentIllnessItems)
                 {
-                    string therapyKey = $"presentIllness_{item.ID}";
+                    var selectedValue = form[$"presentIllness_{item.ID}"];
 
-                    model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                    if (selectedValue == "yes")
                     {
-                        ItemId = item.ID,
-                        PartsOfBodyZh = item.PartsOfBodyZh,
-                        PartsOfBodyEn = item.PartsOfBodyEn,
-                        ReceivingOtherTherapies = form[therapyKey]
-                    });
+                        item.IsYes = true;
+                        item.IsNo = false;
+
+                        string isReceiving_Key = $"presentIllness_{item.ID}";
+
+                        model.PresentIllness = "yes";
+
+                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            ReceivingOtherTherapies = "是"
+                        });
+                    }
+                    else if (selectedValue == "no")
+                    {
+                        item.IsYes = false;
+                        item.IsNo = true;
+
+                        string isReceiving_Key = $"presentIllness_{item.ID}";
+
+                        model.PresentIllness = "no";
+
+                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            ReceivingOtherTherapies = "否"
+                        });
+                    }
+                    else
+                    {
+                        item.IsYes = false;
+                        item.IsNo = true;
+
+                        model.PresentIllness = "未回答";
+
+                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            PartsOfBodyZh = item.PartsOfBodyZh,
+                            PartsOfBodyEn = item.PartsOfBodyEn,
+                            ReceivingOtherTherapies = "未回答"
+                        });
+                    }
+                   _db.Entry(item).State = EntityState.Modified;
                 }
 
-                //收集藥物史數據
+                #endregion
+
+                #region 藥物史
+
+                model.PastDrugsDetails = new List<PastDrugsDetailViewModel>(); //初始化 PastDrugsDetails 列表
                 var pastDrugsItems = _db.PastDrugs.ToList();
+                string otherDrugsDescription = form["otherDrugsDetail"]; // 取得 "其他" 的描述
+                bool isOtherChecked = form["usedDrugs_other"] == "on"; //檢查「其他」選項是否勾選
+
+                // 如果「其他」選項勾選但未填寫描述
+                if (isOtherChecked && string.IsNullOrEmpty(otherDrugsDescription))
+                {
+                    ModelState.AddModelError("otherDrugsDetail", "您勾選了「其他」選項，請填寫描述內容。");
+
+                    //model.TUE = form["TUE"] == "yes" ? "是" : "否";
+                    return View("Main", model); // 返回主頁並顯示錯誤訊息
+                }
+
+                // 獲取其他勾選項目並填充模型
                 foreach (var item in pastDrugsItems)
                 {
-                    string usedKey = $"usedDrugs_{item.ID}";
-                    string isUsed = form[usedKey] == "on" ? "yes" : "no";
-                    string otherDrugs = form["otherDrugs"];
+                    string checkboxName = $"usedDrugs_{item.ID}";
+                    bool isChecked = form[checkboxName] == "on";
 
-                    model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
+                    // 如果勾選，則將此項目添加到模型的 PastDrugsDetails 列表中
+                    if (isChecked || (item.ItemZh == "其他" && isOtherChecked))
                     {
-                        ItemId = item.ID,
-                        ItemZh = item.ItemZh,
-                        ItemEn = item.ItemEn,
-                        IsUsed = isUsed,
-                        OtherDrugs = otherDrugs
-                    });
+                        model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
+                        {
+                            ItemId = item.ID,
+                            ItemZh = item.ItemZh,
+                            ItemEn = item.ItemEn,
+                            IsUsed = "yes",
+                            OtherDrugs = item.ItemZh == "其他" ? otherDrugsDescription : null
+                        });
+                    }
                 }
+                model.TUE = form["TUE"] == "yes" ? "是" : "否";
+
+                #endregion
 
                 //收集營養品數據
                 var supplementsItems = _db.PastSupplements.ToList();
@@ -971,7 +1122,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                ModelState.AddModelError("", "發生錯誤：" + ex.Message);
+                return View("Main", model);
             }
             
         }

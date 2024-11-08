@@ -195,6 +195,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsUsed" Type="bit" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -226,6 +227,9 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsNo" Type="bit" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsUnknown" Type="bit" />
         </EntityType>
         <EntityType Name="PastInjuryPartRecovery">
           <Key>
@@ -278,6 +282,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsNo" Type="bit" />
         </EntityType>
         <EntityType Name="QuestionnaireResponse">
           <Key>
@@ -307,6 +313,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsYes" Type="bit" />
+          <Property Name="IsNo" Type="bit" />
         </EntityType>
         <EntityType Name="SymptomEvaluation">
           <Key>
@@ -519,6 +527,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsUsed" Type="Boolean" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -553,6 +562,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsNo" Type="Boolean" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsUnknown" Type="Boolean" />
         </EntityType>
         <EntityType Name="PastSupplements">
           <Key>
@@ -569,6 +581,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" />
         </EntityType>
         <EntityType Name="SurgeryHistory">
           <Key>
@@ -577,6 +591,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" />
         </EntityType>
         <Association Name="FK__PastHealt__Quest__5165187F">
           <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
@@ -995,6 +1011,7 @@
           <EntitySetMapping Name="PastDrugs">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastDrugs">
               <MappingFragment StoreEntitySet="PastDrugs">
+                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
@@ -1029,6 +1046,9 @@
           <EntitySetMapping Name="PastHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHistory">
               <MappingFragment StoreEntitySet="PastHistory">
+                <ScalarProperty Name="IsUnknown" ColumnName="IsUnknown" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
                 <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
@@ -1047,6 +1067,8 @@
           <EntitySetMapping Name="PresentIllness">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PresentIllness">
               <MappingFragment StoreEntitySet="PresentIllness">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
                 <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
@@ -1056,6 +1078,8 @@
           <EntitySetMapping Name="SurgeryHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.SurgeryHistory">
               <MappingFragment StoreEntitySet="SurgeryHistory">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
                 <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />

@@ -32,13 +32,41 @@
                             </td>
                         </tr>
                     }
+
+                    <!-- 其他欄位 -->
                     <tr class="hover:bg-gray-100">
-                        <td class="border border-gray-300 px-4 py-2 font-medium">其他 Others，請詳述：</td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <input type="text" name="otherDrugs" class="border rounded p-2 w-full" placeholder="請描述...">
+                            <span class="block font-medium">其他 Others，請詳述：</span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" name="usedDrugs_other" class="form-checkbox h-5 w-5 text-blue-600">
+                                <input type="text" name="otherDrugsDetail" class="border rounded p-2 ml-2 w-full" placeholder="請描述...">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- TUE 欄位 -->
+                    <tr class="hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2">
+                            <span class="block font-medium">是否有申請治療用途豁免？(Therapeutic Use Exemption, TUE)</span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <div class="flex items-center space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                                    <span class="ml-2">是</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5 text-blue-600">
+                                    <span class="ml-2">否</span>
+                                </label>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
+
+
             </table>
         </div>
     </div>

@@ -21,7 +21,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string PastHistory { get; set; }        // 過去病史
         public string SurgeryHistory { get; set; }     // 手術病史
         public string PresentIllness { get; set; }     // 現在病史
-        public string PastDrugs { get; set; }          // 藥物史
         public string PastSupplements { get; set; }    // 營養品
         public string FemaleQuestionnaire { get; set; } // 女性問卷（若有）
 
@@ -60,6 +59,7 @@ namespace Tiss_HealthQuestionnaire.Models
 
         //藥物史
         public List<PastDrugsDetailViewModel> PastDrugsDetails { get; set; } = new List<PastDrugsDetailViewModel>();
+        public string TUE { get; set; }
 
         //營養品詳細
         public List<PastSupplementsDetailViewModel> PastSupplementsDetails { get; set; } = new List<PastSupplementsDetailViewModel>();
@@ -100,23 +100,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Item1 { get; set; } = "未回答";  // 第一個輸入框的內容
         public string Item2 { get; set; } = "未回答";  // 第二個輸入框的內容
         public string Item3 { get; set; } = "未回答";  // 第三個輸入框的內容
-        //public string Answer { get; set; } // 單選題的答案代碼
-        //public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
-
-        //// 顯示選擇的答案（中英文對照）
-        //public string DisplayAnswer
-        //{
-        //    get
-        //    {
-        //        if (string.IsNullOrEmpty(Answer))
-        //        {
-        //            return "未回答"; // 如果沒有回答，顯示預設
-        //        }
-
-        //        // 檢查 AnswerOptions 是否為 null 並確認包含 Answer 的鍵
-        //        return AnswerOptions != null && AnswerOptions.ContainsKey(Answer) ? AnswerOptions[Answer] : Answer;
-        //    }
-        //}
     }
 
     public class AllergicHistoryDetailViewModel //過敏史
@@ -124,8 +107,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ItemId { get; set; }    // 項目的ID
         public string ItemZh { get; set; } 
         public string ItemEn { get; set; }
-        public string IsAllergic { get; set; } = "未回答";  // 是否過敏（"yes" 或 "no"）
-        public string AllergyDescription { get; set; } = "未回答";  // 過敏詳情描述
+        public string IsAllergic { get; set; }  // 是否過敏（"yes" 或 "no"）
+        public string AllergyDescription { get; set; }  // 過敏詳情描述
     }
 
     public class FamilyHistoryViewModel //家族病史的每個項目
@@ -133,8 +116,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ItemId { get; set; }
         public string GeneralPartsZh { get; set; }
         public string GeneralPartsEn { get; set; }
-        public string FamilyHistoryOption { get; set; } = "未回答"; // 可為 "yes", "no", 或 "unknown"
-        public string OtherFamilyHistory { get; set; } = "未回答";  // 其他家族病史
+        public string FamilyHistoryOption { get; set; }  // 可為 "yes", "no", 或 "unknown"
+        public string OtherFamilyHistory { get; set; }  // 其他家族病史
         public bool? IsNo { get; set; }        
         public bool? IsYes { get; set; }        
         public bool? IsUnknown { get; set; }    
@@ -146,14 +129,18 @@ namespace Tiss_HealthQuestionnaire.Models
         public string GeneralPartsZh { get; set; }
         public string GeneralPartsEn { get; set; }
         public string PastHistoryOption { get; set; } // "yes", "no", "unknown"
+        public string OtherPastHistory {  get; set; }
+        public bool? IsNo { get; set; }
+        public bool? IsYes { get; set; }
+        public bool? IsUnknown { get; set; }
     }
 
-    public class SurgeryHistoryDetailViewModel //手術病史
+    public class SurgeryHistoryDetailViewModel //開刀史
     {
         public int ItemId { get; set; }           // 手術項目ID
         public string PartsOfBodyZh { get; set; } // 手術部位 (中文)
         public string PartsOfBodyEn { get; set; } // 手術部位 (英文)
-        public string OperationOption { get; set; } // 是否接受手術的選擇 ("yes", "no", "unknown")
+        public string OperationOption { get; set; } // 是否接受手術的選擇 ("yes", "no")
     }
 
     public class PresentIllnessDetailViewModel //現在病史
@@ -161,7 +148,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ItemId { get; set; }    // 項目的ID
         public string PartsOfBodyZh { get; set; }
         public string PartsOfBodyEn { get; set; }
-        public string ReceivingOtherTherapies { get; set; }  // 是否接受其他治療
+        public string ReceivingOtherTherapies { get; set; }  // 是否接受其他治療("yes", "no")
     }
 
     public class PastDrugsDetailViewModel //藥物史
