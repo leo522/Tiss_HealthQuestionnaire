@@ -49,7 +49,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PastHealth()
         {
             var pastHealthItems = _db.PastHealth.ToList();
-            return PartialView("_PastHealth", pastHealthItems);
+            return View("PastHealth", pastHealthItems);
+            //return PartialView("_PastHealth", pastHealthItems);
         }
         #endregion
 
@@ -57,7 +58,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult AllergicHistory()
         {
             var allergicHistoryItems = _db.AllergicHistory.ToList();
-            return PartialView("_AllergicHistory", allergicHistoryItems);
+            return View("AllergicHistory", allergicHistoryItems);
+            //return PartialView("_AllergicHistory", allergicHistoryItems);
         }
         #endregion
 
@@ -65,7 +67,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult FamilyHistory()
         {
             var familyHistory = _db.FamilyHistory.ToList();
-            return PartialView("_FamilyHistory", familyHistory);
+            return View("FamilyHistory", familyHistory);
+            //return PartialView("_FamilyHistory", familyHistory);
         }
         #endregion
 
@@ -73,15 +76,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PastHistory()
         {
             var pastHistory = _db.PastHistory.ToList();
-            return PartialView("_PastHistory", pastHistory);
+            return View("PastHistory", pastHistory);
+            //return PartialView("_PastHistory", pastHistory);
         }
         #endregion
 
-        #region 手術病史
+        #region 開刀史
         public ActionResult SurgeryHistory()
         {
             var surgeryHistory = _db.SurgeryHistory.ToList();
-            return PartialView("_SurgeryHistory", surgeryHistory);
+            return View("SurgeryHistory", surgeryHistory);
+            //return PartialView("_SurgeryHistory", surgeryHistory);
         }
         #endregion
 
@@ -89,7 +94,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PresentIllness()
         {
             var presentIllness = _db.PresentIllness.ToList();
-            return PartialView("_PresentIllness", presentIllness);
+            return View("PresentIllness", presentIllness);
+            //return PartialView("_PresentIllness", presentIllness);
         }
         #endregion
 
@@ -98,7 +104,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var pastDrugs = _db.PastDrugs.Where(drug => drug.ID != 13).ToList();
 
-            return PartialView("_PastDrugs", pastDrugs);
+            return View("PastDrugs", pastDrugs);
+            //return PartialView("_PastDrugs", pastDrugs);
         }
         #endregion
 
@@ -106,7 +113,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PastSupplements()
         {
             var pastSupplements = _db.PastSupplements.ToList();
-            return PartialView("_PastSupplements", pastSupplements);
+            return View("PastSupplements", pastSupplements);
+            //return PartialView("_PastSupplements", pastSupplements);
         }
         #endregion
 
@@ -114,7 +122,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult FemaleQuestionnaire()
         {
             var femaleQuestionnaire = _db.FemaleQuestionnaire.ToList();
-            return PartialView("_FemaleQuestionnaire", femaleQuestionnaire);
+            return View("FemaleQuestionnaire", femaleQuestionnaire);
+            //return PartialView("_FemaleQuestionnaire", femaleQuestionnaire);
         }
         #endregion
 
@@ -140,7 +149,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                                       injury.InjuryPart == "骨盆/薦椎")
                 }).ToList();
 
-                return PartialView("_PastInjury", PastInjuryList);
+                return View("PastInjuryRestored", PastInjuryList);
+                //return PartialView("_PastInjury", PastInjuryList);
             }
             catch (Exception ex)
             {
@@ -151,13 +161,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PastInjuryType() //過去傷勢類型
         {
             var PastInjuryType = _db.PastInjuryType.ToList();
-            return PartialView("_PastInjuryType", PastInjuryType);
+            return View("PastInjuryType", PastInjuryType);
+            //return PartialView("_PastInjuryType", PastInjuryType);
         }
 
         public ActionResult PastTreatmentMethod() //過去治療方式
         {
             var PastTreatmentMethod = _db.PastTreatmentMethod.ToList();
-            return PartialView("_PastTreatmentMethod", PastTreatmentMethod);
+            return View("PastTreatmentMethod", PastTreatmentMethod);
+            //return PartialView("_PastTreatmentMethod", PastTreatmentMethod);
         }
         #endregion
 
@@ -180,7 +192,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }).ToList();
 
                 // 傳遞轉換後的 injuryList 到 Partial View
-                return PartialView("_NowInjuryRestored", injuryList);
+                return View("NowInjuryRestored", injuryList);
+                //return PartialView("_NowInjuryRestored", injuryList);
             }
             catch (Exception ex)
             {
@@ -191,13 +204,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult NowInjuryType() //目前傷勢類型
         {
             var InjuryType = _db.InjuryType.ToList();
-            return PartialView("_NowInjuryType", InjuryType);
+            return View("NowInjuryType", InjuryType);
+            //return PartialView("_NowInjuryType", InjuryType);
         }
 
         public ActionResult NowTreatmentMethod() //目前治療方式
         {
             var treatmentMethod = _db.TreatmentMethod.ToList();
-            return PartialView("_NowTreatmentMethod", treatmentMethod);
+            return View("NowTreatmentMethod", treatmentMethod);
+            //return PartialView("_NowTreatmentMethod", treatmentMethod);
         }
         #endregion
 
@@ -240,11 +255,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question
             }).ToList();
 
-            return PartialView("_CardiovascularScreening", viewModel);
+            return PartialView("CardiovascularScreening", viewModel);
+            //return PartialView("_CardiovascularScreening", viewModel);
         }
         #endregion
 
-        #region 腦震盪篩檢
+        #region 腦震盪篩檢-選手自填
         /// <summary>
         /// 第一部分 選手背景
         /// </summary>
@@ -261,7 +277,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question
             }).ToList();
 
-            return PartialView("_ConcussionScreening", viewModel);
+            return View("ConcussionScreening", viewModel);
+            //return PartialView("_ConcussionScreening", viewModel);
         }
 
         /// <summary>
@@ -280,7 +297,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.SymptomItem
             }).ToList();
 
-            return PartialView("_SymptomEvaluation", viewModel);
+            return View("SymptomEvaluation", viewModel);
+            //return PartialView("_SymptomEvaluation", viewModel);
         }
         #endregion
 
@@ -298,7 +316,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ObservationPoints = q.ObservationPoints
             }).ToList();
 
-            return PartialView("_OrthopaedicScreening", viewModel);
+            return View("OrthopaedicScreening", viewModel);
+            //return PartialView("_OrthopaedicScreening", viewModel);
         }
         #endregion
 
@@ -323,7 +342,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question     // 顯示問題
             }).ToList();
 
-            return PartialView("_CognitiveScreening", viewModel);
+            return View("CognitiveScreening", viewModel);
+            //return PartialView("_CognitiveScreening", viewModel);
         }
 
         /// <summary>
@@ -342,7 +362,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Word = q.Word             // 顯示的詞彙
             }).ToList();
 
-            return PartialView("_ImmediateMemory", viewModel);
+            return View("ImmediateMemory", viewModel);
+            //return PartialView("_ImmediateMemory", viewModel);
         }
 
         /// <summary>
@@ -353,14 +374,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             // 模擬數據或從資料庫中獲取資料
             var viewModel = new List<ConcentrationViewModel>
-{
-    new ConcentrationViewModel { OrderNumber = 1, ListA = "4-9-3", ListB = "5-2-6", ListC = "1-4-2" },
-    new ConcentrationViewModel { OrderNumber = 2, ListA = "6-2-9", ListB = "4-1-5", ListC = "6-5-8" },
-    new ConcentrationViewModel { OrderNumber = 3, ListA = "3-8-1-4", ListB = "1-7-9-5", ListC = "6-8-3-1" },
-    new ConcentrationViewModel { OrderNumber = 4, ListA = "3-2-7-9", ListB = "4-9-6-8", ListC = "3-4-8-1" }
-};
+            {
+                new ConcentrationViewModel { OrderNumber = 1, ListA = "4-9-3", ListB = "5-2-6", ListC = "1-4-2" },
+                new ConcentrationViewModel { OrderNumber = 2, ListA = "6-2-9", ListB = "4-1-5", ListC = "6-5-8" },
+                new ConcentrationViewModel { OrderNumber = 3, ListA = "3-8-1-4", ListB = "1-7-9-5", ListC = "6-8-3-1" },
+                new ConcentrationViewModel { OrderNumber = 4, ListA = "3-2-7-9", ListB = "4-9-6-8", ListC = "3-4-8-1" }
+            };
 
-            return PartialView("_Concentration", viewModel);
+            return View("Concentration", viewModel);
+            //return PartialView("_Concentration", viewModel);
         }
 
         /// <summary>
@@ -369,7 +391,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// <returns></returns>
         public ActionResult CoordinationAndBalanceExamination()
         {
-            return PartialView("_CoordinationAndBalanceExamination");
+            return View("CoordinationAndBalanceExamination");
+            //return PartialView("_CoordinationAndBalanceExamination");
         }
 
         /// <summary>
@@ -389,7 +412,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             }).ToList();
 
-            return PartialView("_DelayedRecall", viewModel);
+            return View("DelayedRecall", viewModel);
+            //return PartialView("_DelayedRecall", viewModel);
         }
 
         /// <summary>
@@ -412,7 +436,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             };
 
 
-            return PartialView("_CognitiveScreeningTotalScore", viewModel);
+            return View("CognitiveScreeningTotalScore", viewModel);
+            //return PartialView("_CognitiveScreeningTotalScore", viewModel);
         }
 
         // 根據項目名稱取得對應的最大分數
@@ -465,7 +490,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 問卷填完預覽頁
         public ActionResult Preview(QuestionnaireViewModel model)
         {
-            return View("_PreviewTotal", model); // 從表單收集的數據進行處理
+            return View("Preview", model); // 從表單收集的數據進行處理
+            //return View("_PreviewTotal", model); // 從表單收集的數據進行處理
         }
 
         [HttpPost]

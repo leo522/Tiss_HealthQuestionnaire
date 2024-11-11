@@ -1,12 +1,12 @@
-﻿@*過去傷害狀況(已復原)-傷勢類型*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryType>
+﻿@*目前傷害狀況-傷勢類型*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryType>
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width" />
 </head>
 <body>
     <div class="p-4">
@@ -64,9 +64,9 @@
             <!-- 軟骨/滑膜/滑囊類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">軟骨/滑膜/滑囊類</h3>
-                <select name="NowepidermalTissue" class="w-full border border-gray-300 p-2 rounded">
+                <select name="NowcartilageSynoviumBursa" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
+                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.CartilageSynoviumBursa)).Select(i => i.CartilageSynoviumBursa).Distinct())
                     {
                         <option value="@item">@item</option>
                     }
@@ -111,36 +111,22 @@
         </div>
 
         <!-- 治療方式表單（最初是隱藏的） -->
-        <div id="treatment-method-section" class="hidden mt-4">
+        <div id="Nowtreatment-method-section" class="hidden mt-4">
             <!-- 這裡是下一個部分視圖的容器 -->
         </div>
     </div>
 
     <script>
-        //$(document).ready(function () {
-        //    // 當用戶在 "傷勢類型" 部分選擇複選框時顯示 "治療方式" 部分
-        //    $('.Pastinjury-checkbox').change(function () {
-        //        if ($('.Pastinjury-checkbox:checked').length > 0) {
-        //            // 動態載入治療方式的部分視圖
-        //            $.get('/Questionnaire/PastTreatmentMethod', function (data) {
-        //                $('#treatment-method-section').html(data).removeClass('hidden');
-        //            });
-        //        } else {
-        //            $('#treatment-method-section').addClass('hidden');
-        //        }
-        //    });
-        //});
-
         $(document).ready(function () {
             // 當用戶在 "傷勢類型" 部分選擇項目時顯示 "治療方式" 部分
             $('select').change(function () {
                 if ($('select').filter(function () { return this.value; }).length > 0) {
                     // 動態載入治療方式的部分視圖
-                    $.get('/Questionnaire/PastTreatmentMethod', function (data) {
-                        $('#treatment-method-section').html(data).removeClass('hidden');
+                    $.get('/Questionnaire/NowTreatmentMethod', function (data) {
+                        $('#Nowtreatment-method-section').html(data).removeClass('hidden');
                     });
                 } else {
-                    $('#treatment-method-section').addClass('hidden');
+                    $('#Nowtreatment-method-section').addClass('hidden');
                 }
             });
         });
