@@ -1,4 +1,5 @@
 ﻿@*認知篩檢-協調與平衡測驗*@
+@model Tiss_HealthQuestionnaire.Models.CoordinationAndBalanceExaminationViewModel
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -12,104 +13,83 @@
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">協調與平衡測驗 (Coordination and Balance Examination)</h2>
 
-        <!-- 第一部分：改良版平衡姿勢檢測 -->
+        <!-- 改良版平衡姿勢檢測 -->
         <h3 class="text-lg font-semibold mb-2">1. 改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)：</h3>
 
-        <!-- 測試腳與測試平面輸入 -->
+        <!-- 測試腳選項 -->
         <div class="mb-4">
-            <label class="block mb-2 font-semibold">測試腳 (非慣用腳)：</label>
-            <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="testFoot" value="左"> 左
+            <label>測試腳 (非慣用腳)：</label>
+            <label class="inline-flex items-center ml-2">
+                <input type="radio" name="TestFoot" value="左" @(Model.ModifiedBalanceTest.TestFoot == "左" ? "checked" : "") /> 左
             </label>
             <label class="inline-flex items-center ml-4">
-                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="testFoot" value="右"> 右
+                <input type="radio" name="TestFoot" value="右" @(Model.ModifiedBalanceTest.TestFoot == "右" ? "checked" : "") /> 右
             </label>
         </div>
 
+        <!-- 測試平面和腳穿著 -->
         <div class="mb-4">
-            <label class="block mb-2 font-semibold">測試平面 (硬地/訓練場)：</label>
-            <input type="text" class="border border-gray-300 rounded w-full px-3 py-2" placeholder="請輸入測試平面">
+            <label>測試平面 (硬地/訓練場)：</label>
+            <input type="text" name="TestSurface" value="@Model.ModifiedBalanceTest.TestSurface" class="border border-gray-300 rounded px-2 py-1 w-full">
         </div>
-
         <div class="mb-4">
-            <label class="block mb-2 font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
-            <input type="text" class="border border-gray-300 rounded w-full px-3 py-2" placeholder="請輸入腳穿著狀況">
+            <label>腳穿著 (赤足/球鞋/貼紮)：</label>
+            <input type="text" name="Footwear" value="@Model.ModifiedBalanceTest.Footwear" class="border border-gray-300 rounded px-2 py-1 w-full">
         </div>
 
         <!-- 錯誤扣分表格 -->
         <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
                 <tr class="bg-gray-100">
-                    <th class="border border-gray-300 px-4 py-2">閉上眼 · 雙手插腰完成以下動作 (20 秒)</th>
-                    <th class="border border-gray-300 px-4 py-2">錯誤扣分</th>
+                    <th>動作</th>
+                    <th>錯誤扣分</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2">雙腳站立</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
-                    </td>
+                <tr>
+                    <td>雙腳站立</td>
+                    <td><input type="number" name="DoubleLegErrorCount" value="@Model.ModifiedBalanceTest.DoubleLegErrorCount" class="border border-gray-300 rounded w-16 text-center error-input"></td>
                 </tr>
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2">腳跟前後站立 (慣用腳在前)</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
-                    </td>
+                <tr>
+                    <td>腳跟前後站立 (慣用腳在前)</td>
+                    <td><input type="number" name="TandemStanceErrorCount" value="@Model.ModifiedBalanceTest.TandemStanceErrorCount" class="border border-gray-300 rounded w-16 text-center error-input"></td>
                 </tr>
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2">單腳站立 (非慣用腳)</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center error-input" min="0" max="10" value="0"> / 10
-                    </td>
+                <tr>
+                    <td>單腳站立 (非慣用腳)</td>
+                    <td><input type="number" name="SingleLegErrorCount" value="@Model.ModifiedBalanceTest.SingleLegErrorCount" class="border border-gray-300 rounded w-16 text-center error-input"></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr class="bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2 font-semibold">總錯誤次數</td>
-                    <td class="border border-gray-300 px-4 py-2 font-semibold">
-                        <span id="totalErrorCount">0</span> / 30
-                    </td>
+                    <td class="font-semibold">總錯誤次數</td>
+                    <td><span id="totalErrorCount">0</span> / 30</td>
                 </tr>
             </tfoot>
         </table>
 
-        <!-- 說明文字 -->
-        <div class="mt-4">
-            <p class="text-sm">錯誤動作：手移開腰、眼睛張開、跌倒(不穩)、髖外展超過 30 度、腳後跟(前足)抬起、無法維持姿勢超過 5 秒。</p>
-        </div>
+        <!-- 腳跟碰腳尖快速走路 -->
+        <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
 
-        <!-- 第二部分：腳跟碰腳尖快速走路 -->
-        <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：記錄三公尺線內來回往返時間</h3>
-
-        <!-- 記錄時間表格 -->
         <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
                 <tr class="bg-gray-100">
-                    <th class="border border-gray-300 px-4 py-2">第一次</th>
-                    <th class="border border-gray-300 px-4 py-2">第二次</th>
-                    <th class="border border-gray-300 px-4 py-2">第三次</th>
-                    <th class="border border-gray-300 px-4 py-2">平均時間</th>
-                    <th class="border border-gray-300 px-4 py-2">最快時間</th>
+                    <th>第一次</th>
+                    <th>第二次</th>
+                    <th>第三次</th>
+                    <th>平均時間</th>
+                    <th>最快時間</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <input type="number" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01" placeholder="秒"> 秒
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2" id="averageTime">秒</td>
-                    <td class="border border-gray-300 px-4 py-2" id="fastestTime">秒</td>
+                <tr>
+                    <td><input type="number" name="FirstTrialTime" value="@Model.TimedTandemGait.FirstTrialTime" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01"> 秒</td>
+                    <td><input type="number" name="SecondTrialTime" value="@Model.TimedTandemGait.SecondTrialTime" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01"> 秒</td>
+                    <td><input type="number" name="ThirdTrialTime" value="@Model.TimedTandemGait.ThirdTrialTime" class="border border-gray-300 rounded w-16 text-center time-input" min="0" step="0.01"> 秒</td>
+                    <td id="averageTime">0 秒</td>
+                    <td id="fastestTime">0 秒</td>
                 </tr>
             </tbody>
         </table>
-
         <!-- 表單按鈕 -->
         <div class="flex justify-between space-x-4 mt-4">
             <form action="/Questionnaire/Concentration" method="get">

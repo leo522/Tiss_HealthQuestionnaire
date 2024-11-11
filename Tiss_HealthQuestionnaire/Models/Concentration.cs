@@ -12,13 +12,12 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Test_AthleticTrainer
+    public partial class Concentration
     {
-        public int ID { get; set; }
-        public string ATName { get; set; }
-        public string ATNumber { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public int Id { get; set; }
+        public int OrderNumber { get; set; }
+        public string ListA { get; set; }
+        public string ListB { get; set; }
+        public string ListC { get; set; }
     }
 }

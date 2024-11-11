@@ -165,7 +165,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ItemId { get; set; }    // 補充品項目 ID
         public string ItemZh { get; set; } // 補充品項目中文名稱
         public string ItemEn { get; set; } // 補充品項目英文名稱
-        public bool IsUsed { get; set; }   // 是否使用過（true 或 false）
+        public string IsUsed { get; set; }   // 是否使用過（true 或 false）
         public string OtherSupplements { get; set; } // 其他補充品描述
     }
 
@@ -235,6 +235,12 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Instructions { get; set; }
         public string ObservationPoints { get; set; }
         public string Result { get; set; }  // 正常或異常
+    }
+
+    public class CoordinationAndBalanceExaminationViewModel //協調與平衡測驗
+    {
+        public ModifiedBalanceTest ModifiedBalanceTest { get; set; }
+        public TimedTandemGait TimedTandemGait { get; set; }
     }
     #endregion
 }

@@ -10,38 +10,45 @@
     <title>健康檢查問卷</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="~/css/mainStyle.css" rel="stylesheet" /> @*頁籤顏色*@
+    @*<script src="~/js/questionnaire.js"></script>*@
 </head>
 <body class="bg-gray-100 p-4">
     <div class="container mx-auto">
         <form id="questionnaireForm" method="post" action="/Questionnaire/Preview">
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
-                <div class="flex flex-col md:flex-row items-center mb-4">
-                    <label class="mr-2">
-                        專項：
-                        <input type="text" name="specialist" class="border rounded p-1"
-                               value="@ViewBag.Specialist" readonly />
-                    </label>
-                    <label class="mr-2">
-                        填表人：
-                        <input type="text" name="fillName" class="border rounded p-1"
-                               value="@ViewBag.FillName" readonly />
-                    </label>
-                    <label class="mr-2">
-                        選手編號：
-                        <input type="text" name="atheNum" class="border rounded p-1"
-                               value="@ViewBag.AtheNum" readonly />
-                    </label>
-                    <label class="mr-2">
-                        性別：
-                        <input type="text" name="genderDisplay" class="border rounded p-1"
-                               value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly />
-                        <input type="hidden" name="gender" value="@(ViewBag.GenderID)" />
-                    </label>
-                    <label class="mr-2">
-                        填表日期：
-                        <input type="date" name="fillDate" class="border rounded p-1" required />
-                    </label>
-                    <button type="button" class="btn btn-success ml-auto bg-green-500 text-white rounded px-4 py-2" id="previewButton">預覽送出</button>
+                <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                    <div class="flex flex-col md:flex-row items-center mb-4 space-x-4">
+                        <label class="mr-2">
+                            專項：
+                            <input type="text" name="specialist" class="border rounded p-1"
+                                   value="@ViewBag.Specialist" readonly />
+                        </label>
+                        <label class="mr-2">
+                            填表人：
+                            <input type="text" name="fillName" class="border rounded p-1"
+                                   value="@ViewBag.FillName" readonly />
+                        </label>
+                        <label class="mr-2">
+                            選手編號：
+                            <input type="text" name="atheNum" class="border rounded p-1"
+                                   value="@ViewBag.AtheNum" readonly />
+                            <input type="hidden" id="athleteNumber" value="@ViewBag.AtheNum" />
+                        </label>
+                        <label class="mr-2">
+                            性別：
+                            <input type="text" name="genderDisplay" class="border rounded p-1"
+                                   value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly />
+                            <input type="hidden" name="gender" value="@(ViewBag.GenderID)" />
+                        </label>
+                        <label class="mr-2">
+                            填表日期：
+                            <input type="date" name="fillDate" class="border rounded p-1" required />
+                        </label>
+                        <div class="flex space-x-4 ml-auto">
+                            <button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2" id="temporarySaveButton">臨時保存</button>
+                            <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2" id="previewButton">預覽送出</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -49,15 +56,15 @@
                 <div class="flex flex-wrap">
                     <!-- 修改這裡的 onclick 事件，增加 URL -->
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l"
-                            onclick="openTab(event, 'PastHealth', '/Questionnaire/PastHealth')">
+                            data-questionnaire-type="A" data-tab-name="PastHealth" data-url="/Questionnaire/PastHealth">
                         過去健康檢查病史
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            onclick="openTab(event, 'AllergicHistory', '/Questionnaire/AllergicHistory')">
+                            onclick="openTab(event, 'AllergicHistory', '/Questionnaire/AllergicHistory')" data-questionnaire-type="B">
                         過敏史
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            onclick="openTab(event, 'FamilyHistory', '/Questionnaire/FamilyHistory')">
+                            onclick="openTab(event, 'FamilyHistory', '/Questionnaire/FamilyHistory')" data-questionnaire-type="C">
                         家族病史
                     </button>
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
@@ -147,57 +154,58 @@
             </div>
         </div>
     </div>
-    <script>
+    @*<script>
         $(document).ready(function () {
             // 預設打開第一個頁籤，防止頁籤重複觸發
             if (!$('.tablinks.active').length) {
                 $('.tablinks:first').trigger('click');
             }
 
-            // 頁籤切換時保存表單數據
-            $('.tablinks').click(function () {
-                saveFormDataToSession();
+            // 綁定臨時保存按鈕
+            $('#temporarySaveButton').click(function () {
+                temporarySave();
             });
 
-            // 載入頁面時恢復表單數據
-            loadFormDataFromSession();
+            $('#previewButton').click(function (e) {
+                e.preventDefault(); // 阻止默認行為
+
+                // 檢查填表日期是否選擇
+                const fillDate = $('input[name="fillDate"]').val();
+                if (!fillDate) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '日期未選擇',
+                        text: '請選擇填表日期！',
+                        confirmButtonText: '確定'
+                    });
+                    return; // 終止函數執行
+                }
+
+                $('#questionnaireForm').submit(); // 提交表單進行預覽
+            });
         });
 
-        $('#previewButton').click(function (e) {
-            e.preventDefault(); // 阻止默認行為
+        // 臨時保存功能
+            function temporarySave() {
+                const athleteNumber = $('#athleteNumber').val();  // 從選手編號的輸入欄位獲取值
+                const formData = $('#questionnaireForm').serializeArray();
 
-            // 檢查填表日期是否選擇
-            const fillDate = $('input[name="fillDate"]').val();
-            if (!fillDate) {
-                // 使用 SweetAlert2 彈出警告
-                Swal.fire({
-                    icon: 'warning',
-                    title: '日期未選擇',
-                    text: '請選擇填表日期！',
-                    confirmButtonText: '確定'
+                formData.forEach(item => {
+                    console.log("Sending Answer for Question", item.name, "with value:", item.value); // 檢查 answer 是否為空
+                    $.post('/Temporary/SaveAnswer', {
+                        userId: athleteNumber,  // 使用選手編號作為 userId
+                        questionnaireType: 'TemporaryType',  // 根據頁面狀態設置問卷類型
+                        questionId: item.name.replace(/[^\d]/g, ''),
+                        answer: item.value
+                    }).done(function (response) {
+                        if (!response.success) {
+                            alert("保存失敗：" + response.message);
+                        }
+                    }).fail(function () {
+                        alert("臨時保存時發生錯誤，請稍後再試。");
+                    });
                 });
-                return; // 終止函數執行
             }
-
-            // 檢查「其他」選項的描述內容是否已填寫
-            const otherCheckbox = $("input[name='usedDrugs_other']");
-            const otherDetailInput = $("input[name='otherDrugsDetail']");
-
-            if (otherCheckbox.is(':checked') && otherDetailInput.val().trim() === "") {
-                // 顯示警告訊息並阻止提交
-                Swal.fire({
-                    icon: 'warning',
-                    title: '「其他」選項未填寫',
-                    text: '您勾選了「其他」選項，請填寫描述內容。',
-                    confirmButtonText: '確定'
-                });
-                otherDetailInput.focus(); // 聚焦到文字輸入框
-                return; // 終止函數執行
-            }
-
-            saveFormDataToSession(); // 提交表單前保存數據
-            $('#questionnaireForm').submit(); // 提交表單進行預覽
-        });
 
         // 彈出醫療團隊身份驗證對話框
         function showTrainerAuthModal(evt, tabName, url) {
@@ -274,32 +282,81 @@
             // 防止默認行為，只有當 evt 存在時才執行
             if (evt) evt.preventDefault();
         }
+        </script>*@
+    <script>
+        let currentQuestionnaireTypeCode = ''; // 全域變數
 
-        // 保存表單數據到 sessionStorage
-        function saveFormDataToSession() {
-            const formData = $('#questionnaireForm').serializeArray();
-            const formDataObj = {};
-            $.each(formData, function () {
-                formDataObj[this.name] = this.value;
+        $(document).ready(function () {
+            // Click event for tab buttons
+            $('.tablinks').on('click', function (e) {
+                e.preventDefault(); // Prevent default button behavior
+                currentQuestionnaireTypeCode = $(this).data('questionnaire-type'); // Set the questionnaire type code
+                const tabName = $(this).data('tab-name');
+                const url = $(this).data('url');
+                openTab(tabName, url);
             });
-            sessionStorage.setItem('formData', JSON.stringify(formDataObj)); // 存儲到 sessionStorage
+
+            // Temporary save button click event
+            $('#temporarySaveButton').click(function () {
+                temporarySave(currentQuestionnaireTypeCode);
+            });
+
+            // Preview button click event with validation
+            $('#previewButton').click(function (e) {
+                e.preventDefault();
+                const fillDate = $('input[name="fillDate"]').val();
+                if (!fillDate) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '日期未選擇',
+                        text: '請選擇填表日期！',
+                        confirmButtonText: '確定'
+                    });
+                    return;
+                }
+                $('#questionnaireForm').submit();
+            });
+        });
+
+        function temporarySave(questionnaireTypeCode) {
+            const athleteNumber = $('#athleteNumber').val();
+            const formData = $('#questionnaireForm').serializeArray();
+
+            formData.forEach(item => {
+                if (item.value) { // Ensure only non-empty values are sent
+                    console.log("Sending Answer for Question", item.name, "with value:", item.value);
+                    $.post('/Temporary/SaveAnswer', {
+                        userId: athleteNumber,
+                        questionnaireTypeCode: questionnaireTypeCode,
+                        questionId: item.name.replace(/[^\d]/g, ''),
+                        answer: item.value
+                    }).done(function (response) {
+                        if (!response.success) {
+                            alert("保存失敗：" + response.message);
+                        }
+                    }).fail(function () {
+                        alert("臨時保存時發生錯誤，請稍後再試。");
+                    });
+                }
+            });
         }
 
-        // 從 sessionStorage 恢復表單數據
-        function loadFormDataFromSession() {
-            const savedData = sessionStorage.getItem('formData');
-            if (savedData) {
-                const formDataObj = JSON.parse(savedData);
-                for (let key in formDataObj) {
-                    if (formDataObj.hasOwnProperty(key)) {
-                        const $input = $('[name="' + key + '"]');
-                        if ($input.attr('type') === 'radio' || $input.attr('type') === 'checkbox') {
-                            $input.filter('[value="' + formDataObj[key] + '"]').prop('checked', true);
-                        } else {
-                            $input.val(formDataObj[key]);
-                        }
-                    }
-                }
+        function openTab(tabName, url) {
+            const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, ''); // Sanitize tab name
+
+            $('.tabcontent').hide(); // Hide all tab content
+            $('.tablinks').removeClass('active'); // Remove active class from all tabs
+            $(`[data-tab-name="${safeTabName}"]`).addClass('active'); // Set active class on current tab
+
+            if ($('#' + safeTabName).length === 0) {
+                // Load content dynamically if not already loaded
+                $.get(url, function (data) {
+                    $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
+                }).fail(function (xhr) {
+                    alert('載入頁面時發生錯誤，請稍後再試。');
+                });
+            } else {
+                $('#' + safeTabName).show(); // Show already loaded content
             }
         }
     </script>

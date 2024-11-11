@@ -177,30 +177,30 @@
 
         <!-- 顯示開刀史 -->
         @*<div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
-            @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
+                @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
 
-            @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
-            {
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
-                            <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detail in Model.SurgeryHistoryDetails)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
-                                <td class="border border-gray-300 p-2">@detail.OperationOption</td>
+                @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
+                {
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
+                                <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>*@
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in Model.SurgeryHistoryDetails)
+                            {
+                                <tr>
+                                    <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
+                                    <td class="border border-gray-300 p-2">@detail.OperationOption</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>*@
 
         <!-- 顯示現在病史 -->
         <div class="mb-8">
@@ -264,7 +264,6 @@
             }
         </div>
 
-
         <!-- 顯示營養品 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">營養品:</h2>
@@ -283,16 +282,12 @@
                             <tr>
                                 <td class="border border-gray-300 p-2">@detail.ItemZh (@detail.ItemEn)</td>
                                 <td class="border border-gray-300 p-2">
-                                    @(detail.IsUsed ? "是 Yes" : "否 No")
+                                    是 Yes
+                                    @if (detail.ItemZh == "其他" && !string.IsNullOrEmpty(detail.OtherSupplements))
+                                    {
+                                        <div class="text-sm text-gray-600">描述: @detail.OtherSupplements</div>
+                                    }
                                 </td>
-                            </tr>
-                        }
-
-                        @if (!string.IsNullOrEmpty(Model.PastSupplementsDetails.FirstOrDefault()?.OtherSupplements))
-                        {
-                            <tr>
-                                <td class="border border-gray-300 p-2">其他 Others:</td>
-                                <td class="border border-gray-300 p-2">@Model.PastSupplementsDetails.FirstOrDefault()?.OtherSupplements</td>
                             </tr>
                         }
                     </tbody>
@@ -455,6 +450,33 @@
                                 <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
                                 <td class="border border-gray-300 p-2">@detail.Question</td>
                                 <td class="border border-gray-300 p-2">@detail.Answer</td> <!-- 直接顯示 Answer -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- 顯示骨科篩檢 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢:</h3>
+            @if (Model.OrthopaedicScreeningDetails != null && Model.OrthopaedicScreeningDetails.Any())
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">項次 (Order Number)</th>
+                            <th class="border border-gray-300 p-2">問題 (Question)</th>
+                            <th class="border border-gray-300 p-2">答案 (Answer)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.OrthopaedicScreeningDetails)
+                        {
+                            <tr>
+                                <td class="border border-gray-300 p-2 text-center">@detail.OrderNumber</td>
+                                <td class="border border-gray-300 p-2">@detail.ObservationPoints</td>
+                                <td class="border border-gray-300 p-2">@detail.Result</td> <!-- 直接顯示 Answer -->
                             </tr>
                         }
                     </tbody>

@@ -21,7 +21,7 @@ namespace Tiss_HealthQuestionnaire.Models
             this.QuestionnaireResponse = new HashSet<QuestionnaireResponse>();
         }
     
-        public int ID { get; set; }
+        public string ID { get; set; }
         public int AthleteID { get; set; }
         public string AthleteNumber { get; set; }
         public string Password { get; set; }

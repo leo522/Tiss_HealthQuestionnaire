@@ -16,5 +16,6 @@ namespace Tiss_HealthQuestionnaire.Models
     {
         public int Id { get; set; }
         public string Question { get; set; }
+        public Nullable<bool> Response { get; set; }
     }
 }

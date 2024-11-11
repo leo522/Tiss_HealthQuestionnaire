@@ -17,5 +17,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string ItemZh { get; set; }
         public string ItemEn { get; set; }
+        public Nullable<bool> IsUsed { get; set; }
     }
 }

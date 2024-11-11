@@ -7,7 +7,7 @@ namespace Tiss_HealthQuestionnaire.Models
 {
     public class QuestionnaireResponseViewModel
     {
-        public int AthleteID { get; set; }
+        public string AthleteID { get; set; }
         public int? GenderID { get; set; }
         public string Specialty { get; set; }
         public string FillName { get; set; }

@@ -12,13 +12,11 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Test_AthleticTrainer
+    public partial class TimedTandemGait
     {
-        public int ID { get; set; }
-        public string ATName { get; set; }
-        public string ATNumber { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public int Id { get; set; }
+        public Nullable<double> FirstTrialTime { get; set; }
+        public Nullable<double> SecondTrialTime { get; set; }
+        public Nullable<double> ThirdTrialTime { get; set; }
     }
 }

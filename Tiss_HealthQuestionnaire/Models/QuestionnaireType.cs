@@ -12,24 +12,20 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class QuestionnaireResponse
+    public partial class QuestionnaireType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public QuestionnaireResponse()
+        public QuestionnaireType()
         {
-            this.QuestionnaireResponseDetails = new HashSet<QuestionnaireResponseDetails>();
+            this.TemporaryQuestionnaireData = new HashSet<TemporaryQuestionnaireData>();
         }
     
-        public int ID { get; set; }
-        public string AthleteID { get; set; }
-        public Nullable<int> GenderID { get; set; }
-        public System.DateTime FillingDate { get; set; }
-        public string Specialty { get; set; }
-        public string FillName { get; set; }
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
+        public bool IsActive { get; set; }
     
-        public virtual AthleteUser AthleteUser { get; set; }
-        public virtual Gender Gender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
+        public virtual ICollection<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
     }
 }

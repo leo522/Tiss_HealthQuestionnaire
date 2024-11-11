@@ -26,39 +26,44 @@ namespace Tiss_HealthQuestionnaire.Models
         }
     
         public virtual DbSet<AllergicHistory> AllergicHistory { get; set; }
+        public virtual DbSet<AthleteUser> AthleteUser { get; set; }
+        public virtual DbSet<AthleticTrainer> AthleticTrainer { get; set; }
+        public virtual DbSet<CardiovascularScreening> CardiovascularScreening { get; set; }
+        public virtual DbSet<CognitiveScreening> CognitiveScreening { get; set; }
+        public virtual DbSet<CognitiveScreeningScores> CognitiveScreeningScores { get; set; }
+        public virtual DbSet<Concentration> Concentration { get; set; }
+        public virtual DbSet<ConcussionScreening> ConcussionScreening { get; set; }
+        public virtual DbSet<CurrentInjury> CurrentInjury { get; set; }
+        public virtual DbSet<DelayedRecall> DelayedRecall { get; set; }
         public virtual DbSet<FamilyHistory> FamilyHistory { get; set; }
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
+        public virtual DbSet<Gender> Gender { get; set; }
+        public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
+        public virtual DbSet<InjuryStatus> InjuryStatus { get; set; }
+        public virtual DbSet<InjuryType> InjuryType { get; set; }
+        public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
+        public virtual DbSet<ModifiedBalanceTest> ModifiedBalanceTest { get; set; }
+        public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
         public virtual DbSet<PasswordReset> PasswordReset { get; set; }
         public virtual DbSet<PastDrugs> PastDrugs { get; set; }
         public virtual DbSet<PastHealth> PastHealth { get; set; }
         public virtual DbSet<PastHealthAnswers> PastHealthAnswers { get; set; }
         public virtual DbSet<PastHistory> PastHistory { get; set; }
-        public virtual DbSet<PastSupplements> PastSupplements { get; set; }
-        public virtual DbSet<PresentIllness> PresentIllness { get; set; }
-        public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
-        public virtual DbSet<Gender> Gender { get; set; }
-        public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
-        public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
-        public virtual DbSet<CardiovascularScreening> CardiovascularScreening { get; set; }
-        public virtual DbSet<ConcussionScreening> ConcussionScreening { get; set; }
-        public virtual DbSet<CurrentInjury> CurrentInjury { get; set; }
-        public virtual DbSet<InjuryStatus> InjuryStatus { get; set; }
-        public virtual DbSet<InjuryType> InjuryType { get; set; }
-        public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
         public virtual DbSet<PastInjuryPartRecovery> PastInjuryPartRecovery { get; set; }
-        public virtual DbSet<Treatment> Treatment { get; set; }
-        public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
-        public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
-        public virtual DbSet<CognitiveScreening> CognitiveScreening { get; set; }
-        public virtual DbSet<CognitiveScreeningScores> CognitiveScreeningScores { get; set; }
-        public virtual DbSet<DelayedRecall> DelayedRecall { get; set; }
-        public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
         public virtual DbSet<PastInjuryStatus> PastInjuryStatus { get; set; }
         public virtual DbSet<PastInjuryType> PastInjuryType { get; set; }
+        public virtual DbSet<PastSupplements> PastSupplements { get; set; }
         public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
+        public virtual DbSet<PresentIllness> PresentIllness { get; set; }
+        public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
+        public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
+        public virtual DbSet<QuestionnaireType> QuestionnaireType { get; set; }
+        public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
         public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
-        public virtual DbSet<AthleteUser> AthleteUser { get; set; }
-        public virtual DbSet<AthleticTrainer> AthleticTrainer { get; set; }
+        public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
         public virtual DbSet<Test_AthleticTrainer> Test_AthleticTrainer { get; set; }
+        public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
+        public virtual DbSet<Treatment> Treatment { get; set; }
+        public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
     }
 }

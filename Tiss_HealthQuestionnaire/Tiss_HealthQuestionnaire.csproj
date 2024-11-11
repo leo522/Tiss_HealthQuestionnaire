@@ -133,6 +133,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\TemporaryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -157,6 +158,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CognitiveScreeningViewModel.cs" />
+    <Compile Include="Models\Concentration.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConcentrationViewModel.cs" />
     <Compile Include="Models\ConcussionScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -208,6 +212,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
+    <Compile Include="Models\ModifiedBalanceTest.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -253,6 +260,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
+    <Compile Include="Models\QuestionnaireType.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\SurgeryHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -260,7 +270,13 @@
     <Compile Include="Models\SymptomEvaluation.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TemporaryQuestionnaireData.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Test_AthleticTrainer.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TimedTandemGait.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Treatment.cs">
@@ -298,6 +314,7 @@
     <Content Include="img\logo.svg" />
     <Content Include="img\問卷404.jpg" />
     <Content Include="img\問卷404_2.jpg" />
+    <Content Include="js\questionnaire.js" />
     <Content Include="Models\HealthModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>HealthModel.Context.cs</LastGenOutput>
@@ -388,6 +405,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Reports\" />
+    <Folder Include="Views\Temporary\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
