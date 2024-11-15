@@ -79,13 +79,21 @@
 
             // 當用戶完成填寫時，動態顯示傷勢類型部分
             $('.injury-details input[type="checkbox"]').change(function () {
+                const selectedType = $(this).data("questionnaire-type");
+
                 if ($('.injury-details input[type="checkbox"]:checked').length > 0) {
-                    // 動態載入傷勢類型的部分視圖
                     $.get('/Questionnaire/PastInjuryType', function (data) {
                         $('#injury-type-section').html(data).removeClass('hidden');
                     });
+                    //if (selectedType === "I") {
+                    //    // 動態載入傷勢類型的部分視圖
+                    //    $.get('/Questionnaire/PastInjuryType', function (data) {
+                    //        $('#injury-type-section').html(data).removeClass('hidden');
+                    //    });
+                    //}
+                   
                 } else {
-                    $('#injury-type-section').addClass('hidden');
+                    $('#injury-type-section').addClass('hidden'); //如果沒有勾選則隱藏
                 }
             });
         });

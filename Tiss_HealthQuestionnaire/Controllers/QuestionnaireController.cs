@@ -1153,7 +1153,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 _db.SaveChanges(); // 儲存所有的變更
 
-                return View("_PreviewTotal", model);
+                return View("Preview", model);
             }
             catch (Exception ex)
             {

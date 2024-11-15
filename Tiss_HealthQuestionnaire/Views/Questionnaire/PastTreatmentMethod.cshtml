@@ -26,9 +26,19 @@
             <div class="flex items-center mt-4">
                 <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
                 <label for="Pasttreatment_other" class="text-gray-800">其他：</label>
-                <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-full" placeholder="請輸入其他治療方式">
+                <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
             </div>
         </div>
     </div>
+<script>
+    $(document).ready(function () {
+        // 當用戶在治療方式頁面進行勾選時，自動將這些選項標記為I類型
+        $('input[name^="Pasttreatment_"]').change(function () {
+            const isChecked = $(this).is(':checked');
+            if (isChecked) {
+                $(this).data('questionnaire-type', 'I');
+            }
+        });
+</script>
 </body>
 </html>

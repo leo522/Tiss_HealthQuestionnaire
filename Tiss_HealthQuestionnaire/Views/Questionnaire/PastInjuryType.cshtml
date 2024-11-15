@@ -138,12 +138,18 @@
             // 當用戶在 "傷勢類型" 部分選擇項目時顯示 "治療方式" 部分
             $('select').change(function () {
                 if ($('select').filter(function () { return this.value; }).length > 0) {
-                    // 動態載入治療方式的部分視圖
+                    
+                    const selectedType = $(this).data("questionnaire-type"); //若至少有一個下拉選單有選擇，顯示 "治療方式" 表單部分
                     $.get('/Questionnaire/PastTreatmentMethod', function (data) {
                         $('#treatment-method-section').html(data).removeClass('hidden');
                     });
+                    //if (selectedType === "I") {
+                    //    $.get('/Questionnaire/PastTreatmentMethod', function (data) {
+                    //        $('#treatment-method-section').html(data).removeClass('hidden');
+                    //    });
+                    //}
                 } else {
-                    $('#treatment-method-section').addClass('hidden');
+                    $('#treatment-method-section').addClass('hidden'); //如果沒有選擇則隱藏
                 }
             });
         });

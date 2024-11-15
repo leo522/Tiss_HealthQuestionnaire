@@ -1,0 +1,31 @@
+﻿@*目前傷害狀況-治療方式*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.TreatmentMethod>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">3.目前治療方式 Treatment Methods</h2>
+
+        <div class="space-y-2">
+            @foreach (var method in Model)
+            {
+                <div class="flex items-center">
+                    <input type="checkbox" id="Nowtreatment_@method.Id" name="Nowtreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                    <label for="Nowtreatment_@method.Id" class="text-gray-800">@method.Method</label>
+                </div>
+            }
+            <div class="flex items-center mt-4">
+                <input type="checkbox" id="Nowtreatment_other" name="Nowtreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                <label for="Nowtreatment_other" class="text-gray-800">其他：</label>
+                <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
