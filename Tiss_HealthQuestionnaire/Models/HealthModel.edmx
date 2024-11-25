@@ -92,6 +92,15 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Question" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="CoordinationAndBalanceExamination">
+          <Key>
+            <PropertyRef Name="ExaminationID" />
+          </Key>
+          <Property Name="ExaminationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TestFoot" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="TestSurface" Type="nvarchar" MaxLength="20" />
+          <Property Name="Footwear" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="CurrentInjury">
           <Key>
             <PropertyRef Name="ID" />
@@ -500,6 +509,7 @@
           <EntitySet Name="CognitiveScreeningScores" EntityType="Self.CognitiveScreeningScores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Concentration" EntityType="Self.Concentration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConcussionScreening" EntityType="Self.ConcussionScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CoordinationAndBalanceExamination" EntityType="Self.CoordinationAndBalanceExamination" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CurrentInjury" EntityType="Self.CurrentInjury" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DelayedRecall" EntityType="Self.DelayedRecall" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" Schema="dbo" store:Type="Tables" />
@@ -626,6 +636,7 @@
             <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
             <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
           </AssociationSet>
+          <EntitySet Name="CoordinationAndBalanceExamination" EntityType="HealthQuestionnaireModel.CoordinationAndBalanceExamination" />
         </EntityContainer>
         <EntityType Name="AllergicHistory">
           <Key>
@@ -1119,6 +1130,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CoordinationAndBalanceExamination">
+          <Key>
+            <PropertyRef Name="ExaminationID" />
+          </Key>
+          <Property Name="ExaminationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TestFoot" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TestSurface" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Footwear" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1570,6 +1590,16 @@
               <MappingFragment StoreEntitySet="TreatmentMethod">
                 <ScalarProperty Name="Method" ColumnName="Method" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoordinationAndBalanceExamination">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CoordinationAndBalanceExamination">
+              <MappingFragment StoreEntitySet="CoordinationAndBalanceExamination">
+                <ScalarProperty Name="Footwear" ColumnName="Footwear" />
+                <ScalarProperty Name="TestSurface" ColumnName="TestSurface" />
+                <ScalarProperty Name="TestFoot" ColumnName="TestFoot" />
+                <ScalarProperty Name="ExaminationID" ColumnName="ExaminationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

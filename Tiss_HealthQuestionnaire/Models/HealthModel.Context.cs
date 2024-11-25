@@ -65,5 +65,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
+        public virtual DbSet<CoordinationAndBalanceExamination> CoordinationAndBalanceExamination { get; set; }
     }
 }

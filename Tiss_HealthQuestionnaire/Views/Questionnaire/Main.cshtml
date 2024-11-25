@@ -45,8 +45,12 @@
                             <input type="date" name="fillDate" class="border rounded p-1" required />
                         </label>
                         <div class="flex space-x-4 ml-auto">
-                            <button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2" id="temporarySaveButton">臨時保存</button>
-                            <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2" id="previewButton">預覽送出</button>
+                            <button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2 whitespace-nowrap" id="temporarySaveButton">
+                                臨時保存
+                            </button>
+                            <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2 whitespace-nowrap" id="previewButton">
+                                預覽送出
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -167,7 +171,7 @@
         </div>
     </div>
 
-<script>
+    <script>
         let currentQuestionnaireTypeCode = ''; // 全域變數
 
         $(document).ready(function () {
@@ -267,13 +271,13 @@
             }
         }
 
-    //window.addEventListener('popstate', function (event) {
-    //    if (event.state && event.state.tabName) {
-    //        const tabName = event.state.tabName;
-    //        const url = $(`[data-tab-name="${tabName}"]`).data('url');
-    //        openTab(tabName, url);
-    //    }
-    //});
+        //window.addEventListener('popstate', function (event) {
+        //    if (event.state && event.state.tabName) {
+        //        const tabName = event.state.tabName;
+        //        const url = $(`[data-tab-name="${tabName}"]`).data('url');
+        //        openTab(tabName, url);
+        //    }
+        //});
 
 
         // 臨時保存功能

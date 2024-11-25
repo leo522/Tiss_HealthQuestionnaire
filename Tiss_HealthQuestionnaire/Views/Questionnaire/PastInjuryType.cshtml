@@ -19,7 +19,7 @@
             <!-- 肌肉/肌腱類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">肌肉/肌腱</h3>
-                <select name="NowmuscleTendon" class="w-full border border-gray-300 p-2 rounded">
+                <select name="MuscleTendon" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
                     @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.MuscleTendon)).Select(i => i.MuscleTendon).Distinct())
                     {
@@ -31,11 +31,11 @@
             <!-- 骨類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">骨類</h3>
-                <select name="Nowbone" class="w-full border border-gray-300 p-2 rounded">
+                <select name="Bone" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Bone)).Select(i => i.Bone).Distinct())
+                    @foreach (var bone in Model.Where(i => !string.IsNullOrEmpty(i.Bone)).Select(i => i.Bone).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@bone">@bone</option>
                     }
                 </select>
             </div>
@@ -43,11 +43,11 @@
             <!-- 韌帶類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">韌帶類</h3>
-                <select name="Nowligament" class="w-full border border-gray-300 p-2 rounded">
+                <select name="Ligament" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Ligament)).Select(i => i.Ligament).Distinct())
+                    @foreach (var ligament in Model.Where(i => !string.IsNullOrEmpty(i.Ligament)).Select(i => i.Ligament).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@ligament">@ligament</option>
                     }
                 </select>
             </div>
@@ -55,11 +55,11 @@
             <!-- 神經類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">神經類</h3>
-                <select name="Nownerve" class="w-full border border-gray-300 p-2 rounded">
+                <select name="Nerve" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.Nerve)).Select(i => i.Nerve).Distinct())
+                    @foreach (var nerve in Model.Where(i => !string.IsNullOrEmpty(i.Nerve)).Select(i => i.Nerve).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@nerve">@nerve</option>
                     }
                 </select>
             </div>
@@ -67,11 +67,11 @@
             <!-- 軟骨/滑膜/滑囊類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">軟骨/滑膜/滑囊類</h3>
-                <select name="NowepidermalTissue" class="w-full border border-gray-300 p-2 rounded">
+                <select name="CartilageSynoviumBursa" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
+                    @foreach (var cartilage in Model.Where(i => !string.IsNullOrEmpty(i.CartilageSynoviumBursa)).Select(i => i.CartilageSynoviumBursa).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@cartilage">@cartilage</option>
                     }
                 </select>
             </div>
@@ -79,11 +79,11 @@
             <!-- 表皮組織 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">表皮組織</h3>
-                <select name="NowepidermalTissue" class="w-full border border-gray-300 p-2 rounded">
+                <select name="EpidermalTissue" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
+                    @foreach (var tissue in Model.Where(i => !string.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@tissue">@tissue</option>
                     }
                 </select>
             </div>
@@ -91,11 +91,11 @@
             <!-- 血管類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">血管類</h3>
-                <select name="NowbloodVessel" class="w-full border border-gray-300 p-2 rounded">
+                <select name="BloodVessel" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.BloodVessel)).Select(i => i.BloodVessel).Distinct())
+                    @foreach (var vessel in Model.Where(i => !string.IsNullOrEmpty(i.BloodVessel)).Select(i => i.BloodVessel).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@vessel">@vessel</option>
                     }
                 </select>
             </div>
@@ -103,11 +103,11 @@
             <!-- 器官/四肢類 -->
             <div>
                 <h3 class="font-bold mb-2 border-b border-gray-400">器官/四肢類</h3>
-                <select name="NoworganLimb" class="w-full border border-gray-300 p-2 rounded">
+                <select name="OrganLimb" class="w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.OrganLimb)).Select(i => i.OrganLimb).Distinct())
+                    @foreach (var organ in Model.Where(i => !string.IsNullOrEmpty(i.OrganLimb)).Select(i => i.OrganLimb).Distinct())
                     {
-                        <option value="@item">@item</option>
+                        <option value="@organ">@organ</option>
                     }
                 </select>
             </div>
@@ -138,7 +138,7 @@
             // 當用戶在 "傷勢類型" 部分選擇項目時顯示 "治療方式" 部分
             $('select').change(function () {
                 if ($('select').filter(function () { return this.value; }).length > 0) {
-                    
+
                     const selectedType = $(this).data("questionnaire-type"); //若至少有一個下拉選單有選擇，顯示 "治療方式" 表單部分
                     $.get('/Questionnaire/PastTreatmentMethod', function (data) {
                         $('#treatment-method-section').html(data).removeClass('hidden');

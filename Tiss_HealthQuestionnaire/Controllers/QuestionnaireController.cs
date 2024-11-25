@@ -343,7 +343,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }).ToList();
 
             return View("CognitiveScreening", viewModel);
-            //return PartialView("_CognitiveScreening", viewModel);
         }
 
         /// <summary>
@@ -359,11 +358,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var viewModel = questions.Select((q, index) => new ImmediateMemoryViewModel
             {
                 OrderNumber = index + 1,  // 自動遞增項次
-                Word = q.Word             // 顯示的詞彙
+                Word = q.Word,             // 顯示的詞彙
+                CompletionTime = "00:00"   // 確保為合法的分:秒格式
             }).ToList();
 
             return View("ImmediateMemory", viewModel);
-            //return PartialView("_ImmediateMemory", viewModel);
         }
 
         /// <summary>
@@ -391,7 +390,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// <returns></returns>
         public ActionResult CoordinationAndBalanceExamination()
         {
-            return View("CoordinationAndBalanceExamination");
+            var model = new CoordinationAndBalanceExamination
+            {
+                TestSurface = "", // 確保初始為空
+                Footwear = ""     // 確保初始為空
+            };
+            return View(model);
             //return PartialView("_CoordinationAndBalanceExamination");
         }
 
@@ -434,7 +438,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 DelayedRecallScore = scores.FirstOrDefault(x => x.ItemScreening == "延遲記憶 (Delayed Recall)")?.TotalScore ?? 0,
                 TotalScore = scores.Sum(x => x.TotalScore) // 總分計算
             };
-
 
             return View("CognitiveScreeningTotalScore", viewModel);
             //return PartialView("_CognitiveScreeningTotalScore", viewModel);
@@ -966,27 +969,59 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 #endregion
 
                 #region 過去傷害狀況(已復原)
+                // 初始化傷害部位列表
+                model.PastInjuryDetails = new List<PastInjuryStatuSViewModel>();
+
+                // 收集傷害部位數據
                 var pastInjuryItems = _db.PastInjuryStatus.ToList();
                 foreach (var item in pastInjuryItems)
                 {
-                    string partKey = $"pastinjury_{item.Id}";
                     string leftPartKey = $"pastinjuryLeft_{item.Id}";
                     string rightPartKey = $"pastinjuryRight_{item.Id}";
-                    bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
+
+                    // 判斷是否有受傷部位選擇
+                    bool hasInjury = form[leftPartKey] != null || form[rightPartKey] != null;
 
                     if (hasInjury)
                     {
+                        // 初始化傷勢類型列表
+                        var injuryTypes = new List<string>();
+
+                        // 收集傷勢類型數據
+                        string muscleTendon = form["MuscleTendon"]; // 肌肉/肌腱類
+                        string bone = form["Bone"]; // 骨類
+                        string ligament = form["Ligament"]; // 韌帶類
+                        string nerve = form["Nerve"]; // 神經類
+                        string cartilageSynoviumBursa = form["CartilageSynoviumBursa"]; // 軟骨/滑膜/滑囊類
+                        string epidermalTissue = form["EpidermalTissue"]; // 表皮組織
+                        string bloodVessel = form["BloodVessel"]; // 血管類
+                        string organLimb = form["OrganLimb"]; // 器官/四肢類
+
+                        // 添加用戶選擇的傷勢類型到列表中
+                        if (!string.IsNullOrEmpty(muscleTendon)) injuryTypes.Add(muscleTendon);
+                        if (!string.IsNullOrEmpty(bone)) injuryTypes.Add(bone);
+                        if (!string.IsNullOrEmpty(ligament)) injuryTypes.Add(ligament);
+                        if (!string.IsNullOrEmpty(nerve)) injuryTypes.Add(nerve);
+                        if (!string.IsNullOrEmpty(cartilageSynoviumBursa)) injuryTypes.Add(cartilageSynoviumBursa);
+                        if (!string.IsNullOrEmpty(epidermalTissue)) injuryTypes.Add(epidermalTissue);
+                        if (!string.IsNullOrEmpty(bloodVessel)) injuryTypes.Add(bloodVessel);
+                        if (!string.IsNullOrEmpty(organLimb)) injuryTypes.Add(organLimb);
+
+                        // 添加到模型
                         model.PastInjuryDetails.Add(new PastInjuryStatuSViewModel
                         {
-                            PastInjuryPart = item.InjuryPart,
-                            //PastIsSingleSelect = item.PastIsSingleSelect,
-                            LeftSide = form[leftPartKey] != null,
-                            RightSide = form[rightPartKey] != null
+                            PastInjuryPart = item.InjuryPart, // 受傷部位
+                            LeftSide = form[leftPartKey] != null, // 是否左側受傷
+                            RightSide = form[rightPartKey] != null, // 是否右側受傷
+                            InjuryTypes = injuryTypes // 傷勢類型列表
                         });
                     }
                 }
 
-                //收集過去治療方式
+                #endregion
+
+                #region 過去傷害狀況(已復原)-治療方式
+
                 var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
                 foreach (var method in PasttreatmentMethods)
                 {
@@ -1005,69 +1040,48 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var injuryItems = _db.InjuryStatus.ToList();
                 foreach (var item in injuryItems)
                 {
-                    string partKey = $"Nowinjury_{item.Id}";
                     string leftPartKey = $"NowinjuryLeft_{item.Id}";
                     string rightPartKey = $"NowinjuryRight_{item.Id}";
-                    bool hasInjury = form[partKey] != null || form[leftPartKey] != null || form[rightPartKey] != null;
+                    bool hasInjury = form[leftPartKey] != null || form[rightPartKey] != null;
 
                     if (hasInjury)
                     {
-                        var injuryViewModel = new InjuryStatuSViewModel
-                        {
-                            InjuryPart = item.InjuryPart,
-                            LeftSide = form[leftPartKey] != null,
-                            RightSide = form[rightPartKey] != null,
-                            InjuryTypes = new List<string>()
-                        };
+                        // 初始化傷勢類型列表
+                        var injuryTypes = new List<string>();
 
-                        // 根據 ID 從表單收集每個傷勢類型下拉選單的值
-                        string muscleTendonType = form[$"NowmuscleTendon_{item.Id}"];
-                        string boneType = form[$"Nowbone_{item.Id}"];
-                        string ligamentType = form[$"Nowligament_{item.Id}"];
-                        string nerveType = form[$"Nownerve_{item.Id}"];
-                        string cartilageType = form[$"NowcartilageSynoviumBursa_{item.Id}"];
-                        string epidermalType = form[$"NowepidermalTissue_{item.Id}"];
-                        string bloodVesselType = form[$"NowbloodVessel_{item.Id}"];
-                        string organLimbType = form[$"NoworganLimb_{item.Id}"];
+                        // 收集傷勢類型數據
+                        string muscleTendon = form["NowmuscleTendon"]; // 肌肉/肌腱類
+                        string bone = form["Nowbone"]; // 骨類
+                        string ligament = form["Nowligament"]; // 韌帶類
+                        string nerve = form["Nownerve"]; // 神經類
+                        string cartilageSynoviumBursa = form["NowcartilageSynoviumBursa"]; // 軟骨/滑膜/滑囊類
+                        string epidermalTissue = form["NowepidermalTissue"]; // 表皮組織
+                        string bloodVessel = form["NowbloodVessel"]; // 血管類
+                        string organLimb = form["NoworganLimb"]; // 器官/四肢類
 
-                        if (!string.IsNullOrEmpty(muscleTendonType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"肌肉/肌腱: {muscleTendonType}");
-                        }
-                        if (!string.IsNullOrEmpty(boneType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"骨頭: {boneType}");
-                        }
-                        if (!string.IsNullOrEmpty(ligamentType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"韌帶: {ligamentType}");
-                        }
-                        if (!string.IsNullOrEmpty(nerveType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"神經: {nerveType}");
-                        }
-                        if (!string.IsNullOrEmpty(cartilageType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"軟骨/滑膜/滑囊: {cartilageType}");
-                        }
-                        if (!string.IsNullOrEmpty(epidermalType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"表皮組織: {epidermalType}");
-                        }
-                        if (!string.IsNullOrEmpty(bloodVesselType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"血管: {bloodVesselType}");
-                        }
-                        if (!string.IsNullOrEmpty(organLimbType))
-                        {
-                            injuryViewModel.InjuryTypes.Add($"器官/四肢: {organLimbType}");
-                        }
+                        // 添加用戶選擇的傷勢類型到列表中
+                        if (!string.IsNullOrEmpty(muscleTendon)) injuryTypes.Add(muscleTendon);
+                        if (!string.IsNullOrEmpty(bone)) injuryTypes.Add(bone);
+                        if (!string.IsNullOrEmpty(ligament)) injuryTypes.Add(ligament);
+                        if (!string.IsNullOrEmpty(nerve)) injuryTypes.Add(nerve);
+                        if (!string.IsNullOrEmpty(cartilageSynoviumBursa)) injuryTypes.Add(cartilageSynoviumBursa);
+                        if (!string.IsNullOrEmpty(epidermalTissue)) injuryTypes.Add(epidermalTissue);
+                        if (!string.IsNullOrEmpty(bloodVessel)) injuryTypes.Add(bloodVessel);
+                        if (!string.IsNullOrEmpty(organLimb)) injuryTypes.Add(organLimb);
 
-                        model.NowInjuryDetails.Add(injuryViewModel);
+                        // 添加到模型
+                        model.NowInjuryDetails.Add(new InjuryStatuSViewModel
+                        {
+                            InjuryPart = item.InjuryPart, // 受傷部位
+                            LeftSide = form[leftPartKey] != null, // 是否左側受傷
+                            RightSide = form[rightPartKey] != null, // 是否右側受傷
+                            InjuryTypes = injuryTypes // 傷勢類型列表
+                        });
                     }
                 }
+                #endregion
 
-                // 收集目前治療方式
+                #region 目前治療方式
                 var treatmentMethods = _db.TreatmentMethod.ToList();
                 foreach (var method in treatmentMethods)
                 {

@@ -28,7 +28,7 @@
                     {
                         <tr class="hover:bg-gray-100">
                             <!-- 顯示問題 -->
-                            <td class="border border-gray-300 px-4 py-2">@item.Word</td>
+                            <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td>
 
                             <!-- 第一次測驗選項 -->
                             <td class="border border-gray-300 px-4 py-2">
@@ -76,8 +76,14 @@
         <!-- 最後完成時間 -->
         <div class="mt-4 flex items-center">
             <span class="mr-2 text-lg font-semibold">●</span>
-            <span class="mr-2">最後完成時間：</span>
-            <input type="text" class="border-b border-dotted text-lg font-semibold w-20 px-2" placeholder="____">
+            <span class="mr-2">最後完成時間 (分:秒)：</span>
+            <input type="text"
+                   name="CompletionTime"
+                   class="border-b border-dotted text-lg font-semibold w-24 px-2"
+                   placeholder="MM:SS"
+                   maxlength="5"
+                   pattern="^[0-5][0-9]:[0-5][0-9]$"
+                   title="請輸入正確的時間格式，例如 05:30">
         </div>
 
         <!-- 短期記憶總分 -->
@@ -98,49 +104,45 @@
         </div>
     </div>
 
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            // 初始化並加載保存的分數
+            // 初始化並加載保存的分數和時間
             loadScores();
+            loadCompletionTime();
 
             // 監聽所有的 radio 按鈕變更事件
             $('.memory-option').on('change', function () {
-                updateScores();
+                const groupName = $(this).attr('name').split('_')[0];
+                updateSingleScore(groupName);
                 saveScores();
             });
 
-            // 計算並更新每次和總分
-            function updateScores() {
-                let firstTotal = 0;
-                let secondTotal = 0;
-                let thirdTotal = 0;
+            // 監聽完成時間輸入事件
+            $('input[name="CompletionTime"]').on('input', function () {
+                formatCompletionTime(this);
+            });
 
-                // 計算每次測驗的分數
-                $('input[name^="first_"]:checked').each(function () {
-                    firstTotal += parseInt($(this).val());
+            $('input[name="CompletionTime"]').on('blur', function () {
+                validateAndFixCompletionTime(this);
+                saveCompletionTime(this.value);
+            });
+
+            function updateSingleScore(groupName) {
+                let total = 0;
+                $(`input[name^="${groupName}_"]:checked`).each(function () {
+                    total += parseInt($(this).val());
                 });
-                $('input[name^="second_"]:checked').each(function () {
-                    secondTotal += parseInt($(this).val());
-                });
-                $('input[name^="third_"]:checked').each(function () {
-                    thirdTotal += parseInt($(this).val());
-                });
-
-                // 更新顯示分數
-                $('#firstTotal').text(firstTotal + ' / 10');
-                $('#secondTotal').text(secondTotal + ' / 10');
-                $('#thirdTotal').text(thirdTotal + ' / 10');
-
-                // 總分計算
-                const totalScore = firstTotal + secondTotal + thirdTotal;
-                $('#totalScore').text(totalScore);
-
-                // 保存總分到 sessionStorage
-                sessionStorage.setItem('ImmediateMemoryScore', totalScore);
+                $(`#${groupName}Total`).text(`${total} / 10`);
+                updateTotalScore();
             }
 
-            // 保存每個選項的選中狀態到 sessionStorage
+            function updateTotalScore() {
+                const firstTotal = parseInt($('#firstTotal').text()) || 0;
+                const secondTotal = parseInt($('#secondTotal').text()) || 0;
+                const thirdTotal = parseInt($('#thirdTotal').text()) || 0;
+                $('#totalScore').text(firstTotal + secondTotal + thirdTotal);
+            }
+
             function saveScores() {
                 $('input[type="radio"]').each(function () {
                     if ($(this).is(':checked')) {
@@ -149,24 +151,47 @@
                 });
             }
 
-            // 從 sessionStorage 加載分數和選中狀態
             function loadScores() {
-                // 加載每個選項的選中狀態
                 $('input[type="radio"]').each(function () {
                     const savedValue = sessionStorage.getItem($(this).attr('name'));
-                    if (savedValue !== null && $(this).val() === savedValue) {
+                    if (savedValue !== null && (savedValue === '0' || savedValue === '1')) {
                         $(this).prop('checked', true);
                     }
                 });
+                updateTotalScore();
+            }
 
-                // 加載總分
-                const savedScore = sessionStorage.getItem('ImmediateMemoryScore');
-                if (savedScore !== null) {
-                    $('#totalScore').text(savedScore);
+            function formatCompletionTime(input) {
+                const value = input.value.replace(/[^0-9:]/g, '');
+                const parts = value.split(':');
+                if (parts.length > 1) {
+                    input.value = `${parts[0].slice(0, 2)}:${parts[1].slice(0, 2)}`;
+                } else {
+                    input.value = value.slice(0, 2);
                 }
+            }
 
-                // 更新每次的分數顯示
-                updateScores();
+            function validateAndFixCompletionTime(input) {
+                const value = input.value.split(':');
+                if (value.length === 1 && value[0]) {
+                    input.value = `${value[0].padStart(2, '0')}:00`;
+                } else if (value.length === 2) {
+                    input.value = `${value[0].padStart(2, '0')}:${value[1].padStart(2, '0')}`;
+                }
+            }
+
+            function saveCompletionTime(value) {
+                const isValid = /^[0-5][0-9]:[0-5][0-9]$/.test(value);
+                if (isValid) {
+                    sessionStorage.setItem('CompletionTime', value);
+                }
+            }
+
+            function loadCompletionTime() {
+                const savedTime = sessionStorage.getItem('CompletionTime');
+                if (savedTime) {
+                    $('input[name="CompletionTime"]').val(savedTime);
+                }
             }
         });
     </script>

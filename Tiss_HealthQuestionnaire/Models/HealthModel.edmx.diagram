@@ -51,6 +51,7 @@
         <AssociationConnector Association="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.CoordinationAndBalanceExamination" Width="1.5" PointX="11.375" PointY="17.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -166,6 +166,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConcussionScreeningViewModel.cs" />
+    <Compile Include="Models\CoordinationAndBalanceExamination.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CurrentInjury.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -307,6 +310,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="css\mainStyle.css" />
     <Content Include="css\registerStyle.css" />
+    <Content Include="css\tailwind.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

@@ -33,7 +33,22 @@ namespace Tiss_HealthQuestionnaire.Models
 
         public string ConvertYesNoToLocalizedString(string value) //中英文轉換
         {
-            return value == "yes" ? "是 Yes" : "否 No";
+            if (value == "yes")
+            {
+                return "是 Yes";
+            }
+            else if (value == "no")
+            {
+                return "否 No";
+            }
+            else if (value == "unknown")
+            {
+                return "未知 Unknown";
+            }
+            else
+            {
+                return "未定義 Undefined"; // 處理潛在的未定義值
+            }
         }
 
         //動態存放所有問卷數據
@@ -69,10 +84,18 @@ namespace Tiss_HealthQuestionnaire.Models
 
         //顯示過去傷害狀況(已復原)
         public List<PastInjuryStatuSViewModel> PastInjuryDetails { get; set; } = new List<PastInjuryStatuSViewModel>();
+
+        //顯示過去傷害狀況(已復原)-傷勢類型
+        public List<PastInjuryTypeViewModel> PastInjuryTypes { get; set; } = new List<PastInjuryTypeViewModel>();
+
+        //顯示過去傷害狀況(已復原)-治療方法
         public List<PastTreatmentMethoDViewModel> PastTreatmentDetails { get; set; } = new List<PastTreatmentMethoDViewModel>();
 
         //目前傷害狀況
         public List<InjuryStatuSViewModel> NowInjuryDetails { get; set; } = new List<InjuryStatuSViewModel>();
+
+        //目前傷害狀況-傷勢類型
+        public List<InjuryStatuTypeViewModel> NowInjuryTypes { get; set; } = new List<InjuryStatuTypeViewModel>();
 
         //目前傷害狀況-治療方法
         public List<TreatmentMethoDViewModel> NowTreatmentDetails { get; set; } = new List<TreatmentMethoDViewModel>();
@@ -105,7 +128,7 @@ namespace Tiss_HealthQuestionnaire.Models
     public class AllergicHistoryDetailViewModel //過敏史
     {
         public int ItemId { get; set; }    // 項目的ID
-        public string ItemZh { get; set; } 
+        public string ItemZh { get; set; }
         public string ItemEn { get; set; }
         public string IsAllergic { get; set; }  // 是否過敏（"yes" 或 "no"）
         public string AllergyDescription { get; set; }  // 過敏詳情描述
@@ -118,9 +141,9 @@ namespace Tiss_HealthQuestionnaire.Models
         public string GeneralPartsEn { get; set; }
         public string FamilyHistoryOption { get; set; }  // 可為 "yes", "no", 或 "unknown"
         public string OtherFamilyHistory { get; set; }  // 其他家族病史
-        public bool? IsNo { get; set; }        
-        public bool? IsYes { get; set; }        
-        public bool? IsUnknown { get; set; }    
+        public bool? IsNo { get; set; }
+        public bool? IsYes { get; set; }
+        public bool? IsUnknown { get; set; }
     }
 
     public class PastHistoryDetailViewModel //過去病史
@@ -129,7 +152,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public string GeneralPartsZh { get; set; }
         public string GeneralPartsEn { get; set; }
         public string PastHistoryOption { get; set; } // "yes", "no", "unknown"
-        public string OtherPastHistory {  get; set; }
+        public string OtherPastHistory { get; set; }
         public bool? IsNo { get; set; }
         public bool? IsYes { get; set; }
         public bool? IsUnknown { get; set; }
@@ -197,10 +220,15 @@ namespace Tiss_HealthQuestionnaire.Models
 
     public class PastInjuryStatuSViewModel //顯示過去傷害狀況(已復原)
     {
-        public string PastInjuryPart { get; set; }
-        public bool PastIsSingleSelect { get; set; }
-        public bool LeftSide { get; set; }
-        public bool RightSide { get; set; }
+        public string PastInjuryPart { get; set; } // 部位名稱
+        public bool LeftSide { get; set; } // 左側是否受傷
+        public bool RightSide { get; set; } // 右側是否受傷
+        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
+    }
+
+    public class PastInjuryTypeViewModel //顯示過去傷害狀況(傷勢類型)
+    {
+        public string Type { get; set; }
     }
 
     public class PastTreatmentMethoDViewModel //顯示過去傷害狀況(治療方法)
@@ -217,11 +245,15 @@ namespace Tiss_HealthQuestionnaire.Models
 
     public class InjuryStatuSViewModel //顯示目前傷害狀況
     {
-        public string InjuryPart { get; set; } // 部位
-        public bool IsSingleSelect { get; set; } // 是否單選
-        public bool LeftSide { get; set; } // 左邊
-        public bool RightSide { get; set; } // 右邊
-        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型
+        public string InjuryPart { get; set; } // 部位名稱
+        public bool LeftSide { get; set; } // 左側是否受傷
+        public bool RightSide { get; set; } // 右側是否受傷
+        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
+    }
+
+    public class InjuryStatuTypeViewModel //顯示目前傷害狀況(傷勢類型)
+    {
+        public string Type { get; set; }
     }
 
     public class TreatmentMethoDViewModel //顯示目前傷害狀況(治療方法)
