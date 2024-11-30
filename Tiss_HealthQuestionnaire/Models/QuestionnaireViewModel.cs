@@ -103,12 +103,9 @@ namespace Tiss_HealthQuestionnaire.Models
         //心血管篩檢
         public List<CardiovascularScreeningDetailViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningDetailViewModel>();
 
-        //腦震盪篩檢(選手自填)
+        //腦震盪篩檢(選手自填)-選手背景
         public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
-        public string MedicationAnswer { get; set; }
-        public string MedicationDetails { get; set; }
-        public string Notes { get; set; }
-
+        
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
     }
@@ -241,6 +238,16 @@ namespace Tiss_HealthQuestionnaire.Models
         public int OrderNumber { get; set; } // 項次
         public string Question { get; set; }  // 問題描述
         public string Answer { get; set; }    // 答案
+    }
+
+    public class ConcussionScreeningViewModel //腦震盪篩檢-選手自填-選手背景
+    {
+        public int OrderNumber { get; set; }  //問卷項次
+        public string Question { get; set; }  //問卷問題
+        public string Answer { get; set; } //答案 (Yes/No)
+        public string Notes { get; set; } //備註
+        public string MedicationAnswer { get; set; } //是否服用藥物
+        public string MedicationDetails { get; set; } //藥物細節
     }
 
     public class InjuryStatuSViewModel //顯示目前傷害狀況

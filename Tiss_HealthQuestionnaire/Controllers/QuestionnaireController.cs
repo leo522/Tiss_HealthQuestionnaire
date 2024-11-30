@@ -277,8 +277,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question
             }).ToList();
 
+            // 如果有暫存的數據，恢復填寫狀態
+            var savedAnswers = Session["ConcussionScreeningAnswers"] as Dictionary<int, string>;
+            if (savedAnswers != null)
+            {
+                foreach (var item in viewModel)
+                {
+                    if (savedAnswers.ContainsKey(item.OrderNumber))
+                    {
+                        item.Answer = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                    }
+                }
+            }
+
             return View("ConcussionScreening", viewModel);
-            //return PartialView("_ConcussionScreening", viewModel);
         }
 
         /// <summary>
@@ -297,8 +309,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.SymptomItem
             }).ToList();
 
+            // 如果有暫存的數據，恢復填寫狀態
+            var savedAnswers = Session["SymptomEvaluationAnswers"] as Dictionary<int, string>;
+            if (savedAnswers != null)
+            {
+                foreach (var item in viewModel)
+                {
+                    if (savedAnswers.ContainsKey(item.OrderNumber))
+                    {
+                        item.Answer = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                    }
+                }
+            }
             return View("SymptomEvaluation", viewModel);
-            //return PartialView("_SymptomEvaluation", viewModel);
         }
         #endregion
 
@@ -494,7 +517,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult Preview(QuestionnaireViewModel model)
         {
             return View("Preview", model); // 從表單收集的數據進行處理
-            //return View("_PreviewTotal", model); // 從表單收集的數據進行處理
         }
 
         [HttpPost]
@@ -1115,34 +1137,40 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
-                #region 腦震盪篩檢(選手自填)
-                var concussionScreenings = _db.CognitiveScreening.ToList();
+                #region 腦震盪篩檢(選手自填)-選手背景
+                var concussionScreenings = _db.ConcussionScreening.ToList();
+
                 foreach (var item in concussionScreenings)
                 {
-                    string answerKey = $"question_{item.ID}";
+                    string answerKey = $"question_{item.Id}";
                     var answer = form[answerKey];
 
                     if (!string.IsNullOrEmpty(answer))
                     {
                         model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
                         {
-                            OrderNumber = item.ID,
+                            OrderNumber = item.Id,
                             Question = item.Question,
                             Answer = answer
                         });
                     }
                 }
 
-                // 收集是否正在服用藥物的數據
+                // 收集藥物與備註數據
                 var medicationAnswer = form["medication"];
-                if (!string.IsNullOrEmpty(medicationAnswer))
-                {
-                    model.MedicationAnswer = medicationAnswer;
-                    model.MedicationDetails = form["medicationDetails"];
-                }
+                var medicationDetails = form["medicationDetails"];
+                var notes = form["notes"];
 
-                // 收集備註
-                model.Notes = form["notes"];
+                // 收集服用藥物相關數據
+                model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                {
+                    MedicationAnswer = medicationAnswer,
+                    MedicationDetails = medicationDetails,
+                    Notes = notes
+                });
+
+                // 暫存到 Session（防止資料丟失）
+                Session["PreviewData"] = model;
                 #endregion
 
                 #region 骨科篩檢
