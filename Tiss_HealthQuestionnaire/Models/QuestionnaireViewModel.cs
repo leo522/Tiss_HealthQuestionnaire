@@ -103,9 +103,17 @@ namespace Tiss_HealthQuestionnaire.Models
         //心血管篩檢
         public List<CardiovascularScreeningDetailViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningDetailViewModel>();
 
-        //腦震盪篩檢(選手自填)-選手背景
+        ////腦震盪篩檢(選手自填)-選手背景
+        //public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
+        // 脑震荡筛检-选手自填
         public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
-        
+        public string ConcussionScreeningMedicationAnswer { get; set; } // 是否服用药物
+        public string ConcussionScreeningMedicationDetails { get; set; } // 药物细节
+        public string ConcussionScreeningNotes { get; set; } // 备注
+
+        // 症状自我评估
+        public List<SymptomEvaluationViewModel> SymptomEvaluationDetails { get; set; } = new List<SymptomEvaluationViewModel>();
+
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
     }
@@ -240,16 +248,30 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Answer { get; set; }    // 答案
     }
 
-    public class ConcussionScreeningViewModel //腦震盪篩檢-選手自填-選手背景
+    //public class ConcussionScreeningViewModel //腦震盪篩檢-選手自填-選手背景
+    //{
+    //    public int OrderNumber { get; set; }  //問卷項次
+    //    public string Question { get; set; }  //問卷問題
+    //    public string Answer { get; set; } //答案 (Yes/No)
+    //    public string Notes { get; set; } //備註
+    //    public string MedicationAnswer { get; set; } //是否服用藥物
+    //    public string MedicationDetails { get; set; } //藥物細節
+    //}
+    // 腦震盪篩檢的模型
+    public class ConcussionScreeningViewModel
     {
-        public int OrderNumber { get; set; }  //問卷項次
-        public string Question { get; set; }  //問卷問題
-        public string Answer { get; set; } //答案 (Yes/No)
-        public string Notes { get; set; } //備註
-        public string MedicationAnswer { get; set; } //是否服用藥物
-        public string MedicationDetails { get; set; } //藥物細節
+        public int OrderNumber { get; set; }  // 问卷项次
+        public string Question { get; set; }  // 问卷问题
+        public string Answer { get; set; } // 答案 (yes/no)
     }
 
+    // 症狀自我評估的模型
+    public class SymptomEvaluationViewModel
+    {
+        public int OrderNumber { get; set; }
+        public string SymptomItem { get; set; }
+        public int Score { get; set; }
+    }
     public class InjuryStatuSViewModel //顯示目前傷害狀況
     {
         public string InjuryPart { get; set; } // 部位名稱

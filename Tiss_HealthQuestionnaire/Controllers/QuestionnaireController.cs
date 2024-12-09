@@ -16,6 +16,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 主頁
         public ActionResult Main()
         {
+            // 从 Session 中获取暂存的问卷数据
+            var concussionData = Session["ConcussionScreeningData"] as QuestionnaireViewModel;
+            var symptomData = Session["SymptomEvaluationData"] as QuestionnaireViewModel;
+
             // 從 Session 獲取使用者的名稱
             string loggedInUserName = Session["UserName"] as string;
             if (string.IsNullOrEmpty(loggedInUserName))
@@ -38,6 +42,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
             ViewBag.AtheNum = user.AthleteNumber; // 選手編號，顯示為五位數
             ViewBag.GenderID = user.GenderID; // 性別
             ViewBag.ShowFemaleTab = (user.GenderID == 2); // 假設 2 代表女性，決定是否顯示女性問卷頁籤
+
+            // 将数据传递到视图
+            ViewBag.ConcussionData = concussionData;
+            ViewBag.SymptomData = symptomData;
 
             return View();
         }
@@ -297,6 +305,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// 第二部分 症狀自我評估
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult SymptomEvaluation()
         {
             // 從資料庫中讀取問卷問題
@@ -323,6 +332,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             return View("SymptomEvaluation", viewModel);
         }
+
         #endregion
 
         #region 骨科篩檢
@@ -513,7 +523,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #endregion
 
-        #region 問卷填完預覽頁
+        #region 預覽頁
         public ActionResult Preview(QuestionnaireViewModel model)
         {
             return View("Preview", model); // 從表單收集的數據進行處理
@@ -1137,40 +1147,56 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
-                #region 腦震盪篩檢(選手自填)-選手背景
-                var concussionScreenings = _db.ConcussionScreening.ToList();
+                #region 从 Session 中取出暂存的答案
 
-                foreach (var item in concussionScreenings)
+                // 脑震荡筛检-选手自填
+                var concussionAnswers = Session["ConcussionScreeningAnswers"] as Dictionary<int, string>;
+                if (concussionAnswers != null)
                 {
-                    string answerKey = $"question_{item.Id}";
-                    var answer = form[answerKey];
+                    var questions = _db.ConcussionScreening.ToList();
 
-                    if (!string.IsNullOrEmpty(answer))
+                    foreach (var q in questions)
                     {
-                        model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                        if (concussionAnswers.ContainsKey(q.Id))
                         {
-                            OrderNumber = item.Id,
-                            Question = item.Question,
-                            Answer = answer
-                        });
+                            model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
+                            {
+                                OrderNumber = q.Id,
+                                Question = q.Question,
+                                Answer = concussionAnswers[q.Id]
+                            });
+                        }
+                    }
+
+                    // 取出药物与备注
+                    model.ConcussionScreeningMedicationAnswer = Session["ConcussionScreeningMedicationAnswer"] as string;
+                    model.ConcussionScreeningMedicationDetails = Session["ConcussionScreeningMedicationDetails"] as string;
+                    model.ConcussionScreeningNotes = Session["ConcussionScreeningNotes"] as string;
+                }
+
+                // 症状自我评估
+                var symptomAnswers = Session["SymptomEvaluationAnswers"] as Dictionary<int, int>;
+                if (symptomAnswers != null)
+                {
+                    var symptomQuestions = _db.SymptomEvaluation.ToList();
+
+                    foreach (var q in symptomQuestions)
+                    {
+                        if (symptomAnswers.ContainsKey(q.ID))
+                        {
+                            model.SymptomEvaluationDetails.Add(new SymptomEvaluationViewModel
+                            {
+                                OrderNumber = q.ID,
+                                SymptomItem = q.SymptomItem,
+                                Score = symptomAnswers[q.ID]
+                            });
+                        }
                     }
                 }
 
-                // 收集藥物與備註數據
-                var medicationAnswer = form["medication"];
-                var medicationDetails = form["medicationDetails"];
-                var notes = form["notes"];
-
-                // 收集服用藥物相關數據
-                model.ConcussionScreeningDetails.Add(new ConcussionScreeningViewModel
-                {
-                    MedicationAnswer = medicationAnswer,
-                    MedicationDetails = medicationDetails,
-                    Notes = notes
-                });
-
-                // 暫存到 Session（防止資料丟失）
+                // 暂存到 Session（防止数据丢失）
                 Session["PreviewData"] = model;
+
                 #endregion
 
                 #region 骨科篩檢
@@ -1264,6 +1290,62 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 _db.QuestionnaireResponseDetails.Add(detail);
             }
         }
+        #endregion
+
+        #region 測試
+        // 新增保存脑震荡筛检的动作方法
+        [HttpPost]
+        public ActionResult SaveConcussionScreening(FormCollection form)
+        {
+            // 收集问卷答案
+            var answers = new Dictionary<int, string>();
+
+            foreach (var key in form.AllKeys)
+            {
+                if (key.StartsWith("question_"))
+                {
+                    int orderNumber = int.Parse(key.Substring("question_".Length));
+                    string answer = form[key];
+                    answers[orderNumber] = answer;
+                }
+            }
+
+            // 保存到 Session
+            Session["ConcussionScreeningAnswers"] = answers;
+
+            // 保存药物与备注
+            Session["ConcussionScreeningMedicationAnswer"] = form["medication"];
+            Session["ConcussionScreeningMedicationDetails"] = form["medicationDetails"];
+            Session["ConcussionScreeningNotes"] = form["notes"];
+
+            // 重定向到下一个问卷页面
+            return RedirectToAction("SymptomEvaluation");
+        }
+
+        // 新增保存症状自我评估的动作方法
+        [HttpPost]
+        public ActionResult SaveSymptomEvaluation(FormCollection form)
+        {
+            // 收集问卷答案
+            var answers = new Dictionary<int, int>();
+
+            foreach (var key in form.AllKeys)
+            {
+                if (key.StartsWith("score_"))
+                {
+                    int orderNumber = int.Parse(key.Substring("score_".Length));
+                    int score = int.Parse(form[key]);
+                    answers[orderNumber] = score;
+                }
+            }
+
+            // 保存到 Session
+            Session["SymptomEvaluationAnswers"] = answers;
+
+            // 提交完毕，返回主页
+            return RedirectToAction("Main");
+        }
+
         #endregion
     }
 }

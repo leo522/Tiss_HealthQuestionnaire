@@ -521,36 +521,74 @@
         <!-- 腦震盪篩檢-選手自填-選手背景 -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢 - 選手自填:</h3>
-            @if(Model.ConcussionScreening != null && Model.ConcussionScreening.Any())
-            { 
-            
-            }
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border px-4 py-2">項次</th>
-                        <th class="border px-4 py-2">問題</th>
-                        <th class="border px-4 py-2">答案</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.ConcussionScreeningDetails)
-                    {
-                        <tr>
-                            <td class="border px-4 py-2">@item.OrderNumber</td>
-                            <td class="border px-4 py-2">@item.Question</td>
-                            <td class="border px-4 py-2">@Model.ConvertYesNoToLocalizedString(item.Answer)</td>
+            @if (Model.ConcussionScreeningDetails != null && Model.ConcussionScreeningDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">項次</th>
+                            <th class="border px-4 py-2">問題</th>
+                            <th class="border px-4 py-2">答案</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ConcussionScreeningDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.OrderNumber</td>
+                                <td class="border px-4 py-2">@item.Question</td>
+                                <td class="border px-4 py-2">@Model.ConvertYesNoToLocalizedString(item.Answer)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            <!-- 顯示藥物與備註 -->
+            <div class="mt-4">
+                <p><strong>是否服用藥物：</strong> @Model.ConvertYesNoToLocalizedString(Model.ConcussionScreeningMedicationAnswer)</p>
+                <p><strong>服用藥物細節：</strong> @Model.ConcussionScreeningMedicationDetails</p>
+                <p><strong>備註：</strong> @Model.ConcussionScreeningNotes</p>
+            </div>
         </div>
 
-        <!-- 藥物與備註 -->
-        <div class="mt-4">
-            <p><strong>是否服用藥物：</strong> @Model.ConcussionScreeningDetails.FirstOrDefault()?.MedicationAnswer</p>
-            <p><strong>服用藥物細節：</strong> @Model.ConcussionScreeningDetails.FirstOrDefault()?.MedicationDetails</p>
-            <p><strong>備註：</strong> @Model.ConcussionScreeningDetails.FirstOrDefault()?.Notes</p>
+        <!-- 症狀自我評估-選手 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估:</h3>
+            @if (Model.SymptomEvaluationDetails != null && Model.SymptomEvaluationDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">項次</th>
+                            <th class="border px-4 py-2">症狀</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SymptomEvaluationDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.OrderNumber</td>
+                                <td class="border px-4 py-2">@item.SymptomItem</td>
+                                <td class="border px-4 py-2">@item.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- 計算總分和症狀總數 -->
+                <div class="mt-4">
+                    <p>
+                        <strong>症狀總數：</strong>
+                        @Model.SymptomEvaluationDetails.Count(s => s.Score > 0) / 22
+                    </p>
+                    <p>
+                        <strong>症狀分數：</strong>
+                        @Model.SymptomEvaluationDetails.Sum(s => s.Score) / 132
+                    </p>
+                </div>
+            }
         </div>
 
         <!-- 顯示骨科篩檢 -->
@@ -580,6 +618,8 @@
             }
         </div>
     </div>
+
+
 
     <!-- 操作按鈕 -->
     <div class="flex justify-between items-center mt-6">
