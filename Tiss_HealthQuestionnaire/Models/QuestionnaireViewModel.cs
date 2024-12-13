@@ -103,16 +103,23 @@ namespace Tiss_HealthQuestionnaire.Models
         //心血管篩檢
         public List<CardiovascularScreeningDetailViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningDetailViewModel>();
 
-        ////腦震盪篩檢(選手自填)-選手背景
-        //public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
-        // 脑震荡筛检-选手自填
+        //腦震盪篩檢(選手自填)
         public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
-        public string ConcussionScreeningMedicationAnswer { get; set; } // 是否服用药物
-        public string ConcussionScreeningMedicationDetails { get; set; } // 药物细节
-        public string ConcussionScreeningNotes { get; set; } // 备注
+        public string ConcussionScreeningMedicationAnswer { get; set; } //是否服用藥物
+        public string ConcussionScreeningMedicationDetails { get; set; } //藥物細節
+        public string ConcussionScreeningNotes { get; set; } //備註
 
-        // 症状自我评估
+        //症狀自我評估
         public List<SymptomEvaluationViewModel> SymptomEvaluationDetails { get; set; } = new List<SymptomEvaluationViewModel>();
+
+        //定位
+        public List<CognitiveScreeningViewModel> CognitiveScreeningDetails { get; set; } = new List<CognitiveScreeningViewModel>();
+        public int CognitiveScreeningTotalScore { get; set; } //定位總分
+
+        //短期記憶
+        public List<ImmediateMemoryViewModel> ImmediateMemoryDetails { get; set; } = new List<ImmediateMemoryViewModel>();
+        public int ImmediateMemoryTotalScore { get; set; } //短期記憶總分
+        public string CompletionTime { get; set; } //短期記憶完成時間
 
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
@@ -248,30 +255,20 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Answer { get; set; }    // 答案
     }
 
-    //public class ConcussionScreeningViewModel //腦震盪篩檢-選手自填-選手背景
-    //{
-    //    public int OrderNumber { get; set; }  //問卷項次
-    //    public string Question { get; set; }  //問卷問題
-    //    public string Answer { get; set; } //答案 (Yes/No)
-    //    public string Notes { get; set; } //備註
-    //    public string MedicationAnswer { get; set; } //是否服用藥物
-    //    public string MedicationDetails { get; set; } //藥物細節
-    //}
-    // 腦震盪篩檢的模型
-    public class ConcussionScreeningViewModel
+    public class ConcussionScreeningViewModel //腦震盪篩檢
     {
-        public int OrderNumber { get; set; }  // 问卷项次
-        public string Question { get; set; }  // 问卷问题
+        public int OrderNumber { get; set; }  // 問卷項次
+        public string Question { get; set; }  // 問卷問題
         public string Answer { get; set; } // 答案 (yes/no)
     }
 
-    // 症狀自我評估的模型
-    public class SymptomEvaluationViewModel
+    public class SymptomEvaluationViewModel //症狀自我評估
     {
         public int OrderNumber { get; set; }
         public string SymptomItem { get; set; }
         public int Score { get; set; }
     }
+
     public class InjuryStatuSViewModel //顯示目前傷害狀況
     {
         public string InjuryPart { get; set; } // 部位名稱
@@ -288,6 +285,24 @@ namespace Tiss_HealthQuestionnaire.Models
     public class TreatmentMethoDViewModel //顯示目前傷害狀況(治療方法)
     {
         public string Method { get; set; }
+    }
+
+    public class CognitiveScreeningViewModel //醫療團隊-認知篩檢-定位(1)
+    {
+        public int OrderNumber { get; set; }  // 項次
+        public string Question { get; set; }  // 問題文字
+        public int OrientationScore { get; set; } // 定位分數
+        public int ImmediateMemoryScore { get; set; } // 短期記憶分數
+        public int ConcentrationScore { get; set; } // 專注力分數
+        public int DelayedRecallScore { get; set; } // 延遲記憶分數
+        public int TotalScore { get; set; } // 總分
+    }
+
+    public class ImmediateMemoryViewModel //醫療團隊-認知篩檢-短期記憶(2)
+    {
+        public int OrderNumber { get; set; }  // 項次
+        public string Word { get; set; }      // 顯示的詞彙
+        public string CompletionTime { get; set; } = "00:00"; // 預設為 00:00
     }
 
     public class OrthopaedicScreeninGViewModel //骨科篩檢

@@ -16,7 +16,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 主頁
         public ActionResult Main()
         {
-            // 从 Session 中获取暂存的问卷数据
+            // 從 Session 中取得暫存的問卷答案
             var concussionData = Session["ConcussionScreeningData"] as QuestionnaireViewModel;
             var symptomData = Session["SymptomEvaluationData"] as QuestionnaireViewModel;
 
@@ -43,7 +43,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             ViewBag.GenderID = user.GenderID; // 性別
             ViewBag.ShowFemaleTab = (user.GenderID == 2); // 假設 2 代表女性，決定是否顯示女性問卷頁籤
 
-            // 将数据传递到视图
             ViewBag.ConcussionData = concussionData;
             ViewBag.SymptomData = symptomData;
 
@@ -356,7 +355,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #region 腦震盪篩檢-防護員評估
         /// <summary>
-        /// 第三部分 認知篩檢-定位
+        /// 認知篩檢-定位
         /// </summary>
         /// <returns></returns>
 
@@ -375,11 +374,25 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question     // 顯示問題
             }).ToList();
 
+            // 如果有暫存的數據，恢復填寫狀態
+            var savedAnswers = Session["OrientationAnswers"] as Dictionary<int, int>;
+            if (savedAnswers != null)
+            {
+                foreach (var item in viewModel)
+                {
+                    if (savedAnswers.ContainsKey(item.OrderNumber))
+                    {
+                        item.OrientationScore = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                    }
+                }
+            }
+
+
             return View("CognitiveScreening", viewModel);
         }
 
         /// <summary>
-        /// 第三部分 認知篩檢-短期記憶
+        /// 認知篩檢-短期記憶
         /// </summary>
         /// <returns></returns>
         public ActionResult ImmediateMemory()
@@ -399,7 +412,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
 
         /// <summary>
-        /// 第三部分 認知篩檢-專注力
+        /// 認知篩檢-專注力
         /// </summary>
         /// <returns></returns>
         public ActionResult Concentration()
@@ -603,8 +616,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         });
                     }
 
-                    // 將變更保存至資料庫
-                    _db.Entry(item).State = EntityState.Modified;
+                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
                 #endregion
 
@@ -665,9 +677,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                             AllergyDescription = "未回答"
                         });
                     }
-
-                    // 將變更保存至資料庫
-                    _db.Entry(item).State = EntityState.Modified;
+                    
+                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
                 #endregion
 
@@ -975,18 +986,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                         // 為每個問題項目設定選項對應的中英文描述
                         var answerOptions = new Dictionary<string, string>
-        {
-            { "10以下", "10歲 (含) 以下" },
-            { "11", "11歲" },
-            { "12", "12歲" },
-            { "13", "13歲" },
-            { "14", "14歲" },
-            { "15", "15歲" },
-            { "16以上", "16歲 (含) 以上" },
-            { "yes", "是 Yes" },
-            { "no", "否 No" },
-            { "noCycle", "目前無生理期" }
-        };
+                        {
+                            { "10以下", "10歲 (含) 以下" },
+                            { "11", "11歲" },
+                            { "12", "12歲" },
+                            { "13", "13歲" },
+                            { "14", "14歲" },
+                            { "15", "15歲" },
+                            { "16以上", "16歲 (含) 以上" },
+                            { "yes", "是 Yes" },
+                            { "no", "否 No" },
+                            { "noCycle", "目前無生理期" }
+                        };
 
                         model.FemaleQuestionnaireDetails.Add(new FemaleQuestionnaireDetailViewModel
                         {
@@ -1147,9 +1158,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
-                #region 从 Session 中取出暂存的答案
+                #region 腦震盪篩檢-選手自填
 
-                // 脑震荡筛检-选手自填
                 var concussionAnswers = Session["ConcussionScreeningAnswers"] as Dictionary<int, string>;
                 if (concussionAnswers != null)
                 {
@@ -1168,13 +1178,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         }
                     }
 
-                    // 取出药物与备注
+                    // 取出藥物與備註
                     model.ConcussionScreeningMedicationAnswer = Session["ConcussionScreeningMedicationAnswer"] as string;
                     model.ConcussionScreeningMedicationDetails = Session["ConcussionScreeningMedicationDetails"] as string;
                     model.ConcussionScreeningNotes = Session["ConcussionScreeningNotes"] as string;
                 }
 
-                // 症状自我评估
+                // 症狀自我評估
                 var symptomAnswers = Session["SymptomEvaluationAnswers"] as Dictionary<int, int>;
                 if (symptomAnswers != null)
                 {
@@ -1194,8 +1204,57 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     }
                 }
 
-                // 暂存到 Session（防止数据丢失）
+                // 暂存到 Session（防止數據遺失）
                 Session["PreviewData"] = model;
+
+                #endregion
+
+
+                #region 醫療團隊評估-認知篩檢-定位
+                var CognitiveScreeningAnswer = Session["CognitiveScreeningAnswers"] as Dictionary<int, int>;
+
+                if (CognitiveScreeningAnswer != null)
+                {
+                    var orientationQuestions = _db.CognitiveScreening.ToList();
+
+                    foreach (var item in orientationQuestions)
+                    {
+                        if (CognitiveScreeningAnswer.ContainsKey(item.ID))
+                        {
+                            model.CognitiveScreeningDetails.Add(new CognitiveScreeningViewModel
+                            {
+                                OrderNumber = item.ID,
+                                Question = item.Question,
+                                OrientationScore = CognitiveScreeningAnswer[item.ID]
+                            });
+                        }
+                    }
+                }
+                Session["PreviewData"] = model;
+                // 計算定位總分
+                //model.CognitiveScreeningTotalScore = CognitiveScreeningAnswer.Values.Sum();
+                #endregion
+
+                #region 醫療團隊評估-認知篩檢-短期記憶
+                //var immediateMemoryAnswers = Session["ImmediateMemoryAnswers"] as Dictionary<string, int>;
+
+                //    var immediateMemoryQuestions = _db.ImmediateMemory.ToList();
+
+                //    foreach (var q in immediateMemoryQuestions)
+                //    {
+                //        model.ImmediateMemoryDetails.Add(new ImmediateMemoryViewModel
+                //        {
+                //            OrderNumber = q.ID,
+                //            Word = q.Word,
+                //            CompletionTime = Session["ImmediateMemoryCompletionTime"] as string ?? "00:00"
+                //            //FirstTestScore = immediateMemoryAnswers.ContainsKey($"first_{q.ID}") ? immediateMemoryAnswers[$"first_{q.ID}"] : 0,
+                //            //SecondTestScore = immediateMemoryAnswers.ContainsKey($"second_{q.ID}") ? immediateMemoryAnswers[$"second_{q.ID}"] : 0,
+                //            //ThirdTestScore = immediateMemoryAnswers.ContainsKey($"third_{q.ID}") ? immediateMemoryAnswers[$"third_{q.ID}"] : 0
+                //        });
+                //    }
+
+                //    //計算短期記憶總分
+                //    model.ImmediateMemoryTotalScore = immediateMemoryAnswers.Values.Sum();
 
                 #endregion
 
@@ -1292,13 +1351,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 測試
-        // 新增保存脑震荡筛检的动作方法
+        #region 保存腦震盪篩檢-選手自填(選手背景)
         [HttpPost]
         public ActionResult SaveConcussionScreening(FormCollection form)
         {
-            // 收集问卷答案
-            var answers = new Dictionary<int, string>();
+            var answers = new Dictionary<int, string>(); //蒐集問卷答案
 
             foreach (var key in form.AllKeys)
             {
@@ -1310,24 +1367,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
             }
 
-            // 保存到 Session
-            Session["ConcussionScreeningAnswers"] = answers;
+            Session["ConcussionScreeningAnswers"] = answers; //保存到 Session
 
-            // 保存药物与备注
+            //保存藥物與備註
             Session["ConcussionScreeningMedicationAnswer"] = form["medication"];
             Session["ConcussionScreeningMedicationDetails"] = form["medicationDetails"];
             Session["ConcussionScreeningNotes"] = form["notes"];
-
-            // 重定向到下一个问卷页面
-            return RedirectToAction("SymptomEvaluation");
+            
+            return RedirectToAction("SymptomEvaluation"); //重定向到下一個問卷頁面
         }
 
-        // 新增保存症状自我评估的动作方法
+        // 新增保存症況自我評估的動作方法
         [HttpPost]
         public ActionResult SaveSymptomEvaluation(FormCollection form)
         {
-            // 收集问卷答案
-            var answers = new Dictionary<int, int>();
+            var answers = new Dictionary<int, int>(); //蒐集問卷答案
 
             foreach (var key in form.AllKeys)
             {
@@ -1338,14 +1392,43 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     answers[orderNumber] = score;
                 }
             }
+            
+            Session["SymptomEvaluationAnswers"] = answers; //保存到 Session
 
-            // 保存到 Session
-            Session["SymptomEvaluationAnswers"] = answers;
-
-            // 提交完毕，返回主页
             return RedirectToAction("Main");
         }
 
+        #endregion
+
+        #region 保存醫療團隊-認知篩檢-定位
+        [HttpPost]
+        public ActionResult SaveCognitiveScreening(FormCollection form)
+        {
+            try
+            {
+                var answers = new Dictionary<int, string>();
+
+                foreach (var key in form.AllKeys)
+                {
+                    if (key.StartsWith("question_"))
+                    {
+                        int orderNumber = int.Parse(key.Substring("question_".Length));
+
+                        string answer = form[key];
+
+                        answers[orderNumber] = answer;
+                    }
+                }
+
+                Session["CognitiveScreeningAnswers"] = answers;
+
+                return RedirectToAction("ImmediateMemory");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

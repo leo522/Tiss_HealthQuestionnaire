@@ -198,30 +198,30 @@
 
         <!-- 顯示開刀史 -->
         @*<div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
-            @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
+                @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
 
-            @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
-            {
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
-                            <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detail in Model.SurgeryHistoryDetails)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
-                                <td class="border border-gray-300 p-2">@detail.OperationOption</td>
+                @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
+                {
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
+                                <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>*@
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in Model.SurgeryHistoryDetails)
+                            {
+                                <tr>
+                                    <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
+                                    <td class="border border-gray-300 p-2">@detail.OperationOption</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>*@
 
         <!-- 顯示現在病史 -->
         <div class="mb-8">
@@ -617,9 +617,73 @@
                 </table>
             }
         </div>
+
+        <!-- 腦震盪篩檢-醫療團隊評估-認知篩檢-定位(1)-->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 定位 (Orientation):</h3>
+            @if (Model.CognitiveScreeningDetails != null && Model.CognitiveScreeningDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">項次</th>
+                            <th class="border px-4 py-2">問題</th>
+                            <th class="border px-4 py-2">答案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CognitiveScreeningDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.OrderNumber</td>
+                                <td class="border px-4 py-2">@item.Question</td>
+                                <td class="border px-4 py-2">@item.OrientationScore</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    <p><strong>定位總分：</strong> @Model.CognitiveScreeningTotalScore / 5</p>
+                </div>
+            }
+        </div>
+
+        <!-- 腦震盪篩檢-醫療團隊評估-認知篩檢-短期記憶(2)-->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 短期記憶 (Immediate Memory):</h3>
+            @if (Model.ImmediateMemoryDetails != null && Model.ImmediateMemoryDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">詞彙</th>
+                            <th class="border px-4 py-2">第一次</th>
+                            <th class="border px-4 py-2">第二次</th>
+                            <th class="border px-4 py-2">第三次</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ImmediateMemoryDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.OrderNumber</td>
+                                <td class="border px-4 py-2">@item.Word</td>
+                                <td class="border px-4 py-2">@item.CompletionTime</td>
+                                @*<td class="border px-4 py-2">@item.Word</td>
+                                    <td class="border px-4 py-2">@item.FirstTestScore</td>
+                                    <td class="border px-4 py-2">@item.SecondTestScore</td>
+                                    <td class="border px-4 py-2">@item.ThirdTestScore</td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    <p><strong>短期記憶總分：</strong> @Model.ImmediateMemoryTotalScore / 30</p>
+                    <p><strong>完成時間：</strong> @Model.CompletionTime</p>
+                </div>
+            }
+        </div>
     </div>
-
-
 
     <!-- 操作按鈕 -->
     <div class="flex justify-between items-center mt-6">
