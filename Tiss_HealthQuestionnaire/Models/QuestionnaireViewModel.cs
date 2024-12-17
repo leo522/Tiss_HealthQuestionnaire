@@ -29,7 +29,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public string CardiovascularScreening { get; set; } // 心血管篩檢
         public string ConcussionScreening { get; set; }     // 腦震盪篩檢-選手自填
         public string OrthopaedicScreening { get; set; }    // 骨科篩檢
-        public string CognitiveScreening { get; set; }      // 腦震盪篩檢-醫療團隊評估
+        public string CognitiveScreening { get; set; }      // 腦震盪篩檢-醫療團隊評估-定位
 
         public string ConvertYesNoToLocalizedString(string value) //中英文轉換
         {
@@ -120,6 +120,18 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<ImmediateMemoryViewModel> ImmediateMemoryDetails { get; set; } = new List<ImmediateMemoryViewModel>();
         public int ImmediateMemoryTotalScore { get; set; } //短期記憶總分
         public string CompletionTime { get; set; } //短期記憶完成時間
+
+        //專注力
+        public List<ConcentrationViewModel> ConcentrationDetails { get; set; } = new List<ConcentrationViewModel>();
+        public int ConcentrationTotalScore { get; set; } // 總分
+
+        // 協調與平衡測驗
+        public List<CoordinationAndBalanceExaminationViewModel> CoordinationAndBalanceDetails { get; set; }
+            = new List<CoordinationAndBalanceExaminationViewModel>();
+
+        public int CoordinationAndBalanceTotalErrors { get; set; } = 0; // 總錯誤次數
+        public float CoordinationAndBalanceAverageTime { get; set; } = 0; // 平均時間
+        public float CoordinationAndBalanceFastestTime { get; set; } = 0; // 最快時間
 
         //骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
@@ -302,7 +314,33 @@ namespace Tiss_HealthQuestionnaire.Models
     {
         public int OrderNumber { get; set; }  // 項次
         public string Word { get; set; }      // 顯示的詞彙
-        public string CompletionTime { get; set; } = "00:00"; // 預設為 00:00
+        public int FirstTestScore { get; set; } = 0;  // 第一次測驗分數
+        public int SecondTestScore { get; set; } = 0; // 第二次測驗分數
+        public int ThirdTestScore { get; set; } = 0;  // 第三次測驗分數
+        public string CompletionTime { get; set; } = "00:00";
+    }
+
+    public class ConcentrationViewModel //醫療團隊-認知篩檢-專注力(3)
+    {
+        public int OrderNumber { get; set; } // 項次
+        public string ListA { get; set; }    // 列表 A
+        public string ListB { get; set; }    // 列表 B
+        public string ListC { get; set; }    // 列表 C
+        public int Score { get; set; } = 0;  // 分數 (0 或 1)
+    }
+
+    public class CoordinationAndBalanceExaminationViewModel //醫療團隊-認知篩檢-協調與平衡測驗(4)
+    {
+        public int OrderNumber { get; set; } // 項次
+        public string TestFoot { get; set; } // 測試腳
+        public string TestSurface { get; set; } // 測試平面
+        public string Footwear { get; set; } // 腳穿著
+        public int DoubleLegError { get; set; } = 0; // 雙腳站立錯誤次數
+        public int TandemError { get; set; } = 0; // 腳跟前後站立錯誤次數
+        public int SingleLegError { get; set; } = 0; // 單腳站立錯誤次數
+        public float FirstTime { get; set; } = 0; // 第一次測試時間
+        public float SecondTime { get; set; } = 0; // 第二次測試時間
+        public float ThirdTime { get; set; } = 0; // 第三次測試時間
     }
 
     public class OrthopaedicScreeninGViewModel //骨科篩檢
@@ -313,10 +351,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Result { get; set; }  // 正常或異常
     }
 
-    public class CoordinationAndBalanceExaminationViewModel //協調與平衡測驗
-    {
-        public ModifiedBalanceTest ModifiedBalanceTest { get; set; }
-        public TimedTandemGait TimedTandemGait { get; set; }
-    }
     #endregion
 }

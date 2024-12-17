@@ -7,6 +7,7 @@
 <html lang="zh-Hant">
 <head>
     <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 </head>
 <body>
     <div class="p-4">
@@ -47,7 +48,7 @@
                     </tbody>
                 </table>
             </div>
-        </form>
+
             <!-- 總計部分 -->
             <div class="flex items-center mt-4">
                 <span class="mr-2 text-lg font-semibold">●</span>
@@ -57,16 +58,11 @@
             </div>
 
             <div class="flex justify-between space-x-4 mt-4">
-                <form action="/Questionnaire/SymptomEvaluation" method="get" class="mt-4">
-                    <button type="submit" class="btn btn-warning">回上一頁</button>
-                </form>
-                <form action="/Questionnaire/ImmediateMemory" method="get" class="mt-4">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
-                </form>
+                <button type="submit" class="btn btn-warning">回上一頁</button>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
             </div>
+        </form>
     </div>
-
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 初始化分數

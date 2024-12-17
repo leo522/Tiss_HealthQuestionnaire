@@ -161,7 +161,6 @@
     <Compile Include="Models\Concentration.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ConcentrationViewModel.cs" />
     <Compile Include="Models\ConcussionScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>

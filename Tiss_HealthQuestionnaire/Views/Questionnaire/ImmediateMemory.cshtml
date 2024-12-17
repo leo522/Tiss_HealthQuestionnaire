@@ -11,97 +11,97 @@
 <body>
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">2. 短期記憶 (Immediate Memory) (測驗三次，0錯誤；1正確)</h2>
-
-        <!-- 問卷表格 -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300 text-center">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">詞彙</th>
-                        <th class="border border-gray-300 px-4 py-2">第一次</th>
-                        <th class="border border-gray-300 px-4 py-2">第二次</th>
-                        <th class="border border-gray-300 px-4 py-2">第三次</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="hover:bg-gray-100">
-                            <!-- 顯示問題 -->
-                            <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td>
-
-                            <!-- 第一次測驗選項 -->
-                            <td class="border border-gray-300 px-4 py-2">
-                                <div class="flex justify-center items-center">
-                                    <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">0</label>
-                                    <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">1</label>
-                                </div>
-                            </td>
-
-                            <!-- 第二次測驗選項 -->
-                            <td class="border border-gray-300 px-4 py-2">
-                                <div class="flex justify-center items-center">
-                                    <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">0</label>
-                                    <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">1</label>
-                                </div>
-                            </td>
-
-                            <!-- 第三次測驗選項 -->
-                            <td class="border border-gray-300 px-4 py-2">
-                                <div class="flex justify-center items-center">
-                                    <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">0</label>
-                                    <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                    <label class="mx-2">1</label>
-                                </div>
-                            </td>
+        <form method="post" action="/Questionnaire/SaveImmediateMemory">
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">詞彙</th>
+                            <th class="border border-gray-300 px-4 py-2">第一次</th>
+                            <th class="border border-gray-300 px-4 py-2">第二次</th>
+                            <th class="border border-gray-300 px-4 py-2">第三次</th>
                         </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr class="bg-gray-100">
-                        <td class="border border-gray-300 px-4 py-2 font-semibold">每次分數</td>
-                        <td class="border border-gray-300 px-4 py-2" id="firstTotal">/ 10</td>
-                        <td class="border border-gray-300 px-4 py-2" id="secondTotal">/ 10</td>
-                        <td class="border border-gray-300 px-4 py-2" id="thirdTotal">/ 10</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover:bg-gray-100">
+                                <!-- 顯示問題 -->
+                                <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td>
 
-        <!-- 最後完成時間 -->
-        <div class="mt-4 flex items-center">
-            <span class="mr-2 text-lg font-semibold">●</span>
-            <span class="mr-2">最後完成時間 (分:秒)：</span>
-            <input type="text"
-                   name="CompletionTime"
-                   class="border-b border-dotted text-lg font-semibold w-24 px-2"
-                   placeholder="MM:SS"
-                   maxlength="5"
-                   pattern="^[0-5][0-9]:[0-5][0-9]$"
-                   title="請輸入正確的時間格式，例如 05:30">
-        </div>
+                                <!-- 第一次測驗選項 -->
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <div class="flex justify-center items-center">
+                                        <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">0</label>
+                                        <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">1</label>
+                                    </div>
+                                </td>
 
-        <!-- 短期記憶總分 -->
-        <div class="flex items-center mt-4">
-            <span class="mr-2 text-lg font-semibold">●</span>
-            <span class="mr-2">短期記憶總分：</span>
-            <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span> / 30
-        </div>
+                                <!-- 第二次測驗選項 -->
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <div class="flex justify-center items-center">
+                                        <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">0</label>
+                                        <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">1</label>
+                                    </div>
+                                </td>
 
-        <!-- 表單按鈕 -->
-        <div class="flex justify-between space-x-4 mt-4">
-            <form action="/Questionnaire/CognitiveScreening" method="get">
-                <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">回上一頁</button>
-            </form>
-            <form action="/Questionnaire/Concentration" method="get">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
-            </form>
-        </div>
+                                <!-- 第三次測驗選項 -->
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <div class="flex justify-center items-center">
+                                        <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">0</label>
+                                        <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                        <label class="mx-2">1</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-100">
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">每次分數</td>
+                            <td class="border border-gray-300 px-4 py-2" id="firstTotal">/ 10</td>
+                            <td class="border border-gray-300 px-4 py-2" id="secondTotal">/ 10</td>
+                            <td class="border border-gray-300 px-4 py-2" id="thirdTotal">/ 10</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 最後完成時間 -->
+            <div class="mt-4 flex items-center">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">最後完成時間 (分:秒)：</span>
+                <input type="text"
+                       name="CompletionTime"
+                       class="border-b border-dotted text-lg font-semibold w-24 px-2"
+                       placeholder="MM:SS"
+                       maxlength="5"
+                       pattern="^[0-5][0-9]:[0-5][0-9]$"
+                       title="請輸入正確的時間格式，例如 05:30">
+            </div>
+
+            <!-- 短期記憶總分 -->
+            <div class="flex items-center mt-4">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">短期記憶總分：</span>
+                <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span> / 30
+            </div>
+
+            <!-- 表單按鈕 -->
+            <div class="flex justify-between space-x-4 mt-4">
+                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
+                    回上一頁
+                </button>
+                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                    接續下一頁
+                </button>
+            </div>
+        </form>
     </div>
 
     <script>

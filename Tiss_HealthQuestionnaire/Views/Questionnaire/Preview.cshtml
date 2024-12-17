@@ -657,22 +657,19 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="border px-4 py-2">詞彙</th>
-                            <th class="border px-4 py-2">第一次</th>
-                            <th class="border px-4 py-2">第二次</th>
-                            <th class="border px-4 py-2">第三次</th>
+                            <th class="border px-4 py-2">第一次分數</th>
+                            <th class="border px-4 py-2">第二次分數</th>
+                            <th class="border px-4 py-2">第三次分數</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.ImmediateMemoryDetails)
                         {
                             <tr>
-                                <td class="border px-4 py-2">@item.OrderNumber</td>
                                 <td class="border px-4 py-2">@item.Word</td>
-                                <td class="border px-4 py-2">@item.CompletionTime</td>
-                                @*<td class="border px-4 py-2">@item.Word</td>
-                                    <td class="border px-4 py-2">@item.FirstTestScore</td>
-                                    <td class="border px-4 py-2">@item.SecondTestScore</td>
-                                    <td class="border px-4 py-2">@item.ThirdTestScore</td>*@
+                                <td class="border px-4 py-2">@item.FirstTestScore</td>
+                                <td class="border px-4 py-2">@item.SecondTestScore</td>
+                                <td class="border px-4 py-2">@item.ThirdTestScore</td>
                             </tr>
                         }
                     </tbody>
@@ -682,7 +679,124 @@
                     <p><strong>完成時間：</strong> @Model.CompletionTime</p>
                 </div>
             }
+            else
+            {
+                <p class="text-red-500">目前無可顯示的短期記憶數據。</p>
+            }
         </div>
+
+        <!-- 醫療團隊-認知篩檢-專注力(3)-->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 專注力 (Concentration):</h3>
+            @if (Model.ConcentrationDetails != null && Model.ConcentrationDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">List A</th>
+                            <th class="border px-4 py-2">List B</th>
+                            <th class="border px-4 py-2">List C</th>
+                            <th class="border px-4 py-2">回答</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ConcentrationDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.ListA</td>
+                                <td class="border px-4 py-2">@item.ListB</td>
+                                <td class="border px-4 py-2">@item.ListC</td>
+                                <td class="border px-4 py-2">@((item.Score == 1) ? "Y" : "N")</td>
+                                <td class="border px-4 py-2">@item.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    <p><strong>專注力總分：</strong> @Model.ConcentrationTotalScore / 4</p>
+                </div>
+            }
+        </div>
+
+        <!-- 醫療團隊-認知篩檢-協調與平衡測驗(4)-->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 協調與平衡測驗 (Coordination and Balance Examination):</h3>
+
+            @if (Model.CoordinationAndBalanceDetails != null && Model.CoordinationAndBalanceDetails.Any())
+            {
+                foreach (var item in Model.CoordinationAndBalanceDetails)
+                {
+                    <!-- 測試基本信息 -->
+                    <div class="mb-4">
+                        <p><strong>測試腳：</strong> @item.TestFoot</p>
+                        <p><strong>測試平面：</strong> @item.TestSurface</p>
+                        <p><strong>腳穿著：</strong> @item.Footwear</p>
+                    </div>
+
+                    <!-- 錯誤扣分結果 -->
+                    <div class="mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">錯誤扣分：</h4>
+                        <table class="w-full border-collapse border border-gray-300 text-center">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border px-4 py-2">動作</th>
+                                    <th class="border px-4 py-2">錯誤次數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">雙腳站立</td>
+                                    <td class="border px-4 py-2">@item.DoubleLegError</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">腳跟前後站立</td>
+                                    <td class="border px-4 py-2">@item.TandemError</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">單腳站立</td>
+                                    <td class="border px-4 py-2">@item.SingleLegError</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 快速走路結果 -->
+                    <div class="mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h4>
+                        <table class="w-full border-collapse border border-gray-300 text-center">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border px-4 py-2">第一次</th>
+                                    <th class="border px-4 py-2">第二次</th>
+                                    <th class="border px-4 py-2">第三次</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">@item.FirstTime 秒</td>
+                                    <td class="border px-4 py-2">@item.SecondTime 秒</td>
+                                    <td class="border px-4 py-2">@item.ThirdTime 秒</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+
+            <!-- 總計 -->
+            <div class="mt-4">
+                <p><strong>總錯誤次數：</strong> @Model.CoordinationAndBalanceTotalErrors / 30</p>
+                <p><strong>平均時間：</strong> @Model.CoordinationAndBalanceAverageTime 秒</p>
+                <p><strong>最快時間：</strong> @Model.CoordinationAndBalanceFastestTime 秒</p>
+            </div>
+        </div>
+
+        <!-- 醫療團隊-認知篩檢-延遲記憶(5)-->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 延遲記憶 (DelayedRecall):</h3>
+        </div>
+
     </div>
 
     <!-- 操作按鈕 -->
