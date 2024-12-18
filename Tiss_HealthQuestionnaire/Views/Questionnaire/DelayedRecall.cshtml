@@ -12,60 +12,51 @@
 <body>
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">延遲記憶 (Delayed Recall)</h2>
-        <p class="mb-4">請選手回想複誦上述提到的十個詞彙。(0 錯誤；1 正確)</p>
-
-        <!-- 延遲記憶表格 -->
-        <table class="min-w-full bg-white border border-gray-300 text-center">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-gray-300 px-4 py-2">詞彙</th>
-                    <th class="border border-gray-300 px-4 py-2">分數</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="hover:bg-gray-100">
-                        <!-- 詞彙 -->
-                        <td class="border border-gray-300 px-4 py-2">@item.Word</td>
-
-                        <!-- 分數選項 -->
-                        <td class="border border-gray-300 px-4 py-2">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600"> 0
-                            </label>
-                            <label class="inline-flex items-center ml-4">
-                                <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600"> 1
-                            </label>
+        <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的十個詞彙。(0錯誤；1正確)</h3>
+        <form method="post" action="/Questionnaire/SaveDelayedRecall">
+            <table class="min-w-full bg-white border border-gray-300 text-center">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">詞彙</th>
+                        <th class="border border-gray-300 px-4 py-2">分數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="border px-4 py-2">@item.Word</td>
+                            <td class="border px-4 py-2">
+                                <label>
+                                    <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option"> 0
+                                </label>
+                                <label class="ml-4">
+                                    <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option"> 1
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100">
+                        <td class="border px-4 py-2 font-semibold">總分</td>
+                        <td class="border px-4 py-2 font-semibold">
+                            <span id="totalScore">0</span> / @Model.Count()
                         </td>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr class="bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2 font-semibold">總分</td>
-                    <td class="border border-gray-300 px-4 py-2 font-semibold">
-                        <span id="totalScore">0</span> / 10
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                </tfoot>
+            </table>
 
-        <!-- 測驗開始時間 -->
-        <div class="mt-4">
-            <label class="block mb-2 font-semibold">測驗開始時間：</label>
-            <input type="time" class="border border-gray-300 rounded w-1/4 px-3 py-2" placeholder="請輸入測驗開始時間">
-        </div>
-
-        <!-- 表單按鈕 -->
-        <div class="flex justify-between space-x-4 mt-4">
-            <form action="/Questionnaire/CoordinationAndBalanceExamination" method="get" class="mt-4">
-                <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">回上一頁</button>
-            </form>
-            <form action="/Questionnaire/CognitiveScreeningTotalScore" method="get" class="mt-4">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">查看總分</button>
-            </form>
-        </div>
+            <!-- 按鈕 -->
+            <div class="mt-4 flex justify-between">
+                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
+                    回上一頁
+                </button>
+                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                    查看總分
+                </button>
+            </div>
+        </form>
     </div>
 
     <script src="~/Scripts/jquery-3.7.0.min.js"></script>

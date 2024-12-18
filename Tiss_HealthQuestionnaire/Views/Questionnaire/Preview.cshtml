@@ -198,30 +198,30 @@
 
         <!-- 顯示開刀史 -->
         @*<div class="mb-8">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
-                @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
+            @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
 
-                @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
-                                <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
+            @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
+                            <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.SurgeryHistoryDetails)
+                        {
+                            <tr>
+                                <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
+                                <td class="border border-gray-300 p-2">@detail.OperationOption</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var detail in Model.SurgeryHistoryDetails)
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
-                                    <td class="border border-gray-300 p-2">@detail.OperationOption</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>*@
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>*@
 
         <!-- 顯示現在病史 -->
         <div class="mb-8">
@@ -792,9 +792,39 @@
             </div>
         </div>
 
-        <!-- 醫療團隊-認知篩檢-延遲記憶(5)-->
+        <!-- 醫療團隊-認知篩檢-延遲記憶(5) -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 延遲記憶 (DelayedRecall):</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 延遲記憶 (Delayed Recall):</h3>
+            @if (Model.DelayedRecallDetails != null && Model.DelayedRecallDetails.Any())
+            {
+                <table class="w-full border-collapse border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">項次</th>
+                            <th class="border px-4 py-2">詞彙</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DelayedRecallDetails)
+                        {
+                            <tr>
+                                <td class="border px-4 py-2">@item.OrderNumber</td>
+                                <td class="border px-4 py-2">@item.Word</td>
+                                <td class="border px-4 py-2">@item.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    @*<p><strong>延遲記憶總分：</strong> @Session["DelayedRecallTotalScore"] / 10</p>*@
+                    <p><strong>延遲記憶總分：</strong> @Model.DelayedRecallTotalScore / 10</p>
+                </div>
+            }
+            else
+            {
+                <p class="text-red-500">尚未填寫延遲記憶部分。</p>
+            }
         </div>
 
     </div>

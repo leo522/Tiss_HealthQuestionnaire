@@ -173,7 +173,6 @@
     <Compile Include="Models\DelayedRecall.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DelayedRecallViewModel.cs" />
     <Compile Include="Models\FamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>

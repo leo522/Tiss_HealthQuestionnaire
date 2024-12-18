@@ -446,7 +446,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return View("Concentration", viewModel);
         }
 
-
         /// 協調與平衡測驗
         public ActionResult CoordinationAndBalanceExamination()
         {
@@ -479,13 +478,29 @@ namespace Tiss_HealthQuestionnaire.Controllers
             // 從資料庫中讀取問卷問題
             var questions = _db.DelayedRecall.ToList();
 
-            // 將問題列表傳送到前端作為 ViewModel
-            var viewModel = questions.Select((q, index) => new DelayedRecallViewModel
-            {
-                OrderNumber = index + 1,
-                Word = q.Word
+            var delayedrecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<string, int>;
 
+            var viewModel = questions.Select(q =>
+            {
+                int Scores = 0;
+
+                delayedrecallAnswers?.TryGetValue($"score_{q.ID}", out Scores);
+
+                return new DelayedRecallViewModel
+                { 
+                    OrderNumber = q.ID,
+                    Word = q.Word,
+                    Score = Scores,
+                };
             }).ToList();
+
+            //// 將問題列表傳送到前端作為 ViewModel
+            //var viewModel = questions.Select((q, index) => new DelayedRecallViewModel
+            //{
+            //    OrderNumber = index + 1,
+            //    Word = q.Word
+
+            //}).ToList();
 
             return View("DelayedRecall", viewModel);
             //return PartialView("_DelayedRecall", viewModel);
@@ -1342,6 +1357,33 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
+                #region 醫療團隊評估-認知篩檢-延遲記憶
+                var delayedrecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<int, int>;
+
+                var delayedrecallQuestions = _db.DelayedRecall.ToList();
+
+                foreach (var q in delayedrecallQuestions) 
+                {
+                    int Score = 0;
+
+                    delayedrecallAnswers?.TryGetValue(q.ID, out Score);
+
+                    model.DelayedRecallDetails.Add(new DelayedRecallViewModel
+                    { 
+                        OrderNumber = q.ID,
+                        Word = q.Word,
+                        Score = Score,
+                    });
+                }
+
+                model.DelayedRecallTotalScore = delayedrecallAnswers?.Values.Sum() ?? 0;
+                //計算延遲記憶總分
+                //if (delayedrecallAnswers != null)
+                //{ 
+                //    model.DelayedRecallTotalScore = delayedrecallAnswers.Values.Sum();
+                //}
+                #endregion
+
                 #region 骨科篩檢
                 var orthopaedicScreenings = _db.OrthopaedicScreening.ToList();
                 foreach (var item in orthopaedicScreenings)
@@ -1661,7 +1703,45 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 保存醫療團隊-認知篩檢-延遲記憶
+        [HttpPost]
+        public ActionResult SaveDelayedRecall(FormCollection form)
+        {
+            try
+            {
+                string action = form["action"];
 
+                if (action == "Previous")
+                {
+                    // 返回上一頁
+                    return RedirectToAction("CoordinationAndBalanceExamination");
+                }
+
+                var scores = new Dictionary<int, int>(); //收集分數
+
+                foreach (var key in form.AllKeys)
+                {
+                    if (key.StartsWith("score_"))
+                    {
+                        int orderNumber = int.Parse(key.Split('_')[1]);
+                        int score = int.TryParse(form[key], out var value) ? value : 0;
+                        scores[orderNumber] = score;
+                    }
+                }
+                
+                int totalScore = scores.Values.Sum(); //計算總分
+
+                // 保存到 Session
+                Session["DelayedRecallAnswers"] = scores;
+                Session["DelayedRecallTotalScore"] = totalScore;
+
+                return RedirectToAction("CognitiveScreeningTotalScore");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"保存數據時發生錯誤：{ex.Message}");
+                return View("DelayedRecall");
+            }
+        }
         #endregion
     }
 }
