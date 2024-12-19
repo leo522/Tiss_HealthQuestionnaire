@@ -163,6 +163,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #region 醫療團隊-認知篩檢-延遲記憶(5)
         public List<DelayedRecallViewModel> DelayedRecallDetails { get; set; } = new List<DelayedRecallViewModel>();
         public int DelayedRecallTotalScore { get; set; } //延遲記憶總分
+        public string DelayedRecallStartTime { get; set; } // 測驗開始時間
         #endregion
 
         #region 骨科篩檢

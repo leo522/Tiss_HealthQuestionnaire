@@ -47,6 +47,12 @@
                 </tfoot>
             </table>
 
+            <!-- 測驗開始時間 -->
+            <div class="mt-4 flex items-center">
+                <label for="testStartTime" class="mr-2 font-semibold">測驗開始時間：</label>
+                <input type="text" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" placeholder="HH:mm">
+            </div>
+
             <!-- 按鈕 -->
             <div class="mt-4 flex justify-between">
                 <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
@@ -59,7 +65,6 @@
         </form>
     </div>
 
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function () {
             // 初始化並加載保存的數據
@@ -92,7 +97,8 @@
                 });
 
                 // 保存測驗開始時間
-                const startTime = $('input[type="text"]').val();
+                //const startTime = $('input[type="text"]').val();
+                const startTime = $('#testStartTime').val();
                 sessionStorage.setItem('DelayedRecallStartTime', startTime);
             }
 
@@ -114,7 +120,8 @@
                 // 加載測驗開始時間
                 const savedStartTime = sessionStorage.getItem('DelayedRecallStartTime');
                 if (savedStartTime !== null) {
-                    $('input[type="text"]').val(savedStartTime);
+                    /*$('input[type="text"]').val(savedStartTime);*/
+                    $('#testStartTime').val(savedStartTime);
                 }
             }
         });

@@ -478,13 +478,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
             // 從資料庫中讀取問卷問題
             var questions = _db.DelayedRecall.ToList();
 
-            var delayedrecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<string, int>;
+            var delayedrecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<int, int>;
+
+            var delayedRecallStartTime = Session["DelayedRecallStartTime"] as string;
 
             var viewModel = questions.Select(q =>
             {
                 int Scores = 0;
 
-                delayedrecallAnswers?.TryGetValue($"score_{q.ID}", out Scores);
+                delayedrecallAnswers?.TryGetValue(q.ID, out Scores);
 
                 return new DelayedRecallViewModel
                 { 
@@ -501,7 +503,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             //    Word = q.Word
 
             //}).ToList();
-
+            ViewBag.DelayedRecallStartTime = delayedRecallStartTime; //傳遞開始時間
             return View("DelayedRecall", viewModel);
             //return PartialView("_DelayedRecall", viewModel);
         }
@@ -1362,6 +1364,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 var delayedrecallQuestions = _db.DelayedRecall.ToList();
 
+                var delayedRecallStartTime = Session["DelayedRecallStartTime"] as string;
+                model.DelayedRecallStartTime = delayedRecallStartTime; // 傳遞開始時間
+
                 foreach (var q in delayedrecallQuestions) 
                 {
                     int Score = 0;
@@ -1712,8 +1717,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 if (action == "Previous")
                 {
-                    // 返回上一頁
-                    return RedirectToAction("CoordinationAndBalanceExamination");
+                    return RedirectToAction("CoordinationAndBalanceExamination"); //返回上一頁
                 }
 
                 var scores = new Dictionary<int, int>(); //收集分數
@@ -1727,10 +1731,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         scores[orderNumber] = score;
                     }
                 }
-                
-                int totalScore = scores.Values.Sum(); //計算總分
 
-                // 保存到 Session
+                // 保存測驗開始時間
+                string startTime = form["testStartTime"];
+                Session["DelayedRecallStartTime"] = startTime;
+
+                int totalScore = scores.Values.Sum(); //保存計算總分
                 Session["DelayedRecallAnswers"] = scores;
                 Session["DelayedRecallTotalScore"] = totalScore;
 
