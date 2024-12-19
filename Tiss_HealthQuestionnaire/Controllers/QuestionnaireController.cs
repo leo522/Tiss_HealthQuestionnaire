@@ -354,7 +354,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 腦震盪篩檢-防護員評估
-        /// 認知篩檢-定位
+        /// 認知篩檢-定位(1)
         public ActionResult CognitiveScreening()
         {
             string loggedInUserName = Session["UserName"] as string;
@@ -382,11 +382,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
             }
 
-
             return View("CognitiveScreening", viewModel);
         }
 
-        /// 認知篩檢-短期記憶
+        /// 認知篩檢-短期記憶(2)
         public ActionResult ImmediateMemory()
         {
             var questions = _db.ImmediateMemory.ToList();
@@ -394,6 +393,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             // 從 Session 中讀取已保存的數據
             var immediateMemoryAnswers = Session["ImmediateMemoryAnswers"] as Dictionary<string, int>;
             var completionTime = Session["ImmediateMemoryCompletionTime"] as string ?? "00:00";
+
+            int totalScore = 0;// 計算短期記憶總分
 
             // 為每個問題生成 ViewModel
             var viewModel = questions.Select(q =>
@@ -405,6 +406,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 immediateMemoryAnswers?.TryGetValue($"second_{q.ID}", out secondScore);
                 immediateMemoryAnswers?.TryGetValue($"third_{q.ID}", out thirdScore);
 
+                totalScore += firstScore + secondScore + thirdScore;
+
                 return new ImmediateMemoryViewModel
                 {
                     OrderNumber = q.ID,
@@ -415,11 +418,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     CompletionTime = completionTime
                 };
             }).ToList();
+    
+            Session["ImmediateMemoryTotalScore"] = totalScore; //保存短期記憶總分到 Session
 
             return View("ImmediateMemory", viewModel);
         }
 
-        /// 認知篩檢-專注力
+        /// 認知篩檢-專注力(3)
         public ActionResult Concentration()
         {
             // 從資料庫或其他來源加載數據
@@ -446,7 +451,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return View("Concentration", viewModel);
         }
 
-        /// 協調與平衡測驗
+        /// 協調與平衡測驗(4)
         public ActionResult CoordinationAndBalanceExamination()
         {
             // 初始化模型
@@ -472,7 +477,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return View(model);
         }
 
-        /// 延遲記憶
+        /// 延遲記憶(5)
         public ActionResult DelayedRecall()
         {
             // 從資料庫中讀取問卷問題
@@ -508,7 +513,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             //return PartialView("_DelayedRecall", viewModel);
         }
 
-        /// 認知篩檢分數總合
+        /// 認知篩檢分數總合(6)
         public ActionResult CognitiveScreeningTotalScore()
         {
             // 從資料庫中讀取認知篩檢的各項分數
@@ -1248,7 +1253,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 #endregion
 
-                #region 醫療團隊評估-認知篩檢-定位
+                #region 醫療團隊評估-認知篩檢-定位(1)
                 var CognitiveScreeningAnswer = Session["CognitiveScreeningAnswers"] as Dictionary<int, int>;
 
                 if (CognitiveScreeningAnswer != null)
@@ -1275,7 +1280,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 #endregion
 
-                #region 醫療團隊評估-認知篩檢-短期記憶
+                #region 醫療團隊評估-認知篩檢-短期記憶(2)
                 var immediateMemoryAnswers = Session["ImmediateMemoryAnswers"] as Dictionary<string, int>;
                 var immediateMemoryQuestions = _db.ImmediateMemory.ToList();
 
@@ -1307,7 +1312,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 #endregion
 
-                #region 醫療團隊評估-認知篩檢-專注力
+                #region 醫療團隊評估-認知篩檢-專注力(3)
                 var concentrationAnswers = Session["ConcentrationScores"] as Dictionary<int, int>;
                 var concentrationQuestions = _db.Concentration.ToList();
 
@@ -1335,7 +1340,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
-                #region 醫療團隊評估-認知篩檢-協調與平衡測驗
+                #region 醫療團隊評估-認知篩檢-協調與平衡測驗(4)
                 var coordinationData = Session["CoordinationAndBalanceData"] as CoordinationAndBalanceExaminationViewModel;
                 if (coordinationData != null)
                 {
@@ -1359,7 +1364,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
                 #endregion
 
-                #region 醫療團隊評估-認知篩檢-延遲記憶
+                #region 醫療團隊評估-認知篩檢-延遲記憶(5)
                 var delayedrecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<int, int>;
 
                 var delayedrecallQuestions = _db.DelayedRecall.ToList();
@@ -1382,11 +1387,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
 
                 model.DelayedRecallTotalScore = delayedrecallAnswers?.Values.Sum() ?? 0;
-                //計算延遲記憶總分
-                //if (delayedrecallAnswers != null)
-                //{ 
-                //    model.DelayedRecallTotalScore = delayedrecallAnswers.Values.Sum();
-                //}
+                #endregion
+
+                #region 醫療團隊評估-認知篩檢-分數總合(6)
+
+                var orientationScore = Session["OrientationScore"] as int? ?? 0;
+                var immediateMemoryScore = Session["ImmediateMemoryScore"] as int? ?? 0;
+                var concentrationScore = Session["ConcentrationScore"] as int? ?? 0;
+                var delayedRecallScore = Session["DelayedRecallScore"] as int? ?? 0;
+
+                // 計算總分
+                model.CognitiveScreeningTotalScores = orientationScore + immediateMemoryScore + concentrationScore + delayedRecallScore;
+
                 #endregion
 
                 #region 骨科篩檢
@@ -1546,7 +1558,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存醫療團隊-認知篩檢-定位
+        #region 保存醫療團隊-認知篩檢-定位(1)
         [HttpPost]
         public ActionResult SaveCognitiveScreening(FormCollection form)
         {
@@ -1577,7 +1589,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存醫療團隊-認知篩檢-短期記憶
+        #region 保存醫療團隊-認知篩檢-短期記憶(2)
         [HttpPost]
         public ActionResult SaveImmediateMemory(FormCollection form)
         {
@@ -1619,7 +1631,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存醫療團隊-認知篩檢-專注力
+        #region 保存醫療團隊-認知篩檢-專注力(3)
         [HttpPost]
         public ActionResult SaveConcentration(FormCollection form)
         {
@@ -1656,7 +1668,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存醫療團隊-認知篩檢-協調與平衡測驗
+        #region 保存醫療團隊-認知篩檢-協調與平衡測驗(4)
         [HttpPost]
         public ActionResult SaveCoordinationAndBalanceExamination(FormCollection form)
         {
@@ -1707,7 +1719,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存醫療團隊-認知篩檢-延遲記憶
+        #region 保存醫療團隊-認知篩檢-延遲記憶(5)
         [HttpPost]
         public ActionResult SaveDelayedRecall(FormCollection form)
         {
@@ -1746,6 +1758,44 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 ModelState.AddModelError("", $"保存數據時發生錯誤：{ex.Message}");
                 return View("DelayedRecall");
+            }
+        }
+        #endregion
+
+        #region 保存醫療團隊-認知篩檢-分數總合(6)
+        [HttpPost]
+        public ActionResult SaveCSTotalScore(FormCollection form) 
+        {
+            try
+            {
+                // 收集各項分數
+                int orientationScore = int.TryParse(form["OrientationScore"], out var oScore) ? oScore : 0;
+                int immediateMemoryScore = int.TryParse(form["ImmediateMemoryScore"], out var imScore) ? imScore : 0;
+                int concentrationScore = int.TryParse(form["ConcentrationScore"], out var cScore) ? cScore : 0;
+                int delayedRecallScore = int.TryParse(form["DelayedRecallScore"], out var drScore) ? drScore : 0;
+
+                // 計算總分
+                int totalScore = orientationScore + immediateMemoryScore + concentrationScore + delayedRecallScore;
+
+                // 保存到資料庫
+                var totalScoreRecord = new CognitiveScreeningTotalScoreViewModel
+                {
+                    OrientationScore = orientationScore,
+                    ImmediateMemoryScore = immediateMemoryScore,
+                    ConcentrationScore = concentrationScore,
+                    DelayedRecallScore = delayedRecallScore,
+                    TotalScore = totalScore,
+                    //RecordedDate = DateTime.Now // 假設需要保存記錄時間
+                };
+
+                Session["CognitiveScreeningTotalScores"] = totalScore;  //更新 Session
+
+                return RedirectToAction("Main");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "保存分數總合時發生錯誤：" + ex.Message);
+                return View("CognitiveScreeningTotalScore");
             }
         }
         #endregion

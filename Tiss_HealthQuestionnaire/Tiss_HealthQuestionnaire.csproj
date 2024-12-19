@@ -157,7 +157,6 @@
     <Compile Include="Models\CognitiveScreeningScores.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CognitiveScreeningViewModel.cs" />
     <Compile Include="Models\Concentration.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -200,7 +199,6 @@
     <Compile Include="Models\ImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ImmediateMemoryViewModel.cs" />
     <Compile Include="Models\InjuryStatus.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>

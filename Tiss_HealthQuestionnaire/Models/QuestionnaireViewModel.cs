@@ -166,6 +166,11 @@ namespace Tiss_HealthQuestionnaire.Models
         public string DelayedRecallStartTime { get; set; } // 測驗開始時間
         #endregion
 
+        #region 醫療團隊-認知篩檢-分數總合(6)
+        public List<CognitiveScreeningTotalScoreViewModel> CognitiveScreeningTotalScoreDetails { get; set; } = new List<CognitiveScreeningTotalScoreViewModel>();
+        public int CognitiveScreeningTotalScores { get; set; }
+        #endregion
+
         #region 骨科篩檢
         public List<OrthopaedicScreeninGViewModel> OrthopaedicScreeningDetails { get; set; } = new List<OrthopaedicScreeninGViewModel>();
         #endregion
@@ -428,8 +433,15 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
-    #region 醫療團隊-認知篩檢-各項總分
-
+    #region 醫療團隊-認知篩檢-分數總合(6)
+    public class CognitiveScreeningTotalScoreViewModel 
+    {
+        public int OrientationScore { get; set; }
+        public int ImmediateMemoryScore { get; set; }
+        public int ConcentrationScore { get; set; }
+        public int DelayedRecallScore { get; set; }
+        public int TotalScore { get; set; }
+    }
     #endregion
 
     #region 骨科篩檢

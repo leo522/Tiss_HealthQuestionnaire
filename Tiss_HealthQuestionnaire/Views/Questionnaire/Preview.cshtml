@@ -817,7 +817,6 @@
                     </tbody>
                 </table>
                 <div class="mt-4">
-                    @*<p><strong>延遲記憶總分：</strong> @Session["DelayedRecallTotalScore"] / 10</p>*@
                     <p><strong>延遲記憶總分：</strong> @Model.DelayedRecallTotalScore / 10</p>
                     <p><strong>測驗開始時間：</strong> @Model.DelayedRecallStartTime</p>
                 </div>
@@ -827,24 +826,60 @@
                 <p class="text-red-500">尚未填寫延遲記憶部分。</p>
             }
         </div>
+
+        <!-- 醫療團隊-認知篩檢-分數總合(6) -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢 - 分數總合 (Delayed Recall):</h3>
+            <table class="w-full border-collapse border border-gray-300 text-center">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border px-4 py-2">項目</th>
+                        <th class="border px-4 py-2">分數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border px-4 py-2">定位 (Orientation)</td>
+                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 5</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">短期記憶 (Immediate Memory)</td>
+                        <td class="border px-4 py-2">@Model.ImmediateMemoryTotalScore / 30</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">專注力 (Concentration)</td>
+                        <td class="border px-4 py-2">@Model.ConcentrationTotalScore / 4</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">延遲記憶 (Delayed Recall)</td>
+                        <td class="border px-4 py-2">@Model.DelayedRecallTotalScore / 10</td>
+                    </tr>
+                    <tr class="font-bold">
+                        <td class="border px-4 py-2">總分</td>
+                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScores / 49</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
-    <!-- 操作按鈕 -->
-    <div class="flex justify-between items-center mt-6">
-        <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
-            返回編輯
-        </a>
-        <form method="post" action="/Questionnaire/Submit" class="inline">
-            <input type="hidden" name="specialist" value="@Model.Specialist" />
-            <input type="hidden" name="fillName" value="@Model.FillName" />
-            <input type="hidden" name="atheNum" value="@Model.AtheNum" />
-            <input type="hidden" name="gender" value="@Model.Gender" />
-            <input type="hidden" name="fillDate" value="@Model.FillDate" />
-            <!-- 隱藏其他問卷的值 -->
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
-                確認送出
-            </button>
-        </form>
-    </div>
+        <!-- 操作按鈕 -->
+        <div class="flex justify-between items-center mt-6">
+            <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
+                返回編輯
+            </a>
+            <form method="post" action="/Questionnaire/Submit" class="inline">
+                <input type="hidden" name="specialist" value="@Model.Specialist" />
+                <input type="hidden" name="fillName" value="@Model.FillName" />
+                <input type="hidden" name="atheNum" value="@Model.AtheNum" />
+                <input type="hidden" name="gender" value="@Model.Gender" />
+                <input type="hidden" name="fillDate" value="@Model.FillDate" />
+                <!-- 隱藏其他問卷的值 -->
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
+                    確認送出
+                </button>
+            </form>
+        </div>
 </body>
 </html>

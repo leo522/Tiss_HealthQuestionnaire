@@ -140,7 +140,10 @@
                 const firstTotal = parseInt($('#firstTotal').text()) || 0;
                 const secondTotal = parseInt($('#secondTotal').text()) || 0;
                 const thirdTotal = parseInt($('#thirdTotal').text()) || 0;
+                const totalScore = firstTotal + secondTotal + thirdTotal;
+
                 $('#totalScore').text(firstTotal + secondTotal + thirdTotal);
+                sessionStorage.setItem('ImmediateMemoryScore', totalScore);
             }
 
             function saveScores() {

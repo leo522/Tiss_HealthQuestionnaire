@@ -15,51 +15,49 @@
 <body>
     <div class="container mx-auto px-4 py-8">
         <h2 class="text-xl font-bold mb-4">(六) 認知篩檢 (Cognitive Screening) 分數總合</h2>
-        <table class="table-auto border-collapse border border-black w-full text-center">
-            <thead>
-                <tr>
-                    <th class="border border-black px-4 py-2">項目</th>
-                    <th class="border border-black px-4 py-2">分數</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 定位 (Orientation) -->
-                <tr>
-                    <td class="border border-black px-4 py-2">定位 (Orientation)</td>
-                    <td class="border border-black px-4 py-2" id="orientationScore">/5</td>
-                </tr>
-                <!-- 短期記憶 (Immediate Memory) -->
-                <tr>
-                    <td class="border border-black px-4 py-2">短期記憶 (Immediate Memory)</td>
-                    <td class="border border-black px-4 py-2" id="immediateMemoryScore">/30</td>
-                </tr>
-                <!-- 專注力 (Concentration) -->
-                <tr>
-                    <td class="border border-black px-4 py-2">專注力 (Concentration)</td>
-                    <td class="border border-black px-4 py-2" id="concentrationScore">/4</td>
-                </tr>
-                <!-- 延遲記憶 (Delayed Recall) -->
-                <tr>
-                    <td class="border border-black px-4 py-2">延遲記憶 (Delayed Recall)</td>
-                    <td class="border border-black px-4 py-2" id="delayedRecallScore">/10</td>
-                </tr>
-                <!-- 總分 -->
-                <tr class="font-bold">
-                    <td class="border border-black px-4 py-2">總分</td>
-                    <td class="border border-black px-4 py-2" id="totalScore">/49</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="flex justify-between space-x-4 mt-4">
-        <form action="/Questionnaire/DelayedRecall" method="get" class="mt-4">
-            <button type="submit" class="btn btn-warning">回上一頁</button>
-        </form>
-        <form action="/Questionnaire/Main" method="get" class="mt-4">
-            <button type="submit" class="btn btn-success">回問卷首頁</button>
-        </form>
-    </div>
+        <form method="post" action="/Questionnaire/SaveCSTotalScore">
+            <table class="table-auto border-collapse border border-black w-full text-center">
+                <thead>
+                    <tr>
+                        <th class="border border-black px-4 py-2">項目</th>
+                        <th class="border border-black px-4 py-2">分數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 定位 (Orientation) -->
+                    <tr>
+                        <td class="border border-black px-4 py-2">定位 (Orientation)</td>
+                        <td class="border border-black px-4 py-2" id="orientationScore">/5</td>
+                    </tr>
+                    <!-- 短期記憶 (Immediate Memory) -->
+                    <tr>
+                        <td class="border border-black px-4 py-2">短期記憶 (Immediate Memory)</td>
+                        <td class="border border-black px-4 py-2" id="immediateMemoryScore">/30</td>
+                    </tr>
+                    <!-- 專注力 (Concentration) -->
+                    <tr>
+                        <td class="border border-black px-4 py-2">專注力 (Concentration)</td>
+                        <td class="border border-black px-4 py-2" id="concentrationScore">/4</td>
+                    </tr>
+                    <!-- 延遲記憶 (Delayed Recall) -->
+                    <tr>
+                        <td class="border border-black px-4 py-2">延遲記憶 (Delayed Recall)</td>
+                        <td class="border border-black px-4 py-2" id="delayedRecallScore">/10</td>
+                    </tr>
+                    <!-- 總分 -->
+                    <tr class="font-bold">
+                        <td class="border border-black px-4 py-2">總分</td>
+                        <td class="border border-black px-4 py-2" id="totalScore">/49</td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <div class="flex justify-between space-x-4 mt-4">
+                <button type="submit" class="btn btn-warning">回上一頁</button>
+                <button type="submit" class="btn btn-success">回問卷首頁</button>
+            </div>
+        </form>
+    </div>
     <script>
         $(document).ready(function () {
             // 從 sessionStorage 獲取各頁面的分數
