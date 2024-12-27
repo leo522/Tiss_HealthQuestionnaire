@@ -57,7 +57,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var pastHealthItems = _db.PastHealth.ToList();
             return View("PastHealth", pastHealthItems);
-            //return PartialView("_PastHealth", pastHealthItems);
         }
         #endregion
 
@@ -66,7 +65,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var allergicHistoryItems = _db.AllergicHistory.ToList();
             return View("AllergicHistory", allergicHistoryItems);
-            //return PartialView("_AllergicHistory", allergicHistoryItems);
         }
         #endregion
 
@@ -75,16 +73,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var familyHistory = _db.FamilyHistory.ToList();
             return View("FamilyHistory", familyHistory);
-            //return PartialView("_FamilyHistory", familyHistory);
         }
         #endregion
 
-        #region 過去病史Past history
+        #region 過去病史
         public ActionResult PastHistory()
         {
             var pastHistory = _db.PastHistory.ToList();
             return View("PastHistory", pastHistory);
-            //return PartialView("_PastHistory", pastHistory);
         }
         #endregion
 
@@ -93,7 +89,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var surgeryHistory = _db.SurgeryHistory.ToList();
             return View("SurgeryHistory", surgeryHistory);
-            //return PartialView("_SurgeryHistory", surgeryHistory);
         }
         #endregion
 
@@ -102,7 +97,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var presentIllness = _db.PresentIllness.ToList();
             return View("PresentIllness", presentIllness);
-            //return PartialView("_PresentIllness", presentIllness);
         }
         #endregion
 
@@ -112,7 +106,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var pastDrugs = _db.PastDrugs.Where(drug => drug.ID != 13).ToList();
 
             return View("PastDrugs", pastDrugs);
-            //return PartialView("_PastDrugs", pastDrugs);
         }
         #endregion
 
@@ -121,7 +114,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var pastSupplements = _db.PastSupplements.ToList();
             return View("PastSupplements", pastSupplements);
-            //return PartialView("_PastSupplements", pastSupplements);
         }
         #endregion
 
@@ -130,7 +122,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var femaleQuestionnaire = _db.FemaleQuestionnaire.ToList();
             return View("FemaleQuestionnaire", femaleQuestionnaire);
-            //return PartialView("_FemaleQuestionnaire", femaleQuestionnaire);
         }
         #endregion
 
@@ -157,7 +148,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }).ToList();
 
                 return View("PastInjuryRestored", PastInjuryList);
-                //return PartialView("_PastInjury", PastInjuryList);
             }
             catch (Exception ex)
             {
@@ -169,14 +159,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var PastInjuryType = _db.PastInjuryType.ToList();
             return View("PastInjuryType", PastInjuryType);
-            //return PartialView("_PastInjuryType", PastInjuryType);
         }
 
         public ActionResult PastTreatmentMethod() //過去治療方式
         {
             var PastTreatmentMethod = _db.PastTreatmentMethod.ToList();
             return View("PastTreatmentMethod", PastTreatmentMethod);
-            //return PartialView("_PastTreatmentMethod", PastTreatmentMethod);
         }
         #endregion
 
@@ -187,7 +175,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 var nowInjury = _db.InjuryStatus.ToList();
 
-                // 將資料轉換為 InjuryStatusViewModel
                 var injuryList = nowInjury.Select(injury => new InjuryStatusViewModel
                 {
                     Id = injury.Id,
@@ -198,9 +185,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                                       injury.InjuryPart == "骨盆/薦椎")
                 }).ToList();
 
-                // 傳遞轉換後的 injuryList 到 Partial View
                 return View("NowInjuryRestored", injuryList);
-                //return PartialView("_NowInjuryRestored", injuryList);
             }
             catch (Exception ex)
             {
@@ -212,14 +197,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             var InjuryType = _db.InjuryType.ToList();
             return View("NowInjuryType", InjuryType);
-            //return PartialView("_NowInjuryType", InjuryType);
         }
 
         public ActionResult NowTreatmentMethod() //目前治療方式
         {
             var treatmentMethod = _db.TreatmentMethod.ToList();
             return View("NowTreatmentMethod", treatmentMethod);
-            //return PartialView("_NowTreatmentMethod", treatmentMethod);
         }
         #endregion
 
@@ -252,35 +235,27 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 心血管篩檢
         public ActionResult CardiovascularScreening()
         {
-            // 從資料庫中讀取所有的問卷問題
             var questions = _db.CardiovascularScreening.ToList();
 
-            // 為每個問題手動生成項次
             var viewModel = questions.Select((q, index) => new CardiovascularScreeningViewModel
             {
-                OrderNumber = index + 1,  // 自動遞增項次
+                OrderNumber = index + 1,  //自動遞增項次
                 Question = q.Question
             }).ToList();
 
             return PartialView("CardiovascularScreening", viewModel);
-            //return PartialView("_CardiovascularScreening", viewModel);
         }
         #endregion
 
         #region 腦震盪篩檢-選手自填
-        /// <summary>
         /// 第一部分 選手背景
-        /// </summary>
-        /// <returns></returns>
         public ActionResult ConcussionScreening()
         {
-            // 從資料庫中讀取問卷問題
             var questions = _db.ConcussionScreening.ToList();
 
-            //為每個問題手動生成項次
             var viewModel = questions.Select((q, index) => new ConcussionScreeningViewModel
             {
-                OrderNumber = index + 1,  // 自動遞增項次
+                OrderNumber = index + 1,  //自動遞增項次
                 Question = q.Question
             }).ToList();
 
@@ -292,7 +267,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     if (savedAnswers.ContainsKey(item.OrderNumber))
                     {
-                        item.Answer = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                        item.Answer = savedAnswers[item.OrderNumber]; //恢復用戶填寫的答案
                     }
                 }
             }
@@ -300,20 +275,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return View("ConcussionScreening", viewModel);
         }
 
-        /// <summary>
         /// 第二部分 症狀自我評估
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public ActionResult SymptomEvaluation()
         {
-            // 從資料庫中讀取問卷問題
             var questions = _db.SymptomEvaluation.ToList();
 
-            //為每個問題手動生成項次
             var viewModel = questions.Select((q, index) => new ConcussionScreeningViewModel
             {
-                OrderNumber = index + 1,  // 自動遞增項次
+                OrderNumber = index + 1,  //自動遞增項次
                 Question = q.SymptomItem
             }).ToList();
 
@@ -325,7 +295,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     if (savedAnswers.ContainsKey(item.OrderNumber))
                     {
-                        item.Answer = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                        item.Answer = savedAnswers[item.OrderNumber]; //恢復用戶填寫的答案
                     }
                 }
             }
@@ -337,19 +307,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 骨科篩檢
         public ActionResult OrthopaedicScreening()
         {
-            // 從資料庫中讀取問卷問題
             var questions = _db.OrthopaedicScreening.ToList();
 
-            // 將資料轉換為 ViewModel
             var viewModel = questions.Select((q, index) => new OrthopaedicScreeningViewModel
             {
-                OrderNumber = index + 1,  // 自動遞增項次
+                OrderNumber = index + 1,  //自動遞增項次
                 Instructions = q.Instructions,
                 ObservationPoints = q.ObservationPoints
             }).ToList();
 
             return View("OrthopaedicScreening", viewModel);
-            //return PartialView("_OrthopaedicScreening", viewModel);
         }
         #endregion
 
@@ -357,32 +324,39 @@ namespace Tiss_HealthQuestionnaire.Controllers
         /// 認知篩檢-定位(1)
         public ActionResult CognitiveScreening()
         {
-            string loggedInUserName = Session["UserName"] as string;
-            bool isAthleticTrainer = _db.Test_AthleticTrainer.Any(at => at.ATName == loggedInUserName && at.IsActive);
-
-            var questions = _db.CognitiveScreening.ToList();
-
-            // 為每個問題手動生成項次並轉換成 ViewModel
-            var viewModel = questions.Select((q, index) => new CognitiveScreeningViewModel
+            try
             {
-                OrderNumber = index + 1,  // 自動遞增項次
-                Question = q.Question     // 顯示問題
-            }).ToList();
+                string loggedInUserName = Session["UserName"] as string;
+                //bool isAthleticTrainer = _db.Test_AthleticTrainer.Any(at => at.ATName == loggedInUserName && at.IsActive);
+                bool isAthleticTrainer = _db.Test_AthleticTrainer.Where(at => at.ATName == loggedInUserName).Any(at => at.IsActive == true);
 
-            // 如果有暫存的數據，恢復填寫狀態
-            var savedAnswers = Session["OrientationAnswers"] as Dictionary<int, int>;
-            if (savedAnswers != null)
-            {
-                foreach (var item in viewModel)
+                var questions = _db.CognitiveScreening.ToList();
+
+                var viewModel = questions.Select((q, index) => new CognitiveScreeningViewModel
                 {
-                    if (savedAnswers.ContainsKey(item.OrderNumber))
+                    OrderNumber = index + 1,  // 自動遞增項次
+                    Question = q.Question     // 顯示問題
+                }).ToList();
+
+                var savedAnswers = Session["OrientationAnswers"] as Dictionary<int, int>; //如果有暫存的數據，恢復填寫狀態
+                if (savedAnswers != null)
+                {
+                    foreach (var item in viewModel)
                     {
-                        item.OrientationScore = savedAnswers[item.OrderNumber]; // 恢復用戶填寫的答案
+                        if (savedAnswers.ContainsKey(item.OrderNumber))
+                        {
+                            item.OrientationScore = savedAnswers[item.OrderNumber];
+                        }
                     }
                 }
-            }
 
-            return View("CognitiveScreening", viewModel);
+                return View("CognitiveScreening", viewModel);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         /// 認知篩檢-短期記憶(2)
@@ -1254,7 +1228,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 #endregion
 
                 #region 醫療團隊評估-認知篩檢-定位(1)
-                var CognitiveScreeningAnswer = Session["CognitiveScreeningAnswers"] as Dictionary<int, int>;
+                //var CognitiveScreeningAnswer = Session["CognitiveScreeningAnswers"] as Dictionary<int, int>;
+                var CognitiveScreeningAnswer = Session["CognitiveScreeningAnswers"] as Dictionary<int, int> ?? new Dictionary<int, int>();
 
                 if (CognitiveScreeningAnswer != null)
                 {
