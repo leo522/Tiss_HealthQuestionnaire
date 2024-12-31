@@ -59,7 +59,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public Dictionary<string, string> FormData { get; set; } = new Dictionary<string, string>();
         #endregion
 
-        #region 過去健康檢查病史的文字敘述
+        #region 過去健康檢查病史
         public List<PastHealthDetailViewModel> PastHealthDetails { get; set; } = new List<PastHealthDetailViewModel>();
         #endregion
 

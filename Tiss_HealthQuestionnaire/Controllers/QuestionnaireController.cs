@@ -565,6 +565,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
+                var missingFields = new List<string>();
+
                 //處理填寫者基本信息
                 model.Specialist = form["specialist"];
                 model.FillName = form["fillName"];
@@ -584,6 +586,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 foreach (var item in pastHealthItems)
                 {
                     var selectedValue = form[$"pastHealth_{item.ID}"];
+
+                    //if (string.IsNullOrEmpty(selectedValue))
+                    //{
+                    //    missingFields.Add($"過去健康檢查病史 - {item.ItemZh}");
+                    //}
 
                     if (selectedValue == "yes")
                     {
@@ -643,6 +650,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 foreach (var item in allergicItems)
                 {
                     var selectedValue = form[$"allergy_{item.ID}"];
+
+                    //if (string.IsNullOrEmpty(selectedValue))
+                    //{
+                    //    missingFields.Add($"過敏史 - {item.ItemZh}");
+                    //}
 
                     if (selectedValue == "yes")
                     {
@@ -1395,6 +1407,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
                 #endregion
+
+
+                //if (missingFields.Any())
+                //{
+                //    ViewBag.ErrorMessage = "以下項目尚未填寫：" + string.Join(", ", missingFields);
+                //    return View("Main", model);
+                //}
 
                 _db.SaveChanges(); // 儲存所有的變更
 

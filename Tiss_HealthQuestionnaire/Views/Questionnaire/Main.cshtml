@@ -45,9 +45,9 @@
                             <input type="date" name="fillDate" class="border rounded p-1" required />
                         </label>
                         <div class="flex space-x-4 ml-auto">
-                            <button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2 whitespace-nowrap" id="temporarySaveButton">
+                            @*<button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2 whitespace-nowrap" id="temporarySaveButton">
                                 臨時保存
-                            </button>
+                            </button>*@
                             <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2 whitespace-nowrap" id="previewButton">
                                 預覽送出
                             </button>
@@ -195,8 +195,9 @@
             });
 
             // 預覽按鈕點擊事件
-            $('#previewButton').click(function (e) {
+            $('#previewButton').click(async function (e) {
                 e.preventDefault();
+
                 const fillDate = $('input[name="fillDate"]').val();
                 if (!fillDate) {
                     Swal.fire({
@@ -207,9 +208,89 @@
                     });
                     return;
                 }
+                // 載入所有頁籤的內容
+                await loadAllTabs();
+
+                // 驗證所有問卷內容
+                if (!validateAllQuestionnaires()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '問卷未完成',
+                        text: '請確保所有問卷內容已填寫完整！',
+                        confirmButtonText: '確定'
+                    });
+                    return;
+                }
                 $('#questionnaireForm').submit();
             });
         });
+        // 載入所有頁籤的內容，並隱藏未點擊的頁籤
+        async function loadAllTabs() {
+            const tabs = $('.tablinks'); // 找到所有頁籤按鈕
+            const currentVisibleTab = $('.tabcontent:visible'); // 目前顯示的頁籤
+
+            for (let i = 0; i < tabs.length; i++) {
+                const tab = $(tabs[i]);
+                const tabName = tab.data('tab-name');
+                const url = tab.data('url');
+
+                // 檢查是否已載入頁籤內容
+                if ($(`#${tabName}`).length === 0) {
+                    await $.get(url, function (data) {
+                        // 新增內容並隱藏頁籤
+                        $('<div>', { id: tabName, class: 'tabcontent hidden' }).html(data).appendTo('#tabContent');
+                    }).fail(function (xhr) {
+                        console.error(`載入頁籤內容失敗：${tabName}`);
+                    });
+                }
+            }
+
+            // 還原之前顯示的頁籤內容，隱藏其他頁籤
+            $('.tabcontent').hide();
+            currentVisibleTab.show();
+        }
+        function validateAllQuestionnaires() {
+            let isValid = true;
+
+            // 檢查每組 radio 是否有選中的選項
+            $('#tabContent').find('input[type="radio"]').each(function () {
+                const name = $(this).attr('name');
+                if ($(`input[name="${name}"]:checked`).length === 0) {
+                    isValid = false;
+                    Swal.fire({
+                        icon: 'error',
+                        title: '問卷未完成',
+                        text: `請確保所有選項已填寫，例如 "${name}"。`,
+                        confirmButtonText: '確定'
+                    });
+                    return false; // 中斷遍歷
+                }
+            });
+
+            // 檢查選擇「是」的選項是否填寫相關內容
+            $('#tabContent').find('input[type="radio"][value="yes"]:checked').each(function () {
+                const name = $(this).attr('name'); // 取得當前選中 radio 的 name
+                const idSuffix = name.split('_')[1]; // 假設 name 格式為 "pastHealth_ID" 或 "allergy_ID"
+                const relatedInputs = $(`input[name^="item"][name$="_${idSuffix}"], input[name^="details"][name$="_${idSuffix}"]`);
+
+                relatedInputs.each(function () {
+                    if ($(this).val().trim() === '') {
+                        isValid = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: '問卷未完成',
+                            text: `請填寫與選擇「是」相關的所有內容，例如 "${name}"。`,
+                            confirmButtonText: '確定'
+                        });
+                        return false; // 中斷遍歷
+                    }
+                });
+
+                if (!isValid) return false; // 中斷迴圈
+            });
+
+            return isValid;
+        }
 
         // 顯示醫療團隊身份驗證對話框
         function showTrainerAuthModal(evt, tabName, url) {
@@ -280,27 +361,27 @@
         });
 
         // 臨時保存功能
-        function temporarySave(questionnaireTypeCode) {
-            const athleteNumber = $('#athleteNumber').val();
-            const formData = $('#questionnaireForm').serializeArray();
+        //function temporarySave(questionnaireTypeCode) {
+        //    const athleteNumber = $('#athleteNumber').val();
+        //    const formData = $('#questionnaireForm').serializeArray();
 
-            formData.forEach(item => {
-                if (item.value) { // 確保僅傳送非空值
-                    $.post('/Temporary/SaveAnswer', {
-                        userId: athleteNumber,
-                        questionnaireTypeCode: questionnaireTypeCode,
-                        questionId: item.name.replace(/[^\d]/g, ''),
-                        answer: item.value
-                    }).done(function (response) {
-                        if (!response.success) {
-                            alert("保存失敗：" + response.message);
-                        }
-                    }).fail(function () {
-                        alert("臨時保存時發生錯誤，請稍後再試。");
-                    });
-                }
-            });
-        }
+        //    formData.forEach(item => {
+        //        if (item.value) { // 確保僅傳送非空值
+        //            $.post('/Temporary/SaveAnswer', {
+        //                userId: athleteNumber,
+        //                questionnaireTypeCode: questionnaireTypeCode,
+        //                questionId: item.name.replace(/[^\d]/g, ''),
+        //                answer: item.value
+        //            }).done(function (response) {
+        //                if (!response.success) {
+        //                    alert("保存失敗：" + response.message);
+        //                }
+        //            }).fail(function () {
+        //                alert("臨時保存時發生錯誤，請稍後再試。");
+        //            });
+        //        }
+        //    });
+        //}
     </script>
 </body>
 </html>
