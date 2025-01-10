@@ -46,8 +46,8 @@
                         </label>
                         <div class="flex space-x-4 ml-auto">
                             @*<button type="button" class="btn btn-warning bg-yellow-500 text-white rounded px-6 py-2 whitespace-nowrap" id="temporarySaveButton">
-                                臨時保存
-                            </button>*@
+                                    臨時保存
+                                </button>*@
                             <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2 whitespace-nowrap" id="previewButton">
                                 預覽送出
                             </button>
@@ -80,61 +80,61 @@
                     </button>
 
                     @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                            data-questionnaire-type="E" data-tab-name="PresentIllness" data-url="/Questionnaire/PresentIllness">
+                        現在病史
+                    </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                            data-questionnaire-type="F" data-tab-name="PastDrugs" data-url="/Questionnaire/PastDrugs">
+                        藥物史
+                    </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                            data-questionnaire-type="G" data-tab-name="PastSupplements" data-url="/Questionnaire/PastSupplements">
+                        營養品
+                    </button>*@
+
+                    @*女性問卷頁籤，根據後端設定顯示或隱藏*@
+                    @*<button id="femaleQuestionnaireTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 @(ViewBag.ShowFemaleTab ? "" : "hidden")"
+                                data-questionnaire-type="H" data-tab-name="FemaleQuestionnaire" data-url="/Questionnaire/FemaleQuestionnaire">
+                            女性問卷
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="I" data-tab-name="PastInjuryRestored" data-url="/Questionnaire/PastInjuryRestored">
+                            過去傷害狀況 (已復原)
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="J" data-tab-name="NowInjuryRestored" data-url="/Questionnaire/NowInjuryRestored">
+                            目前傷害狀況
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="K" data-tab-name="CardiovascularScreening" data-url="/Questionnaire/CardiovascularScreening">
+                            心血管篩檢
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="L" data-tab-name="ConcussionScreening" data-url="/Questionnaire/ConcussionScreening">
+                            腦震盪篩檢-選手自填
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="M" data-tab-name="OrthopaedicScreening" data-url="/Questionnaire/OrthopaedicScreening">
+                            骨科篩檢
+                        </button>*@
+
+                    <!-- 防護員專屬頁籤按鈕 -->
+                    @*<button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                                data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
+                            腦震盪篩檢-醫療團隊評估
+                        </button>*@
+
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                                 onclick="openTab(event, 'SurgeryHistory', '/Questionnaire/SurgeryHistory')">
                             手術病史
                         </button>*@
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="E" data-tab-name="PresentIllness" data-url="/Questionnaire/PresentIllness">
-                        現在病史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="F" data-tab-name="PastDrugs" data-url="/Questionnaire/PastDrugs">
-                        藥物史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="G" data-tab-name="PastSupplements" data-url="/Questionnaire/PastSupplements">
-                        營養品
-                    </button>
-
-                    <!-- 女性問卷頁籤，根據後端設定顯示或隱藏 -->
-                    <button id="femaleQuestionnaireTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 @(ViewBag.ShowFemaleTab ? "" : "hidden")"
-                            data-questionnaire-type="H" data-tab-name="FemaleQuestionnaire" data-url="/Questionnaire/FemaleQuestionnaire">
-                        女性問卷
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="I" data-tab-name="PastInjuryRestored" data-url="/Questionnaire/PastInjuryRestored">
-                        過去傷害狀況 (已復原)
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="J" data-tab-name="NowInjuryRestored" data-url="/Questionnaire/NowInjuryRestored">
-                        目前傷害狀況
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="K" data-tab-name="CardiovascularScreening" data-url="/Questionnaire/CardiovascularScreening">
-                        心血管篩檢
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="L" data-tab-name="ConcussionScreening" data-url="/Questionnaire/ConcussionScreening">
-                        腦震盪篩檢-選手自填
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="M" data-tab-name="OrthopaedicScreening" data-url="/Questionnaire/OrthopaedicScreening">
-                        骨科篩檢
-                    </button>
-
-                    <!-- 防護員專屬頁籤按鈕 -->
-                    <button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
-                        腦震盪篩檢-醫療團隊評估
-                    </button>
                 </div>
             </div>
 
@@ -181,12 +181,21 @@
                 const url = $(this).data('url');
                 currentQuestionnaireTypeCode = $(this).data('questionnaire-type');
 
+                saveTabDataToSession(); //保存當前頁籤的數據到 sessionStorage
+
                 if (tabName === 'CognitiveScreening') {
                     // 如果是醫療團隊評估頁籤，顯示身份驗證對話框
                     showTrainerAuthModal(e, tabName, url);
                 } else {
                     openTab(tabName, url);
                 }
+            });
+
+            restoreFormData(); //恢復主頁表單數據
+
+            // 初始化表單輸入監聽事件
+            $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', function () {
+                saveTabDataToSession();
             });
 
             // 臨時保存按鈕點擊事件
@@ -221,9 +230,38 @@
                     });
                     return;
                 }
+                // 清除 sessionStorage 並提交表單
+                sessionStorage.clear();
                 $('#questionnaireForm').submit();
             });
         });
+
+        // 保存當前頁籤的數據到 sessionStorage
+        function saveTabDataToSession() {
+            const formData = $('#tabContent').find('input, textarea, select').serializeArray();
+            const tabData = {};
+            formData.forEach(item => {
+                tabData[item.name] = item.value;
+            });
+            sessionStorage.setItem(currentQuestionnaireTypeCode, JSON.stringify(tabData));
+        }
+        // 從 sessionStorage 恢復數據
+        function restoreFormData() {
+            const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
+            if (savedData) {
+                const dataObject = JSON.parse(savedData);
+                for (const key in dataObject) {
+                    const input = $(`[name="${key}"]`);
+                    if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+                        input.prop('checked', input.val() === dataObject[key]);
+                    } else {
+                        input.val(dataObject[key]);
+                    }
+                }
+            }
+        }
+
+
         // 載入所有頁籤的內容，並隱藏未點擊的頁籤
         async function loadAllTabs() {
             const tabs = $('.tablinks'); // 找到所有頁籤按鈕
@@ -360,28 +398,35 @@
             }
         });
 
-        // 臨時保存功能
-        //function temporarySave(questionnaireTypeCode) {
-        //    const athleteNumber = $('#athleteNumber').val();
-        //    const formData = $('#questionnaireForm').serializeArray();
+        function saveToSessionStorage() {
+            const formData = $('#questionnaireForm').serializeArray();
+            const dataObject = {};
+            formData.forEach(item => {
+                dataObject[item.name] = item.value;
+            });
+            sessionStorage.setItem('healthQuestionnaire', JSON.stringify(dataObject));
+        }
 
-        //    formData.forEach(item => {
-        //        if (item.value) { // 確保僅傳送非空值
-        //            $.post('/Temporary/SaveAnswer', {
-        //                userId: athleteNumber,
-        //                questionnaireTypeCode: questionnaireTypeCode,
-        //                questionId: item.name.replace(/[^\d]/g, ''),
-        //                answer: item.value
-        //            }).done(function (response) {
-        //                if (!response.success) {
-        //                    alert("保存失敗：" + response.message);
-        //                }
-        //            }).fail(function () {
-        //                alert("臨時保存時發生錯誤，請稍後再試。");
-        //            });
-        //        }
-        //    });
-        //}
+        function loadFromSessionStorage() {
+            const savedData = sessionStorage.getItem('healthQuestionnaire');
+            if (savedData) {
+                const dataObject = JSON.parse(savedData);
+                for (const key in dataObject) {
+                    const input = $(`[name="${key}"]`);
+                    if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+                        input.prop('checked', input.val() === dataObject[key]);
+                    } else {
+                        input.val(dataObject[key]);
+                    }
+                }
+            }
+        }
+
+        // 自動保存事件
+        $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', saveToSessionStorage);
+
+        // 初始化加載事件
+        $(document).ready(loadFromSessionStorage);
     </script>
 </body>
 </html>

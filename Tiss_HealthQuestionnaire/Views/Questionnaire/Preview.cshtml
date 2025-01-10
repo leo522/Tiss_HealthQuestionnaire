@@ -27,7 +27,7 @@
 
         <!-- 過去健康檢查病史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去健康檢查病史</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去健康檢查病史(PastHealth)</h2>
             <!-- 顯示主問題 -->
             <p class="mb-4">
                 <h2 class="text-lg font-bold mb-4">
@@ -70,7 +70,7 @@
 
         <!-- 顯示過敏史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過敏史:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過敏史(AllergicHistory)</h2>
             <p class="mb-4">
                 <h2 class="text-lg font-bold mb-4">
                     <strong>
@@ -109,7 +109,7 @@
 
         <!-- 顯示家族病史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">家族病史:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">家族病史(FamilyHistory)</h2>
             @if (Model.FamilyHistoryDetails != null && Model.FamilyHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -151,15 +151,11 @@
                     </tbody>
                 </table>
             }
-            else
-            {
-                <p class="text-gray-500">未填寫家族病史。</p>
-            }
         </div>
 
         <!-- 顯示過去病史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去病史:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去病史(PastHistory)</h2>
             @if (Model.PastHistoryDetails != null && Model.PastHistoryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -225,7 +221,7 @@
 
         <!-- 顯示現在病史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">現在病史 Present Illness:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">現在病史(Present Illness)</h2>
             @if (Model.PresentIllnessDetails != null && Model.PresentIllnessDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -258,7 +254,7 @@
 
         <!-- 顯示藥物史 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">藥物史:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">藥物史(PastDrugs)</h2>
             @if (Model.PastDrugsDetails != null && Model.PastDrugsDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -295,7 +291,7 @@
 
         <!-- 顯示營養品 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">營養品:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">營養品(PastSupplements)</h2>
             @if (Model.PastSupplementsDetails != null && Model.PastSupplementsDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -326,7 +322,7 @@
 
         <!-- 顯示女性問卷 -->
         <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">女性問卷:</h2>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">女性問卷(FemaleQuestionnaire)</h2>
             @if (Model.FemaleQuestionnaireDetails != null)
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -363,7 +359,7 @@
 
         <!-- 顯示過去傷害狀況(已復原) 、傷勢類型、治療方式-->
         <div class="mb-8">
-            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況(已復原):</h2>
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原(PastInjuryStatus)</h2>
             @if (Model.PastInjuryDetails != null && Model.PastInjuryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -430,7 +426,7 @@
 
         <!-- 顯示目前傷害狀況、傷勢類型、治療方式 -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況:</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況(InjuryStatus)</h3>
             @if (Model.NowInjuryDetails != null && Model.NowInjuryDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -493,7 +489,7 @@
 
         <!-- 顯示心血管篩檢 -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">心血管篩檢:</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">心血管篩檢(CardiovascularScreening)</h3>
             @if (Model.CardiovascularScreeningDetails != null && Model.CardiovascularScreeningDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">
@@ -520,7 +516,7 @@
 
         <!-- 腦震盪篩檢-選手自填-選手背景 -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢 - 選手自填:</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢-選手自填(ConcussionScreening)</h3>
             @if (Model.ConcussionScreeningDetails != null && Model.ConcussionScreeningDetails.Any())
             {
                 <table class="w-full border-collapse border border-gray-300">
@@ -554,7 +550,7 @@
 
         <!-- 症狀自我評估-選手 -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估:</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估(Self-assessment of Symptoms)</h3>
             @if (Model.SymptomEvaluationDetails != null && Model.SymptomEvaluationDetails.Any())
             {
                 <table class="w-full border-collapse border border-gray-300 text-center">
@@ -593,7 +589,7 @@
 
         <!-- 顯示骨科篩檢 -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢:</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢(OrthopaedicScreening)</h3>
             @if (Model.OrthopaedicScreeningDetails != null && Model.OrthopaedicScreeningDetails.Any())
             {
                 <table class="min-w-full bg-white border border-gray-300">

@@ -587,11 +587,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     var selectedValue = form[$"pastHealth_{item.ID}"];
 
-                    //if (string.IsNullOrEmpty(selectedValue))
-                    //{
-                    //    missingFields.Add($"過去健康檢查病史 - {item.ItemZh}");
-                    //}
-
                     if (selectedValue == "yes")
                     {
                         // 更新資料庫的 IsYes 和 IsNo 狀態
@@ -650,11 +645,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 foreach (var item in allergicItems)
                 {
                     var selectedValue = form[$"allergy_{item.ID}"];
-
-                    //if (string.IsNullOrEmpty(selectedValue))
-                    //{
-                    //    missingFields.Add($"過敏史 - {item.ItemZh}");
-                    //}
 
                     if (selectedValue == "yes")
                     {
@@ -803,8 +793,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     }
 
                     // 判斷是否為「其他」項目並處理描述
-                    string otherPastHistory = item.ID == 10 ? form["PastHistoryOption"] ?? "未回答" : null;
-
+                    string otherPastHistory = item.ID == 20 ? form["PastHistoryOption"] ?? "未回答" : null;
 
                     model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
                     {

@@ -64,22 +64,28 @@
     </div>
     <script>
         $(document).ready(function () {
-            // 初始化分數
-            loadScores();
+            loadScores(); //初始化分數
 
-            // 監聽所有的 radio 按鈕變化
+            //所有的 radio 按鈕變化
             $('.score-option').on('change', function () {
                 updateTotalScore();
                 saveScores();
             });
 
-            // 計算並更新總分
+            //計算並更新總分
             function updateTotalScore() {
                 let totalScore = 0;
 
-                // 遍歷所有的定位題目分數選項
+                //遍歷所有的定位題目分數選項
                 $('input[type="radio"]:checked').each(function () {
-                    totalScore += parseInt($(this).val()); // 累加所有選擇的分數
+                    const value = $(this).val();
+                    const numericValue = parseInt(value, 10);
+                    // 確保數值為有效數字再累加
+                    if (!isNaN(numericValue)) {
+                        totalScore += numericValue;
+                    }
+                    //totalScore += parseInt($(this).val()); //累加所有選擇的分數
+
                 });
 
                 // 更新顯示的總計分數
