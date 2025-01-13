@@ -635,8 +635,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                             Item3 = "未回答"
                         });
                     }
-
-                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
                 #endregion
 
@@ -697,8 +695,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                             AllergyDescription = "未回答"
                         });
                     }
-
-                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
                 #endregion
 
@@ -750,9 +746,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         FamilyHistoryOption = familyHistoryOption,
                         OtherFamilyHistory = otherFamilyHistory // 只有「其他」項目會有描述
                     });
-
-                    // 將變更保存至資料庫
-                    _db.Entry(item).State = EntityState.Modified;
                 }
                 #endregion
 
@@ -793,7 +786,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     }
 
                     // 判斷是否為「其他」項目並處理描述
-                    string otherPastHistory = item.ID == 20 ? form["PastHistoryOption"] ?? "未回答" : null;
+                    string otherPastHistory = item.ID == 20 ? form["otherPastHistory"] ?? "未回答" : null;
 
                     model.PastHistoryDetails.Add(new PastHistoryDetailViewModel
                     {
@@ -803,8 +796,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         PastHistoryOption = pastHistoryOption,
                         OtherPastHistory = otherPastHistory,
                     });
-
-                    _db.Entry(item).State = EntityState.Modified; //將變更保存至資料庫
                 }
                 #endregion
 

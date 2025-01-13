@@ -125,14 +125,7 @@
                             <tr>
                                 <td class="border border-gray-300 p-2">@detail.GeneralPartsZh (@detail.GeneralPartsEn)</td>
                                 <td class="border border-gray-300 p-2">
-                                    @if (!string.IsNullOrEmpty(detail.FamilyHistoryOption))
-                                    {
                                         @Model.ConvertYesNoToLocalizedString(detail.FamilyHistoryOption)
-                                    }
-                                    else
-                                    {
-                                        <p class="text-gray-500 italic">無異常項目。</p>
-                                    }
                                 </td>
                             </tr>
                         }
@@ -171,14 +164,14 @@
                             <tr>
                                 <td class="border border-gray-300 p-2">@detail.GeneralPartsZh (@detail.GeneralPartsEn)</td>
                                 <td class="border border-gray-300 p-2">
-                                    @Model.ConvertYesNoToLocalizedString(detail.PastHistoryOption)
+                                        @Model.ConvertYesNoToLocalizedString(detail.PastHistoryOption)                
                                 </td>
                             </tr>
                         }
 
                         <!-- 顯示其他過去病史，如果存在「其他」描述 -->
                         @{
-                            var otherDetail = Model.PastHistoryDetails.FirstOrDefault(d => d.ItemId == 10 && !string.IsNullOrEmpty(d.PastHistoryOption));
+                            var otherDetail = Model.PastHistoryDetails.FirstOrDefault(d => d.ItemId == 20 && !string.IsNullOrEmpty(d.OtherPastHistory));
                         }
                         @if (otherDetail != null)
                         {

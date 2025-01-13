@@ -216,7 +216,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 過去病史
     public class PastHistoryDetailViewModel
     {
-        public int ItemId { get; set; } // 項目的ID
+        public int ItemId { get; set; } //項目的ID
         public string GeneralPartsZh { get; set; }
         public string GeneralPartsEn { get; set; }
         public string PastHistoryOption { get; set; } // "yes", "no", "unknown"
