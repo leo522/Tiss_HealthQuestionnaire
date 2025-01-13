@@ -85,7 +85,7 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 藥物史
         public List<PastDrugsDetailViewModel> PastDrugsDetails { get; set; } = new List<PastDrugsDetailViewModel>();
-        public string TUE { get; set; }
+        public string TUE { get; set; } //是否有申請治療用途豁免
         #endregion
 
         #region 營養品詳細

@@ -84,7 +84,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 開刀史
+        #region 開刀史-不使用
         public ActionResult SurgeryHistory()
         {
             var surgeryHistory = _db.SurgeryHistory.ToList();
@@ -866,93 +866,39 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     var selectedValue = form[$"presentIllness_{item.ID}"];
 
-                    if (selectedValue == "yes")
+                    // 根據選項添加到模型
+                    model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
                     {
-                        item.IsYes = true;
-                        item.IsNo = false;
-
-                        string isReceiving_Key = $"presentIllness_{item.ID}";
-
-                        model.PresentIllness = "yes";
-
-                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
-                        {
-                            ItemId = item.ID,
-                            PartsOfBodyZh = item.PartsOfBodyZh,
-                            PartsOfBodyEn = item.PartsOfBodyEn,
-                            ReceivingOtherTherapies = "是"
-                        });
-                    }
-                    else if (selectedValue == "no")
-                    {
-                        item.IsYes = false;
-                        item.IsNo = true;
-
-                        string isReceiving_Key = $"presentIllness_{item.ID}";
-
-                        model.PresentIllness = "no";
-
-                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
-                        {
-                            ItemId = item.ID,
-                            PartsOfBodyZh = item.PartsOfBodyZh,
-                            PartsOfBodyEn = item.PartsOfBodyEn,
-                            ReceivingOtherTherapies = "否"
-                        });
-                    }
-                    else
-                    {
-                        item.IsYes = false;
-                        item.IsNo = true;
-
-                        model.PresentIllness = "未回答";
-
-                        model.PresentIllnessDetails.Add(new PresentIllnessDetailViewModel
-                        {
-                            ItemId = item.ID,
-                            PartsOfBodyZh = item.PartsOfBodyZh,
-                            PartsOfBodyEn = item.PartsOfBodyEn,
-                            ReceivingOtherTherapies = "未回答"
-                        });
-                    }
-                    _db.Entry(item).State = EntityState.Modified;
+                        ItemId = item.ID,
+                        PartsOfBodyZh = item.PartsOfBodyZh,
+                        PartsOfBodyEn = item.PartsOfBodyEn,
+                        ReceivingOtherTherapies = selectedValue
+                    });
                 }
                 #endregion
 
                 #region 藥物史
                 model.PastDrugsDetails = new List<PastDrugsDetailViewModel>(); //初始化 PastDrugsDetails 列表
                 var pastDrugsItems = _db.PastDrugs.ToList();
-                string otherDrugsDescription = form["otherDrugsDetail"]; // 取得 "其他" 的描述
-                bool isOtherChecked = form["usedDrugs_other"] == "on"; //檢查「其他」選項是否勾選
-
-                // 如果「其他」選項勾選但未填寫描述
-                if (isOtherChecked && string.IsNullOrEmpty(otherDrugsDescription))
-                {
-                    ModelState.AddModelError("otherDrugsDetail", "您勾選了「其他」選項，請填寫描述內容。");
-
-                    //return View("Main", model); // 返回主頁並顯示錯誤訊息，待修正
-                }
-
+               
                 foreach (var item in pastDrugsItems)
                 {
                     string checkboxName = $"usedDrugs_{item.ID}";
                     bool isChecked = form[checkboxName] == "on";
 
-                    // 如果勾選，則將此項目添加到模型的 PastDrugsDetails 列表中
-                    if (isChecked || (item.ItemZh == "其他" && isOtherChecked))
+                    if (isChecked)
                     {
                         model.PastDrugsDetails.Add(new PastDrugsDetailViewModel
                         {
                             ItemId = item.ID,
                             ItemZh = item.ItemZh,
                             ItemEn = item.ItemEn,
-                            IsUsed = "yes",
-                            OtherDrugs = item.ItemZh == "其他" ? otherDrugsDescription : null
+                            IsUsed = "yes"
                         });
                     }
-                    //_db.Entry(item).State = EntityState.Modified;
                 }
-                model.TUE = form["TUE"] == "yes" ? "是" : "否";
+
+                model.TUE = form["TUE"] ?? "unknown";
                 #endregion
 
                 #region 營養品

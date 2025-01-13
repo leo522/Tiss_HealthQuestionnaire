@@ -185,33 +185,7 @@
             }
         </div>
 
-        <!-- 顯示開刀史 -->
-        @*<div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">開刀史:</h2>
-            @Model.ConvertYesNoToLocalizedString(Model.SurgeryHistory)
-
-            @if (Model.SurgeryHistory == "yes" && Model.SurgeryHistoryDetails != null && Model.SurgeryHistoryDetails.Any())
-            {
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 p-2">部位 (Parts of the Body)</th>
-                            <th class="border border-gray-300 p-2">是否接受手術 (Receiving Operation)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detail in Model.SurgeryHistoryDetails)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
-                                <td class="border border-gray-300 p-2">@detail.OperationOption</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>*@
-
+        
         <!-- 顯示現在病史 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">現在病史(Present Illness)</h2>
@@ -228,9 +202,7 @@
                         @foreach (var detail in Model.PresentIllnessDetails)
                         {
                             <tr>
-                                <td class="border border-gray-300 p-2">
-                                    @detail.PartsOfBodyZh (@detail.PartsOfBodyEn)
-                                </td>
+                                <td class="border border-gray-300 p-2">@detail.PartsOfBodyZh (@detail.PartsOfBodyEn)</td>
                                 <td class="border border-gray-300 p-2">
                                     @Model.ConvertYesNoToLocalizedString(detail.ReceivingOtherTherapies)
                                 </td>
@@ -238,10 +210,6 @@
                         }
                     </tbody>
                 </table>
-            }
-            else
-            {
-                <p class="text-gray-500">沒有填寫任何現在病史。</p>
             }
         </div>
 
