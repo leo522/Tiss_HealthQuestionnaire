@@ -823,9 +823,7 @@
 
         <!-- 操作按鈕 -->
         <div class="flex justify-between items-center mt-6">
-            <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
-                返回編輯
-            </a>
+            <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">返回編輯</a>
             <form method="post" action="/Questionnaire/Submit" class="inline">
                 <input type="hidden" name="specialist" value="@Model.Specialist" />
                 <input type="hidden" name="fillName" value="@Model.FillName" />

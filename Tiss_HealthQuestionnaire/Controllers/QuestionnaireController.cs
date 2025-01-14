@@ -8,8 +8,7 @@ using System.Web.Mvc;
 using Tiss_HealthQuestionnaire.Models;
 
 namespace Tiss_HealthQuestionnaire.Controllers
-{
-    public class QuestionnaireController : Controller
+{public class QuestionnaireController : Controller
     {
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities(); //資料庫
 
@@ -1298,10 +1297,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 #region 醫療團隊評估-認知篩檢-分數總合(6)
 
-                var orientationScore = Session["OrientationScore"] as int? ?? 0;
-                var immediateMemoryScore = Session["ImmediateMemoryScore"] as int? ?? 0;
-                var concentrationScore = Session["ConcentrationScore"] as int? ?? 0;
-                var delayedRecallScore = Session["DelayedRecallScore"] as int? ?? 0;
+                //var orientationScore = Session["OrientationScore"] as int? ?? 0;
+                //var immediateMemoryScore = Session["ImmediateMemoryScore"] as int? ?? 0;
+                //var concentrationScore = Session["ConcentrationScore"] as int? ?? 0;
+                //var delayedRecallScore = Session["DelayedRecallScore"] as int? ?? 0;
+                var orientationScore = Session["OrientationScore"] as int? ?? model.CognitiveScreeningTotalScore; // 默認使用計算的定位總分
+                var immediateMemoryScore = Session["ImmediateMemoryScore"] as int? ?? model.ImmediateMemoryTotalScore;
+                var concentrationScore = Session["ConcentrationScore"] as int? ?? model.ConcentrationTotalScore;
+                var delayedRecallScore = Session["DelayedRecallScore"] as int? ?? model.DelayedRecallTotalScore;
 
                 // 計算總分
                 model.CognitiveScreeningTotalScores = orientationScore + immediateMemoryScore + concentrationScore + delayedRecallScore;
