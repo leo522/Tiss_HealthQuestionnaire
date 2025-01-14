@@ -57,15 +57,18 @@
                 <tbody>
                     <tr>
                         <td>雙腳站立</td>
-                        <td><input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0"></td>
+                        <td><input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        </td>
                     </tr>
                     <tr>
                         <td>腳跟前後站立 (慣用腳在前)</td>
-                        <td><input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0"></td>
+                        <td><input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        </td>
                     </tr>
                     <tr>
                         <td>單腳站立 (非慣用腳)</td>
-                        <td><input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0"></td>
+                        <td><input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -75,6 +78,7 @@
                     </tr>
                 </tfoot>
             </table>
+            
             <!-- 腳跟碰腳尖快速走路 -->
             <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
             <table class="min-w-full bg-white border border-gray-300 text-center">
@@ -135,6 +139,22 @@
                         totalErrorCount += value;
                     }
                 });
+
+                // 檢查是否超過30分
+                if (totalErrorCount > 30) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '警告',
+                        text: '總錯誤次數不能超過30分！',
+                        confirmButtonText: '確定'
+                    });
+
+                    // 重置最後一個輸入框的值
+                    //const lastInput = $('.error-input').last();
+                    //lastInput.val(30 - (totalErrorCount - parseInt(lastInput.val())));
+                    totalErrorCount = 30; // 將總錯誤次數設置為30
+                }
+
                 $('#totalErrorCount').text(totalErrorCount);
                 sessionStorage.setItem('TotalErrorCount', totalErrorCount);
             }

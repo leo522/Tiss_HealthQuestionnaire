@@ -17,8 +17,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult Main()
         {
             // 從 Session 中取得暫存的問卷答案
-            var concussionData = Session["ConcussionScreeningData"] as QuestionnaireViewModel;
-            var symptomData = Session["SymptomEvaluationData"] as QuestionnaireViewModel;
+            //var concussionData = Session["ConcussionScreeningData"] as QuestionnaireViewModel;
+            //var symptomData = Session["SymptomEvaluationData"] as QuestionnaireViewModel;
+
+            var concussionData = Session["ConcussionScreeningData"] as Dictionary<int, string>;
+            var symptomData = Session["SymptomEvaluationData"] as Dictionary<int, string>;
 
             // 從 Session 獲取使用者的名稱
             string loggedInUserName = Session["UserName"] as string;
@@ -392,7 +395,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     CompletionTime = completionTime
                 };
             }).ToList();
-    
+
             Session["ImmediateMemoryTotalScore"] = totalScore; //保存短期記憶總分到 Session
 
             return View("ImmediateMemory", viewModel);
@@ -468,7 +471,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 delayedrecallAnswers?.TryGetValue(q.ID, out Scores);
 
                 return new DelayedRecallViewModel
-                { 
+                {
                     OrderNumber = q.ID,
                     Word = q.Word,
                     Score = Scores,
@@ -880,7 +883,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 #region 藥物史
                 model.PastDrugsDetails = new List<PastDrugsDetailViewModel>(); //初始化 PastDrugsDetails 列表
                 var pastDrugsItems = _db.PastDrugs.ToList();
-               
+
                 foreach (var item in pastDrugsItems)
                 {
                     string checkboxName = $"usedDrugs_{item.ID}";
@@ -983,36 +986,26 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                     if (hasInjury)
                     {
-                        // 初始化傷勢類型列表
-                        var injuryTypes = new List<string>();
-
                         // 收集傷勢類型數據
-                        string muscleTendon = form["MuscleTendon"]; // 肌肉/肌腱類
-                        string bone = form["Bone"]; // 骨類
-                        string ligament = form["Ligament"]; // 韌帶類
-                        string nerve = form["Nerve"]; // 神經類
-                        string cartilageSynoviumBursa = form["CartilageSynoviumBursa"]; // 軟骨/滑膜/滑囊類
-                        string epidermalTissue = form["EpidermalTissue"]; // 表皮組織
-                        string bloodVessel = form["BloodVessel"]; // 血管類
-                        string organLimb = form["OrganLimb"]; // 器官/四肢類
-
-                        // 添加用戶選擇的傷勢類型到列表中
-                        if (!string.IsNullOrEmpty(muscleTendon)) injuryTypes.Add(muscleTendon);
-                        if (!string.IsNullOrEmpty(bone)) injuryTypes.Add(bone);
-                        if (!string.IsNullOrEmpty(ligament)) injuryTypes.Add(ligament);
-                        if (!string.IsNullOrEmpty(nerve)) injuryTypes.Add(nerve);
-                        if (!string.IsNullOrEmpty(cartilageSynoviumBursa)) injuryTypes.Add(cartilageSynoviumBursa);
-                        if (!string.IsNullOrEmpty(epidermalTissue)) injuryTypes.Add(epidermalTissue);
-                        if (!string.IsNullOrEmpty(bloodVessel)) injuryTypes.Add(bloodVessel);
-                        if (!string.IsNullOrEmpty(organLimb)) injuryTypes.Add(organLimb);
+                        var injuryTypes = new List<string>
+                        {
+                            form["MuscleTendon"],
+                            form["Bone"],
+                            form["Ligament"],
+                            form["Nerve"],
+                            form["CartilageSynoviumBursa"],
+                            form["EpidermalTissue"],
+                            form["BloodVessel"],
+                            form["OrganLimb"]
+                        }.Where(type => !string.IsNullOrEmpty(type)).ToList();
 
                         // 添加到模型
                         model.PastInjuryDetails.Add(new PastInjuryStatuSViewModel
                         {
-                            PastInjuryPart = item.InjuryPart, // 受傷部位
-                            LeftSide = form[leftPartKey] != null, // 是否左側受傷
-                            RightSide = form[rightPartKey] != null, // 是否右側受傷
-                            InjuryTypes = injuryTypes // 傷勢類型列表
+                            PastInjuryPart = item.InjuryPart,
+                            LeftSide = !string.IsNullOrEmpty(form[leftPartKey]),
+                            RightSide = !string.IsNullOrEmpty(form[rightPartKey]),
+                            InjuryTypes = injuryTypes
                         });
                     }
                 }
@@ -1020,12 +1013,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 #endregion
 
                 #region 過去傷害狀況(已復原)-治療方式
+                model.PastTreatmentDetails = new List<PastTreatmentMethoDViewModel>(); //初始化治療方式列表
 
                 var PasttreatmentMethods = _db.PastTreatmentMethod.ToList();
                 foreach (var method in PasttreatmentMethods)
                 {
                     string methodKey = $"Pasttreatment_{method.Id}";
-                    if (form[methodKey] != null)
+                    if (!string.IsNullOrEmpty(form[methodKey]))
                     {
                         model.PastTreatmentDetails.Add(new PastTreatmentMethoDViewModel
                         {
@@ -1134,13 +1128,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         }
                     }
 
-                    // 取出藥物與備註
+                    //取出藥物與備註
                     model.ConcussionScreeningMedicationAnswer = Session["ConcussionScreeningMedicationAnswer"] as string;
                     model.ConcussionScreeningMedicationDetails = Session["ConcussionScreeningMedicationDetails"] as string;
                     model.ConcussionScreeningNotes = Session["ConcussionScreeningNotes"] as string;
                 }
 
-                // 症狀自我評估
+                //選手自填-症狀自我評估
                 var symptomAnswers = Session["SymptomEvaluationAnswers"] as Dictionary<int, int>;
                 if (symptomAnswers != null)
                 {
@@ -1285,14 +1279,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var delayedRecallStartTime = Session["DelayedRecallStartTime"] as string;
                 model.DelayedRecallStartTime = delayedRecallStartTime; // 傳遞開始時間
 
-                foreach (var q in delayedrecallQuestions) 
+                foreach (var q in delayedrecallQuestions)
                 {
                     int Score = 0;
 
                     delayedrecallAnswers?.TryGetValue(q.ID, out Score);
 
                     model.DelayedRecallDetails.Add(new DelayedRecallViewModel
-                    { 
+                    {
                         OrderNumber = q.ID,
                         Word = q.Word,
                         Score = Score,
@@ -1414,7 +1408,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 保存腦震盪篩檢-選手自填(選手背景)
+        #region 保存腦震盪篩檢-選手自填(選手背景)-(1)
         [HttpPost]
         public ActionResult SaveConcussionScreening(FormCollection form)
         {
@@ -1449,7 +1443,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #endregion
 
-        #region 保存腦震盪篩檢-選手症狀自我評估
+        #region 保存腦震盪篩檢-選手症狀自我評估-(2)
         [HttpPost]
         public ActionResult SaveSymptomEvaluation(FormCollection form)
         {
@@ -1684,7 +1678,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #region 保存醫療團隊-認知篩檢-分數總合(6)
         [HttpPost]
-        public ActionResult SaveCSTotalScore(FormCollection form) 
+        public ActionResult SaveCSTotalScore(FormCollection form)
         {
             try
             {
