@@ -1,8 +1,8 @@
 ﻿@*症狀自我評估-選手-(2)*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -32,7 +32,7 @@
 <body>
     <div class="p-4">
         <h1 class="text-xl font-bold mb-4">症狀自我評估 Self-assessment of Symptoms</h1>
-        <form method="post" action="/Questionnaire/SaveSymptomEvaluation">
+        <form action="/Questionnaire/SaveSymptomEvaluation" method="post">
             <!-- 問卷表格 -->
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300 text-center">

@@ -114,10 +114,10 @@
                         心血管篩檢
                     </button>*@
 
-                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             data-questionnaire-type="L" data-tab-name="ConcussionScreening" data-url="/Questionnaire/ConcussionScreening">
                         腦震盪篩檢-選手自填
-                    </button>*@
+                    </button>
 
                     @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             data-questionnaire-type="M" data-tab-name="OrthopaedicScreening" data-url="/Questionnaire/OrthopaedicScreening">
@@ -125,10 +125,10 @@
                     </button>*@
 
                     @*防護員專屬頁籤按鈕*@
-                    <button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                    @*<button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
                         腦震盪篩檢-醫療團隊評估
-                    </button>
+                    </button>*@
 
                     @*開刀史-不使用*@
                     @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
@@ -172,7 +172,7 @@
     </div>
 
     <script>
-        let currentQuestionnaireTypeCode = ''; // 全域變數
+        let currentQuestionnaireTypeCode = ''; //全域變數
 
         $(document).ready(function () {
             $('.tablinks').on('click', function (e) {
@@ -243,24 +243,69 @@
             formData.forEach(item => {
                 tabData[item.name] = item.value;
             });
+
+            //// 更新主頁表單數據
+            //const mainFormData = $('#questionnaireForm').find('input, textarea, select').serializeArray();
+            //const mainData = {};
+            //mainFormData.forEach(item => {
+            //    mainData[item.name] = item.value;
+            //});
+
             sessionStorage.setItem(currentQuestionnaireTypeCode, JSON.stringify(tabData));
+
+            // 保存主頁表單數據
+            const mainFormData = $('#questionnaireForm').find('input, textarea, select').serializeArray();
+            const mainData = {};
+            mainFormData.forEach(item => {
+                mainData[item.name] = item.value;
+            });
+            sessionStorage.setItem('MainFormData', JSON.stringify(mainData));
         }
-        // 從 sessionStorage 恢復數據
+        //// 從 sessionStorage 恢復數據
+        //function restoreFormData() {
+        //    const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
+        //    if (savedData) {
+        //        const dataObject = JSON.parse(savedData);
+        //        for (const key in dataObject) {
+        //            const input = $(`[name="${key}"]`);
+        //            if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+        //                input.prop('checked', input.val() === dataObject[key]);
+        //            } else {
+        //                input.val(dataObject[key]);
+        //            }
+        //        }
+        //    }
+        //}
+
         function restoreFormData() {
-            const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
-            if (savedData) {
-                const dataObject = JSON.parse(savedData);
-                for (const key in dataObject) {
+            // 恢復主頁數據
+            const savedMainData = sessionStorage.getItem('MainFormData');
+            if (savedMainData) {
+                const mainData = JSON.parse(savedMainData);
+                for (const key in mainData) {
                     const input = $(`[name="${key}"]`);
                     if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
-                        input.prop('checked', input.val() === dataObject[key]);
+                        input.prop('checked', input.val() === mainData[key]);
                     } else {
-                        input.val(dataObject[key]);
+                        input.val(mainData[key]);
+                    }
+                }
+            }
+
+            // 恢復當前頁籤數據
+            const savedTabData = sessionStorage.getItem(currentQuestionnaireTypeCode);
+            if (savedTabData) {
+                const tabData = JSON.parse(savedTabData);
+                for (const key in tabData) {
+                    const input = $(`[name="${key}"]`);
+                    if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+                        input.prop('checked', input.val() === tabData[key]);
+                    } else {
+                        input.val(tabData[key]);
                     }
                 }
             }
         }
-
 
         // 載入所有頁籤的內容，並隱藏未點擊的頁籤
         async function loadAllTabs() {
@@ -287,49 +332,96 @@
             $('.tabcontent').hide();
             currentVisibleTab.show();
         }
+
+        // 驗證所有問卷內容
+        //function validateAllQuestionnaires() {
+        //    let isValid = true;
+
+        //    // 檢查每組 radio 是否有選中的選項
+        //    $('#tabContent').find('input[type="radio"]').each(function () {
+        //        const name = $(this).attr('name');
+        //        if ($(`input[name="${name}"]:checked`).length === 0) {
+        //            isValid = false;
+        //            Swal.fire({
+        //                icon: 'error',
+        //                title: '問卷未完成',
+        //                text: `請確保所有選項已填寫，例如 "${name}"。`,
+        //                confirmButtonText: '確定'
+        //            });
+        //            return false; // 中斷遍歷
+        //        }
+        //    });
+
+        //    // 檢查選擇「是」的選項是否填寫相關內容
+        //    $('#tabContent').find('input[type="radio"][value="yes"]:checked').each(function () {
+        //        const name = $(this).attr('name'); // 取得當前選中 radio 的 name
+        //        const idSuffix = name.split('_')[1]; // 假設 name 格式為 "pastHealth_ID" 或 "allergy_ID"
+        //        const relatedInputs = $(`input[name^="item"][name$="_${idSuffix}"], input[name^="details"][name$="_${idSuffix}"]`);
+
+        //        relatedInputs.each(function () {
+        //            if ($(this).val().trim() === '') {
+        //                isValid = false;
+        //                Swal.fire({
+        //                    icon: 'error',
+        //                    title: '問卷未完成',
+        //                    text: `請填寫與選擇「是」相關的所有內容，例如 "${name}"。`,
+        //                    confirmButtonText: '確定'
+        //                });
+        //                return false; // 中斷遍歷
+        //            }
+        //        });
+
+        //        if (!isValid) return false; // 中斷迴圈
+        //    });
+
+        //    return isValid;
+        //}
+
         function validateAllQuestionnaires() {
             let isValid = true;
 
-            // 檢查每組 radio 是否有選中的選項
-            $('#tabContent').find('input[type="radio"]').each(function () {
-                const name = $(this).attr('name');
-                if ($(`input[name="${name}"]:checked`).length === 0) {
-                    isValid = false;
+            // 驗證主頁數據
+            const savedMainData = sessionStorage.getItem('MainFormData');
+            if (savedMainData) {
+                const mainData = JSON.parse(savedMainData);
+                if (!mainData['fillDate'] || mainData['fillDate'].trim() === '') {
                     Swal.fire({
-                        icon: 'error',
-                        title: '問卷未完成',
-                        text: `請確保所有選項已填寫，例如 "${name}"。`,
+                        icon: 'warning',
+                        title: '日期未選擇',
+                        text: '請選擇填表日期！',
                         confirmButtonText: '確定'
                     });
-                    return false; // 中斷遍歷
+                    return false;
                 }
-            });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '主頁數據遺失',
+                    text: '請重新填寫主頁數據。',
+                    confirmButtonText: '確定'
+                });
+                return false;
+            }
 
-            // 檢查選擇「是」的選項是否填寫相關內容
-            $('#tabContent').find('input[type="radio"][value="yes"]:checked').each(function () {
-                const name = $(this).attr('name'); // 取得當前選中 radio 的 name
-                const idSuffix = name.split('_')[1]; // 假設 name 格式為 "pastHealth_ID" 或 "allergy_ID"
-                const relatedInputs = $(`input[name^="item"][name$="_${idSuffix}"], input[name^="details"][name$="_${idSuffix}"]`);
-
-                relatedInputs.each(function () {
-                    if ($(this).val().trim() === '') {
-                        isValid = false;
+            // 驗證所有頁籤數據
+            for (const key in sessionStorage) {
+                if (key === 'MainFormData') continue; // 跳過主頁數據
+                const tabData = JSON.parse(sessionStorage.getItem(key));
+                for (const fieldName in tabData) {
+                    if (!tabData[fieldName] || tabData[fieldName].trim() === '') {
                         Swal.fire({
                             icon: 'error',
                             title: '問卷未完成',
-                            text: `請填寫與選擇「是」相關的所有內容，例如 "${name}"。`,
+                            text: `請確保所有問卷內容已填寫完整，例如 "${fieldName}"。`,
                             confirmButtonText: '確定'
                         });
-                        return false; // 中斷遍歷
+                        return false;
                     }
-                });
-
-                if (!isValid) return false; // 中斷迴圈
-            });
+                }
+            }
 
             return isValid;
         }
-
         // 顯示醫療團隊身份驗證對話框
         function showTrainerAuthModal(evt, tabName, url) {
             evt.preventDefault();
