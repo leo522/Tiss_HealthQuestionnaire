@@ -411,16 +411,19 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
     public class CoordinationAndBalanceExaminationViewModel
     {
-        public int OrderNumber { get; set; } // 項次
-        public string TestFoot { get; set; } // 測試腳
-        public string TestSurface { get; set; } // 測試平面
-        public string Footwear { get; set; } // 腳穿著
-        public int DoubleLegError { get; set; } = 0; // 雙腳站立錯誤次數
-        public int TandemError { get; set; } = 0; // 腳跟前後站立錯誤次數
-        public int SingleLegError { get; set; } = 0; // 單腳站立錯誤次數
-        public float FirstTime { get; set; } = 0; // 第一次測試時間
-        public float SecondTime { get; set; } = 0; // 第二次測試時間
-        public float ThirdTime { get; set; } = 0; // 第三次測試時間
+        public int OrderNumber { get; set; } //項次
+        public string TestFoot { get; set; } //測試腳
+        public string TestSurface { get; set; } //測試平面
+        public string Footwear { get; set; } //腳穿著
+        public int DoubleLegError { get; set; } = 0; //雙腳站立錯誤次數
+        public int TandemError { get; set; } = 0; //腳跟前後站立錯誤次數
+        public int SingleLegError { get; set; } = 0; //單腳站立錯誤次數
+        public int TotalErrors { get; set; } = 0; //錯誤次數分數
+        public float FirstTime { get; set; } = 0; //第一次測試時間
+        public float SecondTime { get; set; } = 0; //第二次測試時間
+        public float ThirdTime { get; set; } = 0; //第三次測試時間
+        public float AverageTimes { get; set; } = 0; //平均時間
+        public float FastestTimes { get; set; } = 0; //最快時間
     }
     #endregion
 

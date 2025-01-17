@@ -35,12 +35,14 @@
 
                                 <!-- 有選項 -->
                                 <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                                    <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-5 w-5 text-blue-600"
+                                           @(item.Answer == "yes" ? "checked" : "")>
                                 </td>
 
                                 <!-- 無選項 -->
                                 <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-5 w-5 text-blue-600">
+                                    <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-5 w-5 text-blue-600"
+                                           @(item.Answer == "no" ? "checked" : "")>
                                 </td>
                             </tr>
                         }
@@ -52,11 +54,13 @@
             <div class="flex items-center mt-8 mb-4">
                 <span class="mr-4 font-medium">● 現在是否服用藥物：</span>
                 <label class="inline-flex items-center mr-4">
-                    <input type="radio" name="medication" value="no" class="form-radio h-5 w-5 text-blue-600">
+                    <input type="radio" name="medication" value="no" class="form-radio h-5 w-5 text-blue-600"
+                           @(ViewBag.MedicationAnswer == "no" ? "checked" : "")>
                     <span class="ml-2">無</span>
                 </label>
                 <label class="inline-flex items-center mr-4">
-                    <input type="radio" name="medication" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                    <input type="radio" name="medication" value="yes" class="form-radio h-5 w-5 text-blue-600"
+                           @(ViewBag.MedicationAnswer == "yes" ? "checked" : "")>
                     <span class="ml-2">有</span>
                 </label>
                 <span class="ml-2">(請述明)</span>
@@ -66,7 +70,8 @@
             <!-- 新增項目：備註 -->
             <div class="flex items-start mb-4">
                 <span class="mr-4 font-medium">● 備註：</span>
-                <input type="text" name="notes" class="border border-gray-300 rounded flex-none w-64 px-1 py-1">
+                <input type="text" name="notes" class="border border-gray-300 rounded flex-none w-64 px-1 py-1"
+                       value="@ViewBag.Notes" />
             </div>
 
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" >接續下一頁</button>

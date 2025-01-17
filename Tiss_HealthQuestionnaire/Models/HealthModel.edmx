@@ -340,6 +340,18 @@
           <Property Name="QuestionID" Type="int" Nullable="false" />
           <Property Name="Answer" Type="nvarchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="QuestionnaireResponses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Specialist" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FillName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="AtheNum" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Gender" Type="int" Nullable="false" />
+          <Property Name="FillDate" Type="date" Nullable="false" />
+          <Property Name="SubmissionDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="QuestionnaireType">
           <Key>
             <PropertyRef Name="Id" />
@@ -348,6 +360,241 @@
           <Property Name="Code" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseAllergicHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="IsAllergic" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseAllergicHistoryDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AllergicHistoryId" Type="int" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="30" />
+          <Property Name="IsAllergic" Type="bit" Nullable="false" />
+          <Property Name="AllergyDescription" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseCardiovascularScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Answer" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseConcentration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="ListA" Type="nvarchar" MaxLength="10" />
+          <Property Name="ListB" Type="nvarchar" MaxLength="10" />
+          <Property Name="ListC" Type="nvarchar" MaxLength="10" />
+          <Property Name="Response" Type="nvarchar" MaxLength="5" />
+          <Property Name="Score" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseConcussionMedication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="IsTakingMedication" Type="bit" Nullable="false" />
+          <Property Name="MedicationDetails" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseConcussionScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Answer" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseCoordinationAndBalance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="TestFoot" Type="nvarchar" MaxLength="10" />
+          <Property Name="TestSurface" Type="nvarchar" MaxLength="10" />
+          <Property Name="Footwear" Type="nvarchar" MaxLength="10" />
+          <Property Name="DoubleLegError" Type="int" />
+          <Property Name="TandemError" Type="int" />
+          <Property Name="SingleLegError" Type="int" />
+          <Property Name="FirstTime" Type="float" />
+          <Property Name="SecondTime" Type="float" />
+          <Property Name="ThirdTime" Type="float" />
+          <Property Name="AverageTime" Type="float" />
+          <Property Name="FastestTime" Type="float" />
+          <Property Name="TotalErrors" Type="int" />
+        </EntityType>
+        <EntityType Name="ResponseDelayedRecall">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseFamilyHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="10" />
+          <Property Name="FamilyHistoryOption" Type="nvarchar" MaxLength="10" />
+          <Property Name="OtherFamilyHistory" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseFemaleQuestionnaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="QuestionZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="QuestionEn" Type="nvarchar" MaxLength="10" />
+          <Property Name="DisplayAnswer" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseImmediateMemory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstTestScore" Type="int" />
+          <Property Name="SecondTestScore" Type="int" />
+          <Property Name="ThirdTestScore" Type="int" />
+        </EntityType>
+        <EntityType Name="ResponseInjury">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="InjuryPart" Type="nvarchar" MaxLength="10" />
+          <Property Name="LeftSide" Type="bit" Nullable="false" />
+          <Property Name="RightSide" Type="bit" Nullable="false" />
+          <Property Name="InjuryTypes" Type="nvarchar" MaxLength="50" />
+          <Property Name="TreatmentMethods" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsCurrent" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseOrientation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrientationScore" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseOrthopaedicScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="ObservationPoints" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Result" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponsePastDrugs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="MedicationName" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
+          <Property Name="OtherDrugs" Type="nvarchar" MaxLength="50" />
+          <Property Name="TUE" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponsePastHealth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="HasAbnormality" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponsePastHealthDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PastHealthId" Type="int" Nullable="false" />
+          <Property Name="Item1" Type="nvarchar" MaxLength="30" />
+          <Property Name="Item2" Type="nvarchar" MaxLength="30" />
+          <Property Name="Item3" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="ResponsePastHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="10" />
+          <Property Name="PastHistoryOption" Type="nvarchar" MaxLength="10" />
+          <Property Name="OtherPastHistory" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponsePresentIllness">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="ReceivingOtherTherapies" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseSupplements">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="ItemZh" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
+          <Property Name="OtherSupplements" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseSymptomEvaluation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
+          <Property Name="Symptom" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseTotalScores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionnaireResponseId" Type="int" Nullable="false" />
+          <Property Name="OrientationScore" Type="int" Nullable="false" />
+          <Property Name="ImmediateMemoryScore" Type="int" Nullable="false" />
+          <Property Name="ConcentrationScore" Type="int" Nullable="false" />
+          <Property Name="DelayedRecallScore" Type="int" Nullable="false" />
+          <Property Name="TotalScore" Type="int" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="SurgeryHistory">
           <Key>
@@ -482,6 +729,270 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ResponseA__Aller__0662F0A3">
+          <End Role="ResponseAllergicHistory" Type="Self.ResponseAllergicHistory" Multiplicity="1" />
+          <End Role="ResponseAllergicHistoryDetails" Type="Self.ResponseAllergicHistoryDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponseAllergicHistory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseAllergicHistoryDetails">
+              <PropertyRef Name="AllergicHistoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseA__Quest__038683F8">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseAllergicHistory" Type="Self.ResponseAllergicHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseAllergicHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__1D4655FB">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseCardiovascularScreening" Type="Self.ResponseCardiovascularScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseCardiovascularScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__2022C2A6">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseConcussionScreening" Type="Self.ResponseConcussionScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcussionScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__22FF2F51">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseConcussionMedication" Type="Self.ResponseConcussionMedication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcussionMedication">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__314D4EA8">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseConcentration" Type="Self.ResponseConcentration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcentration">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Total__60083D91">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseCoordinationAndBalance" Type="Self.ResponseCoordinationAndBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseCoordinationAndBalance">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseD__Quest__39E294A9">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseDelayedRecall" Type="Self.ResponseDelayedRecall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseDelayedRecall">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseF__Quest__093F5D4E">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseFamilyHistory" Type="Self.ResponseFamilyHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseFamilyHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseF__Quest__178D7CA5">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseFemaleQuestionnaire" Type="Self.ResponseFemaleQuestionnaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseFemaleQuestionnaire">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseI__Quest__1A69E950">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseInjury" Type="Self.ResponseInjury" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseInjury">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseI__Quest__2E70E1FD">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseImmediateMemory" Type="Self.ResponseImmediateMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseImmediateMemory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseO__Quest__28B808A7">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseOrthopaedicScreening" Type="Self.ResponseOrthopaedicScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseOrthopaedicScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseO__Quest__2B947552">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseOrientation" Type="Self.ResponseOrientation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseOrientation">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__PastH__00AA174D">
+          <End Role="ResponsePastHealth" Type="Self.ResponsePastHealth" Multiplicity="1" />
+          <End Role="ResponsePastHealthDetails" Type="Self.ResponsePastHealthDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsePastHealth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHealthDetails">
+              <PropertyRef Name="PastHealthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__0C1BC9F9">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponsePastHistory" Type="Self.ResponsePastHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__0EF836A4">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponsePresentIllness" Type="Self.ResponsePresentIllness" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePresentIllness">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__11D4A34F">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponsePastDrugs" Type="Self.ResponsePastDrugs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastDrugs">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__7DCDAAA2">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponsePastHealth" Type="Self.ResponsePastHealth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHealth">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseS__Quest__14B10FFA">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseSupplements" Type="Self.ResponseSupplements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseSupplements">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseS__Quest__25DB9BFC">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseSymptomEvaluation" Type="Self.ResponseSymptomEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseSymptomEvaluation">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseT__Quest__408F9238">
+          <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
+          <End Role="ResponseTotalScores" Type="Self.ResponseTotalScores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseTotalScores">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <!--產生期間發現錯誤:
 警告 6035: 關聯性 'FK_AthleteUser_Gender' 在主要端上，有不屬於資料表索引鍵的資料行。已排除此關聯性。
         <Association Name="FK_AthleteUser_Gender" />-->
@@ -534,7 +1045,30 @@
           <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireResponse" EntityType="Self.QuestionnaireResponse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireResponseDetails" EntityType="Self.QuestionnaireResponseDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionnaireResponses" EntityType="Self.QuestionnaireResponses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireType" EntityType="Self.QuestionnaireType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseAllergicHistory" EntityType="Self.ResponseAllergicHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseAllergicHistoryDetails" EntityType="Self.ResponseAllergicHistoryDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseCardiovascularScreening" EntityType="Self.ResponseCardiovascularScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseConcentration" EntityType="Self.ResponseConcentration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseConcussionMedication" EntityType="Self.ResponseConcussionMedication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseConcussionScreening" EntityType="Self.ResponseConcussionScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="Self.ResponseCoordinationAndBalance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseDelayedRecall" EntityType="Self.ResponseDelayedRecall" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseFamilyHistory" EntityType="Self.ResponseFamilyHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="Self.ResponseFemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseImmediateMemory" EntityType="Self.ResponseImmediateMemory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseInjury" EntityType="Self.ResponseInjury" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseOrientation" EntityType="Self.ResponseOrientation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseOrthopaedicScreening" EntityType="Self.ResponseOrthopaedicScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsePastDrugs" EntityType="Self.ResponsePastDrugs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsePastHealth" EntityType="Self.ResponsePastHealth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsePastHealthDetails" EntityType="Self.ResponsePastHealthDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsePastHistory" EntityType="Self.ResponsePastHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsePresentIllness" EntityType="Self.ResponsePresentIllness" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseSupplements" EntityType="Self.ResponseSupplements" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseSymptomEvaluation" EntityType="Self.ResponseSymptomEvaluation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseTotalScores" EntityType="Self.ResponseTotalScores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SymptomEvaluation" EntityType="Self.SymptomEvaluation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemporaryQuestionnaireData" EntityType="Self.TemporaryQuestionnaireData" Schema="dbo" store:Type="Tables" />
@@ -561,6 +1095,94 @@
           <AssociationSet Name="FK__Questionn__Respo__6477ECF3" Association="Self.FK__Questionn__Respo__6477ECF3">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseA__Aller__0662F0A3" Association="Self.FK__ResponseA__Aller__0662F0A3">
+            <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
+            <End Role="ResponseAllergicHistoryDetails" EntitySet="ResponseAllergicHistoryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseA__Quest__038683F8" Association="Self.FK__ResponseA__Quest__038683F8">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__1D4655FB" Association="Self.FK__ResponseC__Quest__1D4655FB">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseCardiovascularScreening" EntitySet="ResponseCardiovascularScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__2022C2A6" Association="Self.FK__ResponseC__Quest__2022C2A6">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcussionScreening" EntitySet="ResponseConcussionScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__22FF2F51" Association="Self.FK__ResponseC__Quest__22FF2F51">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcussionMedication" EntitySet="ResponseConcussionMedication" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__314D4EA8" Association="Self.FK__ResponseC__Quest__314D4EA8">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Total__60083D91" Association="Self.FK__ResponseC__Total__60083D91">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseD__Quest__39E294A9" Association="Self.FK__ResponseD__Quest__39E294A9">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseF__Quest__093F5D4E" Association="Self.FK__ResponseF__Quest__093F5D4E">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseFamilyHistory" EntitySet="ResponseFamilyHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseF__Quest__178D7CA5" Association="Self.FK__ResponseF__Quest__178D7CA5">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseFemaleQuestionnaire" EntitySet="ResponseFemaleQuestionnaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseI__Quest__1A69E950" Association="Self.FK__ResponseI__Quest__1A69E950">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseInjury" EntitySet="ResponseInjury" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseI__Quest__2E70E1FD" Association="Self.FK__ResponseI__Quest__2E70E1FD">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseImmediateMemory" EntitySet="ResponseImmediateMemory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseO__Quest__28B808A7" Association="Self.FK__ResponseO__Quest__28B808A7">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseOrthopaedicScreening" EntitySet="ResponseOrthopaedicScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseO__Quest__2B947552" Association="Self.FK__ResponseO__Quest__2B947552">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseOrientation" EntitySet="ResponseOrientation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__PastH__00AA174D" Association="Self.FK__ResponseP__PastH__00AA174D">
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
+            <End Role="ResponsePastHealthDetails" EntitySet="ResponsePastHealthDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__0C1BC9F9" Association="Self.FK__ResponseP__Quest__0C1BC9F9">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastHistory" EntitySet="ResponsePastHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__0EF836A4" Association="Self.FK__ResponseP__Quest__0EF836A4">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePresentIllness" EntitySet="ResponsePresentIllness" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__11D4A34F" Association="Self.FK__ResponseP__Quest__11D4A34F">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastDrugs" EntitySet="ResponsePastDrugs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__7DCDAAA2" Association="Self.FK__ResponseP__Quest__7DCDAAA2">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseS__Quest__14B10FFA" Association="Self.FK__ResponseS__Quest__14B10FFA">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseSupplements" EntitySet="ResponseSupplements" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseS__Quest__25DB9BFC" Association="Self.FK__ResponseS__Quest__25DB9BFC">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseSymptomEvaluation" EntitySet="ResponseSymptomEvaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseT__Quest__408F9238" Association="Self.FK__ResponseT__Quest__408F9238">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseTotalScores" EntitySet="ResponseTotalScores" />
           </AssociationSet>
           <AssociationSet Name="FK_TemporaryQuestionnaireData_QuestionnaireType" Association="Self.FK_TemporaryQuestionnaireData_QuestionnaireType">
             <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
@@ -637,7 +1259,118 @@
             <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
           </AssociationSet>
           <EntitySet Name="CoordinationAndBalanceExamination" EntityType="HealthQuestionnaireModel.CoordinationAndBalanceExamination" />
-        </EntityContainer>
+          <EntitySet Name="QuestionnaireResponses" EntityType="HealthQuestionnaireModel.QuestionnaireResponses" />
+          <EntitySet Name="ResponseAllergicHistory" EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" />
+          <EntitySet Name="ResponseAllergicHistoryDetails" EntityType="HealthQuestionnaireModel.ResponseAllergicHistoryDetails" />
+          <EntitySet Name="ResponseCardiovascularScreening" EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" />
+          <EntitySet Name="ResponseConcentration" EntityType="HealthQuestionnaireModel.ResponseConcentration" />
+          <EntitySet Name="ResponseConcussionMedication" EntityType="HealthQuestionnaireModel.ResponseConcussionMedication" />
+          <EntitySet Name="ResponseConcussionScreening" EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" />
+          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="HealthQuestionnaireModel.ResponseCoordinationAndBalance" />
+          <EntitySet Name="ResponseDelayedRecall" EntityType="HealthQuestionnaireModel.ResponseDelayedRecall" />
+          <EntitySet Name="ResponseFamilyHistory" EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" />
+          <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" />
+          <EntitySet Name="ResponseImmediateMemory" EntityType="HealthQuestionnaireModel.ResponseImmediateMemory" />
+          <EntitySet Name="ResponseInjury" EntityType="HealthQuestionnaireModel.ResponseInjury" />
+          <EntitySet Name="ResponseOrientation" EntityType="HealthQuestionnaireModel.ResponseOrientation" />
+          <EntitySet Name="ResponseOrthopaedicScreening" EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" />
+          <EntitySet Name="ResponsePastDrugs" EntityType="HealthQuestionnaireModel.ResponsePastDrugs" />
+          <EntitySet Name="ResponsePastHealth" EntityType="HealthQuestionnaireModel.ResponsePastHealth" />
+          <EntitySet Name="ResponsePastHealthDetails" EntityType="HealthQuestionnaireModel.ResponsePastHealthDetails" />
+          <EntitySet Name="ResponsePastHistory" EntityType="HealthQuestionnaireModel.ResponsePastHistory" />
+          <EntitySet Name="ResponsePresentIllness" EntityType="HealthQuestionnaireModel.ResponsePresentIllness" />
+          <EntitySet Name="ResponseSupplements" EntityType="HealthQuestionnaireModel.ResponseSupplements" />
+          <EntitySet Name="ResponseSymptomEvaluation" EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" />
+          <EntitySet Name="ResponseTotalScores" EntityType="HealthQuestionnaireModel.ResponseTotalScores" />
+          <AssociationSet Name="FK__ResponseA__Quest__038683F8" Association="HealthQuestionnaireModel.FK__ResponseA__Quest__038683F8">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__1D4655FB" Association="HealthQuestionnaireModel.FK__ResponseC__Quest__1D4655FB">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseCardiovascularScreening" EntitySet="ResponseCardiovascularScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__2022C2A6" Association="HealthQuestionnaireModel.FK__ResponseC__Quest__2022C2A6">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcussionScreening" EntitySet="ResponseConcussionScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__22FF2F51" Association="HealthQuestionnaireModel.FK__ResponseC__Quest__22FF2F51">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcussionMedication" EntitySet="ResponseConcussionMedication" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Quest__314D4EA8" Association="HealthQuestionnaireModel.FK__ResponseC__Quest__314D4EA8">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseC__Total__60083D91" Association="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseD__Quest__39E294A9" Association="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseF__Quest__093F5D4E" Association="HealthQuestionnaireModel.FK__ResponseF__Quest__093F5D4E">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseFamilyHistory" EntitySet="ResponseFamilyHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseF__Quest__178D7CA5" Association="HealthQuestionnaireModel.FK__ResponseF__Quest__178D7CA5">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseFemaleQuestionnaire" EntitySet="ResponseFemaleQuestionnaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseI__Quest__1A69E950" Association="HealthQuestionnaireModel.FK__ResponseI__Quest__1A69E950">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseInjury" EntitySet="ResponseInjury" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseI__Quest__2E70E1FD" Association="HealthQuestionnaireModel.FK__ResponseI__Quest__2E70E1FD">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseImmediateMemory" EntitySet="ResponseImmediateMemory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseO__Quest__28B808A7" Association="HealthQuestionnaireModel.FK__ResponseO__Quest__28B808A7">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseOrthopaedicScreening" EntitySet="ResponseOrthopaedicScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseO__Quest__2B947552" Association="HealthQuestionnaireModel.FK__ResponseO__Quest__2B947552">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseOrientation" EntitySet="ResponseOrientation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__0C1BC9F9" Association="HealthQuestionnaireModel.FK__ResponseP__Quest__0C1BC9F9">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastHistory" EntitySet="ResponsePastHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__0EF836A4" Association="HealthQuestionnaireModel.FK__ResponseP__Quest__0EF836A4">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePresentIllness" EntitySet="ResponsePresentIllness" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__11D4A34F" Association="HealthQuestionnaireModel.FK__ResponseP__Quest__11D4A34F">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastDrugs" EntitySet="ResponsePastDrugs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__Quest__7DCDAAA2" Association="HealthQuestionnaireModel.FK__ResponseP__Quest__7DCDAAA2">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseS__Quest__14B10FFA" Association="HealthQuestionnaireModel.FK__ResponseS__Quest__14B10FFA">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseSupplements" EntitySet="ResponseSupplements" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseS__Quest__25DB9BFC" Association="HealthQuestionnaireModel.FK__ResponseS__Quest__25DB9BFC">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseSymptomEvaluation" EntitySet="ResponseSymptomEvaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseT__Quest__408F9238" Association="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238">
+            <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
+            <End Role="ResponseTotalScores" EntitySet="ResponseTotalScores" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseA__Aller__0662F0A3" Association="HealthQuestionnaireModel.FK__ResponseA__Aller__0662F0A3">
+            <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
+            <End Role="ResponseAllergicHistoryDetails" EntitySet="ResponseAllergicHistoryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResponseP__PastH__00AA174D" Association="HealthQuestionnaireModel.FK__ResponseP__PastH__00AA174D">
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
+            <End Role="ResponsePastHealthDetails" EntitySet="ResponsePastHealthDetails" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="AllergicHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -1139,6 +1872,561 @@
           <Property Name="TestSurface" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Footwear" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="QuestionnaireResponses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Specialist" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FillName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AtheNum" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int32" Nullable="false" />
+          <Property Name="FillDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SubmissionDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ResponseAllergicHistory" Relationship="HealthQuestionnaireModel.FK__ResponseA__Quest__038683F8" FromRole="QuestionnaireResponses" ToRole="ResponseAllergicHistory" />
+          <NavigationProperty Name="ResponseCardiovascularScreening" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__1D4655FB" FromRole="QuestionnaireResponses" ToRole="ResponseCardiovascularScreening" />
+          <NavigationProperty Name="ResponseConcussionScreening" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__2022C2A6" FromRole="QuestionnaireResponses" ToRole="ResponseConcussionScreening" />
+          <NavigationProperty Name="ResponseConcussionMedication" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__22FF2F51" FromRole="QuestionnaireResponses" ToRole="ResponseConcussionMedication" />
+          <NavigationProperty Name="ResponseConcentration" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__314D4EA8" FromRole="QuestionnaireResponses" ToRole="ResponseConcentration" />
+          <NavigationProperty Name="ResponseCoordinationAndBalance" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91" FromRole="QuestionnaireResponses" ToRole="ResponseCoordinationAndBalance" />
+          <NavigationProperty Name="ResponseDelayedRecall" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9" FromRole="QuestionnaireResponses" ToRole="ResponseDelayedRecall" />
+          <NavigationProperty Name="ResponseFamilyHistory" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__093F5D4E" FromRole="QuestionnaireResponses" ToRole="ResponseFamilyHistory" />
+          <NavigationProperty Name="ResponseFemaleQuestionnaire" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__178D7CA5" FromRole="QuestionnaireResponses" ToRole="ResponseFemaleQuestionnaire" />
+          <NavigationProperty Name="ResponseInjury" Relationship="HealthQuestionnaireModel.FK__ResponseI__Quest__1A69E950" FromRole="QuestionnaireResponses" ToRole="ResponseInjury" />
+          <NavigationProperty Name="ResponseImmediateMemory" Relationship="HealthQuestionnaireModel.FK__ResponseI__Quest__2E70E1FD" FromRole="QuestionnaireResponses" ToRole="ResponseImmediateMemory" />
+          <NavigationProperty Name="ResponseOrthopaedicScreening" Relationship="HealthQuestionnaireModel.FK__ResponseO__Quest__28B808A7" FromRole="QuestionnaireResponses" ToRole="ResponseOrthopaedicScreening" />
+          <NavigationProperty Name="ResponseOrientation" Relationship="HealthQuestionnaireModel.FK__ResponseO__Quest__2B947552" FromRole="QuestionnaireResponses" ToRole="ResponseOrientation" />
+          <NavigationProperty Name="ResponsePastHistory" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__0C1BC9F9" FromRole="QuestionnaireResponses" ToRole="ResponsePastHistory" />
+          <NavigationProperty Name="ResponsePresentIllness" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__0EF836A4" FromRole="QuestionnaireResponses" ToRole="ResponsePresentIllness" />
+          <NavigationProperty Name="ResponsePastDrugs" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__11D4A34F" FromRole="QuestionnaireResponses" ToRole="ResponsePastDrugs" />
+          <NavigationProperty Name="ResponsePastHealth" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__7DCDAAA2" FromRole="QuestionnaireResponses" ToRole="ResponsePastHealth" />
+          <NavigationProperty Name="ResponseSupplements" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__14B10FFA" FromRole="QuestionnaireResponses" ToRole="ResponseSupplements" />
+          <NavigationProperty Name="ResponseSymptomEvaluation" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__25DB9BFC" FromRole="QuestionnaireResponses" ToRole="ResponseSymptomEvaluation" />
+          <NavigationProperty Name="ResponseTotalScores" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238" FromRole="QuestionnaireResponses" ToRole="ResponseTotalScores" />
+        </EntityType>
+        <EntityType Name="ResponseAllergicHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="IsAllergic" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseA__Quest__038683F8" FromRole="ResponseAllergicHistory" ToRole="QuestionnaireResponses" />
+          <NavigationProperty Name="ResponseAllergicHistoryDetails" Relationship="HealthQuestionnaireModel.FK__ResponseA__Aller__0662F0A3" FromRole="ResponseAllergicHistory" ToRole="ResponseAllergicHistoryDetails" />
+        </EntityType>
+        <EntityType Name="ResponseAllergicHistoryDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AllergicHistoryId" Type="Int32" Nullable="false" />
+          <Property Name="ItemZh" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IsAllergic" Type="Boolean" Nullable="false" />
+          <Property Name="AllergyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ResponseAllergicHistory" Relationship="HealthQuestionnaireModel.FK__ResponseA__Aller__0662F0A3" FromRole="ResponseAllergicHistoryDetails" ToRole="ResponseAllergicHistory" />
+        </EntityType>
+        <EntityType Name="ResponseCardiovascularScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__1D4655FB" FromRole="ResponseCardiovascularScreening" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseConcentration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="ListA" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ListB" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ListC" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Response" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__314D4EA8" FromRole="ResponseConcentration" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseConcussionMedication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="IsTakingMedication" Type="Boolean" Nullable="false" />
+          <Property Name="MedicationDetails" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__22FF2F51" FromRole="ResponseConcussionMedication" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseConcussionScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__2022C2A6" FromRole="ResponseConcussionScreening" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseCoordinationAndBalance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="TestFoot" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TestSurface" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Footwear" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DoubleLegError" Type="Int32" />
+          <Property Name="TandemError" Type="Int32" />
+          <Property Name="SingleLegError" Type="Int32" />
+          <Property Name="FirstTime" Type="Double" />
+          <Property Name="SecondTime" Type="Double" />
+          <Property Name="ThirdTime" Type="Double" />
+          <Property Name="AverageTime" Type="Double" />
+          <Property Name="FastestTime" Type="Double" />
+          <Property Name="TotalErrors" Type="Int32" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91" FromRole="ResponseCoordinationAndBalance" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseDelayedRecall">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9" FromRole="ResponseDelayedRecall" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseFamilyHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="GeneralPartsEn" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FamilyHistoryOption" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OtherFamilyHistory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__093F5D4E" FromRole="ResponseFamilyHistory" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseFemaleQuestionnaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="QuestionZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionEn" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayAnswer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__178D7CA5" FromRole="ResponseFemaleQuestionnaire" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseImmediateMemory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstTestScore" Type="Int32" />
+          <Property Name="SecondTestScore" Type="Int32" />
+          <Property Name="ThirdTestScore" Type="Int32" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseI__Quest__2E70E1FD" FromRole="ResponseImmediateMemory" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseInjury">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="InjuryPart" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="LeftSide" Type="Boolean" Nullable="false" />
+          <Property Name="RightSide" Type="Boolean" Nullable="false" />
+          <Property Name="InjuryTypes" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TreatmentMethods" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseI__Quest__1A69E950" FromRole="ResponseInjury" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseOrientation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrientationScore" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseO__Quest__2B947552" FromRole="ResponseOrientation" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseOrthopaedicScreening">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="ObservationPoints" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Result" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseO__Quest__28B808A7" FromRole="ResponseOrthopaedicScreening" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponsePastDrugs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="MedicationName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
+          <Property Name="OtherDrugs" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TUE" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__11D4A34F" FromRole="ResponsePastDrugs" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponsePastHealth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="HasAbnormality" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__7DCDAAA2" FromRole="ResponsePastHealth" ToRole="QuestionnaireResponses" />
+          <NavigationProperty Name="ResponsePastHealthDetails" Relationship="HealthQuestionnaireModel.FK__ResponseP__PastH__00AA174D" FromRole="ResponsePastHealth" ToRole="ResponsePastHealthDetails" />
+        </EntityType>
+        <EntityType Name="ResponsePastHealthDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PastHealthId" Type="Int32" Nullable="false" />
+          <Property Name="Item1" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Item2" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Item3" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ResponsePastHealth" Relationship="HealthQuestionnaireModel.FK__ResponseP__PastH__00AA174D" FromRole="ResponsePastHealthDetails" ToRole="ResponsePastHealth" />
+        </EntityType>
+        <EntityType Name="ResponsePastHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="GeneralPartsZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="GeneralPartsEn" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PastHistoryOption" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OtherPastHistory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__0C1BC9F9" FromRole="ResponsePastHistory" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponsePresentIllness">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="PartsOfBodyZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivingOtherTherapies" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__0EF836A4" FromRole="ResponsePresentIllness" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseSupplements">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="ItemZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
+          <Property Name="OtherSupplements" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__14B10FFA" FromRole="ResponseSupplements" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseSymptomEvaluation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="Symptom" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__25DB9BFC" FromRole="ResponseSymptomEvaluation" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <EntityType Name="ResponseTotalScores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionnaireResponseId" Type="Int32" Nullable="false" />
+          <Property Name="OrientationScore" Type="Int32" Nullable="false" />
+          <Property Name="ImmediateMemoryScore" Type="Int32" Nullable="false" />
+          <Property Name="ConcentrationScore" Type="Int32" Nullable="false" />
+          <Property Name="DelayedRecallScore" Type="Int32" Nullable="false" />
+          <Property Name="TotalScore" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238" FromRole="ResponseTotalScores" ToRole="QuestionnaireResponses" />
+        </EntityType>
+        <Association Name="FK__ResponseA__Quest__038683F8">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseAllergicHistory" Role="ResponseAllergicHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseAllergicHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__1D4655FB">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseCardiovascularScreening" Role="ResponseCardiovascularScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseCardiovascularScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__2022C2A6">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseConcussionScreening" Role="ResponseConcussionScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcussionScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__22FF2F51">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseConcussionMedication" Role="ResponseConcussionMedication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcussionMedication">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Quest__314D4EA8">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseConcentration" Role="ResponseConcentration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseConcentration">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseC__Total__60083D91">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseCoordinationAndBalance" Role="ResponseCoordinationAndBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseCoordinationAndBalance">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseD__Quest__39E294A9">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseDelayedRecall" Role="ResponseDelayedRecall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseDelayedRecall">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseF__Quest__093F5D4E">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseFamilyHistory" Role="ResponseFamilyHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseFamilyHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseF__Quest__178D7CA5">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" Role="ResponseFemaleQuestionnaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseFemaleQuestionnaire">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseI__Quest__1A69E950">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseInjury" Role="ResponseInjury" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseInjury">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseI__Quest__2E70E1FD">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseImmediateMemory" Role="ResponseImmediateMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseImmediateMemory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseO__Quest__28B808A7">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseOrthopaedicScreening" Role="ResponseOrthopaedicScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseOrthopaedicScreening">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseO__Quest__2B947552">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseOrientation" Role="ResponseOrientation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseOrientation">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__0C1BC9F9">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponsePastHistory" Role="ResponsePastHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHistory">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__0EF836A4">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponsePresentIllness" Role="ResponsePresentIllness" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePresentIllness">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__11D4A34F">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponsePastDrugs" Role="ResponsePastDrugs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastDrugs">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__Quest__7DCDAAA2">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponsePastHealth" Role="ResponsePastHealth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHealth">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseS__Quest__14B10FFA">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseSupplements" Role="ResponseSupplements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseSupplements">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseS__Quest__25DB9BFC">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseSymptomEvaluation" Role="ResponseSymptomEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseSymptomEvaluation">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseT__Quest__408F9238">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseTotalScores" Role="ResponseTotalScores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseTotalScores">
+              <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseA__Aller__0662F0A3">
+          <End Type="HealthQuestionnaireModel.ResponseAllergicHistory" Role="ResponseAllergicHistory" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseAllergicHistoryDetails" Role="ResponseAllergicHistoryDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponseAllergicHistory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponseAllergicHistoryDetails">
+              <PropertyRef Name="AllergicHistoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResponseP__PastH__00AA174D">
+          <End Type="HealthQuestionnaireModel.ResponsePastHealth" Role="ResponsePastHealth" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponsePastHealthDetails" Role="ResponsePastHealthDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsePastHealth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResponsePastHealthDetails">
+              <PropertyRef Name="PastHealthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1603,7 +2891,277 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="QuestionnaireResponses">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireResponses">
+              <MappingFragment StoreEntitySet="QuestionnaireResponses">
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="FillDate" ColumnName="FillDate" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="AtheNum" ColumnName="AtheNum" />
+                <ScalarProperty Name="FillName" ColumnName="FillName" />
+                <ScalarProperty Name="Specialist" ColumnName="Specialist" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseAllergicHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseAllergicHistory">
+              <MappingFragment StoreEntitySet="ResponseAllergicHistory">
+                <ScalarProperty Name="IsAllergic" ColumnName="IsAllergic" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseAllergicHistoryDetails">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseAllergicHistoryDetails">
+              <MappingFragment StoreEntitySet="ResponseAllergicHistoryDetails">
+                <ScalarProperty Name="AllergyDescription" ColumnName="AllergyDescription" />
+                <ScalarProperty Name="IsAllergic" ColumnName="IsAllergic" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="AllergicHistoryId" ColumnName="AllergicHistoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseCardiovascularScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseCardiovascularScreening">
+              <MappingFragment StoreEntitySet="ResponseCardiovascularScreening">
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseConcentration">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseConcentration">
+              <MappingFragment StoreEntitySet="ResponseConcentration">
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="ListC" ColumnName="ListC" />
+                <ScalarProperty Name="ListB" ColumnName="ListB" />
+                <ScalarProperty Name="ListA" ColumnName="ListA" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseConcussionMedication">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseConcussionMedication">
+              <MappingFragment StoreEntitySet="ResponseConcussionMedication">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="MedicationDetails" ColumnName="MedicationDetails" />
+                <ScalarProperty Name="IsTakingMedication" ColumnName="IsTakingMedication" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseConcussionScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseConcussionScreening">
+              <MappingFragment StoreEntitySet="ResponseConcussionScreening">
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseCoordinationAndBalance">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseCoordinationAndBalance">
+              <MappingFragment StoreEntitySet="ResponseCoordinationAndBalance">
+                <ScalarProperty Name="TotalErrors" ColumnName="TotalErrors" />
+                <ScalarProperty Name="FastestTime" ColumnName="FastestTime" />
+                <ScalarProperty Name="AverageTime" ColumnName="AverageTime" />
+                <ScalarProperty Name="ThirdTime" ColumnName="ThirdTime" />
+                <ScalarProperty Name="SecondTime" ColumnName="SecondTime" />
+                <ScalarProperty Name="FirstTime" ColumnName="FirstTime" />
+                <ScalarProperty Name="SingleLegError" ColumnName="SingleLegError" />
+                <ScalarProperty Name="TandemError" ColumnName="TandemError" />
+                <ScalarProperty Name="DoubleLegError" ColumnName="DoubleLegError" />
+                <ScalarProperty Name="Footwear" ColumnName="Footwear" />
+                <ScalarProperty Name="TestSurface" ColumnName="TestSurface" />
+                <ScalarProperty Name="TestFoot" ColumnName="TestFoot" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseDelayedRecall">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseDelayedRecall">
+              <MappingFragment StoreEntitySet="ResponseDelayedRecall">
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseFamilyHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseFamilyHistory">
+              <MappingFragment StoreEntitySet="ResponseFamilyHistory">
+                <ScalarProperty Name="OtherFamilyHistory" ColumnName="OtherFamilyHistory" />
+                <ScalarProperty Name="FamilyHistoryOption" ColumnName="FamilyHistoryOption" />
+                <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
+                <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseFemaleQuestionnaire">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseFemaleQuestionnaire">
+              <MappingFragment StoreEntitySet="ResponseFemaleQuestionnaire">
+                <ScalarProperty Name="DisplayAnswer" ColumnName="DisplayAnswer" />
+                <ScalarProperty Name="QuestionEn" ColumnName="QuestionEn" />
+                <ScalarProperty Name="QuestionZh" ColumnName="QuestionZh" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseImmediateMemory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseImmediateMemory">
+              <MappingFragment StoreEntitySet="ResponseImmediateMemory">
+                <ScalarProperty Name="ThirdTestScore" ColumnName="ThirdTestScore" />
+                <ScalarProperty Name="SecondTestScore" ColumnName="SecondTestScore" />
+                <ScalarProperty Name="FirstTestScore" ColumnName="FirstTestScore" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseInjury">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseInjury">
+              <MappingFragment StoreEntitySet="ResponseInjury">
+                <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
+                <ScalarProperty Name="TreatmentMethods" ColumnName="TreatmentMethods" />
+                <ScalarProperty Name="InjuryTypes" ColumnName="InjuryTypes" />
+                <ScalarProperty Name="RightSide" ColumnName="RightSide" />
+                <ScalarProperty Name="LeftSide" ColumnName="LeftSide" />
+                <ScalarProperty Name="InjuryPart" ColumnName="InjuryPart" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseOrientation">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseOrientation">
+              <MappingFragment StoreEntitySet="ResponseOrientation">
+                <ScalarProperty Name="OrientationScore" ColumnName="OrientationScore" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseOrthopaedicScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseOrthopaedicScreening">
+              <MappingFragment StoreEntitySet="ResponseOrthopaedicScreening">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="ObservationPoints" ColumnName="ObservationPoints" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsePastDrugs">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePastDrugs">
+              <MappingFragment StoreEntitySet="ResponsePastDrugs">
+                <ScalarProperty Name="TUE" ColumnName="TUE" />
+                <ScalarProperty Name="OtherDrugs" ColumnName="OtherDrugs" />
+                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
+                <ScalarProperty Name="MedicationName" ColumnName="MedicationName" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsePastHealth">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePastHealth">
+              <MappingFragment StoreEntitySet="ResponsePastHealth">
+                <ScalarProperty Name="HasAbnormality" ColumnName="HasAbnormality" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsePastHealthDetails">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePastHealthDetails">
+              <MappingFragment StoreEntitySet="ResponsePastHealthDetails">
+                <ScalarProperty Name="Item3" ColumnName="Item3" />
+                <ScalarProperty Name="Item2" ColumnName="Item2" />
+                <ScalarProperty Name="Item1" ColumnName="Item1" />
+                <ScalarProperty Name="PastHealthId" ColumnName="PastHealthId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsePastHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePastHistory">
+              <MappingFragment StoreEntitySet="ResponsePastHistory">
+                <ScalarProperty Name="OtherPastHistory" ColumnName="OtherPastHistory" />
+                <ScalarProperty Name="PastHistoryOption" ColumnName="PastHistoryOption" />
+                <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
+                <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsePresentIllness">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePresentIllness">
+              <MappingFragment StoreEntitySet="ResponsePresentIllness">
+                <ScalarProperty Name="ReceivingOtherTherapies" ColumnName="ReceivingOtherTherapies" />
+                <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseSupplements">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseSupplements">
+              <MappingFragment StoreEntitySet="ResponseSupplements">
+                <ScalarProperty Name="OtherSupplements" ColumnName="OtherSupplements" />
+                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseSymptomEvaluation">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseSymptomEvaluation">
+              <MappingFragment StoreEntitySet="ResponseSymptomEvaluation">
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Symptom" ColumnName="Symptom" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseTotalScores">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseTotalScores">
+              <MappingFragment StoreEntitySet="ResponseTotalScores">
+                <ScalarProperty Name="TotalScore" ColumnName="TotalScore" />
+                <ScalarProperty Name="DelayedRecallScore" ColumnName="DelayedRecallScore" />
+                <ScalarProperty Name="ConcentrationScore" ColumnName="ConcentrationScore" />
+                <ScalarProperty Name="ImmediateMemoryScore" ColumnName="ImmediateMemoryScore" />
+                <ScalarProperty Name="OrientationScore" ColumnName="OrientationScore" />
+                <ScalarProperty Name="QuestionnaireResponseId" ColumnName="QuestionnaireResponseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

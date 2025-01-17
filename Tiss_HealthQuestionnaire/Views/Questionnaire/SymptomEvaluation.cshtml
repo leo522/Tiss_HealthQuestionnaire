@@ -98,17 +98,22 @@
             </div>
 
             <div class="flex justify-between space-x-4 mt-4">
-                <button type="submit" class="btn btn-success">回問卷首頁</button>
-
-                @*<form action="/Questionnaire/CognitiveScreening" method="get" class="mt-4">
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">接續下一頁</button>
-                    </form>*@
+                <button type="button" class="btn btn-success" id="returnToMainButton">回問卷首頁</button>
             </div>
         </form>
     </div>
 
     <script>
         $(document).ready(function () {
+            $('#returnToMainButton').on('click', function () {
+            // 提交表單，然後跳轉至首頁
+            const form = $('form');
+            const action = form.attr('action');
+            form.attr('action', '/Questionnaire/SaveSymptomEvaluation'); // 確保正確的 POST URL
+            form.append('<input type="hidden" name="redirectToMain" value="true">'); // 標記跳轉首頁
+
+            form.submit();
+        });
             // 監聽所有的 radio 按鈕
             $('.score-option').on('change', function () {
                 updateTotals();

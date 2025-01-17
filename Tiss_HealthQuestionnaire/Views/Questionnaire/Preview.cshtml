@@ -125,7 +125,7 @@
                             <tr>
                                 <td class="border border-gray-300 p-2">@detail.GeneralPartsZh (@detail.GeneralPartsEn)</td>
                                 <td class="border border-gray-300 p-2">
-                                        @Model.ConvertYesNoToLocalizedString(detail.FamilyHistoryOption)
+                                    @Model.ConvertYesNoToLocalizedString(detail.FamilyHistoryOption)
                                 </td>
                             </tr>
                         }
@@ -164,7 +164,7 @@
                             <tr>
                                 <td class="border border-gray-300 p-2">@detail.GeneralPartsZh (@detail.GeneralPartsEn)</td>
                                 <td class="border border-gray-300 p-2">
-                                        @Model.ConvertYesNoToLocalizedString(detail.PastHistoryOption)                
+                                    @Model.ConvertYesNoToLocalizedString(detail.PastHistoryOption)
                                 </td>
                             </tr>
                         }
@@ -185,7 +185,7 @@
             }
         </div>
 
-        
+
         <!-- 顯示現在病史 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">現在病史(Present Illness)</h2>
@@ -381,7 +381,7 @@
             }
             else
             {
-                <p class="text-gray-600">沒有記錄到過去傷害狀況。</p>
+                <p class="text-gray-600">沒有過去傷害狀況。</p>
             }
         </div>
 
@@ -444,7 +444,7 @@
             }
             else
             {
-                <p class="text-gray-600">沒有記錄到目前傷害狀況。</p>
+                <p class="text-gray-600">目前沒有傷害狀況。</p>
             }
         </div>
 
@@ -475,7 +475,7 @@
             }
         </div>
 
-        <!-- 腦震盪篩檢-選手自填-選手背景(1) -->
+        <!-- 腦震盪篩檢-選手自填-選手背景 -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢-選手自填(ConcussionScreening)</h3>
             @if (Model.ConcussionScreeningDetails != null && Model.ConcussionScreeningDetails.Any())
@@ -509,7 +509,7 @@
             </div>
         </div>
 
-        <!-- 症狀自我評估-選手(2) -->
+        <!-- 症狀自我評估-選手 -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估(Self-assessment of Symptoms)</h3>
             @if (Model.SymptomEvaluationDetails != null && Model.SymptomEvaluationDetails.Any())
@@ -821,20 +821,42 @@
 
     </div>
 
-        <!-- 操作按鈕 -->
-        <div class="flex justify-between items-center mt-6">
-            <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">返回編輯</a>
-            <form method="post" action="/Questionnaire/Submit" class="inline">
-                <input type="hidden" name="specialist" value="@Model.Specialist" />
-                <input type="hidden" name="fillName" value="@Model.FillName" />
-                <input type="hidden" name="atheNum" value="@Model.AtheNum" />
-                <input type="hidden" name="gender" value="@Model.Gender" />
-                <input type="hidden" name="fillDate" value="@Model.FillDate" />
-                <!-- 隱藏其他問卷的值 -->
-                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
-                    確認送出
-                </button>
-            </form>
-        </div>
+    <!-- 操作按鈕 -->
+    <div class="flex justify-between items-center mt-6">
+        <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
+            返回編輯
+        </a>
+        <form method="post" action="/Questionnaire/Submit" class="inline">
+            <input type="hidden" name="specialist" value="@Model.Specialist" />
+            <input type="hidden" name="fillName" value="@Model.FillName" />
+            <input type="hidden" name="atheNum" value="@Model.AtheNum" />
+            <input type="hidden" name="gender" value="@Model.Gender" />
+            <input type="hidden" name="fillDate" value="@Model.FillDate" />
+            <!-- 隱藏其他問卷的值 -->
+            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
+                確認送出
+            </button>
+        </form>
+    </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const successMessage = '@ViewBag.SuccessMessage';
+    const errorMessage = '@ViewBag.ErrorMessage';
+
+    if (successMessage) {
+        Swal.fire({
+            icon: 'success',
+            title: '存檔成功',
+            text: successMessage,
+        });
+    } else if (errorMessage) {
+        Swal.fire({
+            icon: 'error',
+            title: '存檔失敗',
+            text: errorMessage,
+        });
+    }
+});
+    </script>
 </body>
 </html>
