@@ -27,21 +27,14 @@
                         @foreach (var item in Model)
                         {
                             <tr class="hover:bg-gray-100">
-                                <!-- 項次 -->
-                                <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
-
-                                <!-- 問題 -->
-                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                                <!-- 0選項 -->
+                                <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td> <!-- 項次 -->
+                                <td class="border border-gray-300 px-4 py-2">@item.Question</td><!-- 問題 -->
                                 <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="question_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 score-option">
-                                </td>
-
-                                <!-- 1選項 -->
+                                    <input type="radio" name="question_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 score-option" @(item.OrientationScore == 0 ? "checked" : "") >
+                                </td> <!-- 0選項 -->
                                 <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="question_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 score-option">
-                                </td>
+                                    <input type="radio" name="question_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 score-option" @(item.OrientationScore == 1 ? "checked" : "")>
+                                </td><!-- 1選項 -->
                             </tr>
                         }
                     </tbody>

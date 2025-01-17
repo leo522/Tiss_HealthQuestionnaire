@@ -264,18 +264,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.Question
             }).ToList();
 
-            //// 如果有暫存的數據，恢復填寫狀態
-            //var savedAnswers = Session["ConcussionScreeningAnswers"] as Dictionary<int, string>;
-            //if (savedAnswers != null)
-            //{
-            //    foreach (var item in viewModel)
-            //    {
-            //        if (savedAnswers.ContainsKey(item.OrderNumber))
-            //        {
-            //            item.Answer = savedAnswers[item.OrderNumber]; //恢復用戶填寫的答案
-            //        }
-            //    }
-            //}
             // 從 Session 恢復數據
             if (Session["ConcussionScreeningAnswers"] is Dictionary<int, string> savedAnswers)
             {
@@ -308,18 +296,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Question = q.SymptomItem
             }).ToList();
 
-            //// 如果有暫存的數據，恢復填寫狀態
-            //var savedAnswers = Session["SymptomEvaluationAnswers"] as Dictionary<int, string>;
-            //if (savedAnswers != null)
-            //{
-            //    foreach (var item in viewModel)
-            //    {
-            //        if (savedAnswers.ContainsKey(item.OrderNumber))
-            //        {
-            //            item.Answer = savedAnswers[item.OrderNumber]; //恢復用戶填寫的答案
-            //        }
-            //    }
-            //}
             // 從 Session 恢復數據
             if (Session["SymptomEvaluationAnswers"] is Dictionary<int, int> savedAnswers)
             {
@@ -359,29 +335,40 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                string loggedInUserName = Session["UserName"] as string;
-                //bool isAthleticTrainer = _db.Test_AthleticTrainer.Any(at => at.ATName == loggedInUserName && at.IsActive);
-                bool isAthleticTrainer = _db.Test_AthleticTrainer.Where(at => at.ATName == loggedInUserName).Any(at => at.IsActive == true);
-
                 var questions = _db.CognitiveScreening.ToList();
+
+                var savedAnswers = Session["CognitiveScreeningAnswers"] as Dictionary<int, int> ?? new Dictionary<int, int>();
 
                 var viewModel = questions.Select((q, index) => new CognitiveScreeningViewModel
                 {
-                    OrderNumber = index + 1,  // 自動遞增項次
-                    Question = q.Question     // 顯示問題
+                    OrderNumber = index + 1,
+                    Question = q.Question,
+                    OrientationScore = savedAnswers.ContainsKey(index + 1) ? savedAnswers[index + 1] : 0
                 }).ToList();
 
-                var savedAnswers = Session["OrientationAnswers"] as Dictionary<int, int>; //如果有暫存的數據，恢復填寫狀態
-                if (savedAnswers != null)
-                {
-                    foreach (var item in viewModel)
-                    {
-                        if (savedAnswers.ContainsKey(item.OrderNumber))
-                        {
-                            item.OrientationScore = savedAnswers[item.OrderNumber];
-                        }
-                    }
-                }
+                //string loggedInUserName = Session["UserName"] as string;
+
+                //bool isAthleticTrainer = _db.Test_AthleticTrainer.Where(at => at.ATName == loggedInUserName).Any(at => at.IsActive == true);
+
+                //var questions = _db.CognitiveScreening.ToList();
+
+                //var viewModel = questions.Select((q, index) => new CognitiveScreeningViewModel
+                //{
+                //    OrderNumber = index + 1,  // 自動遞增項次
+                //    Question = q.Question     // 顯示問題
+                //}).ToList();
+
+                //var savedAnswers = Session["OrientationAnswers"] as Dictionary<int, int>; //如果有暫存的數據，恢復填寫狀態
+                //if (savedAnswers != null)
+                //{
+                //    foreach (var item in viewModel)
+                //    {
+                //        if (savedAnswers.ContainsKey(item.OrderNumber))
+                //        {
+                //            item.OrientationScore = savedAnswers[item.OrderNumber];
+                //        }
+                //    }
+                //}
 
                 return View("CognitiveScreening", viewModel);
             }
@@ -1880,7 +1867,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                ModelState.AddModelError("", $"保存數據時出錯：{ex.Message}");
+                return View("CognitiveScreening");
             }
         }
         #endregion
@@ -1891,32 +1879,39 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                string action = form["action"]; //檢查是哪個按鈕觸發的
-                if (action == "Previous")
-                {
-                    // 不保存數據，直接返回定位頁面
-                    return RedirectToAction("CognitiveScreening");
-                }
+                //string action = form["action"];
+                //if (action == "Previous")
+                //{
+                //    // 不保存數據，直接返回定位頁面
+                //    return RedirectToAction("CognitiveScreening");
+                //}
+
+                //var answers = new Dictionary<string, int>();
+
+                //foreach (var key in form.AllKeys)
+                //{
+                //    if (key.StartsWith("first_") || key.StartsWith("second_") || key.StartsWith("third_"))
+                //    {
+                //        string[] parts = key.Split('_');
+                //        string questionKey = $"{parts[0]}_{parts[1]}"; // 保存區分次數的鍵
+                //        int answer = int.Parse(form[key]);
+                //        answers[questionKey] = answer;
+                //    }
+                //}
 
                 var answers = new Dictionary<string, int>();
-
                 foreach (var key in form.AllKeys)
                 {
                     if (key.StartsWith("first_") || key.StartsWith("second_") || key.StartsWith("third_"))
                     {
-                        string[] parts = key.Split('_');
-                        string questionKey = $"{parts[0]}_{parts[1]}"; // 保存區分次數的鍵
-                        int answer = int.Parse(form[key]);
-                        answers[questionKey] = answer;
+                        answers[key] = int.Parse(form[key]);
                     }
                 }
-
-                // 保存完成時間
-                string completionTime = form["CompletionTime"];
+                
+                string completionTime = form["CompletionTime"]; //保存完成時間
                 Session["ImmediateMemoryCompletionTime"] = completionTime;
 
-                // 保存數據到 Session
-                Session["ImmediateMemoryAnswers"] = answers;
+                Session["ImmediateMemoryAnswers"] = answers; //保存數據到 Session
 
                 return RedirectToAction("Concentration");
             }
@@ -1933,25 +1928,34 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                string action = form["action"]; //檢查是哪個按鈕觸發的
-                if (action == "Previous")
-                {
-                    // 不保存數據，直接返回定位頁面
-                    return RedirectToAction("CognitiveScreening");
-                }
+                //string action = form["action"]; //檢查是哪個按鈕觸發的
+                //if (action == "Previous")
+                //{
+                //    // 不保存數據，直接返回定位頁面
+                //    return RedirectToAction("CognitiveScreening");
+                //}
+
+                //var scores = new Dictionary<int, int>();
+
+                //foreach (var key in form.AllKeys)
+                //{
+                //    if (key.StartsWith("response_"))
+                //    {
+                //        int orderNumber = int.Parse(key.Split('_')[1]);
+                //        int score = int.Parse(form[key]);
+                //        scores[orderNumber] = score;
+                //    }
+                //}
 
                 var scores = new Dictionary<int, int>();
-
                 foreach (var key in form.AllKeys)
                 {
                     if (key.StartsWith("response_"))
                     {
                         int orderNumber = int.Parse(key.Split('_')[1]);
-                        int score = int.Parse(form[key]);
-                        scores[orderNumber] = score;
+                        scores[orderNumber] = int.Parse(form[key]);
                     }
                 }
-
                 Session["ConcentrationScores"] = scores;
 
                 return RedirectToAction("CoordinationAndBalanceExamination");

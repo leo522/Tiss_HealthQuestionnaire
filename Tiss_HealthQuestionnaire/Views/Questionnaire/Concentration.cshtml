@@ -29,30 +29,22 @@
                         @foreach (var item in Model)
                         {
                             <tr class="hover:bg-gray-100">
-                                <!-- List A -->
-                                <td class="border border-gray-300 px-4 py-2">@item.ListA</td>
-
-                                <!-- List B -->
-                                <td class="border border-gray-300 px-4 py-2">@item.ListB</td>
-
-                                <!-- List C -->
-                                <td class="border border-gray-300 px-4 py-2">@item.ListC</td>
-
+                                <td class="border border-gray-300 px-4 py-2">@item.ListA</td> <!-- List A -->
+                                <td class="border border-gray-300 px-4 py-2">@item.ListB</td> <!-- List B -->
+                                <td class="border border-gray-300 px-4 py-2">@item.ListC</td> <!-- List C -->
                                 <!-- Y 選項 -->
                                 <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option"> Y
+                                    <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option" @(item.Score == 1 ? "checked" : "")> Y
                                 </td>
 
                                 <!-- N 選項 -->
                                 <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option"> N
+                                    <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option" @(item.Score == 0 ? "checked" : "")> N
                                 </td>
 
-                                <!-- 分數 0 -->
-                                <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td>
+                                <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td> <!-- 分數 0 -->
 
-                                <!-- 分數 1 -->
-                                <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td>
+                                <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td> <!-- 分數 1 -->
                             </tr>
                         }
                     </tbody>
