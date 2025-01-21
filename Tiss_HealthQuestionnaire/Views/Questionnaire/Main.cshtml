@@ -56,7 +56,7 @@
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="flex flex-wrap">
                     <!-- 修改這裡的 onclick 事件，增加 URL -->
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l"
+                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l"
                             data-questionnaire-type="A" data-tab-name="PastHealth" data-url="/Questionnaire/PastHealth">
                         過去健康檢查病史
                     </button>
@@ -115,17 +115,19 @@
                             data-questionnaire-type="L" data-tab-name="ConcussionScreening" data-url="/Questionnaire/ConcussionScreening">
                         腦震盪篩檢-選手自填
                     </button>
-
+                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
+                            data-questionnaire-type="L" data-tab-name="SymptomEvaluation" data-url="/Questionnaire/SymptomEvaluation">
+                        症狀自我評估-選手自填(2)
+                    </button>*@
                     <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
                             data-questionnaire-type="M" data-tab-name="OrthopaedicScreening" data-url="/Questionnaire/OrthopaedicScreening">
                         骨科篩檢
                     </button>
 
                     @*防護員專屬頁籤按鈕*@
-                    <button id="cognitiveScreeningTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
-                        腦震盪篩檢-醫療團隊評估
-                    </button>
+                    <button id="tab_CognitiveScreening" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4" data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
+                            腦震盪篩檢-醫療團隊評估
+                        </button>
 
                     @*開刀史-不使用*@
                     @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
@@ -138,7 +140,7 @@
             <div id="tabContent"></div> <!-- 頁籤內容會在點擊時載入 -->
         </form>
 
-        <!-- 身份驗證對話框 -->
+        <!-- 醫療團隊身份驗證對話框 -->
         <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
@@ -156,41 +158,39 @@
                 <button id="closeModal" class="mt-2 text-red-500">取消</button>
             </div>
         </div>
-    </div>
-    <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
-            <form id="trainerAuthForm">
-                <div class="form-group mb-2">
-                    <label for="trainerUserName">醫療團隊帳號</label>
-                    <input type="text" class="form-control" id="trainerUserName" name="trainerUserName" required>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="trainerPassword">密碼</label>
-                    <input type="password" class="form-control" id="trainerPassword" name="trainerPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-full">驗證</button>
-            </form>
-            <button id="closeModal" class="mt-2 text-red-500">取消</button>
-        </div>
-    </div>
 
+    </div>
     <script>
         let currentQuestionnaireTypeCode = ''; // 全域變數
 
         $(document).ready(function () {
+            // 點擊頁籤按鈕
             $('.tablinks').on('click', function (e) {
-                e.preventDefault(); // 阻止默認按鈕行為
+                e.preventDefault();
+
                 const tabName = $(this).data('tab-name');
                 const url = $(this).data('url');
                 currentQuestionnaireTypeCode = $(this).data('questionnaire-type');
 
-                saveTabDataToSession(); //保存當前頁籤的數據到 sessionStorage
+                saveTabDataToSession();
 
-                if (tabName === 'CognitiveScreening') {
-                    // 如果是醫療團隊評估頁籤，顯示身份驗證對話框
-                    showTrainerAuthModal(e, tabName, url);
+                //// 檢查是否已通過驗證
+                //if (isTrainerAuthenticated()) {
+                //    openTab(tabName, url); // \如果已驗證，直接打開頁籤
+                //} else {
+                //    showTrainerAuthModal(e, tabName, url); // \如果未驗證，顯示身份驗證對話框
+                //}
+
+                // 判斷是否需要醫療團隊身份驗證
+                if (tabName === "CognitiveScreening") {
+                    // 檢查是否已通過驗證
+                    if (isTrainerAuthenticated()) {
+                        openTab(tabName, url); // 如果已驗證，直接打開頁籤
+                    } else {
+                        showTrainerAuthModal(e, tabName, url); // 如果未驗證，顯示身份驗證對話框
+                    }
                 } else {
+                    // 其他頁籤直接打開
                     openTab(tabName, url);
                 }
             });
@@ -202,12 +202,7 @@
                 saveTabDataToSession();
             });
 
-            // 臨時保存按鈕點擊事件
-            $('#temporarySaveButton').click(function () {
-                temporarySave(currentQuestionnaireTypeCode);
-            });
-
-            // 預覽按鈕點擊事件
+            // 預覽按鈕事件
             $('#previewButton').click(async function (e) {
                 e.preventDefault();
 
@@ -222,7 +217,21 @@
                     return;
                 }
                 // 載入所有頁籤的內容
-                await loadAllTabs();
+                //await loadAllTabs();
+                function validateAllQuestionnaires() {
+                    let isValid = true;
+
+                    // 檢查是否每組 radio 都有被選中
+                    $('#questionnaireForm').find('[data-type="radio"]').each(function () {
+                        const groupName = $(this).find('input[type="radio"]').attr('name');
+                        if (!$(`input[name="${groupName}"]:checked`).val()) {
+                            isValid = false;
+                            return false; // 停止迴圈
+                        }
+                    });
+
+                    return isValid;
+                }
 
                 // 驗證所有問卷內容
                 if (!validateAllQuestionnaires()) {
@@ -234,103 +243,26 @@
                     });
                     return;
                 }
-                // 清除 sessionStorage 並提交表單
                 sessionStorage.clear();
                 $('#questionnaireForm').submit();
             });
         });
 
-        // 保存當前頁籤的數據到 sessionStorage
-        function saveTabDataToSession() {
-            const formData = $('#tabContent').find('input, textarea, select').serializeArray();
-            const tabData = {};
-            formData.forEach(item => {
-                tabData[item.name] = item.value;
-            });
-            sessionStorage.setItem(currentQuestionnaireTypeCode, JSON.stringify(tabData));
-        }
-        // 從 sessionStorage 恢復數據
-        function restoreFormData() {
-            const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
-            if (savedData) {
-                const dataObject = JSON.parse(savedData);
-                for (const key in dataObject) {
-                    const input = $(`[name="${key}"]`);
-                    if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
-                        input.prop('checked', input.val() === dataObject[key]);
-                    } else {
-                        input.val(dataObject[key]);
-                    }
-                }
-            }
+        // 醫療團隊身份驗證狀態相關函數
+        function isTrainerAuthenticated() {
+            return sessionStorage.getItem('TrainerAuthenticated') === 'true';
         }
 
-        // 載入所有頁籤的內容，並隱藏未點擊的頁籤
-        async function loadAllTabs() {
-            const tabs = $('.tablinks'); // 找到所有頁籤按鈕
-            const currentVisibleTab = $('.tabcontent:visible'); // 目前顯示的頁籤
-
-            for (let i = 0; i < tabs.length; i++) {
-                const tab = $(tabs[i]);
-                const tabName = tab.data('tab-name');
-                const url = tab.data('url');
-
-                // 檢查是否已載入頁籤內容
-                if ($(`#${tabName}`).length === 0) {
-                    await $.get(url, function (data) {
-                        // 新增內容並隱藏頁籤
-                        $('<div>', { id: tabName, class: 'tabcontent hidden' }).html(data).appendTo('#tabContent');
-                    }).fail(function (xhr) {
-                        console.error(`載入頁籤內容失敗：${tabName}`);
-                    });
-                }
-            }
-
-            // 還原之前顯示的頁籤內容，隱藏其他頁籤
-            $('.tabcontent').hide();
-            currentVisibleTab.show();
+        //跨頁籤共享驗證狀態
+        function setTrainerAuthenticated() {
+            sessionStorage.setItem('TrainerAuthenticated', 'true');
         }
-        function validateAllQuestionnaires() {
-            let isValid = true;
 
-            // 檢查每組 radio 是否有選中的選項
-            $('#tabContent').find('input[type="radio"]').each(function () {
-                const name = $(this).attr('name');
-                if ($(`input[name="${name}"]:checked`).length === 0) {
-                    isValid = false;
-                    Swal.fire({
-                        icon: 'error',
-                        title: '問卷未完成!!',
-                        text: `請確保所有選項已填寫，例如 "${name}"。`,
-                        confirmButtonText: '確定'
-                    });
-                    return false; // 中斷遍歷
-                }
+        //頁籤切換時檢查後端狀態
+        function verifyTrainerSession() {
+            return $.get('/Questionnaire/CheckTrainerSession').then(function (response) {
+                return response.authenticated; // 從後端返回驗證結果
             });
-
-            // 檢查選擇「是」的選項是否填寫相關內容
-            $('#tabContent').find('input[type="radio"][value="yes"]:checked').each(function () {
-                const name = $(this).attr('name'); // 取得當前選中 radio 的 name
-                const idSuffix = name.split('_')[1]; // 假設 name 格式為 "pastHealth_ID" 或 "allergy_ID"
-                const relatedInputs = $(`input[name^="item"][name$="_${idSuffix}"], input[name^="details"][name$="_${idSuffix}"]`);
-
-                relatedInputs.each(function () {
-                    if ($(this).val().trim() === '') {
-                        isValid = false;
-                        Swal.fire({
-                            icon: 'error',
-                            title: '問卷未完成',
-                            text: `請填寫與選擇「是」相關的所有內容，例如 "${name}"。`,
-                            confirmButtonText: '確定'
-                        });
-                        return false; // 中斷遍歷
-                    }
-                });
-
-                if (!isValid) return false; // 中斷迴圈
-            });
-
-            return isValid;
         }
 
         // 顯示醫療團隊身份驗證對話框
@@ -355,10 +287,11 @@
             const userName = $('#trainerUserName').val();
             const password = $('#trainerPassword').val();
 
-            $.post('/Questionnaire/ValidateAthleticTrainer', { userName: userName, password: password }, function (response) {
+            $.post('/Questionnaire/ValidateAthleticTrainer', { userName, password }, function (response) {
                 if (response.success) {
+                    setTrainerAuthenticated(); // 設置驗證狀態
                     document.getElementById('athleticTrainerModal').classList.add('hidden');
-                    openTab(tabName, url); // 成功驗證後才調用 openTab
+                    openTab(tabName, url); // 驗證成功後打開頁籤
                 } else {
                     alert('身份驗證失敗，請確認帳號與密碼。');
                 }
@@ -371,7 +304,7 @@
         function openTab(tabName, url) {
             const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
 
-            // 更新 URL (這裡會添加到瀏覽器的歷史紀錄)
+            // 更新 URL
             history.pushState({ tabName: safeTabName }, '', url);
 
             $('.tabcontent').hide();
@@ -393,25 +326,19 @@
             }
         }
 
-        window.addEventListener('popstate', function (event) {
-            if (event.state && event.state.tabName) {
-                const tabName = event.state.tabName;
-                const url = $(`[data-tab-name="${tabName}"]`).data('url');
-                openTab(tabName, url);
-            }
-        });
-
-        function saveToSessionStorage() {
-            const formData = $('#questionnaireForm').serializeArray();
-            const dataObject = {};
+        // 保存當前頁籤的數據到 sessionStorage
+        function saveTabDataToSession() {
+            const formData = $('#tabContent').find('input, textarea, select').serializeArray();
+            const tabData = {};
             formData.forEach(item => {
-                dataObject[item.name] = item.value;
+                tabData[item.name] = item.value;
             });
-            sessionStorage.setItem('healthQuestionnaire', JSON.stringify(dataObject));
+            sessionStorage.setItem(currentQuestionnaireTypeCode, JSON.stringify(tabData));
         }
 
-        function loadFromSessionStorage() {
-            const savedData = sessionStorage.getItem('healthQuestionnaire');
+        // 從 sessionStorage 恢復數據
+        function restoreFormData() {
+            const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
             if (savedData) {
                 const dataObject = JSON.parse(savedData);
                 for (const key in dataObject) {
@@ -424,12 +351,263 @@
                 }
             }
         }
-
-        // 自動保存事件
-        $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', saveToSessionStorage);
-
-        // 初始化加載事件
-        $(document).ready(loadFromSessionStorage);
     </script>
+
+    @*<script>
+            let currentQuestionnaireTypeCode = ''; // 全域變數
+
+            $(document).ready(function () {
+                $('.tablinks').on('click', function (e) {
+                    e.preventDefault(); // 阻止默認按鈕行為
+                    const tabName = $(this).data('tab-name');
+                    const url = $(this).data('url');
+                    currentQuestionnaireTypeCode = $(this).data('questionnaire-type');
+
+                    saveTabDataToSession(); //保存當前頁籤的數據到 sessionStorage
+
+                    if (tabName === 'CognitiveScreening') {
+                        // 如果是醫療團隊評估頁籤，顯示身份驗證對話框
+                        showTrainerAuthModal(e, tabName, url);
+                    } else {
+                        openTab(tabName, url);
+                    }
+                });
+
+                restoreFormData(); //恢復主頁表單數據
+
+                // 初始化表單輸入監聽事件
+                $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', function () {
+                    saveTabDataToSession();
+                });
+
+                // 臨時保存按鈕點擊事件
+                $('#temporarySaveButton').click(function () {
+                    temporarySave(currentQuestionnaireTypeCode);
+                });
+
+                // 預覽按鈕點擊事件
+                $('#previewButton').click(async function (e) {
+                    e.preventDefault();
+
+                    const fillDate = $('input[name="fillDate"]').val();
+                    if (!fillDate) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '日期未選擇',
+                            text: '請選擇填表日期！',
+                            confirmButtonText: '確定'
+                        });
+                        return;
+                    }
+                    // 載入所有頁籤的內容
+                    await loadAllTabs();
+
+                    // 驗證所有問卷內容
+                    if (!validateAllQuestionnaires()) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '問卷未完成',
+                            text: '請確保所有問卷內容已填寫完整！',
+                            confirmButtonText: '確定'
+                        });
+                        return;
+                    }
+                    // 清除 sessionStorage 並提交表單
+                    sessionStorage.clear();
+                    $('#questionnaireForm').submit();
+                });
+            });
+
+            // 保存當前頁籤的數據到 sessionStorage
+            function saveTabDataToSession() {
+                const formData = $('#tabContent').find('input, textarea, select').serializeArray();
+                const tabData = {};
+                formData.forEach(item => {
+                    tabData[item.name] = item.value;
+                });
+                sessionStorage.setItem(currentQuestionnaireTypeCode, JSON.stringify(tabData));
+            }
+            // 從 sessionStorage 恢復數據
+            function restoreFormData() {
+                const savedData = sessionStorage.getItem(currentQuestionnaireTypeCode);
+                if (savedData) {
+                    const dataObject = JSON.parse(savedData);
+                    for (const key in dataObject) {
+                        const input = $(`[name="${key}"]`);
+                        if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+                            input.prop('checked', input.val() === dataObject[key]);
+                        } else {
+                            input.val(dataObject[key]);
+                        }
+                    }
+                }
+            }
+
+            // 載入所有頁籤的內容，並隱藏未點擊的頁籤
+            async function loadAllTabs() {
+                const tabs = $('.tablinks'); // 找到所有頁籤按鈕
+                const currentVisibleTab = $('.tabcontent:visible'); // 目前顯示的頁籤
+
+                for (let i = 0; i < tabs.length; i++) {
+                    const tab = $(tabs[i]);
+                    const tabName = tab.data('tab-name');
+                    const url = tab.data('url');
+
+                    // 檢查是否已載入頁籤內容
+                    if ($(`#${tabName}`).length === 0) {
+                        await $.get(url, function (data) {
+                            // 新增內容並隱藏頁籤
+                            $('<div>', { id: tabName, class: 'tabcontent hidden' }).html(data).appendTo('#tabContent');
+                        }).fail(function (xhr) {
+                            console.error(`載入頁籤內容失敗：${tabName}`);
+                        });
+                    }
+                }
+
+                // 還原之前顯示的頁籤內容，隱藏其他頁籤
+                $('.tabcontent').hide();
+                currentVisibleTab.show();
+            }
+            function validateAllQuestionnaires() {
+                let isValid = true;
+
+                // 檢查每組 radio 是否有選中的選項
+                $('#tabContent').find('input[type="radio"]').each(function () {
+                    const name = $(this).attr('name');
+                    if ($(`input[name="${name}"]:checked`).length === 0) {
+                        isValid = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: '問卷未完成!!',
+                            text: `請確保所有選項已填寫，例如 "${name}"。`,
+                            confirmButtonText: '確定'
+                        });
+                        return false; // 中斷遍歷
+                    }
+                });
+
+                // 檢查選擇「是」的選項是否填寫相關內容
+                $('#tabContent').find('input[type="radio"][value="yes"]:checked').each(function () {
+                    const name = $(this).attr('name'); // 取得當前選中 radio 的 name
+                    const idSuffix = name.split('_')[1]; // 假設 name 格式為 "pastHealth_ID" 或 "allergy_ID"
+                    const relatedInputs = $(`input[name^="item"][name$="_${idSuffix}"], input[name^="details"][name$="_${idSuffix}"]`);
+
+                    relatedInputs.each(function () {
+                        if ($(this).val().trim() === '') {
+                            isValid = false;
+                            Swal.fire({
+                                icon: 'error',
+                                title: '問卷未完成',
+                                text: `請填寫與選擇「是」相關的所有內容，例如 "${name}"。`,
+                                confirmButtonText: '確定'
+                            });
+                            return false; // 中斷遍歷
+                        }
+                    });
+
+                    if (!isValid) return false; // 中斷迴圈
+                });
+
+                return isValid;
+            }
+
+            // 顯示醫療團隊身份驗證對話框
+            function showTrainerAuthModal(evt, tabName, url) {
+                evt.preventDefault();
+                document.getElementById('athleticTrainerModal').classList.remove('hidden');
+
+                // 綁定表單提交事件
+                $('#trainerAuthForm').off('submit').on('submit', function (e) {
+                    e.preventDefault();
+                    authenticateTrainer(url, tabName);
+                });
+
+                // 綁定取消按鈕事件
+                $('#closeModal').off('click').on('click', function () {
+                    document.getElementById('athleticTrainerModal').classList.add('hidden');
+                });
+            }
+
+            // 醫療團隊身份驗證
+            function authenticateTrainer(url, tabName) {
+                const userName = $('#trainerUserName').val();
+                const password = $('#trainerPassword').val();
+
+                $.post('/Questionnaire/ValidateAthleticTrainer', { userName: userName, password: password }, function (response) {
+                    if (response.success) {
+                        document.getElementById('athleticTrainerModal').classList.add('hidden');
+                        openTab(tabName, url); // 成功驗證後才調用 openTab
+                    } else {
+                        alert('身份驗證失敗，請確認帳號與密碼。');
+                    }
+                }).fail(function () {
+                    alert('驗證時發生錯誤，請稍後再試。');
+                });
+            }
+
+            // 開啟頁籤
+            function openTab(tabName, url) {
+                const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
+
+                // 更新 URL (這裡會添加到瀏覽器的歷史紀錄)
+                history.pushState({ tabName: safeTabName }, '', url);
+
+                $('.tabcontent').hide();
+                $('.tablinks').removeClass('active');
+                $(`[data-tab-name="${safeTabName}"]`).addClass('active');
+
+                if ($('#' + safeTabName).length === 0) {
+                    $.get(url, function (data) {
+                        $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
+                    }).fail(function (xhr) {
+                        if (xhr.status === 403 || xhr.status === 401) {
+                            alert('只有防護員可以訪問此頁面。');
+                        } else {
+                            alert('載入頁面時發生錯誤，請稍後再試。');
+                        }
+                    });
+                } else {
+                    $('#' + safeTabName).show();
+                }
+            }
+
+            window.addEventListener('popstate', function (event) {
+                if (event.state && event.state.tabName) {
+                    const tabName = event.state.tabName;
+                    const url = $(`[data-tab-name="${tabName}"]`).data('url');
+                    openTab(tabName, url);
+                }
+            });
+
+            function saveToSessionStorage() {
+                const formData = $('#questionnaireForm').serializeArray();
+                const dataObject = {};
+                formData.forEach(item => {
+                    dataObject[item.name] = item.value;
+                });
+                sessionStorage.setItem('healthQuestionnaire', JSON.stringify(dataObject));
+            }
+
+            function loadFromSessionStorage() {
+                const savedData = sessionStorage.getItem('healthQuestionnaire');
+                if (savedData) {
+                    const dataObject = JSON.parse(savedData);
+                    for (const key in dataObject) {
+                        const input = $(`[name="${key}"]`);
+                        if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
+                            input.prop('checked', input.val() === dataObject[key]);
+                        } else {
+                            input.val(dataObject[key]);
+                        }
+                    }
+                }
+            }
+
+            // 自動保存事件
+            $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', saveToSessionStorage);
+
+            // 初始化加載事件
+            $(document).ready(loadFromSessionStorage);
+        </script>*@
 </body>
 </html>

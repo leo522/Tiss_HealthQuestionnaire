@@ -18,102 +18,86 @@
         .light-green {
             background-color: #38a169;
         }
-        /* Tailwind green-500 */
+
         .light-yellow {
             background-color: #ecc94b;
         }
-        /* Tailwind yellow-400 */
+
         .light-red {
             background-color: #e53e3e;
         }
-        /* Tailwind red-500 */
     </style>
 </head>
 <body>
     <div class="p-4">
-        <h1 class="text-xl font-bold mb-4">症狀自我評估 Self-assessment of Symptoms</h1>
-        <form action="/Questionnaire/SaveSymptomEvaluation" method="post">
-            <!-- 問卷表格 -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 text-center">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">燈號</th>
-                            <th class="border border-gray-300 px-4 py-2">項次</th>
-                            <th class="border border-gray-300 px-4 py-2">症狀</th>
+        <h1 class="text-xl font-bold mb-4">(二) 選手背景：症狀自我評估 Self-assessment of Symptoms</h1>
+        <!-- 問卷表格 -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 text-center">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 px-4 py-2">燈號</th>
+                        <th class="border border-gray-300 px-4 py-2">項次</th>
+                        <th class="border border-gray-300 px-4 py-2">症狀</th>
+                        @for (int i = 0; i <= 6; i++)
+                        {
+                            <th class="border border-gray-300 px-4 py-2">@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-100">
+                            <!-- 燈號顯示 -->
+                            <td class="border border-gray-300 px-4 py-2">
+                                <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
+                            </td>
+
+                            <!-- 項次 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+
+                            <!-- 症狀項目 -->
+                            <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+
+                            <!-- 分數選項 -->
                             @for (int i = 0; i <= 6; i++)
                             {
-                                <th class="border border-gray-300 px-4 py-2">@i</th>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <input type="radio" name="score_@item.OrderNumber" value="@i" class="form-radio h-5 w-5 text-blue-600 score-option" data-indicator="#indicator_@item.OrderNumber">
+                                </td>
                             }
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="hover:bg-gray-100">
-                                <!-- 燈號顯示 -->
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
-                                </td>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-                                <!-- 項次 -->
-                                <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
-
-                                <!-- 症狀項目 -->
-                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                                <!-- 分數選項 -->
-                                @for (int i = 0; i <= 6; i++)
-                                {
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <input type="radio" name="score_@item.OrderNumber" value="@i" class="form-radio h-5 w-5 text-blue-600 score-option" data-indicator="#indicator_@item.OrderNumber">
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 總計部分 -->
-            <div class="flex flex-col mt-4 space-y-2">
+        <!-- 總計部分 -->
+        <div class="flex flex-col mt-4 space-y-2">
+            <div class="flex items-center">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">症狀總數：</span>
                 <div class="flex items-center">
-                    <span class="mr-2 text-lg font-semibold">●</span>
-                    <span class="mr-2">症狀總數：</span>
-                    <div class="flex items-center">
-                        <span id="totalSymptoms" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
-                        <span class="mr-1">/</span>
-                        <span class="text-lg font-semibold">22</span>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="mr-2 text-lg font-semibold">●</span>
-                    <span class="mr-2">症狀分數：</span>
-                    <div class="flex items-center">
-                        <span id="totalScore" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
-                        <span class="mr-1">/</span>
-                        <span class="text-lg font-semibold">132</span>
-                    </div>
+                    <span id="totalSymptoms" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
+                    <span class="mr-1">/</span>
+                    <span class="text-lg font-semibold">22</span>
                 </div>
             </div>
-
-            <div class="flex justify-between space-x-4 mt-4">
-                <button type="button" class="btn btn-success" id="returnToMainButton">回問卷首頁</button>
+            <div class="flex items-center">
+                <span class="mr-2 text-lg font-semibold">●</span>
+                <span class="mr-2">症狀分數：</span>
+                <div class="flex items-center">
+                    <span id="totalScore" class="border-b border-dotted text-lg font-semibold mr-1">0</span>
+                    <span class="mr-1">/</span>
+                    <span class="text-lg font-semibold">132</span>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#returnToMainButton').on('click', function () {
-            // 提交表單，然後跳轉至首頁
-            const form = $('form');
-            const action = form.attr('action');
-            form.attr('action', '/Questionnaire/SaveSymptomEvaluation'); // 確保正確的 POST URL
-            form.append('<input type="hidden" name="redirectToMain" value="true">'); // 標記跳轉首頁
-
-            form.submit();
-        });
             // 監聽所有的 radio 按鈕
             $('.score-option').on('change', function () {
                 updateTotals();
@@ -127,10 +111,12 @@
                 // 遍歷所有的症狀分數選項
                 $('input[type="radio"]:checked').each(function () {
                     let score = parseInt($(this).val());
-                    if (score > 0) {
-                        totalSymptoms += 1; // 每次有選擇大於 0 的分數就計算一個症狀
+                    if (!isNaN(score)) { // 確認是有效數字
+                        if (score > 0) {
+                            totalSymptoms += 1; // 每次有選擇大於 0 的分數就計算一個症狀
+                        }
+                        totalScore += score; // 累加所有選擇的分數
                     }
-                    totalScore += score; // 累加所有選擇的分數
                 });
 
                 // 更新顯示的總計數值
@@ -140,7 +126,10 @@
 
             function updateWarnings(selectedRadio) {
                 let score = parseInt(selectedRadio.val());
+                if (isNaN(score)) return; // 跳過無效值
+
                 let indicator = $(selectedRadio.data('indicator'));
+                if (indicator.length === 0) return; // 確認是否正確指向 DOM 元素
 
                 // 移除舊的顏色
                 indicator.removeClass('light-green light-yellow light-red');
@@ -154,6 +143,9 @@
                     indicator.addClass('light-red'); // 紅燈
                 }
             }
+
+            // 初始化檢查
+            updateTotals();
         });
     </script>
 </body>

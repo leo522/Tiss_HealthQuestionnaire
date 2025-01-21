@@ -25,32 +25,35 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr class="hover:bg-gray-100">
+                            <tr class="hover:bg-gray-100 question-group" data-type="radio">
                                 <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td> <!-- 顯示問題 -->
-                                
-                                <td class="border border-gray-300 px-4 py-2"> <!-- 第一次測驗選項 -->
+
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <!-- 第一次測驗選項 -->
                                     <div class="flex justify-center items-center">
-                                        <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option" @(item.FirstTestScore == 0 ? "checked" : "")>
+                                        <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">0</label>
-                                        <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option" @(item.FirstTestScore == 1 ? "checked" : "")>
+                                        <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">1</label>
                                     </div>
                                 </td>
 
-                                <td class="border border-gray-300 px-4 py-2"><!-- 第二次測驗選項 -->
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <!-- 第二次測驗選項 -->
                                     <div class="flex justify-center items-center">
-                                        <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option" @(item.SecondTestScore == 0 ? "checked" : "")>
+                                        <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">0</label>
-                                        <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option" @(item.SecondTestScore == 1 ? "checked" : "")>
+                                        <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">1</label>
                                     </div>
                                 </td>
 
-                                <td class="border border-gray-300 px-4 py-2"> <!-- 第三次測驗選項 -->
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <!-- 第三次測驗選項 -->
                                     <div class="flex justify-center items-center">
-                                        <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option" @(item.ThirdTestScore == 0 ? "checked" : "")>
+                                        <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">0</label>
-                                        <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option" @(item.ThirdTestScore == 1 ? "checked" : "")>
+                                        <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
                                         <label class="mx-2">1</label>
                                     </div>
                                 </td>

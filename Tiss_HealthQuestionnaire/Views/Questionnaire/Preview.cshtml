@@ -488,12 +488,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.ConcussionScreeningDetails)
+                        @foreach (var detail in Model.ConcussionScreeningDetails)
                         {
                             <tr>
-                                <td class="border px-4 py-2">@item.OrderNumber</td>
-                                <td class="border px-4 py-2">@item.Question</td>
-                                <td class="border px-4 py-2">@Model.ConvertYesNoToLocalizedString(item.Answer)</td>
+                                <td class="border px-4 py-2">@detail.OrderNumber</td>
+                                <td class="border px-4 py-2">@detail.Question</td>
+                                <td class="border px-4 py-2">@Model.ConvertYesNoToLocalizedString(detail.Answer)</td>
                             </tr>
                         }
                     </tbody>
@@ -508,9 +508,9 @@
             </div>
         </div>
 
-        <!-- 症狀自我評估-選手 -->
+        <!-- 症狀自我評估-選手(2) -->
         <div class="mb-8">
-            <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估(Self-assessment of Symptoms)</h3>
+            <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估-選手自填(Self-assessment of Symptoms)</h3>
             @if (Model.SymptomEvaluationDetails != null && Model.SymptomEvaluationDetails.Any())
             {
                 <table class="w-full border-collapse border border-gray-300 text-center">
@@ -535,14 +535,8 @@
 
                 <!-- 計算總分和症狀總數 -->
                 <div class="mt-4">
-                    <p>
-                        <strong>症狀總數：</strong>
-                        @Model.SymptomEvaluationDetails.Count(s => s.Score > 0) / 22
-                    </p>
-                    <p>
-                        <strong>症狀分數：</strong>
-                        @Model.SymptomEvaluationDetails.Sum(s => s.Score) / 132
-                    </p>
+                    <p><strong>症狀總數：</strong> @Model.SymptomEvaluationDetails.Count(s => s.Score > 0)</p>
+                    <p><strong>症狀分數：</strong> @Model.SymptomEvaluationDetails.Sum(s => s.Score)</p>
                 </div>
             }
         </div>

@@ -17,7 +17,7 @@
             <div class="p-4">
                 <h2 class="text-xl font-bold mb-4">改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)</h2>
                 <!-- 測試腳 -->
-                <div class="mb-4">
+                <div class="mb-4 question-group" data-type="radio">
                     <label class="font-semibold">測試腳 (非慣用腳)：</label>
                     <label class="inline-flex items-center ml-2">
                         <input type="radio" name="TestFoot" value="左" @(Model.TestFoot == "左" ? "checked" : "") /> 左
@@ -27,7 +27,7 @@
                     </label>
                 </div>
                 <!-- 測試平面 -->
-                <div class="mb-4">
+                <div class="mb-4 question-group" data-type="select">
                     <label class="font-semibold">測試平面 (硬地/訓練場)：</label>
                     <select name="TestSurface" class="border border-gray-300 rounded px-2 py-1 w-64">
                         <option value="">請選擇測試平面場地類型</option>
@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 <!-- 腳穿著 -->
-                <div class="mb-4">
+                <div class="mb-4 question-group" data-type="select">
                     <label class="font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
                     <select name="Footwear" class="border border-gray-300 rounded px-2 py-1 w-64">
                         <option value="">請選擇腳穿著類型</option>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!-- 錯誤扣分表格 -->
-            <table class="min-w-full bg-white border border-gray-300 text-center">
+            <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
                 <thead>
                     <tr class="bg-gray-100">
                         <th>動作</th>
@@ -57,17 +57,20 @@
                 <tbody>
                     <tr>
                         <td>雙腳站立</td>
-                        <td><input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        <td>
+                            <input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
                         </td>
                     </tr>
                     <tr>
                         <td>腳跟前後站立 (慣用腳在前)</td>
-                        <td><input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        <td>
+                            <input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
                         </td>
                     </tr>
                     <tr>
                         <td>單腳站立 (非慣用腳)</td>
-                        <td><input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                        <td>
+                            <input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
                         </td>
                     </tr>
                 </tbody>
@@ -78,10 +81,10 @@
                     </tr>
                 </tfoot>
             </table>
-            
+
             <!-- 腳跟碰腳尖快速走路 -->
             <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
-            <table class="min-w-full bg-white border border-gray-300 text-center">
+            <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
                 <thead>
                     <tr class="bg-gray-100">
                         <th>第一次</th>

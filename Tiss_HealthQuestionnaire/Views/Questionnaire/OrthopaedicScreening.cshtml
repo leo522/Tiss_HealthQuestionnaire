@@ -1,4 +1,4 @@
-﻿@*骨科篩檢*@
+﻿﻿@*骨科篩檢*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.OrthopaedicScreeningViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
@@ -26,7 +26,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-100 orthopaedic-row">
                         <!-- 項次 -->
                         <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
 
@@ -52,5 +52,35 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // 行高亮效果
+            $('.orthopaedic-row').hover(
+                function () {
+                    $(this).addClass('bg-gray-200');
+                },
+                function () {
+                    $(this).removeClass('bg-gray-200');
+                }
+            );
+
+            // 保存用戶選擇到 sessionStorage
+            $('input[type="radio"]').on('change', function () {
+                const name = $(this).attr('name');
+                const value = $(this).val();
+                sessionStorage.setItem(name, value);
+            });
+
+            // 恢復用戶選擇
+            $('input[type="radio"]').each(function () {
+                const name = $(this).attr('name');
+                const savedValue = sessionStorage.getItem(name);
+                if (savedValue && $(this).val() === savedValue) {
+                    $(this).prop('checked', true);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

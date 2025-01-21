@@ -1,4 +1,4 @@
-﻿@*現在病史*@
+﻿﻿@*現在病史*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.PresentIllness>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>現在病史</title>
 </head>
 <body>
     <div class="p-4">
@@ -31,11 +32,11 @@
                             </td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
                                 <label class="inline-flex items-center">
-                                    <input type="radio" name="presentIllness_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600">
+                                    <input type="radio" name="presentIllness_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600" required>
                                     <span class="ml-2">是</span>
                                 </label>
                                 <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="presentIllness_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600">
+                                    <input type="radio" name="presentIllness_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600" required>
                                     <span class="ml-2">否</span>
                                 </label>
                             </td>
@@ -45,5 +46,39 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // 初始化並加載保存的數據
+            loadSelections();
+
+            // 監聽所有 radio 按鈕的變化
+            $('input[type="radio"]').on('change', function () {
+                saveSelections();
+            });
+
+            // 保存選擇到 sessionStorage
+            function saveSelections() {
+                $('input[type="radio"]').each(function () {
+                    const name = $(this).attr('name');
+                    const value = $(`input[name="${name}"]:checked`).val();
+                    if (value) {
+                        sessionStorage.setItem(name, value);
+                    }
+                });
+            }
+
+            // 從 sessionStorage 加載數據
+            function loadSelections() {
+                $('input[type="radio"]').each(function () {
+                    const name = $(this).attr('name');
+                    const savedValue = sessionStorage.getItem(name);
+                    if (savedValue === $(this).val()) {
+                        $(this).prop('checked', true);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

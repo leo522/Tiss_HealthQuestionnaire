@@ -124,14 +124,14 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<CardiovascularScreeningDetailViewModel> CardiovascularScreeningDetails { get; set; } = new List<CardiovascularScreeningDetailViewModel>();
         #endregion
 
-        #region 腦震盪篩檢(選手自填)
+        #region 腦震盪篩檢-選手自填-(1)
         public List<ConcussionScreeningViewModel> ConcussionScreeningDetails { get; set; } = new List<ConcussionScreeningViewModel>();
         public string ConcussionScreeningMedicationAnswer { get; set; } //是否服用藥物
         public string ConcussionScreeningMedicationDetails { get; set; } //藥物細節
         public string ConcussionScreeningNotes { get; set; } //備註
         #endregion
 
-        #region 症狀自我評估(選手自填)
+        #region 症狀自我評估-選手自填(2)
         public List<SymptomEvaluationViewModel> SymptomEvaluationDetails { get; set; } = new List<SymptomEvaluationViewModel>();
         #endregion
 
@@ -315,7 +315,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 顯示過去傷害狀況(治療方法)
-    public class PastTreatmentMethoDViewModel 
+    public class PastTreatmentMethoDViewModel
     {
         public string Method { get; set; }
     }
@@ -330,7 +330,7 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
-    #region 腦震盪篩檢
+    #region 腦震盪篩檢-選手自填(1)
     public class ConcussionScreeningViewModel
     {
         public int OrderNumber { get; set; }  // 問卷項次
@@ -339,7 +339,7 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
-    #region 症狀自我評估-選手自填
+    #region 症狀自我評估-選手自填(2)
     public class SymptomEvaluationViewModel
     {
         public int OrderNumber { get; set; }
@@ -437,7 +437,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 醫療團隊-認知篩檢-分數總合(6)
-    public class CognitiveScreeningTotalScoreViewModel 
+    public class CognitiveScreeningTotalScoreViewModel
     {
         public int OrientationScore { get; set; }
         public int ImmediateMemoryScore { get; set; }

@@ -30,15 +30,15 @@
             </div>
         </div>
     </div>
-<script>
-    $(document).ready(function () {
-        // 當用戶在治療方式頁面進行勾選時，自動將這些選項標記為I類型
-        $('input[name^="Pasttreatment_"]').change(function () {
-            const isChecked = $(this).is(':checked');
-            if (isChecked) {
-                $(this).data('questionnaire-type', 'I');
-            }
-        });
-</script>
+    <script>
+        $(document).ready(function () {
+            // 當用戶在治療方式頁面進行勾選時，自動將這些選項標記為I類型
+            $('input[name^="Pasttreatment_"]').change(function () {
+                const isChecked = $(this).is(':checked');
+                if (isChecked) {
+                    $(this).data('questionnaire-type', 'I');
+                }
+            });
+    </script>
 </body>
 </html>

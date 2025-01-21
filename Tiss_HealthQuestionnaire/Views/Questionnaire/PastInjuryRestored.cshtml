@@ -84,7 +84,7 @@
                 if ($('.injury-details input[type="checkbox"]:checked').length > 0) {
                     $.get('/Questionnaire/PastInjuryType', function (data) {
                         $('#injury-type-section').html(data).removeClass('hidden');
-                    });                   
+                    });
                 } else {
                     $('#injury-type-section').addClass('hidden'); //如果沒有勾選則隱藏
                 }
