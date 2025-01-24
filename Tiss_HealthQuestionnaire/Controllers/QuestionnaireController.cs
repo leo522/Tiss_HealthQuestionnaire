@@ -589,6 +589,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 ProcessOrthopaedicScreening(model, form); //骨科篩檢
 
+                ProcessCognitiveScreening(model, form); // 醫療團隊-認知篩檢 (1~6)
+
                 _db.SaveChanges(); // 儲存所有變更
 
                 return View("Preview", model); // 返回預覽頁
@@ -1053,12 +1055,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        private void ProcessCognitiveScreening(QuestionnaireViewModel model, FormCollection form)
-        {
-            // Example for cognitive screening
-            // Similar to the sections above, you can structure the logic to calculate and process values.
-        }
-
         #region 骨科篩檢
         private void ProcessOrthopaedicScreening(QuestionnaireViewModel model, FormCollection form)
         {
@@ -1076,6 +1072,117 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 });
             }
         }
+        #endregion
+
+        #region 醫療團隊-認知篩檢 (1~6)
+        private void ProcessCognitiveScreening(QuestionnaireViewModel model, FormCollection form)
+        {
+            // 定位 (Orientation) (1)
+            var orientationItems = _db.CognitiveScreening.ToList();
+            foreach (var item in orientationItems)
+            {
+                string answerKey = $"question_{item.ID}";
+                var answer = form[answerKey];
+                int score = answer == "1" ? 1 : 0;
+
+                model.CognitiveScreeningDetails.Add(new CognitiveScreeningViewModel
+                {
+                    OrderNumber = item.ID,
+                    Question = item.Question,
+                    OrientationScore = score
+                });
+            }
+            model.CognitiveScreeningTotalScore = model.CognitiveScreeningDetails.Sum(x => x.OrientationScore);
+
+            // 短期記憶 (Immediate Memory) (2)
+            var immediateMemoryItems = _db.ImmediateMemory.ToList();
+            foreach (var item in immediateMemoryItems)
+            {
+                model.ImmediateMemoryDetails.Add(new ImmediateMemoryViewModel
+                {
+                    OrderNumber = item.ID,
+                    Word = item.Word,
+                    FirstTestScore = int.Parse(form[$"first_{item.ID}"] ?? "0"),
+                    SecondTestScore = int.Parse(form[$"second_{item.ID}"] ?? "0"),
+                    ThirdTestScore = int.Parse(form[$"third_{item.ID}"] ?? "0")
+                });
+            }
+            model.ImmediateMemoryTotalScore = model.ImmediateMemoryDetails.Sum(x => x.FirstTestScore + x.SecondTestScore + x.ThirdTestScore);
+            model.CompletionTime = form["CompletionTime"] ?? "00:00";
+
+            // 專注力 (Concentration) (3)
+            var concentrationItems = _db.Concentration.ToList();
+            foreach (var item in concentrationItems)
+            {
+                string answerKey = $"response_{item.Id}";
+                var answer = form[answerKey];
+                int score = answer == "1" ? 1 : 0;
+
+                model.ConcentrationDetails.Add(new ConcentrationViewModel
+                {
+                    OrderNumber = item.Id,
+                    ListA = item.ListA,
+                    ListB = item.ListB,
+                    ListC = item.ListC,
+                    Score = score
+                });
+            }
+            model.ConcentrationTotalScore = model.ConcentrationDetails.Sum(x => x.Score);
+
+            // 協調與平衡測驗 (Coordination and Balance Examination) (4)
+            var coordinationItem = new CoordinationAndBalanceExaminationViewModel
+            {
+                TestFoot = form["TestFoot"],
+                TestSurface = form["TestSurface"],
+                Footwear = form["Footwear"],
+                DoubleLegError = int.Parse(form["DoubleLegError"] ?? "0"),
+                TandemError = int.Parse(form["TandemError"] ?? "0"),
+                SingleLegError = int.Parse(form["SingleLegError"] ?? "0"),
+                FirstTime = float.Parse(form["FirstTime"] ?? "0"),
+                SecondTime = float.Parse(form["SecondTime"] ?? "0"),
+                ThirdTime = float.Parse(form["ThirdTime"] ?? "0")
+            };
+            coordinationItem.TotalErrors = coordinationItem.DoubleLegError + coordinationItem.TandemError + coordinationItem.SingleLegError;
+            coordinationItem.AverageTimes = (coordinationItem.FirstTime + coordinationItem.SecondTime + coordinationItem.ThirdTime) / 3;
+            coordinationItem.FastestTimes = Math.Min(coordinationItem.FirstTime, Math.Min(coordinationItem.SecondTime, coordinationItem.ThirdTime));
+
+            model.CoordinationAndBalanceDetails.Add(coordinationItem);
+            model.CoordinationAndBalanceTotalErrors = coordinationItem.TotalErrors;
+            model.CoordinationAndBalanceAverageTime = coordinationItem.AverageTimes;
+            model.CoordinationAndBalanceFastestTime = coordinationItem.FastestTimes;
+
+            // 延遲記憶 (Delayed Recall) (5)
+            var delayedRecallItems = _db.DelayedRecall.ToList();
+            foreach (var item in delayedRecallItems)
+            {
+                string scoreKey = $"score_{item.ID}";
+                int score = int.Parse(form[scoreKey] ?? "0");
+
+                model.DelayedRecallDetails.Add(new DelayedRecallViewModel
+                {
+                    OrderNumber = item.ID,
+                    Word = item.Word,
+                    Score = score
+                });
+            }
+            model.DelayedRecallTotalScore = model.DelayedRecallDetails.Sum(x => x.Score);
+            model.DelayedRecallStartTime = form["testStartTime"] ?? "00:00";
+
+            // 分數總合 (6)
+            model.CognitiveScreeningTotalScoreDetails.Add(new CognitiveScreeningTotalScoreViewModel
+            {
+                OrientationScore = model.CognitiveScreeningTotalScore,
+                ImmediateMemoryScore = model.ImmediateMemoryTotalScore,
+                ConcentrationScore = model.ConcentrationTotalScore,
+                DelayedRecallScore = model.DelayedRecallTotalScore,
+                TotalScore = model.CognitiveScreeningTotalScore +
+                             model.ImmediateMemoryTotalScore +
+                             model.ConcentrationTotalScore +
+                             model.DelayedRecallTotalScore
+            });
+            model.CognitiveScreeningTotalScores = model.CognitiveScreeningTotalScoreDetails.Sum(x => x.TotalScore);
+        }
+
         #endregion
 
         #endregion
