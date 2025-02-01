@@ -1,141 +1,97 @@
-﻿@*醫療團隊-認知篩檢-專注力(3)*@
+﻿@*專注力*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcentrationViewModel>
 @{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+    Layout = null;
 }
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">3. 專注力 (Concentration): 數字顛倒測驗 (測驗四次，0錯誤；1正確)</h2>
-        <form method="post" action="/Questionnaire/SaveConcentration">
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 text-center">
-                    <thead>
-                        <tr class="bg-gray-100 question-group" data-type="radio">
-                            <th class="border border-gray-300 px-4 py-2">List A</th>
-                            <th class="border border-gray-300 px-4 py-2">List B</th>
-                            <th class="border border-gray-300 px-4 py-2">List C</th>
-                            <th class="border border-gray-300 px-4 py-2">Y</th>
-                            <th class="border border-gray-300 px-4 py-2">N</th>
-                            <th class="border border-gray-300 px-4 py-2">0</th>
-                            <th class="border border-gray-300 px-4 py-2">1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="hover:bg-gray-100">
-                                <td class="border border-gray-300 px-4 py-2">@item.ListA</td> <!-- List A -->
-                                <td class="border border-gray-300 px-4 py-2">@item.ListB</td> <!-- List B -->
-                                <td class="border border-gray-300 px-4 py-2">@item.ListC</td> <!-- List C -->
-                                <!-- Y 選項 -->
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option"> Y
-                                </td>
-
-                                <!-- N 選項 -->
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option"> N
-                                </td>
-
-                                <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td> <!-- 分數 0 -->
-
-                                <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td> <!-- 分數 1 -->
-                            </tr>
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-100">
-                            <td colspan="6" class="border border-gray-300 px-4 py-2 font-semibold text-right">總分</td>
-                            <td class="border border-gray-300 px-4 py-2" id="totalScore">/ 4</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!-- 表單按鈕 -->
-            <div class="flex justify-between space-x-4 mt-4">
-                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
-                    回上一頁
-                </button>
-                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                    接續下一頁
-                </button>
-            </div>
-        </form>
-    </div>
-    <script>
-        $(document).ready(function () {
-            // 初始化並加載保存的分數
-            loadScores();
-
-            // 監聽所有 Y/N 選項變更事件
-            $('.concentration-option').on('change', function () {
-                updateScores();
-                saveScores();
-            });
-
-            // 計算並更新分數
-            function updateScores() {
-                let totalScore = 0;
-
-                $('.concentration-option:checked').each(function () {
-                    const value = parseInt($(this).val());
-                    const orderNumber = $(this).attr('name').split('_')[1]; // 取得項次編號
-
-                    // 更新 0 和 1 的分數欄位
-                    if (value === 1) {
-                        $(`#score1_${orderNumber}`).text('1');
-                        $(`#score0_${orderNumber}`).text('0');
-                    } else {
-                        $(`#score1_${orderNumber}`).text('0');
-                        $(`#score0_${orderNumber}`).text('0');
-                    }
-
-                    // 累加總分
-                    totalScore += value;
-                });
-
-                // 更新顯示總分
-                $('#totalScore').text(totalScore + ' / 4');
-
-                // 保存總分到 sessionStorage
-                sessionStorage.setItem('ConcentrationScore', totalScore);
-            }
-
-            // 保存每個選項的選中狀態到 sessionStorage
-            function saveScores() {
-                $('input[type="radio"]').each(function () {
-                    if ($(this).is(':checked')) {
-                        sessionStorage.setItem($(this).attr('name'), $(this).val());
-                    }
-                });
-            }
-
-            // 從 sessionStorage 加載分數和選中狀態
-            function loadScores() {
-                // 加載每個選項的選中狀態
-                $('input[type="radio"]').each(function () {
-                    const savedValue = sessionStorage.getItem($(this).attr('name'));
-                    if (savedValue !== null && $(this).val() === savedValue) {
-                        $(this).prop('checked', true);
-                    }
-                });
-
-                // 加載總分
-                const savedScore = sessionStorage.getItem('ConcentrationScore');
-                if (savedScore !== null) {
-                    $('#totalScore').text(savedScore + ' / 4');
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">3. 專注力 (Concentration): 數字顛倒測驗 (測驗四次，0錯誤；1正確)</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300 text-center">
+            <thead>
+                <tr class="bg-gray-100 question-group">
+                    <th class="border border-gray-300 px-4 py-2">List A</th>
+                    <th class="border border-gray-300 px-4 py-2">List B</th>
+                    <th class="border border-gray-300 px-4 py-2">List C</th>
+                    <th class="border border-gray-300 px-4 py-2">Y</th>
+                    <th class="border border-gray-300 px-4 py-2">N</th>
+                    <th class="border border-gray-300 px-4 py-2">0</th>
+                    <th class="border border-gray-300 px-4 py-2">1</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2">@item.ListA</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.ListB</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.ListC</td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option"> Y
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option"> N
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td>
+                        <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td>
+                    </tr>
                 }
+            </tbody>
+            <tfoot>
+                <tr class="bg-gray-100">
+                    <td colspan="6" class="border border-gray-300 px-4 py-2 font-semibold text-right">總分</td>
+                    <td class="border border-gray-300 px-4 py-2" id="totalScore">/ 4</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 
-                // 更新每次的分數顯示
-                updateScores();
-            }
+<script>
+    function initializeConcentration() {
+        const scoreKey = 'ConcentrationScore';
+
+        loadScores();
+
+        $('.concentration-option').on('change', function () {
+            updateScores();
+            saveScores();
         });
-    </script>
-</body>
-</html>
+
+        function updateScores() {
+            let totalScore = 0;
+            $('.concentration-option:checked').each(function () {
+                const value = parseInt($(this).val());
+                const orderNumber = $(this).attr('name').split('_')[1];
+
+                if (value === 1) {
+                    $(`#score1_${orderNumber}`).text('1');
+                    $(`#score0_${orderNumber}`).text('0');
+                } else {
+                    $(`#score1_${orderNumber}`).text('0');
+                    $(`#score0_${orderNumber}`).text('0');
+                }
+                totalScore += value;
+            });
+            $('#totalScore').text(`${totalScore} / 4`);
+            sessionStorage.setItem(scoreKey, totalScore);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+        }
+
+        function loadScores() {
+            $('input[type="radio"]').each(function () {
+                const savedValue = sessionStorage.getItem($(this).attr('name'));
+                if (savedValue !== null && $(this).val() === savedValue) {
+                    $(this).prop('checked', true);
+                }
+            });
+            updateScores();
+        }
+    }
+</script>

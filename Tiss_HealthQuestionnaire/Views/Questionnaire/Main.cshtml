@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel
+@{
     ViewBag.Title = "Main";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -9,454 +10,762 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健康檢查問卷</title>
     <link href="~/css/tailwind.min.css" rel="stylesheet" />
-    <link href="~/css/mainStyle.css" rel="stylesheet" /> @*頁籤顏色*@
-    @*<script src="~/js/questionnaire.js"></script>*@
+    <link href="~/css/mainStyle.css" rel="stylesheet" /> @*燈號顯示顏色*@
+    <link href="~/css/SymptomsLights.css" rel="stylesheet" /> @*燈號顯示顏色*@
+    <script src="~/js/SymptomLights.js"></script> @*燈號顯示更新*@
+    <script src="~/js/SymptomEvaluationScore.js"></script> @*選手症狀分數相關邏輯*@
+    <script src="~/js/nowInjuryTypeLoader.js"></script> @*現在傷勢類型顯示*@
+    <script src="~/js/injuryTypeLoader.js"></script> @*過去傷勢類型顯示*@
+    <script src="~/js/ConcussionScreeningScore.js"></script> @*更新分數相關邏輯*@
+    <script src="~/js/formValidation.js"></script> @*表單必填驗證*@
+    <script src="~/js/validateFillDate.js"></script> @*日期必填驗證*@
 </head>
+
 <body class="bg-gray-100 p-4">
     <div class="container mx-auto">
         <form id="questionnaireForm" method="post" action="/Questionnaire/Preview">
+            <input type="hidden" id="formDataJson" name="formDataJson" />
+            <!-- 問卷基本資料 -->
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
-                <div class="bg-white p-6 rounded-lg shadow-md mb-4">
-                    <div class="flex flex-col md:flex-row items-center mb-4 space-x-4">
-                        <label class="mr-2">
-                            專項：
-                            <input type="text" name="specialist" class="border rounded p-1"
-                                   value="@ViewBag.Specialist" readonly />
-                        </label>
-                        <label class="mr-2">
-                            填表人：
-                            <input type="text" name="fillName" class="border rounded p-1"
-                                   value="@ViewBag.FillName" readonly />
-                        </label>
-                        <label class="mr-2">
-                            選手編號：
-                            <input type="text" name="atheNum" class="border rounded p-1"
-                                   value="@ViewBag.AtheNum" readonly />
-                            <input type="hidden" id="athleteNumber" value="@ViewBag.AtheNum" />
-                        </label>
-                        <label class="mr-2">
-                            性別：
-                            <input type="text" name="genderDisplay" class="border rounded p-1"
-                                   value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly />
-                            <input type="hidden" name="gender" value="@(ViewBag.GenderID)" />
-                        </label>
-                        <label class="mr-2">
-                            填表日期：
-                            <input type="date" name="fillDate" class="border rounded p-1" required />
-                        </label>
-                        <div class="flex space-x-4 ml-auto">
-                            <button type="button" class="btn btn-success bg-green-500 text-white rounded px-6 py-2 whitespace-nowrap" id="previewButton">
-                                預覽送出
-                            </button>
+                <div class="flex flex-col md:flex-row items-center mb-4 space-x-4">
+                    <label class="mr-2">
+                        專項：
+                        <input type="text" name="specialist" class="border rounded p-1" value="@ViewBag.Specialist" readonly />
+                    </label>
+                    <label class="mr-2">
+                        填表人：
+                        <input type="text" name="fillName" class="border rounded p-1" value="@ViewBag.FillName" readonly />
+                    </label>
+                    <label class="mr-2">
+                        選手編號：
+                        <input type="text" name="atheNum" class="border rounded p-1" value="@ViewBag.AtheNum" readonly />
+                        <input type="hidden" id="athleteNumber" value="@ViewBag.AtheNum" />
+                    </label>
+                    <label class="mr-2">
+                        性別：
+                        <input type="text" name="genderDisplay" class="border rounded p-1"
+                               value="@(ViewBag.GenderID == 1 ? "男" : "女")" readonly />
+                        <input type="hidden" name="gender" value="@(ViewBag.GenderID)" />
+                    </label>
+                    <label class="mr-2">
+                        填表日期：
+                        <input type="date" name="fillDate" class="border rounded p-1" required />
+                    </label>
+                </div>
+            </div>
+            <div id="questionnaireSteps">
+                <!-- 第一題：過去健康檢查病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="1">
+                    <h3 class="text-lg font-semibold mb-4">過去健康檢查病史</h3>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目 Item</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">否 No</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是 Yes</th>
+                                <th class="border border-gray-300 px-4 py-2">備註 (若選 "是" 必填)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastHealthItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <span class="block font-medium">@item.ItemZh</span>
+                                        <span class="block text-sm text-gray-600">@item.ItemEn</span>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="pastHealth_no_@item.ID" name="pastHealth_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                        <label for="pastHealth_no_@item.ID">否</label>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="pastHealth_yes_@item.ID" name="pastHealth_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                        <label for="pastHealth_yes_@item.ID">是</label>
+                                        <div id="details_@item.ID">
+                                            <input type="text" name="item1_@item.ID" class="border rounded p-2 w-full required-text hidden" placeholder="請填寫...">
+                                            <input type="text" name="item2_@item.ID" class="border rounded p-2 w-full required-text hidden" placeholder="請填寫...">
+                                            <input type="text" name="item3_@item.ID" class="border rounded p-2 w-full required-text hidden" placeholder="請填寫...">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <p id="error_pastHealth_@item.ID" class="hidden text-red-500 text-sm mt-2 error-text">
+                                            請選擇 "是" 或 "否"，若選 "是" 請填寫備註
+                                        </p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第二題：過敏史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="2">
+                    <h3 class="text-lg font-semibold mb-4">過敏史</h3>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目 Item</th>
+                                <th class="border border-gray-300 px-4 py-2">否 No</th>
+                                <th class="border border-gray-300 px-4 py-2">是 Yes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.AllergicHistoryItems)
+                            {
+                                <tr class="hover:bg-gray-100 question-row" data-type="radio">
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <span class="block font-medium">@item.ItemZh</span>
+                                        <span class="block text-sm text-gray-600">@item.ItemEn</span>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="allergy_no_@item.ID" name="allergy_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                        <label for="allergy_no_@item.ID">否</label>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="allergy_yes_@item.ID" name="allergy_@item.ID" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                        <label for="allergy_yes_@item.ID">是</label>
+                                        <div id="details_@item.ID">
+                                            <input type="text" name="details_@item.ID" class="border rounded p-2 w-full" placeholder="請描述過敏內容...">
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第三題：家族病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3">
+                    <h3 class="text-lg font-semibold mb-4">家族病史(二等親內)</h3>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">疾病項目</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">否</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">未知</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.FamilyHistoryItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="familyHistory_@item.ID" value="no" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="familyHistory_@item.ID" value="yes" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="familyHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                </tr>
+                            }
+                            <!-- 其他 (Others) 輸入框 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 Others：</td>
+                                <td colspan="3" class="border border-gray-300 px-4 py-2">
+                                    <input type="text" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory"
+                                           class="border rounded p-2 w-full" placeholder="請填寫其他家族病史...">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第四題：過去病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="4">
+                    <h2 class="text-lg font-semibold mb-4">過去病史</h2>
+                    <label>近六個月內是否發生過以下疾病？</label>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">疾病項目</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">否</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">未知</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastHistoryItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="pastHistory_@item.ID" value="no" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="pastHistory_@item.ID" value="yes" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="pastHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio"/>
+                                    </td>
+                                </tr>
+                            }
+                            <!-- 其他 (Others) 輸入框 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 Others：</td>
+                                <td colspan="3" class="border border-gray-300 px-4 py-2">
+                                    <input type="text" name="OtherPastHistory" class="border rounded p-2 w-full" placeholder="請填寫其他病史...">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第五題：現在病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="5">
+                    <h2 class="text-lg font-semibold mb-4">現在病史</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">疾病部位</th>
+                                <th class="border border-gray-300 px-4 py-2">是否正在治療</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PresentIllnessItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="presentIllness_@item.ID" value="no" class="h-5 w-5 required-radio"/> 否
+                                        <input type="radio" name="presentIllness_@item.ID" value="yes" class="h-5 w-5 required-radio"/> 是
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第六題：藥物史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="6">
+                    <h2 class="text-lg font-semibold mb-4">藥物史</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否使用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastDrugsItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="checkbox" name="drug_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                    </td>
+                                </tr>
+                            }
+
+                            <!-- 其他藥物輸入框 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <label for="otherDrug">其他 (Others)，請詳述：</label>
+                                    <input type="text" id="otherDrug" name="OtherDrug" class="border border-gray-300 rounded px-2 py-1 w-full required-text hidden">
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <input type="checkbox" id="otherDrugCheck" name="drug_other" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherDrug" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- TUE (治療用途豁免) 選擇 -->
+                    <div class="mt-4 p-4 border border-gray-300 rounded-lg">
+                        <label class="font-semibold">是否有申請治療用途豁免？(TUE)</label>
+                        <div class="flex space-x-4 mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">是</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">否</span>
+                            </label>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="flex flex-wrap">
-                    <!-- 修改這裡的 onclick 事件，增加 URL -->
-                    @*<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l"
-                            data-questionnaire-type="A" data-tab-name="PastHealth" data-url="/Questionnaire/PastHealth">
-                        過去健康檢查病史
-                    </button>
+                <!-- 第七題：營養品 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
+                    <h2 class="text-lg font-semibold mb-4">營養品</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目</th>
+                                <th class="border border-gray-300 px-4 py-2">是否使用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastSupplementsItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="checkbox" name="supplement_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                    </td>
+                                </tr>
+                            }
 
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="B" data-tab-name="AllergicHistory" data-url="/Questionnaire/AllergicHistory">
-                        過敏史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="C" data-tab-name="FamilyHistory" data-url="/Questionnaire/FamilyHistory">
-                        家族病史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="D" data-tab-name="PastHistory" data-url="/Questionnaire/PastHistory">
-                        過去病史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="E" data-tab-name="PresentIllness" data-url="/Questionnaire/PresentIllness">
-                        現在病史
-                    </button>*@
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="F" data-tab-name="PastDrugs" data-url="/Questionnaire/PastDrugs">
-                        藥物史
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="G" data-tab-name="PastSupplements" data-url="/Questionnaire/PastSupplements">
-                        營養品
-                    </button>
-
-                    <button id="femaleQuestionnaireTab" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 @(ViewBag.ShowFemaleTab ? "" : "hidden")"
-                            data-questionnaire-type="H" data-tab-name="FemaleQuestionnaire" data-url="/Questionnaire/FemaleQuestionnaire">
-                        女性問卷
-                    </button>
-
-                    <!--<button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="I" data-tab-name="PastInjuryRestored" data-url="/Questionnaire/PastInjuryRestored">
-                        過去傷害狀況 (已復原)
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="J" data-tab-name="NowInjuryRestored" data-url="/Questionnaire/NowInjuryRestored">
-                        目前傷害狀況
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="K" data-tab-name="CardiovascularScreening" data-url="/Questionnaire/CardiovascularScreening">
-                        心血管篩檢
-                    </button>
-
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="L" data-tab-name="ConcussionScreening" data-url="/Questionnaire/ConcussionScreening">
-                        腦震盪篩檢-選手自填
-                    </button>
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="L" data-tab-name="SymptomEvaluation" data-url="/Questionnaire/SymptomEvaluation">
-                        症狀自我評估-選手自填(2)
-                    </button>
-                    <button class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4"
-                            data-questionnaire-type="M" data-tab-name="OrthopaedicScreening" data-url="/Questionnaire/OrthopaedicScreening">
-                        骨科篩檢
-                    </button>-->
-
-                    @*防護員專屬頁籤按鈕*@
-                    <!--<button id="tab_CognitiveScreening" class="tablinks w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4" data-questionnaire-type="N" data-tab-name="CognitiveScreening" data-url="/Questionnaire/CognitiveScreening">
-                        腦震盪篩檢-醫療團隊評估
-                    </button>-->
+                            <!-- "其他 (Others)" 輸入區 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">其他 (Others)：</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <input type="checkbox" id="otherSupplementCheck" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherSupplementInput" />
+                                    <input type="text" id="otherSupplementInput" name="OtherSupplements" class="border rounded p-2 w-full required-text hidden">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
 
-            <div id="tabContent"></div> <!-- 頁籤內容會在點擊時載入 -->
+                <!-- 第八題：女性問卷 -->
+                @if (Model.FemaleQuestionnaireItems != null && Model.FemaleQuestionnaireItems.Any())
+                {
+                    <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="8">
+                        <h2 class="text-lg font-semibold mb-4">女性問卷 Female Health Questionnaire</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2">問題 Question</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-center">答案 Answer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var question in Model.FemaleQuestionnaireItems)
+                                    {
+                                        <tr class="hover:bg-gray-100 question-row">
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <span class="block font-medium">@question.QuestionZh</span>
+                                                <span class="block text-sm text-gray-600">@question.QuestionEn</span>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                @if (question.ID == 1)  // 第一次生理期時間 (選擇年齡範圍)
+                                                {
+                                                    <select name="femaleQ_@question.ID" class="border rounded px-2 py-1">
+                                                        <option value="10">10 歲(含)以下</option>
+                                                        <option value="11">11 歲</option>
+                                                        <option value="12">12 歲</option>
+                                                        <option value="13">13 歲</option>
+                                                        <option value="14">14 歲</option>
+                                                        <option value="15">15 歲</option>
+                                                        <option value="16">16 歲(含)以上</option>
+                                                    </select>
+                                                }
+                                                else if (question.ID == 2)  // 是否曾經連續 3 個月未來生理週期 (是/否)
+                                                {
+                                                    <label>
+                                                <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是
+                                                    </label>
+                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio"> 否</label>
+                                                }
+                                                else if (question.ID == 3)  // 生理週期是否規律 (是/否/目前無生理週期)
+                                                {
+                                                    <label><input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是</label>
+                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no"> 否</label>
+                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="none" class="required-radio"> 目前無生理週期</label>
+                                                }
+                                                else if (question.ID == 4)  // 是否曾接受過賀爾蒙治療 (是/否)
+                                                {
+                                                    <label><input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是</label>
+                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio"> 否</label>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+
+                <!-- 第九步：過去傷害（已復原） -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9">
+                    <h2 class="text-lg font-semibold mb-4">過去有的症狀或疼痛部位 (已復原)</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block">
+                                <input type="radio" id="pastNoInjury" name="pastInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                無 (若勾無，以下不必填寫)
+                            </label>
+                            <label class="block">
+                                <input type="radio" id="pastHasInjury" name="pastInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                有，請詳述有症狀的部位
+                            </label>
+                        </div>
+
+                        <div id="injuryDetails" class="grid grid-cols-3 gap-4 hidden">
+                            @foreach (var item in Model.PastInjuryItems)
+                            {
+                                <div>
+                                    <div class="font-medium">@item.InjuryPart</div>
+                                    <div class="flex items-center space-x-4">
+                                        <label>
+                                            <input type="checkbox" name="pastInjuryLeft_@item.Id" class="injury-part form-checkbox h-5 w-5 text-blue-600 mr-2 "> 左
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="pastInjuryRight_@item.Id" class="injury-part form-checkbox h-5 w-5 text-blue-600 mr-2"> 右
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第十步：過去傷害-傷勢類型 -->
+                <div id="PastInjuryTypeSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="10">
+                    <h2 class="text-lg font-semibold mb-4">過去傷害-傷勢類型</h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        @*@foreach (var category in Model.PastInjuryTypesByCategory)
+                {
+                    <div>
+                        <h3 class="font-bold mb-2 border-b border-gray-400">@category.Key</h3>
+                        <select name="@category.Key" class="injury-type-select w-full border border-gray-300 p-2 rounded">
+                            <option value="">請選擇</option>
+                            @foreach (var item in category.Value)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                }*@
+                    </div>
+                </div>
+
+                <!-- 第十一步：過去傷害-治療方式 -->
+                <div id="treatmentMethodSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
+                    <h2 class="text-lg font-semibold mb-4">過去治療方式 Treatment Methods</h2>
+                    <div class="space-y-2">
+                        @foreach (var method in Model.PastTreatmentItems)
+                        {
+                            <div class="flex items-center">
+                                <input type="checkbox" id="Pasttreatment_@method.Id" name="Pasttreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <label for="Pasttreatment_@method.Id" class="text-gray-800">@method.Method</label>
+                            </div>
+                        }
+                        <div class="flex items-center mt-4">
+                            <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                            <label for="Pasttreatment_other" class="text-gray-800">其他：</label>
+                            <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第十二步：目前傷害狀況 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
+                    <h2 class="text-lg font-semibold mb-4">目前有的症狀或疼痛部位</h2>
+                    <div class="space-y-4">
+                        <!-- 無/有 選項 -->
+                        <div>
+                            <label class="block">
+                                <input type="radio" id="NowNoInjury" name="NowInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                無 (若勾無，以下不必填寫)
+                            </label>
+                            <label class="block">
+                                <input type="radio" id="NowHasInjury" name="NowInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                有，請詳述有症狀的部位
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 NowInjuryDetails hidden">
+                            @foreach (var item in Model.NowInjuryItems)
+                            {
+                                <div>
+                                    <div class="font-medium">@item.InjuryPart</div>
+                                    <input type="checkbox" name="NowInjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                </div>
+                            }
+                        </div>
+
+                        <div id="NowInjuryTypeSection" class="hidden mt-4"></div>
+                    </div>
+                </div>
+
+                <!-- 第十三步：目前傷害狀況-傷勢類型 -->
+                <div id="NowInjuryTypeSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
+                    <h2 class="text-lg font-semibold mb-4">目前傷害狀況-傷勢類型</h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        
+                    </div>
+                </div>
+
+                <!-- 第十四步：目前傷害狀況 - 治療方式 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
+                    <h2 class="text-lg font-semibold mb-4">治療方式</h2>
+                    <div id="now-treatment-method-section">
+                        <div class="space-y-2">
+                            @foreach (var method in Model.NowTreatmentItems)
+                            {
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="nowTreatment_@method.Id" name="nowTreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                    <label for="nowTreatment_@method.Id" class="text-gray-800">@method.Method</label>
+                                </div>
+                            }
+                            <div class="flex items-center mt-4">
+                                <input type="checkbox" id="nowTreatmentOther" name="nowTreatmentOther" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                                <input type="text" class="ml-2 border rounded p-1" placeholder="請輸入其他治療方式">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第十五步：心血管篩檢 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="15">
+                    <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">有</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">無</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CardiovascularScreeningItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="question_@item.Id" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="question_@item.Id" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第十六題 腦震盪篩檢-選手自填-(1) -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="16">
+                    <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
+                    <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">有</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">無</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ConcussionScreeningItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- 服用藥物及備註 -->
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <label class="mr-4 font-medium">● 現在是否服用藥物：</label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">無</span>
+                            </label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">有</span>
+                            </label>
+                            <span class="ml-2">(請述明)</span>
+                            <input type="text" name="MedicationDetails" class="border border-gray-300 rounded px-2 py-1 w-64 ml-2">
+                        </div>
+                        <div class="flex items-start mt-4">
+                            <label class="mr-4 font-medium">● 備註：</label>
+                            <input type="text" name="Notes" class="border border-gray-300 rounded w-96 px-2 py-1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第十七題 症狀自我評估-選手自填(2) -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="17">
+                    <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
+                    <table class="min-w-full bg-white border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">燈號</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">症狀</th>
+                                @for (int i = 0; i <= 6; i++)
+                                {
+                                    <th class="border border-gray-300 px-4 py-2">@i</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SymptomEvaluationItems)
+                            {
+                                <tr class="question-row">
+                                    <!-- 燈號顯示 -->
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <span class="light-indicator" id="indicator_@item.ID"></span>
+                                    </td>
+
+                                    <!-- 項次 -->
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
+
+                                    <!-- 症狀 -->
+                                    <td class="border border-gray-300 px-4 py-2">@item.SymptomItem</td>
+
+                                    <!-- 分數選項 -->
+                                    @for (int i = 0; i <= 6; i++)
+                                    {
+                                        <td class="border border-gray-300 px-4 py-2">
+                                            <input type="radio" name="SymptomScore_@item.ID" value="@i"
+                                                   class="form-radio h-5 w-5 text-blue-600 score-option 
+                                                   required-radio" data-indicator="#indicator_@item.ID">
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- 總計 -->
+                    <div class="flex flex-col mt-4 space-y-2">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀總數：</span>
+                            <span id="TotalSymptoms" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀分數：</span>
+                            <span id="TotalScore" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第十八題 骨科篩檢 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="26">
+                    <h2 class="text-lg font-semibold mb-4">骨科篩檢</h2>
+                    <!-- 骨科篩檢表格 -->
+                    <table class="min-w-full bg-white border border-gray-300 text-center">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">指示操作</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">觀察重點</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">結果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrthopaedicScreeningItems)
+                            {
+                                <tr class="hover:bg-gray-100 orthopaedic-row question-row">
+                                    <!-- 項次 -->
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+
+                                    <!-- 指示操作 -->
+                                    <td class="border border-gray-300 px-4 py-2">@item.Instructions</td>
+
+                                    <!-- 觀察重點 -->
+                                    <td class="border border-gray-300 px-4 py-2">@item.ObservationPoints</td>
+
+                                    <!-- 結果選項 -->
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="Result_@item.Id" value="normal" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                            <span class="ml-2">@item.ResultNormal</span>
+                                        </label>
+                                        <label class="inline-flex items-center ml-4">
+                                            <input type="radio" name="Result_@item.Id" value="abnormal" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                            <span class="ml-2">@item.ResultAbnormal</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <!-- 分步驟按鈕 -->
+            <div class="flex justify-between mt-6">
+                <button type="button" id="prevButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded">上一步</button>
+                <button type="button" id="nextButton" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
+                <button type="submit" id="submitButton" class="hidden bg-blue-500 text-white px-4 py-2 rounded">送出預覽</button>
+            </div>
         </form>
-
-        <!-- 醫療團隊身份驗證對話框 -->
-        <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
-                <form id="trainerAuthForm">
-                    <div class="form-group mb-2">
-                        <label for="trainerUserName">醫療團隊帳號</label>
-                        <input type="text" class="form-control" id="trainerUserName" name="trainerUserName" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="trainerPassword">密碼</label>
-                        <input type="password" class="form-control" id="trainerPassword" name="trainerPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-full">驗證</button>
-                </form>
-                <button id="closeModal" class="mt-2 text-red-500">取消</button>
-            </div>
-        </div>
-
     </div>
+
     <script>
-        let currentQuestionnaireTypeCode = ''; // 全域變數
+        document.addEventListener('DOMContentLoaded', function () {
+            let currentStep = 1; // 當前步驟
+            const steps = document.querySelectorAll('.question-step');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const submitButton = document.getElementById('submitButton');
 
-        $(document).ready(function () {
-            // 頁籤按鈕事件
-            $('.tablinks').on('click', function (e) {
-                e.preventDefault();
-                const tabName = $(this).data('tab-name');
-                const url = $(this).data('url');
-
-                saveTabDataToSession(tabName); // 保存當前頁籤數據
-                openTab(tabName, url); // 加載下一頁籤
-            });
-
-            // 預覽按鈕事件
-            $('#previewButton').click(async function (e) {
-                e.preventDefault();
-
-                const fillDate = $('input[name="fillDate"]').val();
-                if (!fillDate) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '日期未選擇',
-                        text: '請選擇填表日期！',
-                        confirmButtonText: '確定'
-                    });
-                    return;
-                }
-
-                // 保存所有頁籤數據
-                $('.tablinks').each(function () {
-                    const tabName = $(this).data('tab-name');
-                    saveTabDataToSession(tabName);
+            /**顯示當前步驟**/
+            function showStep(step) {
+                steps.forEach((stepDiv, index) => {
+                    stepDiv.classList.toggle('hidden', index + 1 !== step);
                 });
+                prevButton.classList.toggle('hidden', step === 1);
+                nextButton.classList.toggle('hidden', step === steps.length);
+                submitButton.classList.toggle('hidden', step !== steps.length);
+            }
 
-                $('#questionnaireForm').submit();
+            prevButton.addEventListener('click', function () {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
             });
+
+            nextButton.addEventListener('click', function () {
+                if (currentStep < steps.length) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+
+            showStep(currentStep); //預設顯示第一步
+
+            /** 儲存和載入 sessionStorage 資料 **/
+            function loadSavedData() {
+                const savedData = [
+                    { key: 'OrientationScore', selector: '#OrientationScore' },
+                    { key: 'ImmediateMemoryScore', selector: '#ImmediateMemoryScore' },
+                    { key: 'ConcentrationScore', selector: '#ConcentrationScore' },
+                    { key: 'CoordinationScore', selector: '#CoordinationScore' },
+                    { key: 'DelayedRecallScore', selector: '#DelayedRecallScore' },
+                ];
+
+                savedData.forEach(({ key, selector }) => {
+                    const value = sessionStorage.getItem(key);
+                    if (value) {
+                        document.querySelector(selector).textContent = value;
+                    }
+                });
+            }
+
+            loadSavedData();
         });
-
-        // 保存頁籤數據
-        function saveTabDataToSession(tabName) {
-            const formData = $(`#${tabName}`).find('input, textarea, select').serializeArray();
-            const tabData = {};
-            formData.forEach(item => {
-                tabData[item.name] = item.value;
-            });
-
-            const uniqueKey = `TabData_${tabName}`; // 唯一鍵
-            sessionStorage.setItem(uniqueKey, JSON.stringify(tabData)); // 存入 sessionStorage
-            $.post('/Questionnaire/SaveTabData', { tabName: uniqueKey, tabData: JSON.stringify(tabData) }); // 傳送至後端
-        }
-
-        // 打開頁籤
-        function openTab(tabName, url) {
-            const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
-
-            $('.tabcontent').hide();
-            $('.tablinks').removeClass('active');
-            $(`[data-tab-name="${safeTabName}"]`).addClass('active');
-
-            if (!$(`#${safeTabName}`).length) {
-                $.get(url, function (data) {
-                    $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
-                }).fail(function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '頁面加載失敗',
-                        text: '請稍後再試。',
-                        confirmButtonText: '確定'
-                    });
-                });
-            } else {
-                $(`#${safeTabName}`).show();
-            }
-        }
     </script>
-
-    @*<script>
-            let currentQuestionnaireTypeCode = ''; // 全域變數
-
-            $(document).ready(function () {
-                // 點擊頁籤按鈕
-                $('.tablinks').on('click', function (e) {
-                    e.preventDefault();
-
-                    const tabName = $(this).data('tab-name');
-                    const url = $(this).data('url');
-                    currentQuestionnaireTypeCode = $(this).data('questionnaire-type');
-
-                    saveTabDataToSession(tabName);
-
-                    // 判斷是否需要醫療團隊身份驗證
-                    if (tabName === "CognitiveScreening") {
-                        // 檢查是否已通過驗證
-                        if (isTrainerAuthenticated()) {
-                            openTab(tabName, url); // 如果已驗證，直接打開頁籤
-                        } else {
-                            showTrainerAuthModal(e, tabName, url); // 如果未驗證，顯示身份驗證對話框
-                        }
-                    } else {
-                        // 其他頁籤直接打開
-                        openTab(tabName, url);
-                    }
-                });
-
-                // 初始化表單輸入監聽事件
-                $('#questionnaireForm input, #questionnaireForm select, #questionnaireForm textarea').on('change', function () {
-                    const currentTabName = $(this).closest('.tabcontent').attr('id');
-                    saveTabDataToSession(currentTabName);
-                });
-
-                // 預覽按鈕事件
-                $('#previewButton').click(async function (e) {
-                    e.preventDefault();
-
-                    const fillDate = $('input[name="fillDate"]').val();
-                    if (!fillDate) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '日期未選擇',
-                            text: '請選擇填表日期！',
-                            confirmButtonText: '確定'
-                        });
-                        return;
-                    }
-
-                    // 確保所有頁籤數據保存
-                    $('.tablinks').each(function () {
-                        const tabName = $(this).data('tab-name');
-                        saveTabDataToSession(tabName);
-                    });
-
-                    // 驗證所有問卷內容
-                    if (!validateAllQuestionnaires()) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: '問卷未完成',
-                            text: '請確保所有問卷內容已填寫完整！',
-                            confirmButtonText: '確定'
-                        });
-                        return;
-                    }
-
-                    sessionStorage.clear();
-                    $('#questionnaireForm').submit();
-                });
-            });
-
-            // 醫療團隊身份驗證狀態相關函數
-            function isTrainerAuthenticated() {
-                return sessionStorage.getItem('TrainerAuthenticated') === 'true';
-            }
-
-            //跨頁籤共享驗證狀態
-            function setTrainerAuthenticated() {
-                sessionStorage.setItem('TrainerAuthenticated', 'true');
-            }
-
-            //頁籤切換時檢查後端狀態
-            function verifyTrainerSession() {
-                return $.get('/Questionnaire/CheckTrainerSession').then(function (response) {
-                    return response.authenticated; // 從後端返回驗證結果
-                });
-            }
-
-            // 顯示醫療團隊身份驗證對話框
-            function showTrainerAuthModal(evt, tabName, url) {
-                evt.preventDefault();
-                document.getElementById('athleticTrainerModal').classList.remove('hidden');
-
-                // 綁定表單提交事件
-                $('#trainerAuthForm').off('submit').on('submit', function (e) {
-                    e.preventDefault();
-                    authenticateTrainer(url, tabName);
-                });
-
-                // 綁定取消按鈕事件
-                $('#closeModal').off('click').on('click', function () {
-                    document.getElementById('athleticTrainerModal').classList.add('hidden');
-                });
-            }
-
-            // 醫療團隊身份驗證
-            function authenticateTrainer(url, tabName) {
-                const userName = $('#trainerUserName').val();
-                const password = $('#trainerPassword').val();
-
-                $.post('/Questionnaire/ValidateAthleticTrainer', { userName, password }, function (response) {
-                    if (response.success) {
-                        setTrainerAuthenticated(); // 設置驗證狀態
-                        document.getElementById('athleticTrainerModal').classList.add('hidden');
-                        openTab(tabName, url); // 驗證成功後打開頁籤
-                    } else {
-                        alert('身份驗證失敗，請確認帳號與密碼。');
-                    }
-                }).fail(function () {
-                    alert('驗證時發生錯誤，請稍後再試。');
-                });
-            }
-
-            // 開啟頁籤
-            function openTab(tabName, url) {
-                const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
-
-                // 更新 URL
-                history.pushState({ tabName: safeTabName }, '', url);
-
-                $('.tabcontent').hide();
-                $('.tablinks').removeClass('active');
-                $(`[data-tab-name="${safeTabName}"]`).addClass('active');
-
-                if ($('#' + safeTabName).length === 0) {
-                    $.get(url, function (data) {
-                        $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
-                    }).fail(function (xhr) {
-                        if (xhr.status === 403 || xhr.status === 401) {
-                            alert('只有防護員可以訪問此頁面。');
-                        } else {
-                            alert('載入頁面時發生錯誤，請稍後再試。');
-                        }
-                    });
-                } else {
-                    $('#' + safeTabName).show();
-                }
-            }
-
-            // 保存頁籤數據到 Session
-            function saveTabDataToSession(tabName) {
-                const formData = $(`#${tabName}`).find('input, textarea, select').serializeArray();
-                const tabData = {};
-                formData.forEach(item => {
-                    tabData[item.name] = item.value;
-                });
-
-                sessionStorage.setItem(tabName, JSON.stringify(tabData)); // 保存到 sessionStorage
-                $.post('/Questionnaire/SaveTabData', { tabName, tabData: JSON.stringify(tabData) }); // 同步到後端
-            }
-
-            // 載入所有頁籤數據到 SessionStorage
-            function loadAllTabData() {
-                return new Promise((resolve) => {
-                    $('.tablinks').each(function () {
-                        const tabName = $(this).data('tab-name');
-                        const url = $(this).data('url');
-                        $.get(url, function (data) {
-                            // 將每個頁籤數據保存到 SessionStorage
-                            sessionStorage.setItem(tabName, JSON.stringify(data));
-                        }).fail(function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: '數據加載失敗',
-                                text: `頁籤 ${tabName} 數據無法載入，請重試。`,
-                                confirmButtonText: '確定'
-                            });
-                            resolve(false); // 失敗時返回 false
-                        });
-                    });
-                    resolve(true); // 成功時返回 true
-                });
-            }
-            // 從 sessionStorage 恢復數據
-            function restoreTabDataFromSession(tabName) {
-                const savedData = sessionStorage.getItem(tabName);
-                if (savedData) {
-                    const dataObject = JSON.parse(savedData);
-                    for (const key in dataObject) {
-                        const input = $(`[name="${key}"]`);
-                        if (input.attr('type') === 'radio' || input.attr('type') === 'checkbox') {
-                            input.prop('checked', input.val() === dataObject[key]);
-                        } else {
-                            input.val(dataObject[key]);
-                        }
-                    }
-                }
-            }
-
-            // 在頁籤切換時保存當前數據
-            $('.tablinks').on('click', function () {
-                const currentTabName = $(this).data('tab-name');
-                saveTabDataToSession(currentTabName);
-            });
-
-            // 在頁籤加載時調用
-            $('.tablinks').on('click', function () {
-                const tabName = $(this).data('tab-name');
-                restoreTabDataFromSession(tabName);
-            });
-
-            // 驗證所有問卷內容是否完整
-            function validateAllQuestionnaires() {
-                let isValid = true;
-
-                // 檢查是否每組 radio 都有被選中
-                $('#questionnaireForm').find('[data-type="radio"]').each(function () {
-                    const groupName = $(this).find('input[type="radio"]').attr('name');
-                    if (!$(`input[name="${groupName}"]:checked`).val()) {
-                        isValid = false;
-                        return false; // 停止迴圈
-                    }
-                });
-
-                return isValid;
-            }
-        </script>*@
 </body>
 </html>

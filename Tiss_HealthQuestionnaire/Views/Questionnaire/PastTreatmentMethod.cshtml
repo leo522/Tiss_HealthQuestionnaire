@@ -1,44 +1,21 @@
-﻿@*過去傷害狀況(已復原)-治療方式*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastTreatmentMethod>
-@{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
-}
-@{
-    Layout = null;
-}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">3.過去治療方式 Treatment Methods</h2>
-
-        <div class="space-y-2">
-            @foreach (var method in Model)
-            {
-                <div class="flex items-center">
-                    <input type="checkbox" id="Pasttreatment_@method.Id" name="Pasttreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                    <label for="Pasttreatment_@method.Id" class="text-gray-800">@method.Method</label>
-                </div>
-            }
-            <div class="flex items-center mt-4">
-                <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                <label for="Pasttreatment_other" class="text-gray-800">其他：</label>
-                <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
+﻿@*過去治療方式*@
+@model Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel
+<form method="post" action="@Url.Action("pastInjuryTreatmentNextStep", "Questionnaire")">
+    <h2>過去治療方式 Treatment Methods</h2>
+    <div class="space-y-2">
+        @foreach (var method in Model.PastTreatmentItems)
+        {
+            <div class="flex items-center">
+                <input type="checkbox" id="Pasttreatment_@method.Id" name="SelectedTreatmentMethods" value="@method.Method" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+                <label for="Pasttreatment_@method.Id" class="text-gray-800">@method.Method</label>
             </div>
+        }
+        <div class="flex items-center mt-4">
+            <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
+            <label for="Pasttreatment_other" class="text-gray-800">其他：</label>
+            <input type="text" name="OtherTreatment" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            // 當用戶在治療方式頁面進行勾選時，自動將這些選項標記為I類型
-            $('input[name^="Pasttreatment_"]').change(function () {
-                const isChecked = $(this).is(':checked');
-                if (isChecked) {
-                    $(this).data('questionnaire-type', 'I');
-                }
-            });
-    </script>
-</body>
-</html>
+
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
+</form>

@@ -1,213 +1,188 @@
-﻿@*醫療團隊-認知篩檢-協調與平衡測驗(4)*@
+﻿@*協調與平衡測驗(4)*@
 @model Tiss_HealthQuestionnaire.Models.CoordinationAndBalanceExaminationViewModel
-
 @{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+    Layout = null;
 }
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>協調與平衡測驗</title>
-</head>
-<body>
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">4. 協調與平衡測驗 (Coordination and Balance Examination)</h2>
     <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">協調與平衡測驗 (Coordination and Balance Examination)</h2>
-        <form method="post" action="/Questionnaire/SaveCoordinationAndBalanceExamination">
-            <div class="p-4">
-                <h2 class="text-xl font-bold mb-4">改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)</h2>
-                <!-- 測試腳 -->
-                <div class="mb-4 question-group" data-type="radio">
-                    <label class="font-semibold">測試腳 (非慣用腳)：</label>
-                    <label class="inline-flex items-center ml-2">
-                        <input type="radio" name="TestFoot" value="左" @(Model.TestFoot == "左" ? "checked" : "") /> 左
-                    </label>
-                    <label class="inline-flex items-center ml-4">
-                        <input type="radio" name="TestFoot" value="右" @(Model.TestFoot == "右" ? "checked" : "") /> 右
-                    </label>
-                </div>
-                <!-- 測試平面 -->
-                <div class="mb-4 question-group" data-type="select">
-                    <label class="font-semibold">測試平面 (硬地/訓練場)：</label>
-                    <select name="TestSurface" class="border border-gray-300 rounded px-2 py-1 w-64">
-                        <option value="">請選擇測試平面場地類型</option>
-                        <option value="硬地" @(Model.TestSurface == "硬地" ? "selected" : "")>硬地</option>
-                        <option value="訓練場" @(Model.TestSurface == "訓練場" ? "selected" : "")>訓練場</option>
-                    </select>
-                </div>
-                <!-- 腳穿著 -->
-                <div class="mb-4 question-group" data-type="select">
-                    <label class="font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
-                    <select name="Footwear" class="border border-gray-300 rounded px-2 py-1 w-64">
-                        <option value="">請選擇腳穿著類型</option>
-                        <option value="赤足" @(Model.Footwear == "赤足" ? "selected" : "")>赤足</option>
-                        <option value="球鞋" @(Model.Footwear == "球鞋" ? "selected" : "")>球鞋</option>
-                        <option value="貼紮" @(Model.Footwear == "貼紮" ? "selected" : "")>貼紮</option>
-                    </select>
-                </div>
-            </div>
-            <!-- 錯誤扣分表格 -->
-            <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th>動作</th>
-                        <th>錯誤扣分</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>雙腳站立</td>
-                        <td>
-                            <input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>腳跟前後站立 (慣用腳在前)</td>
-                        <td>
-                            <input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>單腳站立 (非慣用腳)</td>
-                        <td>
-                            <input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="bg-gray-100">
-                        <td class="font-semibold">總錯誤次數</td>
-                        <td><span id="totalErrorCount">0</span> / 30</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <!-- 腳跟碰腳尖快速走路 -->
-            <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
-            <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th>第一次</th>
-                        <th>第二次</th>
-                        <th>第三次</th>
-                        <th>平均時間</th>
-                        <th>最快時間</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="number" name="FirstTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
-                        <td><input type="number" name="SecondTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
-                        <td><input type="number" name="ThirdTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
-                        <td id="averageTime">0 秒</td>
-                        <td id="fastestTime">0 秒</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- 表單按鈕 -->
-            <div class="flex justify-between space-x-4 mt-4">
-                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
-                    回上一頁
-                </button>
-                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                    接續下一頁
-                </button>
-            </div>
-        </form>
+        <h2 class="text-xl font-bold mb-4">改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)</h2>
+        <!-- 測試腳 -->
+        <div class="mb-4 question-group" data-type="radio">
+            <label class="font-semibold">測試腳 (非慣用腳)：</label>
+            <label class="inline-flex items-center ml-2">
+                <input type="radio" name="TestFoot" value="左" @(Model.TestFoot == "左" ? "checked" : "") /> 左
+            </label>
+            <label class="inline-flex items-center ml-4">
+                <input type="radio" name="TestFoot" value="右" @(Model.TestFoot == "右" ? "checked" : "") /> 右
+            </label>
+        </div>
+        <!-- 測試平面 -->
+        <div class="mb-4 question-group" data-type="select">
+            <label class="font-semibold">測試平面 (硬地/訓練場)：</label>
+            <select name="TestSurface" class="border border-gray-300 rounded px-2 py-1 w-64">
+                <option value="">請選擇測試平面場地類型</option>
+                <option value="硬地" @(Model.TestSurface == "硬地" ? "selected" : "")>硬地</option>
+                <option value="訓練場" @(Model.TestSurface == "訓練場" ? "selected" : "")>訓練場</option>
+            </select>
+        </div>
+        <!-- 腳穿著 -->
+        <div class="mb-4 question-group" data-type="select">
+            <label class="font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
+            <select name="Footwear" class="border border-gray-300 rounded px-2 py-1 w-64">
+                <option value="">請選擇腳穿著類型</option>
+                <option value="赤足" @(Model.Footwear == "赤足" ? "selected" : "")>赤足</option>
+                <option value="球鞋" @(Model.Footwear == "球鞋" ? "selected" : "")>球鞋</option>
+                <option value="貼紮" @(Model.Footwear == "貼紮" ? "selected" : "")>貼紮</option>
+            </select>
+        </div>
     </div>
+    <!-- 錯誤扣分表格 -->
+    <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
+        <thead>
+            <tr class="bg-gray-100">
+                <th>動作</th>
+                <th>錯誤扣分</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>雙腳站立</td>
+                <td>
+                    <input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                </td>
+            </tr>
+            <tr>
+                <td>腳跟前後站立 (慣用腳在前)</td>
+                <td>
+                    <input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                </td>
+            </tr>
+            <tr>
+                <td>單腳站立 (非慣用腳)</td>
+                <td>
+                    <input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-16 text-center" value="0" min="0">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bg-gray-100">
+                <td class="font-semibold">總錯誤次數</td>
+                <td><span id="totalErrorCount">0</span> / 30</td>
+            </tr>
+        </tfoot>
+    </table>
 
-    <script>
-        $(document).ready(function () {
-            // 初始化並加載保存的數據
-            loadScores();
+    <!-- 腳跟碰腳尖快速走路 -->
+    <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
+    <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
+        <thead>
+            <tr class="bg-gray-100">
+                <th>第一次</th>
+                <th>第二次</th>
+                <th>第三次</th>
+                <th>平均時間</th>
+                <th>最快時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" name="FirstTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
+                <td><input type="number" name="SecondTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
+                <td><input type="number" name="ThirdTime" class="time-input border border-gray-300 rounded w-16 text-center" value="0"> 秒</td>
+                <td id="averageTime">0 秒</td>
+                <td id="fastestTime">0 秒</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-            // 監聽錯誤扣分的輸入變更事件
-            $('.error-input').on('input', function () {
-                updateErrorCount();
-                saveScores();
-            });
+<script>
+    function initializeCoordination() {
+        const errorKey = 'CoordinationErrorScore';
+        const timeKey = 'CoordinationTimeData';
 
-            // 監聽時間輸入的輸入變更事件
-            $('.time-input').on('input', function () {
-                updateTimes();
-                saveScores();
-            });
+        loadScores();
 
-            // 更新總錯誤次數
-            function updateErrorCount() {
-                let totalErrorCount = 0;
-                $('.error-input').each(function () {
-                    const value = parseInt($(this).val());
-                    if (!isNaN(value)) {
-                        totalErrorCount += value;
-                    }
-                });
-
-                // 檢查是否超過30分
-                if (totalErrorCount > 30) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '警告',
-                        text: '總錯誤次數不能超過30分！',
-                        confirmButtonText: '確定'
-                    });
-
-                    // 重置最後一個輸入框的值
-                    //const lastInput = $('.error-input').last();
-                    //lastInput.val(30 - (totalErrorCount - parseInt(lastInput.val())));
-                    totalErrorCount = 30; // 將總錯誤次數設置為30
-                }
-
-                $('#totalErrorCount').text(totalErrorCount);
-                sessionStorage.setItem('TotalErrorCount', totalErrorCount);
-            }
-
-            // 更新平均時間與最快時間
-            function updateTimes() {
-                const times = $('.time-input').map(function () {
-                    const val = parseFloat($(this).val());
-                    return isNaN(val) ? 0 : val;
-                }).get();
-
-                const validTimes = times.filter(time => time > 0);
-                const averageTime = (validTimes.reduce((a, b) => a + b, 0) / (validTimes.length || 1)).toFixed(2);
-                $('#averageTime').text(isNaN(averageTime) ? "0 秒" : averageTime + ' 秒');
-                sessionStorage.setItem('AverageTime', averageTime);
-
-                const fastestTime = validTimes.length > 0 ? Math.min(...validTimes).toFixed(2) : 0;
-                $('#fastestTime').text(isNaN(fastestTime) ? "0 秒" : fastestTime + ' 秒');
-                sessionStorage.setItem('FastestTime', fastestTime);
-            }
-
-            function saveScores() {
-                $('.error-input, .time-input').each(function (index) {
-                    sessionStorage.setItem(`inputValue_${index}`, $(this).val());
-                });
-            }
-
-            function loadScores() {
-                $('.error-input, .time-input').each(function (index) {
-                    const savedValue = sessionStorage.getItem(`inputValue_${index}`);
-                    if (savedValue !== null) {
-                        $(this).val(savedValue);
-                    }
-                });
-
-                const savedTotalErrorCount = sessionStorage.getItem('TotalErrorCount');
-                if (savedTotalErrorCount !== null) {
-                    $('#totalErrorCount').text(savedTotalErrorCount);
-                }
-
-                const savedAverageTime = sessionStorage.getItem('AverageTime');
-                const savedFastestTime = sessionStorage.getItem('FastestTime');
-                if (savedAverageTime !== null) {
-                    $('#averageTime').text(savedAverageTime + ' 秒');
-                }
-                if (savedFastestTime !== null) {
-                    $('#fastestTime').text(savedFastestTime + ' 秒');
-                }
-            }
+        // 監聽錯誤扣分
+        $('.error-input').on('input', function () {
+            updateErrorCount();
+            saveScores();
         });
-    </script>
-</body>
-</html>
+
+        // 監聽時間輸入
+        $('.time-input').on('input', function () {
+            updateTimes();
+            saveScores();
+        });
+
+        function updateErrorCount() {
+            let totalErrorCount = 0;
+            $('.error-input').each(function () {
+                const value = parseInt($(this).val());
+                if (!isNaN(value)) {
+                    totalErrorCount += value;
+                }
+            });
+
+            if (totalErrorCount > 30) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '警告',
+                    text: '總錯誤次數不能超過30分！',
+                    confirmButtonText: '確定'
+                });
+                totalErrorCount = 30;
+            }
+
+            $('#totalErrorCount').text(totalErrorCount);
+            sessionStorage.setItem(errorKey, totalErrorCount);
+        }
+
+        function updateTimes() {
+            const times = $('.time-input').map(function () {
+                const val = parseFloat($(this).val());
+                return isNaN(val) ? 0 : val;
+            }).get();
+
+            const validTimes = times.filter(time => time > 0);
+            const averageTime = (validTimes.reduce((a, b) => a + b, 0) / (validTimes.length || 1)).toFixed(2);
+            $('#averageTime').text(`${averageTime} 秒`);
+            sessionStorage.setItem(`${timeKey}_Average`, averageTime);
+
+            const fastestTime = validTimes.length > 0 ? Math.min(...validTimes).toFixed(2) : 0;
+            $('#fastestTime').text(`${fastestTime} 秒`);
+            sessionStorage.setItem(`${timeKey}_Fastest`, fastestTime);
+        }
+
+        function saveScores() {
+            $('.error-input, .time-input').each(function (index) {
+                sessionStorage.setItem(`${timeKey}_Value_${index}`, $(this).val());
+            });
+        }
+
+        function loadScores() {
+            // 載入輸入值
+            $('.error-input, .time-input').each(function (index) {
+                const savedValue = sessionStorage.getItem(`${timeKey}_Value_${index}`);
+                if (savedValue !== null) {
+                    $(this).val(savedValue);
+                }
+            });
+
+            const savedErrorCount = sessionStorage.getItem(errorKey);
+            if (savedErrorCount !== null) {
+                $('#totalErrorCount').text(savedErrorCount);
+            }
+
+            const savedAverageTime = sessionStorage.getItem(`${timeKey}_Average`);
+            const savedFastestTime = sessionStorage.getItem(`${timeKey}_Fastest`);
+            if (savedAverageTime !== null) {
+                $('#averageTime').text(`${savedAverageTime} 秒`);
+            }
+            if (savedFastestTime !== null) {
+                $('#fastestTime').text(`${savedFastestTime} 秒`);
+            }
+        }
+    }
+</script>

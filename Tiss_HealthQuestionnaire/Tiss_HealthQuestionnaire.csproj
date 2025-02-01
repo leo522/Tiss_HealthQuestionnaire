@@ -374,6 +374,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="css\mainStyle.css" />
     <Content Include="css\registerStyle.css" />
+    <Content Include="css\SymptomsLights.css" />
     <Content Include="css\tailwind.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -382,7 +383,14 @@
     <Content Include="img\logo.svg" />
     <Content Include="img\問卷404.jpg" />
     <Content Include="img\問卷404_2.jpg" />
+    <Content Include="js\ConcussionScreeningScore.js" />
+    <Content Include="js\formValidation.js" />
+    <Content Include="js\injuryTypeLoader.js" />
+    <Content Include="js\nowInjuryTypeLoader.js" />
     <Content Include="js\questionnaire.js" />
+    <Content Include="js\SymptomEvaluationScore.js" />
+    <Content Include="js\SymptomLights.js" />
+    <Content Include="js\validateFillDate.js" />
     <Content Include="Models\HealthModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>HealthModel.Context.cs</LastGenOutput>

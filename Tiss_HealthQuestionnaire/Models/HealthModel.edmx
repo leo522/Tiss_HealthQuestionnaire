@@ -12,8 +12,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" />
-          <Property Name="IsNo" Type="bit" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -125,9 +125,9 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsNo" Type="bit" />
-          <Property Name="IsYes" Type="bit" />
-          <Property Name="IsUnknown" Type="bit" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsUnknown" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -228,7 +228,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsUsed" Type="bit" />
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -237,8 +237,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" />
-          <Property Name="IsNo" Type="bit" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastHealthAnswers">
           <Key>
@@ -260,9 +260,9 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsNo" Type="bit" />
-          <Property Name="IsYes" Type="bit" />
-          <Property Name="IsUnknown" Type="bit" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsUnknown" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastInjuryPartRecovery">
           <Key>
@@ -300,7 +300,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsUsed" Type="bit" />
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastTreatmentMethod">
           <Key>
@@ -316,8 +316,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" />
-          <Property Name="IsNo" Type="bit" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionnaireResponse">
           <Key>
@@ -801,7 +801,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseC__Total__60083D91">
+        <Association Name="FK__ResponseC__Total__37FA4C37">
           <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
           <End Role="ResponseCoordinationAndBalance" Type="Self.ResponseCoordinationAndBalance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -813,7 +813,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseD__Quest__39E294A9">
+        <Association Name="FK__ResponseD__Quest__3AD6B8E2">
           <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
           <End Role="ResponseDelayedRecall" Type="Self.ResponseDelayedRecall" Multiplicity="*" />
           <ReferentialConstraint>
@@ -981,7 +981,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseT__Quest__408F9238">
+        <Association Name="FK__ResponseT__Quest__4183B671">
           <End Role="QuestionnaireResponses" Type="Self.QuestionnaireResponses" Multiplicity="1" />
           <End Role="ResponseTotalScores" Type="Self.ResponseTotalScores" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1120,11 +1120,11 @@
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseC__Total__60083D91" Association="Self.FK__ResponseC__Total__60083D91">
+          <AssociationSet Name="FK__ResponseC__Total__37FA4C37" Association="Self.FK__ResponseC__Total__37FA4C37">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseD__Quest__39E294A9" Association="Self.FK__ResponseD__Quest__39E294A9">
+          <AssociationSet Name="FK__ResponseD__Quest__3AD6B8E2" Association="Self.FK__ResponseD__Quest__3AD6B8E2">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
           </AssociationSet>
@@ -1180,7 +1180,7 @@
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseSymptomEvaluation" EntitySet="ResponseSymptomEvaluation" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseT__Quest__408F9238" Association="Self.FK__ResponseT__Quest__408F9238">
+          <AssociationSet Name="FK__ResponseT__Quest__4183B671" Association="Self.FK__ResponseT__Quest__4183B671">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseTotalScores" EntitySet="ResponseTotalScores" />
           </AssociationSet>
@@ -1378,8 +1378,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsNo" Type="Boolean" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -1484,9 +1484,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsNo" Type="Boolean" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsUnknown" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsUnknown" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -1588,7 +1588,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsUsed" Type="Boolean" />
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -1597,8 +1597,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsNo" Type="Boolean" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PastHealthAnswers" Relationship="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F" FromRole="PastHealth" ToRole="PastHealthAnswers" />
         </EntityType>
         <EntityType Name="PastHealthAnswers">
@@ -1623,9 +1623,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsNo" Type="Boolean" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsUnknown" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsUnknown" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PastInjuryPartRecovery">
           <Key>
@@ -1663,7 +1663,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsUsed" Type="Boolean" />
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PastTreatmentMethod">
           <Key>
@@ -1679,8 +1679,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsNo" Type="Boolean" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionnaireResponse">
           <Key>

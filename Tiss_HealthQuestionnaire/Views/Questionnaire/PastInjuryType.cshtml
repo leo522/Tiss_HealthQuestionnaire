@@ -1,139 +1,21 @@
-﻿@*過去傷害狀況(已復原)-傷勢類型*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryType>
-@{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
-}
-@{
-    Layout = null;
-}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">2.傷勢類型 Injury Types</h2>
-
-        <div class="grid grid-cols-3 gap-4">
-            <!-- 肌肉/肌腱類 -->
+﻿@*過去傷勢類型*@
+<!--@model Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel
+<form method="post" action="@Url.Action("pastInjuryTypesNextStep", "Questionnaire")">
+    <h2>傷勢類型</h2>
+    <div class="grid grid-cols-3 gap-4">
+        @foreach (var category in Model.PastInjuryTypesByCategory)
+        {
             <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">肌肉/肌腱</h3>
-                <select name="MuscleTendon" class="w-full border border-gray-300 p-2 rounded">
+                <h3 class="font-bold mb-2 border-b border-gray-400">@category.Key</h3>
+                <select name="SelectedInjuryTypes" class="injury-type-select w-full border border-gray-300 p-2 rounded">
                     <option value="">請選擇</option>
-                    @foreach (var item in Model.Where(i => !String.IsNullOrEmpty(i.MuscleTendon)).Select(i => i.MuscleTendon).Distinct())
+                    @foreach (var item in category.Value)
                     {
                         <option value="@item">@item</option>
                     }
                 </select>
             </div>
-
-            <!-- 骨類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">骨類</h3>
-                <select name="Bone" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var bone in Model.Where(i => !string.IsNullOrEmpty(i.Bone)).Select(i => i.Bone).Distinct())
-                    {
-                        <option value="@bone">@bone</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 韌帶類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">韌帶類</h3>
-                <select name="Ligament" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var ligament in Model.Where(i => !string.IsNullOrEmpty(i.Ligament)).Select(i => i.Ligament).Distinct())
-                    {
-                        <option value="@ligament">@ligament</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 神經類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">神經類</h3>
-                <select name="Nerve" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var nerve in Model.Where(i => !string.IsNullOrEmpty(i.Nerve)).Select(i => i.Nerve).Distinct())
-                    {
-                        <option value="@nerve">@nerve</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 軟骨/滑膜/滑囊類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">軟骨/滑膜/滑囊類</h3>
-                <select name="CartilageSynoviumBursa" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var cartilage in Model.Where(i => !string.IsNullOrEmpty(i.CartilageSynoviumBursa)).Select(i => i.CartilageSynoviumBursa).Distinct())
-                    {
-                        <option value="@cartilage">@cartilage</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 表皮組織 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">表皮組織</h3>
-                <select name="EpidermalTissue" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var tissue in Model.Where(i => !string.IsNullOrEmpty(i.EpidermalTissue)).Select(i => i.EpidermalTissue).Distinct())
-                    {
-                        <option value="@tissue">@tissue</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 血管類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">血管類</h3>
-                <select name="BloodVessel" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var vessel in Model.Where(i => !string.IsNullOrEmpty(i.BloodVessel)).Select(i => i.BloodVessel).Distinct())
-                    {
-                        <option value="@vessel">@vessel</option>
-                    }
-                </select>
-            </div>
-
-            <!-- 器官/四肢類 -->
-            <div>
-                <h3 class="font-bold mb-2 border-b border-gray-400">器官/四肢類</h3>
-                <select name="OrganLimb" class="w-full border border-gray-300 p-2 rounded">
-                    <option value="">請選擇</option>
-                    @foreach (var organ in Model.Where(i => !string.IsNullOrEmpty(i.OrganLimb)).Select(i => i.OrganLimb).Distinct())
-                    {
-                        <option value="@organ">@organ</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        <!-- 治療方式表單（最初是隱藏的） -->
-        <div id="treatment-method-section" class="hidden mt-4">
-            <!-- 這裡是下一個部分視圖的容器 -->
-        </div>
+        }
     </div>
-
-    <script>
-        $(document).ready(function () {
-            // 當用戶在 "傷勢類型" 部分選擇項目時顯示 "治療方式" 部分
-            $('select').change(function () {
-                if ($('select').filter(function () { return this.value; }).length > 0) {
-
-                    const selectedType = $(this).data("questionnaire-type"); //若至少有一個下拉選單有選擇，顯示 "治療方式" 表單部分
-                    $.get('/Questionnaire/PastTreatmentMethod', function (data) {
-                        $('#treatment-method-section').html(data).removeClass('hidden');
-                    });
-                } else {
-                    $('#treatment-method-section').addClass('hidden'); //如果沒有選擇則隱藏
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+    <button type="submit">下一步</button>
+</form>-->

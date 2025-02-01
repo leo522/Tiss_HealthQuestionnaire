@@ -1,130 +1,104 @@
-﻿@*醫療團隊-認知篩檢-延遲記憶(5)*@
+﻿@*延遲記憶(5)*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecallViewModel>
-@{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
-}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>延遲記憶 (Delayed Recall)</title>
-</head>
-<body>
-    <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">延遲記憶 (Delayed Recall)</h2>
-        <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的十個詞彙。(0錯誤；1正確)</h3>
-        <form method="post" action="/Questionnaire/SaveDelayedRecall">
-            <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="radio">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">詞彙</th>
-                        <th class="border border-gray-300 px-4 py-2">分數</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="border px-4 py-2">@item.Word</td>
-                            <td class="border px-4 py-2">
-                                <label>
-                                    <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option"> 0
-                                </label>
-                                <label class="ml-4">
-                                    <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option"> 1
-                                </label>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr class="bg-gray-100">
-                        <td class="border px-4 py-2 font-semibold">總分</td>
-                        <td class="border px-4 py-2 font-semibold">
-                            <span id="totalScore">0</span> / @Model.Count()
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
 
-            <!-- 測驗開始時間 -->
-            <div class="mt-4 flex items-center">
-                <label for="testStartTime" class="mr-2 font-semibold">測驗開始時間：</label>
-                <input type="time" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" placeholder="HH:mm">
-            </div>
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">5. 延遲記憶 (Delayed Recall)</h2>
+    <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的十個詞彙。(0錯誤；1正確)</h3>
+    <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="radio">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">詞彙</th>
+                <th class="border border-gray-300 px-4 py-2">分數</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="border px-4 py-2">@item.Word</td>
+                    <td class="border px-4 py-2">
+                        <label>
+                            <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option"> 0
+                        </label>
+                        <label class="ml-4">
+                            <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option"> 1
+                        </label>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="bg-gray-100">
+                <td class="border px-4 py-2 font-semibold">總分</td>
+                <td class="border px-4 py-2 font-semibold">
+                    <span id="totalScore">0</span> / @Model.Count()
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 
-            <!-- 按鈕 -->
-            <div class="mt-4 flex justify-between">
-                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
-                    回上一頁
-                </button>
-                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                    查看總分
-                </button>
-            </div>
-        </form>
+    <!-- 測驗開始時間 -->
+    <div class="mt-4 flex items-center">
+        <label for="testStartTime" class="mr-2 font-semibold">測驗開始時間：</label>
+        <input type="time" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" placeholder="HH:mm">
     </div>
+</div>
 
-    <script>
-        $(document).ready(function () {
-            // 初始化並加載保存的數據
-            loadScores();
+<script>
+    function initializeDelayedRecall() {
+        const scoreKey = 'DelayedRecallTotalScore';
+        const timeKey = 'DelayedRecallStartTime';
 
-            // 監聽所有的 radio 按鈕變更事件
-            $('input[type="radio"]').on('change', function () {
-                updateTotalScore();
-                saveScores();
+        loadScores();
+
+        // 監聽所有 radio 按鈕變更
+        $('input[type="radio"]').on('change', function () {
+            updateTotalScore();
+            saveScores();
+        });
+
+        // 監聽開始時間
+        $('#testStartTime').on('change', function () {
+            saveScores();
+        });
+
+        function updateTotalScore() {
+            let totalScore = 0;
+            $('input[type="radio"]:checked').each(function () {
+                totalScore += parseInt($(this).val());
+            });
+            $('#totalScore').text(totalScore);
+            sessionStorage.setItem(scoreKey, totalScore);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+            const startTime = $('#testStartTime').val();
+            sessionStorage.setItem(timeKey, startTime);
+        }
+
+        function loadScores() {
+            // 載入radio勾選
+            $('input[type="radio"]').each(function () {
+                const savedValue = sessionStorage.getItem($(this).attr('name'));
+                if (savedValue !== null && $(this).val() === savedValue) {
+                    $(this).prop('checked', true);
+                }
             });
 
-            // 更新總分
-            function updateTotalScore() {
-                let totalScore = 0;
-                $('input[type="radio"]:checked').each(function () {
-                    totalScore += parseInt($(this).val());
-                });
-                $('#totalScore').text(totalScore);
-
-                // 保存總分到 sessionStorage
-                sessionStorage.setItem('DelayedRecallTotalScore', totalScore);
+            const savedTotalScore = sessionStorage.getItem(scoreKey);
+            if (savedTotalScore !== null) {
+                $('#totalScore').text(savedTotalScore);
             }
 
-            // 保存每個選擇的狀態到 sessionStorage
-            function saveScores() {
-                $('input[type="radio"]').each(function () {
-                    if ($(this).is(':checked')) {
-                        sessionStorage.setItem($(this).attr('name'), $(this).val());
-                    }
-                });
-
-                // 保存測驗開始時間
-                //const startTime = $('input[type="text"]').val();
-                const startTime = $('#testStartTime').val();
-                sessionStorage.setItem('DelayedRecallStartTime', startTime);
+            const savedStartTime = sessionStorage.getItem(timeKey);
+            if (savedStartTime !== null) {
+                $('#testStartTime').val(savedStartTime);
             }
-
-            // 加載 sessionStorage 中的數據
-            function loadScores() {
-                $('input[type="radio"]').each(function () {
-                    const savedValue = sessionStorage.getItem($(this).attr('name'));
-                    if (savedValue !== null && $(this).val() === savedValue) {
-                        $(this).prop('checked', true);
-                    }
-                });
-
-                // 加載總分
-                const savedTotalScore = sessionStorage.getItem('DelayedRecallTotalScore');
-                if (savedTotalScore !== null) {
-                    $('#totalScore').text(savedTotalScore);
-                }
-
-                // 加載測驗開始時間
-                const savedStartTime = sessionStorage.getItem('DelayedRecallStartTime');
-                if (savedStartTime !== null) {
-                    /*$('input[type="text"]').val(savedStartTime);*/
-                    $('#testStartTime').val(savedStartTime);
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+        }
+    }
+</script>

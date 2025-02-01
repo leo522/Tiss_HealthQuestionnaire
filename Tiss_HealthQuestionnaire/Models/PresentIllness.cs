@@ -17,7 +17,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string PartsOfBodyZh { get; set; }
         public string PartsOfBodyEn { get; set; }
-        public Nullable<bool> IsYes { get; set; }
-        public Nullable<bool> IsNo { get; set; }
+        public bool IsYes { get; set; }
+        public bool IsNo { get; set; }
     }
 }

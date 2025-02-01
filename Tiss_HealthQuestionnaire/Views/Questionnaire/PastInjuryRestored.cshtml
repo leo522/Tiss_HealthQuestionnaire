@@ -1,95 +1,15 @@
-﻿@*過去傷害狀況(已復原)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastInjuryStatusViewModel>
-@{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
-}
-<!DOCTYPE html>
-<html lang="zh-Hant">
+﻿@*過去有的症狀或疼痛部位 (已復原)*@
+@model Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
-<body>
-    <div class="p-4">
-        <h1 class="text-xl font-bold mb-4">1.過去有的症狀或疼痛部位 (已復原)</h1>
-
-        <!-- 無/有 選項 -->
-        <div class="space-y-2">
-            <div class="flex items-center">
-                <input type="radio" id="pastnoInjury" name="pastInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="no">
-                <label for="pastnoInjury" class="mr-4">無 (若勾無，以下不必填寫)</label>
-            </div>
-            <div class="flex items-center">
-                <input type="radio" id="pasthasInjury" name="pastInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="yes">
-                <label for="pasthasInjury" class="mr-4">有，請詳述有症狀的部位</label>
-            </div>
-        </div>
-
-        <!-- 部位選擇 -->
-        <div class="mt-4 grid grid-cols-3 gap-4 injury-details hidden">
-            @foreach (var item in Model)
-            {
-                <div>
-                    <div class="font-medium">@item.PastInjuryPart</div>
-
-                    <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
-                    @if (item.PastIsSingleSelect)
-                    {
-                        <!-- 單一勾選項目 -->
-                        <input type="checkbox" name="pastinjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                    }
-                    else
-                    {
-                        <!-- 左右勾選項目 -->
-                        <div class="flex items-center space-x-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" name="pastinjuryLeft_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <span>左</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="pastinjuryRight_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <span>右</span>
-                            </label>
-                        </div>
-                    }
-                </div>
-            }
-        </div>
-
-        <!-- 傷勢類型表單（最初是隱藏的） -->
-        <div id="injury-type-section" class="hidden mt-4">
-            <!-- 這裡是下一個部分視圖的容器 -->
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            // 當 "有" 被選中時顯示症狀部位和傷勢類型
-            $('#pasthasInjury').change(function () {
-                $('.injury-details').removeClass('hidden');
-            });
-
-            // 當 "無" 被選中時隱藏症狀部位和傷勢類型
-            $('#pastnoInjury').change(function () {
-                $('.injury-details').addClass('hidden');
-                $('#injury-type-section').addClass('hidden');
-            });
-
-            // 當用戶完成填寫時，動態顯示傷勢類型部分
-            $('.injury-details input[type="checkbox"]').change(function () {
-                const selectedType = $(this).data("questionnaire-type");
-
-                if ($('.injury-details input[type="checkbox"]:checked').length > 0) {
-                    $.get('/Questionnaire/PastInjuryType', function (data) {
-                        $('#injury-type-section').html(data).removeClass('hidden');
-                    });
-                } else {
-                    $('#injury-type-section').addClass('hidden'); //如果沒有勾選則隱藏
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<form method="post" action="@Url.Action("pastInjuryStatusNextStep", "Questionnaire")">
+    <h2>過去有的症狀或疼痛部位 (已復原)</h2>
+    <label>
+        <input type="radio" name="PastInjuryStatusAnswer" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
+        無 (若勾無，以下不必填寫)
+    </label>
+    <label>
+        <input type="radio" name="PastInjuryStatusAnswer" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
+        有，請詳述有症狀的部位
+    </label>
+    <button type="submit">下一步</button>
+</form>

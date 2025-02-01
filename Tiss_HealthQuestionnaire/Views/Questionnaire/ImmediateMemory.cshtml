@@ -1,201 +1,127 @@
-﻿@*醫療團隊-認知篩檢-短期記憶(2)*@
+﻿@*短期記憶(2)*@
 @model IEnumerable<Tiss_HealthQuestionnaire.Models.ImmediateMemoryViewModel>
 @{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+    Layout = null;
 }
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">2. 短期記憶 (Immediate Memory) (測驗三次，0錯誤；1正確)</h2>
-        <form method="post" action="/Questionnaire/SaveImmediateMemory">
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 text-center">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">詞彙</th>
-                            <th class="border border-gray-300 px-4 py-2">第一次</th>
-                            <th class="border border-gray-300 px-4 py-2">第二次</th>
-                            <th class="border border-gray-300 px-4 py-2">第三次</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="hover:bg-gray-100 question-group" data-type="radio">
-                                <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td> <!-- 顯示問題 -->
-
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <!-- 第一次測驗選項 -->
-                                    <div class="flex justify-center items-center">
-                                        <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">0</label>
-                                        <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">1</label>
-                                    </div>
-                                </td>
-
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <!-- 第二次測驗選項 -->
-                                    <div class="flex justify-center items-center">
-                                        <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">0</label>
-                                        <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">1</label>
-                                    </div>
-                                </td>
-
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <!-- 第三次測驗選項 -->
-                                    <div class="flex justify-center items-center">
-                                        <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">0</label>
-                                        <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
-                                        <label class="mx-2">1</label>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-100">
-                            <td class="border border-gray-300 px-4 py-2 font-semibold">每次分數</td>
-                            <td class="border border-gray-300 px-4 py-2" id="firstTotal">/ 10</td>
-                            <td class="border border-gray-300 px-4 py-2" id="secondTotal">/ 10</td>
-                            <td class="border border-gray-300 px-4 py-2" id="thirdTotal">/ 10</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!-- 最後完成時間 -->
-            <div class="mt-4 flex items-center">
-                <span class="mr-2 text-lg font-semibold">●</span>
-                <span class="mr-2">最後完成時間 (分:秒)：</span>
-                <input type="time"
-                       name="CompletionTime"
-                       class="border-b border-dotted text-lg font-semibold w-30 px-2"
-                       placeholder="MM:SS"
-                       maxlength="5"
-                       pattern="^[0-5][0-9]:[0-5][0-9]$"
-                       title="請輸入正確的時間格式，例如 05:30">
-            </div>
-
-            <!-- 短期記憶總分 -->
-            <div class="flex items-center mt-4">
-                <span class="mr-2 text-lg font-semibold">●</span>
-                <span class="mr-2">短期記憶總分：</span>
-                <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span> / 30
-            </div>
-
-            <!-- 表單按鈕 -->
-            <div class="flex justify-between space-x-4 mt-4">
-                <button type="submit" name="action" value="Previous" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">
-                    回上一頁
-                </button>
-                <button type="submit" name="action" value="Next" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                    接續下一頁
-                </button>
-            </div>
-        </form>
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">2. 短期記憶 (Immediate Memory) (測驗三次，0錯誤；1正確)</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300 text-center">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">詞彙</th>
+                    <th class="border border-gray-300 px-4 py-2">第一次</th>
+                    <th class="border border-gray-300 px-4 py-2">第二次</th>
+                    <th class="border border-gray-300 px-4 py-2">第三次</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-100 question-group">
+                        <td class="border border-gray-300 px-4 py-2">@Html.Encode(item.Word)</td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <div class="flex justify-center items-center">
+                                <input type="radio" name="first_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">0</label>
+                                <input type="radio" name="first_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">1</label>
+                            </div>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <div class="flex justify-center items-center">
+                                <input type="radio" name="second_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">0</label>
+                                <input type="radio" name="second_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">1</label>
+                            </div>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <div class="flex justify-center items-center">
+                                <input type="radio" name="third_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">0</label>
+                                <input type="radio" name="third_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option">
+                                <label class="mx-2">1</label>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="bg-gray-100">
+                    <td class="border border-gray-300 px-4 py-2 font-semibold">每次分數</td>
+                    <td class="border border-gray-300 px-4 py-2" id="firstTotal">/ 10</td>
+                    <td class="border border-gray-300 px-4 py-2" id="secondTotal">/ 10</td>
+                    <td class="border border-gray-300 px-4 py-2" id="thirdTotal">/ 10</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            // 初始化並加載保存的分數和時間
-            loadScores();
-            loadCompletionTime();
+    <!-- 最後完成時間 -->
+    <div class="mt-4 flex items-center">
+        <span class="mr-2 text-lg font-semibold">●</span>
+        <span class="mr-2">最後完成時間 (分:秒)：</span>
+        <input type="time" name="CompletionTime" class="border-b border-dotted text-lg font-semibold w-30 px-2" placeholder="MM:SS">
+    </div>
 
-            // 監聽所有的 radio 按鈕變更事件
-            $('.memory-option').on('change', function () {
-                const groupName = $(this).attr('name').split('_')[0];
-                updateSingleScore(groupName);
-                saveScores();
-            });
+    <!-- 短期記憶總分 -->
+    <div class="flex items-center mt-4">
+        <span class="mr-2 text-lg font-semibold">●</span>
+        <span class="mr-2">短期記憶總分：</span>
+        <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span> / 30
+    </div>
+</div>
 
-            // 監聽完成時間輸入事件
-            $('input[name="CompletionTime"]').on('input', function () {
-                formatCompletionTime(this);
-            });
+<script>
+    function initializeImmediateMemory() {
+        const scoreKey = 'ImmediateMemoryScore';
 
-            $('input[name="CompletionTime"]').on('blur', function () {
-                validateAndFixCompletionTime(this);
-                saveCompletionTime(this.value);
-            });
+        loadScores();
 
-            function updateSingleScore(groupName) {
-                let total = 0;
-                $(`input[name^="${groupName}_"]:checked`).each(function () {
-                    total += parseInt($(this).val());
-                });
-                $(`#${groupName}Total`).text(`${total} / 10`);
-                updateTotalScore();
-            }
-
-            function updateTotalScore() {
-                const firstTotal = parseInt($('#firstTotal').text()) || 0;
-                const secondTotal = parseInt($('#secondTotal').text()) || 0;
-                const thirdTotal = parseInt($('#thirdTotal').text()) || 0;
-                const totalScore = firstTotal + secondTotal + thirdTotal;
-
-                $('#totalScore').text(firstTotal + secondTotal + thirdTotal);
-                sessionStorage.setItem('ImmediateMemoryScore', totalScore);
-            }
-
-            function saveScores() {
-                $('input[type="radio"]').each(function () {
-                    if ($(this).is(':checked')) {
-                        sessionStorage.setItem($(this).attr('name'), $(this).val());
-                    }
-                });
-            }
-
-            function loadScores() {
-                $('input[type="radio"]').each(function () {
-                    const savedValue = sessionStorage.getItem($(this).attr('name'));
-                    if (savedValue !== null && (savedValue === '0' || savedValue === '1')) {
-                        $(this).prop('checked', true);
-                    }
-                });
-                updateTotalScore();
-            }
-
-            function formatCompletionTime(input) {
-                const value = input.value.replace(/[^0-9:]/g, '');
-                const parts = value.split(':');
-                if (parts.length > 1) {
-                    input.value = `${parts[0].slice(0, 2)}:${parts[1].slice(0, 2)}`;
-                } else {
-                    input.value = value.slice(0, 2);
-                }
-            }
-
-            function validateAndFixCompletionTime(input) {
-                const value = input.value.split(':');
-                if (value.length === 1 && value[0]) {
-                    input.value = `${value[0].padStart(2, '0')}:00`;
-                } else if (value.length === 2) {
-                    input.value = `${value[0].padStart(2, '0')}:${value[1].padStart(2, '0')}`;
-                }
-            }
-
-            function saveCompletionTime(value) {
-                const isValid = /^[0-5][0-9]:[0-5][0-9]$/.test(value);
-                if (isValid) {
-                    sessionStorage.setItem('CompletionTime', value);
-                }
-            }
-
-            function loadCompletionTime() {
-                const savedTime = sessionStorage.getItem('CompletionTime');
-                if (savedTime) {
-                    $('input[name="CompletionTime"]').val(savedTime);
-                }
-            }
+        // 監聽選項變更
+        $('.memory-option').on('change', function () {
+            const groupName = $(this).attr('name').split('_')[0];
+            updateSingleScore(groupName);
+            saveScores();
         });
-    </script>
-</body>
-</html>
+
+        function updateSingleScore(groupName) {
+            let total = 0;
+            $(`input[name^="${groupName}_"]:checked`).each(function () {
+                total += parseInt($(this).val());
+            });
+            $(`#${groupName}Total`).text(`${total} / 10`);
+            updateTotalScore();
+        }
+
+        function updateTotalScore() {
+            const firstTotal = parseInt($('#firstTotal').text().split('/')[0]) || 0;
+            const secondTotal = parseInt($('#secondTotal').text().split('/')[0]) || 0;
+            const thirdTotal = parseInt($('#thirdTotal').text().split('/')[0]) || 0;
+            const totalScore = firstTotal + secondTotal + thirdTotal;
+            $('#totalScore').text(totalScore);
+            sessionStorage.setItem(scoreKey, totalScore);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+        }
+
+        function loadScores() {
+            $('input[type="radio"]').each(function () {
+                const savedValue = sessionStorage.getItem($(this).attr('name'));
+                if (savedValue !== null && $(this).val() === savedValue) {
+                    $(this).prop('checked', true);
+                }
+            });
+            updateSingleScore('first');
+            updateSingleScore('second');
+            updateSingleScore('third');
+        }
+    }
+</script>

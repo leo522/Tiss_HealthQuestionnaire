@@ -1,91 +1,28 @@
 ﻿@*目前傷害狀況*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.InjuryStatusViewModel>
-@{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
-}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    <div class="p-4">
-        <h1 class="text-xl font-bold mb-4">1.目前有的症狀或疼痛部位</h1>
-
-        <!-- 無/有 選項 -->
-        <div class="space-y-2">
-            <div class="flex items-center">
-                <input type="radio" id="NownoInjury" name="NowInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="no">
-                <label for="NownoInjury" class="text-gray-800 mr-4">無 (若勾無，以下不必填寫)</label>
-            </div>
-            <div class="flex items-center">
-                <input type="radio" id="NowhasInjury" name="NowInjuryStatus" class="form-radio h-5 w-5 text-blue-600 mr-2" value="yes">
-                <label for="NowhasInjury" class="text-gray-800 mr-4">有，請詳述有症狀的部位</label>
-            </div>
+@model Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel
+<form method="post" action="@Url.Action("NowInjuryNextStep", "Questionnaire")">
+    <h2>目前有的症狀或疼痛部位</h2>
+    <div class="space-y-4">
+        <div>
+            <label class="block">
+                <input type="radio" id="NowNoInjury" name="NowInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                無 (若勾無，以下不必填寫)
+            </label>
+            <label class="block">
+                <input type="radio" id="NowHasInjury" name="NowInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                有，請詳述有症狀的部位
+            </label>
         </div>
-
-        <!-- 部位選擇 -->
-        <div class="mt-4 grid grid-cols-3 gap-4 Nowinjury-details hidden">
-            @foreach (var item in Model)
+        <div class="grid grid-cols-3 gap-4 NowInjuryDetails hidden">
+            @foreach (var item in Model.NowInjuryItems)
             {
                 <div>
                     <div class="font-medium">@item.InjuryPart</div>
-
-                    <!-- 根據後端傳來的 IsSingleSelect 決定是否顯示單一勾選框 -->
-                    @if (item.IsSingleSelect)
-                    {
-                        <!-- 單一勾選項目 -->
-                        <input type="checkbox" name="Nowinjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                    }
-                    else
-                    {
-                        <!-- 左右勾選項目 -->
-                        <div class="flex items-center space-x-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" name="NowinjuryLeft_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <span>左</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="NowinjuryRight_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <span>右</span>
-                            </label>
-                        </div>
-                    }
+                    <input type="checkbox" name="NowInjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
                 </div>
             }
         </div>
-
-        <!-- 傷勢類型表單（最初是隱藏的） -->
-        <div id="Nowinjury-type-section" class="hidden mt-4">
-            <!-- 這裡是下一個部分視圖的容器 -->
-        </div>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            // 當 "有" 被選中時顯示症狀部位和傷勢類型
-            $('#NowhasInjury').change(function () {
-                $('.Nowinjury-details').removeClass('hidden');
-            });
-
-            // 當 "無" 被選中時隱藏症狀部位和傷勢類型
-            $('#NownoInjury').change(function () {
-                $('.Nowinjury-details').addClass('hidden');
-                $('#Nowinjury-type-section').addClass('hidden');
-            });
-
-            // 當用戶完成填寫時，動態顯示傷勢類型部分
-            $('.Nowinjury-details input[type="checkbox"]').change(function () {
-                if ($('.Nowinjury-details input[type="checkbox"]:checked').length > 0) {
-                    // 動態載入傷勢類型的部分視圖
-                    $.get('/Questionnaire/NowInjuryType', function (data) {
-                        $('#Nowinjury-type-section').html(data).removeClass('hidden');
-                    });
-                } else {
-                    $('#Nowinjury-type-section').addClass('hidden');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
+</form>

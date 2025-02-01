@@ -1,83 +1,74 @@
-﻿@*醫療團隊-認知篩檢-分數總合(6)*@
-@model Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel
+﻿@model Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel
 @{
-    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+    Layout = null;
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link href="~/css/tailwind.min.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
-</head>
-<body>
-    <div class="container mx-auto px-4 py-8">
-        <h2 class="text-xl font-bold mb-4">(六) 認知篩檢 (Cognitive Screening) 分數總合</h2>
-        <form method="post" action="/Questionnaire/SaveCSTotalScore">
-            <table class="table-auto border-collapse border border-black w-full text-center">
-                <thead>
-                    <tr>
-                        <th class="border border-black px-4 py-2">項目</th>
-                        <th class="border border-black px-4 py-2">分數</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 定位 (Orientation) -->
-                    <tr>
-                        <td class="border border-black px-4 py-2">定位 (Orientation)</td>
-                        <td class="border border-black px-4 py-2" id="orientationScore">/5</td>
-                    </tr>
-                    <!-- 短期記憶 (Immediate Memory) -->
-                    <tr>
-                        <td class="border border-black px-4 py-2">短期記憶 (Immediate Memory)</td>
-                        <td class="border border-black px-4 py-2" id="immediateMemoryScore">/30</td>
-                    </tr>
-                    <!-- 專注力 (Concentration) -->
-                    <tr>
-                        <td class="border border-black px-4 py-2">專注力 (Concentration)</td>
-                        <td class="border border-black px-4 py-2" id="concentrationScore">/4</td>
-                    </tr>
-                    <!-- 延遲記憶 (Delayed Recall) -->
-                    <tr>
-                        <td class="border border-black px-4 py-2">延遲記憶 (Delayed Recall)</td>
-                        <td class="border border-black px-4 py-2" id="delayedRecallScore">/10</td>
-                    </tr>
-                    <!-- 總分 -->
-                    <tr class="font-bold">
-                        <td class="border border-black px-4 py-2">總分</td>
-                        <td class="border border-black px-4 py-2" id="totalScore">/49</td>
-                    </tr>
-                </tbody>
-            </table>
 
-            <div class="flex justify-between space-x-4 mt-4">
-                    <button type="submit" class="btn btn-warning">回上一頁</button>
-                    <button type="submit" class="btn btn-success">回問卷首頁</button>
-                </div>
-        </form>
-    </div>
-    <script>
-        $(document).ready(function () {
-            // 從 sessionStorage 獲取各頁面的分數
-            const orientationScore = parseInt(sessionStorage.getItem('OrientationScore')) || 0;
-            const immediateMemoryScore = parseInt(sessionStorage.getItem('ImmediateMemoryScore')) || 0;
-            const concentrationScore = parseInt(sessionStorage.getItem('ConcentrationScore')) || 0;
-            const delayedRecallScore = parseInt(sessionStorage.getItem('DelayedRecallTotalScore')) || 0;
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">認知篩檢分數總合</h2>
+    <table class="border-collapse border w-full text-center">
+        <thead>
+            <tr>
+                <th class="border px-4 py-2">項目</th>
+                <th class="border px-4 py-2">分數</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border px-4 py-2">定位(Orientation)</td>
+                <td class="border px-4 py-2" id="orientationScore">/5</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">短期記憶(ImmediateMemory)</td>
+                <td class="border px-4 py-2" id="immediateMemoryScore">/30</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">專注力(Concentration)</td>
+                <td class="border px-4 py-2" id="concentrationScore">/4</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">協調與平衡(Coordination)</td>
+                <td class="border px-4 py-2" id="coordinationScore">/30</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">延遲記憶(DelayedRecall)</td>
+                <td class="border px-4 py-2" id="delayedRecallScore">/10</td>
+            </tr>
+            <tr class="font-bold bg-gray-100">
+                <td class="border px-4 py-2">總分</td>
+                <td class="border px-4 py-2" id="finalScore">/79</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-            // 顯示各項分數，並附上最大分數
-            $('#orientationScore').text(`${orientationScore} / 5`);
-            $('#immediateMemoryScore').text(`${immediateMemoryScore} / 30`);
-            $('#concentrationScore').text(`${concentrationScore} / 4`);
-            $('#delayedRecallScore').text(`${delayedRecallScore} / 10`);
+<script>
+    function initializeSummary() {
+        console.log("Summary init...");
 
-            // 計算總分
-            const totalScore = orientationScore + immediateMemoryScore + concentrationScore + delayedRecallScore;
-            $('#totalScore').text(`${totalScore} / 49`);
+        // 讀取對應 Key
+        const orientation = parseInt(sessionStorage.getItem('OrientationScore')) || 0;
+        const immediate = parseInt(sessionStorage.getItem('ImmediateMemoryScore')) || 0;
+        const concentration = parseInt(sessionStorage.getItem('ConcentrationScore')) || 0;
+        // 協調與平衡這裡要注意: 目前我們只存了「錯誤次數CoordinationErrorScore」，若您想顯示「得分=30-錯誤」要自己轉換
+        const coordinationErrors = parseInt(sessionStorage.getItem('CoordinationErrorScore')) || 0;
+        // 若想把「錯誤次數」直接當成分數，可接在 final 加總；若想用 (30 - 錯誤次數) 則要自己運算
+        // 這裡示範：得分 = 30 - 錯誤
+        const coordinationScore = (30 - coordinationErrors) < 0 ? 0 : (30 - coordinationErrors);
 
-            // 保存總分到 sessionStorage
-            sessionStorage.setItem('TotalScore', totalScore);
-        });
-    </script>
-</body>
-</html>
+        const delayedRecall = parseInt(sessionStorage.getItem('DelayedRecallTotalScore')) || 0;
+
+        // 顯示
+        $('#orientationScore').text(`${orientation} / 5`);
+        $('#immediateMemoryScore').text(`${immediate} / 30`);
+        $('#concentrationScore').text(`${concentration} / 4`);
+        $('#coordinationScore').text(`${coordinationScore} / 30`);
+        $('#delayedRecallScore').text(`${delayedRecall} / 10`);
+
+        // 總分(範例: 5 + 30 + 4 + 30 + 10 = 79 最大值)
+        const final = orientation + immediate + concentration + coordinationScore + delayedRecall;
+        $('#finalScore').text(`${final} / 79`);
+
+        // 若您想存到 sessionStorage
+        sessionStorage.setItem('TotalScore', final);
+    }
+</script>
