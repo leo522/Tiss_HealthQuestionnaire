@@ -12,18 +12,18 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PastInjuryStatus
+    public partial class CurrentInjuryCategory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PastInjuryStatus()
+        public CurrentInjuryCategory()
         {
-            this.PastInjuryRecord = new HashSet<PastInjuryRecord>();
+            this.CurrentInjuryType = new HashSet<CurrentInjuryType>();
         }
     
-        public int Id { get; set; }
-        public string InjuryPart { get; set; }
+        public int CurrentInjuryCategoryId { get; set; }
+        public string CategoryName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PastInjuryRecord> PastInjuryRecord { get; set; }
+        public virtual ICollection<CurrentInjuryType> CurrentInjuryType { get; set; }
     }
 }

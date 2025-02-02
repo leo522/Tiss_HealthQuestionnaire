@@ -12,10 +12,13 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PastInjuryPartRecovery
+    public partial class PastInjuryRecord
     {
-        public int ID { get; set; }
-        public string PartZh { get; set; }
-        public string PartEn { get; set; }
+        public int PastInjuryRecordId { get; set; }
+        public int PastInjuryStatusId { get; set; }
+        public int PastInjuryTypeId { get; set; }
+    
+        public virtual PastInjuryStatus PastInjuryStatus { get; set; }
+        public virtual PastInjuryType PastInjuryType { get; set; }
     }
 }

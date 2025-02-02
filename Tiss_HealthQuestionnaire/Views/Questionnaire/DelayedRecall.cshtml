@@ -1,14 +1,15 @@
-﻿@*延遲記憶(5)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecallViewModel>
+﻿@*醫療團隊-延遲記憶(5)*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecall>
 
 <div class="p-4">
     <h2 class="text-xl font-bold mb-4">5. 延遲記憶 (Delayed Recall)</h2>
-    <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的十個詞彙。(0錯誤；1正確)</h3>
-    <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="radio">
+    <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的詞彙。(0錯誤；1正確)</h3>
+
+    <table class="min-w-full bg-white border border-gray-300 text-center">
         <thead>
             <tr class="bg-gray-100">
-                <th class="border border-gray-300 px-4 py-2">詞彙</th>
-                <th class="border border-gray-300 px-4 py-2">分數</th>
+                <th class="border px-4 py-2">詞彙</th>
+                <th class="border px-4 py-2">分數</th>
             </tr>
         </thead>
         <tbody>
@@ -18,10 +19,10 @@
                     <td class="border px-4 py-2">@item.Word</td>
                     <td class="border px-4 py-2">
                         <label>
-                            <input type="radio" name="score_@item.OrderNumber" value="0" class="form-radio h-5 w-5 memory-option"> 0
+                            <input type="radio" name="score_@item.ID" value="0" class="form-radio memory-option" @(item.Score0 == 0 ? "checked" : "")> 0
                         </label>
                         <label class="ml-4">
-                            <input type="radio" name="score_@item.OrderNumber" value="1" class="form-radio h-5 w-5 memory-option"> 1
+                            <input type="radio" name="score_@item.ID" value="1" class="form-radio memory-option" @(item.Score1 == 1 ? "checked" : "")> 1
                         </label>
                     </td>
                 </tr>
@@ -31,7 +32,7 @@
             <tr class="bg-gray-100">
                 <td class="border px-4 py-2 font-semibold">總分</td>
                 <td class="border px-4 py-2 font-semibold">
-                    <span id="totalScore">0</span> / @Model.Count()
+                    <span id="totalScore">@Session["DelayedRecallTotalScore"]</span> / @Model.Count()
                 </td>
             </tr>
         </tfoot>
@@ -40,7 +41,7 @@
     <!-- 測驗開始時間 -->
     <div class="mt-4 flex items-center">
         <label for="testStartTime" class="mr-2 font-semibold">測驗開始時間：</label>
-        <input type="time" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" placeholder="HH:mm">
+        <input type="time" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" value="@ViewBag.DelayedRecallStartTime">
     </div>
 </div>
 
@@ -51,8 +52,8 @@
 
         loadScores();
 
-        // 監聽所有 radio 按鈕變更
-        $('input[type="radio"]').on('change', function () {
+        // 監聽 radio 變更
+        $('.memory-option').on('change', function () {
             updateTotalScore();
             saveScores();
         });
@@ -64,7 +65,7 @@
 
         function updateTotalScore() {
             let totalScore = 0;
-            $('input[type="radio"]:checked').each(function () {
+            $('.memory-option:checked').each(function () {
                 totalScore += parseInt($(this).val());
             });
             $('#totalScore').text(totalScore);
@@ -72,18 +73,18 @@
         }
 
         function saveScores() {
-            $('input[type="radio"]').each(function () {
+            $('.memory-option').each(function () {
                 if ($(this).is(':checked')) {
                     sessionStorage.setItem($(this).attr('name'), $(this).val());
                 }
             });
+
             const startTime = $('#testStartTime').val();
             sessionStorage.setItem(timeKey, startTime);
         }
 
         function loadScores() {
-            // 載入radio勾選
-            $('input[type="radio"]').each(function () {
+            $('.memory-option').each(function () {
                 const savedValue = sessionStorage.getItem($(this).attr('name'));
                 if (savedValue !== null && $(this).val() === savedValue) {
                     $(this).prop('checked', true);

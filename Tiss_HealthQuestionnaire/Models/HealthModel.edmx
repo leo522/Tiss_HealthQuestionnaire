@@ -109,6 +109,43 @@
           <Property Name="PartZh" Type="nvarchar" MaxLength="10" />
           <Property Name="PartEn" Type="nvarchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="CurrentInjuryCategory">
+          <Key>
+            <PropertyRef Name="CurrentInjuryCategoryId" />
+          </Key>
+          <Property Name="CurrentInjuryCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryRecord">
+          <Key>
+            <PropertyRef Name="CurrentInjuryRecordId" />
+          </Key>
+          <Property Name="CurrentInjuryRecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CurrentInjuryStatusId" Type="int" Nullable="false" />
+          <Property Name="CurrentInjuryTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InjuryPart" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryType">
+          <Key>
+            <PropertyRef Name="CurrentInjuryTypeId" />
+          </Key>
+          <Property Name="CurrentInjuryTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CurrentInjuryCategoryId" Type="int" Nullable="false" />
+          <Property Name="InjuryName" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentTreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Method" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="DelayedRecall">
           <Key>
             <PropertyRef Name="ID" />
@@ -158,27 +195,6 @@
           <Property Name="SecondTest1" Type="int" />
           <Property Name="ThirdTest0" Type="int" />
           <Property Name="ThirdTest1" Type="int" />
-        </EntityType>
-        <EntityType Name="InjuryStatus">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InjuryPart" Type="nvarchar" MaxLength="20" />
-        </EntityType>
-        <EntityType Name="InjuryType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MuscleTendon" Type="nvarchar" MaxLength="30" />
-          <Property Name="Bone" Type="nvarchar" MaxLength="30" />
-          <Property Name="Ligament" Type="nvarchar" MaxLength="30" />
-          <Property Name="Nerve" Type="nvarchar" MaxLength="30" />
-          <Property Name="CartilageSynoviumBursa" Type="nvarchar" MaxLength="30" />
-          <Property Name="EpidermalTissue" Type="nvarchar" MaxLength="30" />
-          <Property Name="BloodVessel" Type="nvarchar" MaxLength="20" />
-          <Property Name="OrganLimb" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="MedicalandFamilyHistory">
           <Key>
@@ -264,34 +280,35 @@
           <Property Name="IsYes" Type="bit" Nullable="false" />
           <Property Name="IsUnknown" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="PastInjuryPartRecovery">
+        <EntityType Name="PastInjuryCategory">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="PastInjuryCategoryId" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartZh" Type="nvarchar" MaxLength="10" />
-          <Property Name="PartEn" Type="nvarchar" MaxLength="150" />
+          <Property Name="PastInjuryCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PastInjuryRecord">
+          <Key>
+            <PropertyRef Name="PastInjuryRecordId" />
+          </Key>
+          <Property Name="PastInjuryRecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PastInjuryStatusId" Type="int" Nullable="false" />
+          <Property Name="PastInjuryTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PastInjuryStatus">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InjuryPart" Type="nvarchar" MaxLength="20" />
+          <Property Name="InjuryPart" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="PastInjuryType">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="PastInjuryTypeId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MuscleTendon" Type="nvarchar" MaxLength="30" />
-          <Property Name="Bone" Type="nvarchar" MaxLength="30" />
-          <Property Name="Ligament" Type="nvarchar" MaxLength="30" />
-          <Property Name="Nerve" Type="nvarchar" MaxLength="30" />
-          <Property Name="CartilageSynoviumBursa" Type="nvarchar" MaxLength="30" />
-          <Property Name="EpidermalTissue" Type="nvarchar" MaxLength="30" />
-          <Property Name="BloodVessel" Type="nvarchar" MaxLength="20" />
-          <Property Name="OrganLimb" Type="nvarchar" MaxLength="20" />
+          <Property Name="PastInjuryTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PastInjuryCategoryId" Type="int" Nullable="false" />
+          <Property Name="InjuryName" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="PastSupplements">
           <Key>
@@ -307,7 +324,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Method" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Method" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="PresentIllness">
           <Key>
@@ -669,6 +686,42 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Method" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <Association Name="FK__CurrentIn__Curre__0CDAE408">
+          <End Role="CurrentInjuryCategory" Type="Self.CurrentInjuryCategory" Multiplicity="1" />
+          <End Role="CurrentInjuryType" Type="Self.CurrentInjuryType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryCategory">
+              <PropertyRef Name="CurrentInjuryCategoryId" />
+            </Principal>
+            <Dependent Role="CurrentInjuryType">
+              <PropertyRef Name="CurrentInjuryCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentIn__Curre__15702A09">
+          <End Role="CurrentInjuryStatus" Type="Self.CurrentInjuryStatus" Multiplicity="1" />
+          <End Role="CurrentInjuryRecord" Type="Self.CurrentInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CurrentInjuryRecord">
+              <PropertyRef Name="CurrentInjuryStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentIn__Curre__16644E42">
+          <End Role="CurrentInjuryType" Type="Self.CurrentInjuryType" Multiplicity="1" />
+          <End Role="CurrentInjuryRecord" Type="Self.CurrentInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryType">
+              <PropertyRef Name="CurrentInjuryTypeId" />
+            </Principal>
+            <Dependent Role="CurrentInjuryRecord">
+              <PropertyRef Name="CurrentInjuryTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__PastHealt__Quest__5165187F">
           <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
           <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
@@ -690,6 +743,42 @@
             </Principal>
             <Dependent Role="PastHealthAnswers">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__04459E07">
+          <End Role="PastInjuryCategory" Type="Self.PastInjuryCategory" Multiplicity="1" />
+          <End Role="PastInjuryType" Type="Self.PastInjuryType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryCategory">
+              <PropertyRef Name="PastInjuryCategoryId" />
+            </Principal>
+            <Dependent Role="PastInjuryType">
+              <PropertyRef Name="PastInjuryCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__119F9925">
+          <End Role="PastInjuryStatus" Type="Self.PastInjuryStatus" Multiplicity="1" />
+          <End Role="PastInjuryRecord" Type="Self.PastInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PastInjuryRecord">
+              <PropertyRef Name="PastInjuryStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__1293BD5E">
+          <End Role="PastInjuryType" Type="Self.PastInjuryType" Multiplicity="1" />
+          <End Role="PastInjuryRecord" Type="Self.PastInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryType">
+              <PropertyRef Name="PastInjuryTypeId" />
+            </Principal>
+            <Dependent Role="PastInjuryRecord">
+              <PropertyRef Name="PastInjuryTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1022,13 +1111,16 @@
           <EntitySet Name="ConcussionScreening" EntityType="Self.ConcussionScreening" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CoordinationAndBalanceExamination" EntityType="Self.CoordinationAndBalanceExamination" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CurrentInjury" EntityType="Self.CurrentInjury" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentInjuryCategory" EntityType="Self.CurrentInjuryCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentInjuryRecord" EntityType="Self.CurrentInjuryRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentInjuryStatus" EntityType="Self.CurrentInjuryStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentInjuryType" EntityType="Self.CurrentInjuryType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentTreatmentMethod" EntityType="Self.CurrentTreatmentMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DelayedRecall" EntityType="Self.DelayedRecall" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FamilyHistory" EntityType="Self.FamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImmediateMemory" EntityType="Self.ImmediateMemory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="InjuryStatus" EntityType="Self.InjuryStatus" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="InjuryType" EntityType="Self.InjuryType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="Self.MedicalandFamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ModifiedBalanceTest" EntityType="Self.ModifiedBalanceTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrthopaedicScreening" EntityType="Self.OrthopaedicScreening" Schema="dbo" store:Type="Tables" />
@@ -1037,7 +1129,8 @@
           <EntitySet Name="PastHealth" EntityType="Self.PastHealth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHealthAnswers" EntityType="Self.PastHealthAnswers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHistory" EntityType="Self.PastHistory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PastInjuryPartRecovery" EntityType="Self.PastInjuryPartRecovery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastInjuryCategory" EntityType="Self.PastInjuryCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastInjuryRecord" EntityType="Self.PastInjuryRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastInjuryStatus" EntityType="Self.PastInjuryStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastInjuryType" EntityType="Self.PastInjuryType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastSupplements" EntityType="Self.PastSupplements" Schema="dbo" store:Type="Tables" />
@@ -1076,6 +1169,18 @@
           <EntitySet Name="TimedTandemGait" EntityType="Self.TimedTandemGait" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Treatment" EntityType="Self.Treatment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TreatmentMethod" EntityType="Self.TreatmentMethod" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CurrentIn__Curre__0CDAE408" Association="Self.FK__CurrentIn__Curre__0CDAE408">
+            <End Role="CurrentInjuryCategory" EntitySet="CurrentInjuryCategory" />
+            <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentIn__Curre__15702A09" Association="Self.FK__CurrentIn__Curre__15702A09">
+            <End Role="CurrentInjuryStatus" EntitySet="CurrentInjuryStatus" />
+            <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentIn__Curre__16644E42" Association="Self.FK__CurrentIn__Curre__16644E42">
+            <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
+            <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
+          </AssociationSet>
           <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
             <End Role="PastHealth" EntitySet="PastHealth" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
@@ -1083,6 +1188,18 @@
           <AssociationSet Name="FK__PastHealt__UserI__52593CB8" Association="Self.FK__PastHealt__UserI__52593CB8">
             <End Role="AthleteUser" EntitySet="AthleteUser" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="Self.FK__PastInjur__PastI__04459E07">
+            <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
+            <End Role="PastInjuryType" EntitySet="PastInjuryType" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__119F9925" Association="Self.FK__PastInjur__PastI__119F9925">
+            <End Role="PastInjuryStatus" EntitySet="PastInjuryStatus" />
+            <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__1293BD5E" Association="Self.FK__PastInjur__PastI__1293BD5E">
+            <End Role="PastInjuryType" EntitySet="PastInjuryType" />
+            <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
           </AssociationSet>
           <AssociationSet Name="FK__Questionn__Athle__60A75C0F" Association="Self.FK__Questionn__Athle__60A75C0F">
             <End Role="AthleteUser" EntitySet="AthleteUser" />
@@ -1202,14 +1319,13 @@
           <EntitySet Name="CognitiveScreeningScores" EntityType="HealthQuestionnaireModel.CognitiveScreeningScores" />
           <EntitySet Name="Concentration" EntityType="HealthQuestionnaireModel.Concentration" />
           <EntitySet Name="ConcussionScreening" EntityType="HealthQuestionnaireModel.ConcussionScreening" />
+          <EntitySet Name="CoordinationAndBalanceExamination" EntityType="HealthQuestionnaireModel.CoordinationAndBalanceExamination" />
           <EntitySet Name="CurrentInjury" EntityType="HealthQuestionnaireModel.CurrentInjury" />
           <EntitySet Name="DelayedRecall" EntityType="HealthQuestionnaireModel.DelayedRecall" />
           <EntitySet Name="FamilyHistory" EntityType="HealthQuestionnaireModel.FamilyHistory" />
           <EntitySet Name="FemaleQuestionnaire" EntityType="HealthQuestionnaireModel.FemaleQuestionnaire" />
           <EntitySet Name="Gender" EntityType="HealthQuestionnaireModel.Gender" />
           <EntitySet Name="ImmediateMemory" EntityType="HealthQuestionnaireModel.ImmediateMemory" />
-          <EntitySet Name="InjuryStatus" EntityType="HealthQuestionnaireModel.InjuryStatus" />
-          <EntitySet Name="InjuryType" EntityType="HealthQuestionnaireModel.InjuryType" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="HealthQuestionnaireModel.MedicalandFamilyHistory" />
           <EntitySet Name="ModifiedBalanceTest" EntityType="HealthQuestionnaireModel.ModifiedBalanceTest" />
           <EntitySet Name="OrthopaedicScreening" EntityType="HealthQuestionnaireModel.OrthopaedicScreening" />
@@ -1218,15 +1334,37 @@
           <EntitySet Name="PastHealth" EntityType="HealthQuestionnaireModel.PastHealth" />
           <EntitySet Name="PastHealthAnswers" EntityType="HealthQuestionnaireModel.PastHealthAnswers" />
           <EntitySet Name="PastHistory" EntityType="HealthQuestionnaireModel.PastHistory" />
-          <EntitySet Name="PastInjuryPartRecovery" EntityType="HealthQuestionnaireModel.PastInjuryPartRecovery" />
+          <EntitySet Name="PastInjuryCategory" EntityType="HealthQuestionnaireModel.PastInjuryCategory" />
           <EntitySet Name="PastInjuryStatus" EntityType="HealthQuestionnaireModel.PastInjuryStatus" />
           <EntitySet Name="PastInjuryType" EntityType="HealthQuestionnaireModel.PastInjuryType" />
           <EntitySet Name="PastSupplements" EntityType="HealthQuestionnaireModel.PastSupplements" />
-          <EntitySet Name="PastTreatmentMethod" EntityType="HealthQuestionnaireModel.PastTreatmentMethod" />
           <EntitySet Name="PresentIllness" EntityType="HealthQuestionnaireModel.PresentIllness" />
           <EntitySet Name="QuestionnaireResponse" EntityType="HealthQuestionnaireModel.QuestionnaireResponse" />
           <EntitySet Name="QuestionnaireResponseDetails" EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" />
+          <EntitySet Name="QuestionnaireResponses" EntityType="HealthQuestionnaireModel.QuestionnaireResponses" />
           <EntitySet Name="QuestionnaireType" EntityType="HealthQuestionnaireModel.QuestionnaireType" />
+          <EntitySet Name="ResponseAllergicHistory" EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" />
+          <EntitySet Name="ResponseAllergicHistoryDetails" EntityType="HealthQuestionnaireModel.ResponseAllergicHistoryDetails" />
+          <EntitySet Name="ResponseCardiovascularScreening" EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" />
+          <EntitySet Name="ResponseConcentration" EntityType="HealthQuestionnaireModel.ResponseConcentration" />
+          <EntitySet Name="ResponseConcussionMedication" EntityType="HealthQuestionnaireModel.ResponseConcussionMedication" />
+          <EntitySet Name="ResponseConcussionScreening" EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" />
+          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="HealthQuestionnaireModel.ResponseCoordinationAndBalance" />
+          <EntitySet Name="ResponseDelayedRecall" EntityType="HealthQuestionnaireModel.ResponseDelayedRecall" />
+          <EntitySet Name="ResponseFamilyHistory" EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" />
+          <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" />
+          <EntitySet Name="ResponseImmediateMemory" EntityType="HealthQuestionnaireModel.ResponseImmediateMemory" />
+          <EntitySet Name="ResponseInjury" EntityType="HealthQuestionnaireModel.ResponseInjury" />
+          <EntitySet Name="ResponseOrientation" EntityType="HealthQuestionnaireModel.ResponseOrientation" />
+          <EntitySet Name="ResponseOrthopaedicScreening" EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" />
+          <EntitySet Name="ResponsePastDrugs" EntityType="HealthQuestionnaireModel.ResponsePastDrugs" />
+          <EntitySet Name="ResponsePastHealth" EntityType="HealthQuestionnaireModel.ResponsePastHealth" />
+          <EntitySet Name="ResponsePastHealthDetails" EntityType="HealthQuestionnaireModel.ResponsePastHealthDetails" />
+          <EntitySet Name="ResponsePastHistory" EntityType="HealthQuestionnaireModel.ResponsePastHistory" />
+          <EntitySet Name="ResponsePresentIllness" EntityType="HealthQuestionnaireModel.ResponsePresentIllness" />
+          <EntitySet Name="ResponseSupplements" EntityType="HealthQuestionnaireModel.ResponseSupplements" />
+          <EntitySet Name="ResponseSymptomEvaluation" EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" />
+          <EntitySet Name="ResponseTotalScores" EntityType="HealthQuestionnaireModel.ResponseTotalScores" />
           <EntitySet Name="SurgeryHistory" EntityType="HealthQuestionnaireModel.SurgeryHistory" />
           <EntitySet Name="SymptomEvaluation" EntityType="HealthQuestionnaireModel.SymptomEvaluation" />
           <EntitySet Name="TemporaryQuestionnaireData" EntityType="HealthQuestionnaireModel.TemporaryQuestionnaireData" />
@@ -1250,38 +1388,14 @@
             <End Role="PastHealth" EntitySet="PastHealth" />
             <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
           </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07">
+            <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
+            <End Role="PastInjuryType" EntitySet="PastInjuryType" />
+          </AssociationSet>
           <AssociationSet Name="FK__Questionn__Respo__6477ECF3" Association="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_TemporaryQuestionnaireData_QuestionnaireType" Association="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType">
-            <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
-            <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
-          </AssociationSet>
-          <EntitySet Name="CoordinationAndBalanceExamination" EntityType="HealthQuestionnaireModel.CoordinationAndBalanceExamination" />
-          <EntitySet Name="QuestionnaireResponses" EntityType="HealthQuestionnaireModel.QuestionnaireResponses" />
-          <EntitySet Name="ResponseAllergicHistory" EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" />
-          <EntitySet Name="ResponseAllergicHistoryDetails" EntityType="HealthQuestionnaireModel.ResponseAllergicHistoryDetails" />
-          <EntitySet Name="ResponseCardiovascularScreening" EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" />
-          <EntitySet Name="ResponseConcentration" EntityType="HealthQuestionnaireModel.ResponseConcentration" />
-          <EntitySet Name="ResponseConcussionMedication" EntityType="HealthQuestionnaireModel.ResponseConcussionMedication" />
-          <EntitySet Name="ResponseConcussionScreening" EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" />
-          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="HealthQuestionnaireModel.ResponseCoordinationAndBalance" />
-          <EntitySet Name="ResponseDelayedRecall" EntityType="HealthQuestionnaireModel.ResponseDelayedRecall" />
-          <EntitySet Name="ResponseFamilyHistory" EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" />
-          <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" />
-          <EntitySet Name="ResponseImmediateMemory" EntityType="HealthQuestionnaireModel.ResponseImmediateMemory" />
-          <EntitySet Name="ResponseInjury" EntityType="HealthQuestionnaireModel.ResponseInjury" />
-          <EntitySet Name="ResponseOrientation" EntityType="HealthQuestionnaireModel.ResponseOrientation" />
-          <EntitySet Name="ResponseOrthopaedicScreening" EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" />
-          <EntitySet Name="ResponsePastDrugs" EntityType="HealthQuestionnaireModel.ResponsePastDrugs" />
-          <EntitySet Name="ResponsePastHealth" EntityType="HealthQuestionnaireModel.ResponsePastHealth" />
-          <EntitySet Name="ResponsePastHealthDetails" EntityType="HealthQuestionnaireModel.ResponsePastHealthDetails" />
-          <EntitySet Name="ResponsePastHistory" EntityType="HealthQuestionnaireModel.ResponsePastHistory" />
-          <EntitySet Name="ResponsePresentIllness" EntityType="HealthQuestionnaireModel.ResponsePresentIllness" />
-          <EntitySet Name="ResponseSupplements" EntityType="HealthQuestionnaireModel.ResponseSupplements" />
-          <EntitySet Name="ResponseSymptomEvaluation" EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" />
-          <EntitySet Name="ResponseTotalScores" EntityType="HealthQuestionnaireModel.ResponseTotalScores" />
           <AssociationSet Name="FK__ResponseA__Quest__038683F8" Association="HealthQuestionnaireModel.FK__ResponseA__Quest__038683F8">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
@@ -1302,11 +1416,11 @@
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseC__Total__60083D91" Association="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91">
+          <AssociationSet Name="FK__ResponseC__Total__37FA4C37" Association="HealthQuestionnaireModel.FK__ResponseC__Total__37FA4C37">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseD__Quest__39E294A9" Association="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9">
+          <AssociationSet Name="FK__ResponseD__Quest__3AD6B8E2" Association="HealthQuestionnaireModel.FK__ResponseD__Quest__3AD6B8E2">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
           </AssociationSet>
@@ -1358,9 +1472,13 @@
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseSymptomEvaluation" EntitySet="ResponseSymptomEvaluation" />
           </AssociationSet>
-          <AssociationSet Name="FK__ResponseT__Quest__408F9238" Association="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238">
+          <AssociationSet Name="FK__ResponseT__Quest__4183B671" Association="HealthQuestionnaireModel.FK__ResponseT__Quest__4183B671">
             <End Role="QuestionnaireResponses" EntitySet="QuestionnaireResponses" />
             <End Role="ResponseTotalScores" EntitySet="ResponseTotalScores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemporaryQuestionnaireData_QuestionnaireType" Association="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType">
+            <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
+            <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
           </AssociationSet>
           <AssociationSet Name="FK__ResponseA__Aller__0662F0A3" Association="HealthQuestionnaireModel.FK__ResponseA__Aller__0662F0A3">
             <End Role="ResponseAllergicHistory" EntitySet="ResponseAllergicHistory" />
@@ -1370,7 +1488,34 @@
             <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
             <End Role="ResponsePastHealthDetails" EntitySet="ResponsePastHealthDetails" />
           </AssociationSet>
-          </EntityContainer>
+          <EntitySet Name="PastTreatmentMethod" EntityType="HealthQuestionnaireModel.PastTreatmentMethod" />
+          <EntitySet Name="CurrentInjuryCategory" EntityType="HealthQuestionnaireModel.CurrentInjuryCategory" />
+          <EntitySet Name="CurrentInjuryStatus" EntityType="HealthQuestionnaireModel.CurrentInjuryStatus" />
+          <EntitySet Name="CurrentInjuryType" EntityType="HealthQuestionnaireModel.CurrentInjuryType" />
+          <EntitySet Name="CurrentTreatmentMethod" EntityType="HealthQuestionnaireModel.CurrentTreatmentMethod" />
+          <AssociationSet Name="FK__CurrentIn__Curre__0CDAE408" Association="HealthQuestionnaireModel.FK__CurrentIn__Curre__0CDAE408">
+            <End Role="CurrentInjuryCategory" EntitySet="CurrentInjuryCategory" />
+            <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
+          </AssociationSet>
+          <EntitySet Name="CurrentInjuryRecord" EntityType="HealthQuestionnaireModel.CurrentInjuryRecord" />
+          <EntitySet Name="PastInjuryRecord" EntityType="HealthQuestionnaireModel.PastInjuryRecord" />
+          <AssociationSet Name="FK__CurrentIn__Curre__15702A09" Association="HealthQuestionnaireModel.FK__CurrentIn__Curre__15702A09">
+            <End Role="CurrentInjuryStatus" EntitySet="CurrentInjuryStatus" />
+            <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentIn__Curre__16644E42" Association="HealthQuestionnaireModel.FK__CurrentIn__Curre__16644E42">
+            <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
+            <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__119F9925" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__119F9925">
+            <End Role="PastInjuryStatus" EntitySet="PastInjuryStatus" />
+            <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PastInjur__PastI__1293BD5E" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__1293BD5E">
+            <End Role="PastInjuryType" EntitySet="PastInjuryType" />
+            <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="AllergicHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -1460,6 +1605,15 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Question" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CoordinationAndBalanceExamination">
+          <Key>
+            <PropertyRef Name="ExaminationID" />
+          </Key>
+          <Property Name="ExaminationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TestFoot" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TestSurface" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Footwear" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="CurrentInjury">
           <Key>
             <PropertyRef Name="ID" />
@@ -1518,27 +1672,6 @@
           <Property Name="SecondTest1" Type="Int32" />
           <Property Name="ThirdTest0" Type="Int32" />
           <Property Name="ThirdTest1" Type="Int32" />
-        </EntityType>
-        <EntityType Name="InjuryStatus">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InjuryPart" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="InjuryType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MuscleTendon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Bone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Ligament" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Nerve" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CartilageSynoviumBursa" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="EpidermalTissue" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="BloodVessel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="OrganLimb" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MedicalandFamilyHistory">
           <Key>
@@ -1627,34 +1760,31 @@
           <Property Name="IsYes" Type="Boolean" Nullable="false" />
           <Property Name="IsUnknown" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="PastInjuryPartRecovery">
+        <EntityType Name="PastInjuryCategory">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="PastInjuryCategoryId" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartZh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="PartEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PastInjuryCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PastInjuryType" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07" FromRole="PastInjuryCategory" ToRole="PastInjuryType" />
         </EntityType>
         <EntityType Name="PastInjuryStatus">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InjuryPart" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InjuryPart" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PastInjuryRecord" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__119F9925" FromRole="PastInjuryStatus" ToRole="PastInjuryRecord" />
         </EntityType>
         <EntityType Name="PastInjuryType">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="PastInjuryTypeId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MuscleTendon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Bone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Ligament" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Nerve" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CartilageSynoviumBursa" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="EpidermalTissue" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="BloodVessel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="OrganLimb" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PastInjuryTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PastInjuryCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="InjuryName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PastInjuryCategory" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07" FromRole="PastInjuryType" ToRole="PastInjuryCategory" />
+          <NavigationProperty Name="PastInjuryRecord" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__1293BD5E" FromRole="PastInjuryType" ToRole="PastInjuryRecord" />
         </EntityType>
         <EntityType Name="PastSupplements">
           <Key>
@@ -1664,13 +1794,6 @@
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="IsUsed" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PastTreatmentMethod">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PresentIllness">
           <Key>
@@ -1707,171 +1830,6 @@
           <Property Name="Answer" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK__Questionn__Respo__6477ECF3" FromRole="QuestionnaireResponseDetails" ToRole="QuestionnaireResponse" />
         </EntityType>
-        <EntityType Name="QuestionnaireType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="TemporaryQuestionnaireData" Relationship="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType" FromRole="QuestionnaireType" ToRole="TemporaryQuestionnaireData" />
-        </EntityType>
-        <EntityType Name="SurgeryHistory">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" />
-          <Property Name="IsNo" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="SymptomEvaluation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SymptomItem" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemScore0" Type="Int32" />
-          <Property Name="ItemScore1" Type="Int32" />
-          <Property Name="ItemScore2" Type="Int32" />
-          <Property Name="ItemScore3" Type="Int32" />
-          <Property Name="ItemScore4" Type="Int32" />
-          <Property Name="ItemScore5" Type="Int32" />
-          <Property Name="ItemScore6" Type="Int32" />
-        </EntityType>
-        <EntityType Name="TemporaryQuestionnaireData">
-          <Key>
-            <PropertyRef Name="TempID" />
-          </Key>
-          <Property Name="TempID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="QuestionnaireType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="QuestionID" Type="Int32" Nullable="false" />
-          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AnswerDateTime" Type="DateTime" Precision="3" />
-          <Property Name="SessionID" Type="Guid" Nullable="false" />
-          <Property Name="IsCompleted" Type="Boolean" />
-          <Property Name="QuestionnaireTypeId" Type="Int32" />
-          <NavigationProperty Name="QuestionnaireType1" Relationship="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType" FromRole="TemporaryQuestionnaireData" ToRole="QuestionnaireType" />
-        </EntityType>
-        <EntityType Name="Test_AthleticTrainer">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ATName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ATNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TimedTandemGait">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstTrialTime" Type="Double" />
-          <Property Name="SecondTrialTime" Type="Double" />
-          <Property Name="ThirdTrialTime" Type="Double" />
-        </EntityType>
-        <EntityType Name="Treatment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemZh" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ItemEn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="TreatmentMethod">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <Association Name="FK__PastHealt__UserI__52593CB8">
-          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AthleteUser">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Questionn__Athle__60A75C0F">
-          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AthleteUser">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponse">
-              <PropertyRef Name="AthleteID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Questionn__Gende__619B8048">
-          <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gender">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponse">
-              <PropertyRef Name="GenderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PastHealt__Quest__5165187F">
-          <End Type="HealthQuestionnaireModel.PastHealth" Role="PastHealth" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PastHealth">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="QuestionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Questionn__Respo__6477ECF3">
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponseDetails" Role="QuestionnaireResponseDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="QuestionnaireResponse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponseDetails">
-              <PropertyRef Name="ResponseID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TemporaryQuestionnaireData_QuestionnaireType">
-          <End Type="HealthQuestionnaireModel.QuestionnaireType" Role="QuestionnaireType" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.TemporaryQuestionnaireData" Role="TemporaryQuestionnaireData" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="QuestionnaireType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TemporaryQuestionnaireData">
-              <PropertyRef Name="QuestionnaireTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CoordinationAndBalanceExamination">
-          <Key>
-            <PropertyRef Name="ExaminationID" />
-          </Key>
-          <Property Name="ExaminationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TestFoot" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="TestSurface" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Footwear" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="QuestionnaireResponses">
           <Key>
             <PropertyRef Name="Id" />
@@ -1888,8 +1846,8 @@
           <NavigationProperty Name="ResponseConcussionScreening" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__2022C2A6" FromRole="QuestionnaireResponses" ToRole="ResponseConcussionScreening" />
           <NavigationProperty Name="ResponseConcussionMedication" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__22FF2F51" FromRole="QuestionnaireResponses" ToRole="ResponseConcussionMedication" />
           <NavigationProperty Name="ResponseConcentration" Relationship="HealthQuestionnaireModel.FK__ResponseC__Quest__314D4EA8" FromRole="QuestionnaireResponses" ToRole="ResponseConcentration" />
-          <NavigationProperty Name="ResponseCoordinationAndBalance" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91" FromRole="QuestionnaireResponses" ToRole="ResponseCoordinationAndBalance" />
-          <NavigationProperty Name="ResponseDelayedRecall" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9" FromRole="QuestionnaireResponses" ToRole="ResponseDelayedRecall" />
+          <NavigationProperty Name="ResponseCoordinationAndBalance" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__37FA4C37" FromRole="QuestionnaireResponses" ToRole="ResponseCoordinationAndBalance" />
+          <NavigationProperty Name="ResponseDelayedRecall" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__3AD6B8E2" FromRole="QuestionnaireResponses" ToRole="ResponseDelayedRecall" />
           <NavigationProperty Name="ResponseFamilyHistory" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__093F5D4E" FromRole="QuestionnaireResponses" ToRole="ResponseFamilyHistory" />
           <NavigationProperty Name="ResponseFemaleQuestionnaire" Relationship="HealthQuestionnaireModel.FK__ResponseF__Quest__178D7CA5" FromRole="QuestionnaireResponses" ToRole="ResponseFemaleQuestionnaire" />
           <NavigationProperty Name="ResponseInjury" Relationship="HealthQuestionnaireModel.FK__ResponseI__Quest__1A69E950" FromRole="QuestionnaireResponses" ToRole="ResponseInjury" />
@@ -1902,7 +1860,17 @@
           <NavigationProperty Name="ResponsePastHealth" Relationship="HealthQuestionnaireModel.FK__ResponseP__Quest__7DCDAAA2" FromRole="QuestionnaireResponses" ToRole="ResponsePastHealth" />
           <NavigationProperty Name="ResponseSupplements" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__14B10FFA" FromRole="QuestionnaireResponses" ToRole="ResponseSupplements" />
           <NavigationProperty Name="ResponseSymptomEvaluation" Relationship="HealthQuestionnaireModel.FK__ResponseS__Quest__25DB9BFC" FromRole="QuestionnaireResponses" ToRole="ResponseSymptomEvaluation" />
-          <NavigationProperty Name="ResponseTotalScores" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238" FromRole="QuestionnaireResponses" ToRole="ResponseTotalScores" />
+          <NavigationProperty Name="ResponseTotalScores" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__4183B671" FromRole="QuestionnaireResponses" ToRole="ResponseTotalScores" />
+        </EntityType>
+        <EntityType Name="QuestionnaireType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TemporaryQuestionnaireData" Relationship="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType" FromRole="QuestionnaireType" ToRole="TemporaryQuestionnaireData" />
         </EntityType>
         <EntityType Name="ResponseAllergicHistory">
           <Key>
@@ -1989,7 +1957,7 @@
           <Property Name="AverageTime" Type="Double" />
           <Property Name="FastestTime" Type="Double" />
           <Property Name="TotalErrors" Type="Int32" />
-          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__60083D91" FromRole="ResponseCoordinationAndBalance" ToRole="QuestionnaireResponses" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseC__Total__37FA4C37" FromRole="ResponseCoordinationAndBalance" ToRole="QuestionnaireResponses" />
         </EntityType>
         <EntityType Name="ResponseDelayedRecall">
           <Key>
@@ -2000,7 +1968,7 @@
           <Property Name="OrderNumber" Type="Int32" Nullable="false" />
           <Property Name="Word" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Score" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__39E294A9" FromRole="ResponseDelayedRecall" ToRole="QuestionnaireResponses" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseD__Quest__3AD6B8E2" FromRole="ResponseDelayedRecall" ToRole="QuestionnaireResponses" />
         </EntityType>
         <EntityType Name="ResponseFamilyHistory">
           <Key>
@@ -2161,8 +2129,154 @@
           <Property Name="ConcentrationScore" Type="Int32" Nullable="false" />
           <Property Name="DelayedRecallScore" Type="Int32" Nullable="false" />
           <Property Name="TotalScore" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__408F9238" FromRole="ResponseTotalScores" ToRole="QuestionnaireResponses" />
+          <NavigationProperty Name="QuestionnaireResponses" Relationship="HealthQuestionnaireModel.FK__ResponseT__Quest__4183B671" FromRole="ResponseTotalScores" ToRole="QuestionnaireResponses" />
         </EntityType>
+        <EntityType Name="SurgeryHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsYes" Type="Boolean" />
+          <Property Name="IsNo" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SymptomEvaluation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SymptomItem" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemScore0" Type="Int32" />
+          <Property Name="ItemScore1" Type="Int32" />
+          <Property Name="ItemScore2" Type="Int32" />
+          <Property Name="ItemScore3" Type="Int32" />
+          <Property Name="ItemScore4" Type="Int32" />
+          <Property Name="ItemScore5" Type="Int32" />
+          <Property Name="ItemScore6" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TemporaryQuestionnaireData">
+          <Key>
+            <PropertyRef Name="TempID" />
+          </Key>
+          <Property Name="TempID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionnaireType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AnswerDateTime" Type="DateTime" Precision="3" />
+          <Property Name="SessionID" Type="Guid" Nullable="false" />
+          <Property Name="IsCompleted" Type="Boolean" />
+          <Property Name="QuestionnaireTypeId" Type="Int32" />
+          <NavigationProperty Name="QuestionnaireType1" Relationship="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType" FromRole="TemporaryQuestionnaireData" ToRole="QuestionnaireType" />
+        </EntityType>
+        <EntityType Name="Test_AthleticTrainer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ATName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ATNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimedTandemGait">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstTrialTime" Type="Double" />
+          <Property Name="SecondTrialTime" Type="Double" />
+          <Property Name="ThirdTrialTime" Type="Double" />
+        </EntityType>
+        <EntityType Name="Treatment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemZh" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ItemEn" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK__PastHealt__UserI__52593CB8">
+          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Athle__60A75C0F">
+          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="AthleteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Gende__619B8048">
+          <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponse">
+              <PropertyRef Name="GenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastHealt__Quest__5165187F">
+          <End Type="HealthQuestionnaireModel.PastHealth" Role="PastHealth" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastHealth">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PastHealthAnswers">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__04459E07">
+          <End Type="HealthQuestionnaireModel.PastInjuryCategory" Role="PastInjuryCategory" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.PastInjuryType" Role="PastInjuryType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryCategory">
+              <PropertyRef Name="PastInjuryCategoryId" />
+            </Principal>
+            <Dependent Role="PastInjuryType">
+              <PropertyRef Name="PastInjuryCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questionn__Respo__6477ECF3">
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.QuestionnaireResponseDetails" Role="QuestionnaireResponseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionnaireResponseDetails">
+              <PropertyRef Name="ResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__ResponseA__Quest__038683F8">
           <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.ResponseAllergicHistory" Role="ResponseAllergicHistory" Multiplicity="*" />
@@ -2223,7 +2337,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseC__Total__60083D91">
+        <Association Name="FK__ResponseC__Total__37FA4C37">
           <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.ResponseCoordinationAndBalance" Role="ResponseCoordinationAndBalance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2235,7 +2349,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseD__Quest__39E294A9">
+        <Association Name="FK__ResponseD__Quest__3AD6B8E2">
           <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.ResponseDelayedRecall" Role="ResponseDelayedRecall" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2391,7 +2505,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ResponseT__Quest__408F9238">
+        <Association Name="FK__ResponseT__Quest__4183B671">
           <End Type="HealthQuestionnaireModel.QuestionnaireResponses" Role="QuestionnaireResponses" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.ResponseTotalScores" Role="ResponseTotalScores" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2400,6 +2514,18 @@
             </Principal>
             <Dependent Role="ResponseTotalScores">
               <PropertyRef Name="QuestionnaireResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemporaryQuestionnaireData_QuestionnaireType">
+          <End Type="HealthQuestionnaireModel.QuestionnaireType" Role="QuestionnaireType" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.TemporaryQuestionnaireData" Role="TemporaryQuestionnaireData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionnaireType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TemporaryQuestionnaireData">
+              <PropertyRef Name="QuestionnaireTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2424,6 +2550,126 @@
             </Principal>
             <Dependent Role="ResponsePastHealthDetails">
               <PropertyRef Name="PastHealthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PastTreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Method" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryCategory">
+          <Key>
+            <PropertyRef Name="CurrentInjuryCategoryId" />
+          </Key>
+          <Property Name="CurrentInjuryCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CurrentInjuryType" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__0CDAE408" FromRole="CurrentInjuryCategory" ToRole="CurrentInjuryType" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InjuryPart" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CurrentInjuryRecord" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__15702A09" FromRole="CurrentInjuryStatus" ToRole="CurrentInjuryRecord" />
+        </EntityType>
+        <EntityType Name="CurrentInjuryType">
+          <Key>
+            <PropertyRef Name="CurrentInjuryTypeId" />
+          </Key>
+          <Property Name="CurrentInjuryTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurrentInjuryCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="InjuryName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CurrentInjuryCategory" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__0CDAE408" FromRole="CurrentInjuryType" ToRole="CurrentInjuryCategory" />
+          <NavigationProperty Name="CurrentInjuryRecord" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__16644E42" FromRole="CurrentInjuryType" ToRole="CurrentInjuryRecord" />
+        </EntityType>
+        <EntityType Name="CurrentTreatmentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Method" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__CurrentIn__Curre__0CDAE408">
+          <End Type="HealthQuestionnaireModel.CurrentInjuryCategory" Role="CurrentInjuryCategory" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.CurrentInjuryType" Role="CurrentInjuryType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryCategory">
+              <PropertyRef Name="CurrentInjuryCategoryId" />
+            </Principal>
+            <Dependent Role="CurrentInjuryType">
+              <PropertyRef Name="CurrentInjuryCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CurrentInjuryRecord">
+          <Key>
+            <PropertyRef Name="CurrentInjuryRecordId" />
+          </Key>
+          <Property Name="CurrentInjuryRecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurrentInjuryStatusId" Type="Int32" Nullable="false" />
+          <Property Name="CurrentInjuryTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CurrentInjuryStatus" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__15702A09" FromRole="CurrentInjuryRecord" ToRole="CurrentInjuryStatus" />
+          <NavigationProperty Name="CurrentInjuryType" Relationship="HealthQuestionnaireModel.FK__CurrentIn__Curre__16644E42" FromRole="CurrentInjuryRecord" ToRole="CurrentInjuryType" />
+        </EntityType>
+        <EntityType Name="PastInjuryRecord">
+          <Key>
+            <PropertyRef Name="PastInjuryRecordId" />
+          </Key>
+          <Property Name="PastInjuryRecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PastInjuryStatusId" Type="Int32" Nullable="false" />
+          <Property Name="PastInjuryTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PastInjuryStatus" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__119F9925" FromRole="PastInjuryRecord" ToRole="PastInjuryStatus" />
+          <NavigationProperty Name="PastInjuryType" Relationship="HealthQuestionnaireModel.FK__PastInjur__PastI__1293BD5E" FromRole="PastInjuryRecord" ToRole="PastInjuryType" />
+        </EntityType>
+        <Association Name="FK__CurrentIn__Curre__15702A09">
+          <End Type="HealthQuestionnaireModel.CurrentInjuryStatus" Role="CurrentInjuryStatus" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.CurrentInjuryRecord" Role="CurrentInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CurrentInjuryRecord">
+              <PropertyRef Name="CurrentInjuryStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentIn__Curre__16644E42">
+          <End Type="HealthQuestionnaireModel.CurrentInjuryType" Role="CurrentInjuryType" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.CurrentInjuryRecord" Role="CurrentInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrentInjuryType">
+              <PropertyRef Name="CurrentInjuryTypeId" />
+            </Principal>
+            <Dependent Role="CurrentInjuryRecord">
+              <PropertyRef Name="CurrentInjuryTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__119F9925">
+          <End Type="HealthQuestionnaireModel.PastInjuryStatus" Role="PastInjuryStatus" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.PastInjuryRecord" Role="PastInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PastInjuryRecord">
+              <PropertyRef Name="PastInjuryStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PastInjur__PastI__1293BD5E">
+          <End Type="HealthQuestionnaireModel.PastInjuryType" Role="PastInjuryType" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.PastInjuryRecord" Role="PastInjuryRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastInjuryType">
+              <PropertyRef Name="PastInjuryTypeId" />
+            </Principal>
+            <Dependent Role="PastInjuryRecord">
+              <PropertyRef Name="PastInjuryTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2528,6 +2774,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CoordinationAndBalanceExamination">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CoordinationAndBalanceExamination">
+              <MappingFragment StoreEntitySet="CoordinationAndBalanceExamination">
+                <ScalarProperty Name="Footwear" ColumnName="Footwear" />
+                <ScalarProperty Name="TestSurface" ColumnName="TestSurface" />
+                <ScalarProperty Name="TestFoot" ColumnName="TestFoot" />
+                <ScalarProperty Name="ExaminationID" ColumnName="ExaminationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CurrentInjury">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjury">
               <MappingFragment StoreEntitySet="CurrentInjury">
@@ -2589,29 +2845,6 @@
                 <ScalarProperty Name="FirstTest0" ColumnName="FirstTest0" />
                 <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InjuryStatus">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.InjuryStatus">
-              <MappingFragment StoreEntitySet="InjuryStatus">
-                <ScalarProperty Name="InjuryPart" ColumnName="InjuryPart" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InjuryType">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.InjuryType">
-              <MappingFragment StoreEntitySet="InjuryType">
-                <ScalarProperty Name="OrganLimb" ColumnName="OrganLimb" />
-                <ScalarProperty Name="BloodVessel" ColumnName="BloodVessel" />
-                <ScalarProperty Name="EpidermalTissue" ColumnName="EpidermalTissue" />
-                <ScalarProperty Name="CartilageSynoviumBursa" ColumnName="CartilageSynoviumBursa" />
-                <ScalarProperty Name="Nerve" ColumnName="Nerve" />
-                <ScalarProperty Name="Ligament" ColumnName="Ligament" />
-                <ScalarProperty Name="Bone" ColumnName="Bone" />
-                <ScalarProperty Name="MuscleTendon" ColumnName="MuscleTendon" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2707,12 +2940,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PastInjuryPartRecovery">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastInjuryPartRecovery">
-              <MappingFragment StoreEntitySet="PastInjuryPartRecovery">
-                <ScalarProperty Name="PartEn" ColumnName="PartEn" />
-                <ScalarProperty Name="PartZh" ColumnName="PartZh" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+          <EntitySetMapping Name="PastInjuryCategory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastInjuryCategory">
+              <MappingFragment StoreEntitySet="PastInjuryCategory">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="PastInjuryCategoryId" ColumnName="PastInjuryCategoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2727,15 +2959,9 @@
           <EntitySetMapping Name="PastInjuryType">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastInjuryType">
               <MappingFragment StoreEntitySet="PastInjuryType">
-                <ScalarProperty Name="OrganLimb" ColumnName="OrganLimb" />
-                <ScalarProperty Name="BloodVessel" ColumnName="BloodVessel" />
-                <ScalarProperty Name="EpidermalTissue" ColumnName="EpidermalTissue" />
-                <ScalarProperty Name="CartilageSynoviumBursa" ColumnName="CartilageSynoviumBursa" />
-                <ScalarProperty Name="Nerve" ColumnName="Nerve" />
-                <ScalarProperty Name="Ligament" ColumnName="Ligament" />
-                <ScalarProperty Name="Bone" ColumnName="Bone" />
-                <ScalarProperty Name="MuscleTendon" ColumnName="MuscleTendon" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InjuryName" ColumnName="InjuryName" />
+                <ScalarProperty Name="PastInjuryCategoryId" ColumnName="PastInjuryCategoryId" />
+                <ScalarProperty Name="PastInjuryTypeId" ColumnName="PastInjuryTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2746,14 +2972,6 @@
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PastTreatmentMethod">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastTreatmentMethod">
-              <MappingFragment StoreEntitySet="PastTreatmentMethod">
-                <ScalarProperty Name="Method" ColumnName="Method" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2791,106 +3009,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="QuestionnaireType">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireType">
-              <MappingFragment StoreEntitySet="QuestionnaireType">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SurgeryHistory">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SurgeryHistory">
-              <MappingFragment StoreEntitySet="SurgeryHistory">
-                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
-                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
-                <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
-                <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SymptomEvaluation">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SymptomEvaluation">
-              <MappingFragment StoreEntitySet="SymptomEvaluation">
-                <ScalarProperty Name="ItemScore6" ColumnName="ItemScore6" />
-                <ScalarProperty Name="ItemScore5" ColumnName="ItemScore5" />
-                <ScalarProperty Name="ItemScore4" ColumnName="ItemScore4" />
-                <ScalarProperty Name="ItemScore3" ColumnName="ItemScore3" />
-                <ScalarProperty Name="ItemScore2" ColumnName="ItemScore2" />
-                <ScalarProperty Name="ItemScore1" ColumnName="ItemScore1" />
-                <ScalarProperty Name="ItemScore0" ColumnName="ItemScore0" />
-                <ScalarProperty Name="SymptomItem" ColumnName="SymptomItem" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TemporaryQuestionnaireData">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TemporaryQuestionnaireData">
-              <MappingFragment StoreEntitySet="TemporaryQuestionnaireData">
-                <ScalarProperty Name="QuestionnaireTypeId" ColumnName="QuestionnaireTypeId" />
-                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
-                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-                <ScalarProperty Name="AnswerDateTime" ColumnName="AnswerDateTime" />
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-                <ScalarProperty Name="QuestionnaireType" ColumnName="QuestionnaireType" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="TempID" ColumnName="TempID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Test_AthleticTrainer">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Test_AthleticTrainer">
-              <MappingFragment StoreEntitySet="Test_AthleticTrainer">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ATNumber" ColumnName="ATNumber" />
-                <ScalarProperty Name="ATName" ColumnName="ATName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TimedTandemGait">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TimedTandemGait">
-              <MappingFragment StoreEntitySet="TimedTandemGait">
-                <ScalarProperty Name="ThirdTrialTime" ColumnName="ThirdTrialTime" />
-                <ScalarProperty Name="SecondTrialTime" ColumnName="SecondTrialTime" />
-                <ScalarProperty Name="FirstTrialTime" ColumnName="FirstTrialTime" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Treatment">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Treatment">
-              <MappingFragment StoreEntitySet="Treatment">
-                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
-                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TreatmentMethod">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TreatmentMethod">
-              <MappingFragment StoreEntitySet="TreatmentMethod">
-                <ScalarProperty Name="Method" ColumnName="Method" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CoordinationAndBalanceExamination">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CoordinationAndBalanceExamination">
-              <MappingFragment StoreEntitySet="CoordinationAndBalanceExamination">
-                <ScalarProperty Name="Footwear" ColumnName="Footwear" />
-                <ScalarProperty Name="TestSurface" ColumnName="TestSurface" />
-                <ScalarProperty Name="TestFoot" ColumnName="TestFoot" />
-                <ScalarProperty Name="ExaminationID" ColumnName="ExaminationID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="QuestionnaireResponses">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireResponses">
               <MappingFragment StoreEntitySet="QuestionnaireResponses">
@@ -2900,6 +3018,16 @@
                 <ScalarProperty Name="AtheNum" ColumnName="AtheNum" />
                 <ScalarProperty Name="FillName" ColumnName="FillName" />
                 <ScalarProperty Name="Specialist" ColumnName="Specialist" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionnaireType">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireType">
+              <MappingFragment StoreEntitySet="QuestionnaireType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3161,7 +3289,146 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+          <EntitySetMapping Name="SurgeryHistory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SurgeryHistory">
+              <MappingFragment StoreEntitySet="SurgeryHistory">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
+                <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
+                <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SymptomEvaluation">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SymptomEvaluation">
+              <MappingFragment StoreEntitySet="SymptomEvaluation">
+                <ScalarProperty Name="ItemScore6" ColumnName="ItemScore6" />
+                <ScalarProperty Name="ItemScore5" ColumnName="ItemScore5" />
+                <ScalarProperty Name="ItemScore4" ColumnName="ItemScore4" />
+                <ScalarProperty Name="ItemScore3" ColumnName="ItemScore3" />
+                <ScalarProperty Name="ItemScore2" ColumnName="ItemScore2" />
+                <ScalarProperty Name="ItemScore1" ColumnName="ItemScore1" />
+                <ScalarProperty Name="ItemScore0" ColumnName="ItemScore0" />
+                <ScalarProperty Name="SymptomItem" ColumnName="SymptomItem" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TemporaryQuestionnaireData">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TemporaryQuestionnaireData">
+              <MappingFragment StoreEntitySet="TemporaryQuestionnaireData">
+                <ScalarProperty Name="QuestionnaireTypeId" ColumnName="QuestionnaireTypeId" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="AnswerDateTime" ColumnName="AnswerDateTime" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuestionnaireType" ColumnName="QuestionnaireType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TempID" ColumnName="TempID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_AthleticTrainer">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Test_AthleticTrainer">
+              <MappingFragment StoreEntitySet="Test_AthleticTrainer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ATNumber" ColumnName="ATNumber" />
+                <ScalarProperty Name="ATName" ColumnName="ATName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimedTandemGait">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TimedTandemGait">
+              <MappingFragment StoreEntitySet="TimedTandemGait">
+                <ScalarProperty Name="ThirdTrialTime" ColumnName="ThirdTrialTime" />
+                <ScalarProperty Name="SecondTrialTime" ColumnName="SecondTrialTime" />
+                <ScalarProperty Name="FirstTrialTime" ColumnName="FirstTrialTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Treatment">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Treatment">
+              <MappingFragment StoreEntitySet="Treatment">
+                <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
+                <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TreatmentMethod">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TreatmentMethod">
+              <MappingFragment StoreEntitySet="TreatmentMethod">
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastTreatmentMethod">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastTreatmentMethod">
+              <MappingFragment StoreEntitySet="PastTreatmentMethod">
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentInjuryCategory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjuryCategory">
+              <MappingFragment StoreEntitySet="CurrentInjuryCategory">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CurrentInjuryCategoryId" ColumnName="CurrentInjuryCategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentInjuryStatus">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjuryStatus">
+              <MappingFragment StoreEntitySet="CurrentInjuryStatus">
+                <ScalarProperty Name="InjuryPart" ColumnName="InjuryPart" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentInjuryType">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjuryType">
+              <MappingFragment StoreEntitySet="CurrentInjuryType">
+                <ScalarProperty Name="InjuryName" ColumnName="InjuryName" />
+                <ScalarProperty Name="CurrentInjuryCategoryId" ColumnName="CurrentInjuryCategoryId" />
+                <ScalarProperty Name="CurrentInjuryTypeId" ColumnName="CurrentInjuryTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentTreatmentMethod">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentTreatmentMethod">
+              <MappingFragment StoreEntitySet="CurrentTreatmentMethod">
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentInjuryRecord">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.CurrentInjuryRecord">
+              <MappingFragment StoreEntitySet="CurrentInjuryRecord">
+                <ScalarProperty Name="CurrentInjuryTypeId" ColumnName="CurrentInjuryTypeId" />
+                <ScalarProperty Name="CurrentInjuryStatusId" ColumnName="CurrentInjuryStatusId" />
+                <ScalarProperty Name="CurrentInjuryRecordId" ColumnName="CurrentInjuryRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastInjuryRecord">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastInjuryRecord">
+              <MappingFragment StoreEntitySet="PastInjuryRecord">
+                <ScalarProperty Name="PastInjuryTypeId" ColumnName="PastInjuryTypeId" />
+                <ScalarProperty Name="PastInjuryStatusId" ColumnName="PastInjuryStatusId" />
+                <ScalarProperty Name="PastInjuryRecordId" ColumnName="PastInjuryRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

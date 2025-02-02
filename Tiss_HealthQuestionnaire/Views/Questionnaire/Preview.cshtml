@@ -357,37 +357,6 @@
             </div>
         }
 
-        <!-- 第九題：過去傷害狀況 (已復原) -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去傷害狀況 (已復原)</h2>
-
-            <p>
-                <strong>是否有過去的傷害狀況：</strong>
-                @(Model.PastInjuryItems.Any() ? "是" : "否")
-            </p>
-
-            @if (Model.PastInjuryItems.Any())
-            {
-                <h3 class="text-lg font-bold mb-2">受傷部位</h3>
-                <ul class="list-disc pl-6">
-                    @foreach (var injury in Model.PastInjuryItems)
-                    {
-                        <li>@injury.InjuryPart</li>
-                    }
-                </ul>
-            }
-        </div>
-        @if (Model.PastTreatmentItems.Any())
-        {
-            <h3 class="text-lg font-bold mb-4">治療方式</h3>
-            <ul class="list-disc pl-6">
-                @foreach (var treatment in Model.PastTreatmentItems)
-                {
-                    <li>@treatment.Method</li>
-                }
-            </ul>
-        }
-
         <!-- 第十題：腦震盪篩檢-選手自填-(1) -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢-選手自填 (Concussion Screening)</h3>
@@ -507,9 +476,9 @@
                     <tbody>
                         @foreach (var item in Model.CardiovascularScreeningItems)
                         {
-                            var responseText = item.Response.HasValue? (item.Response.Value ? "是" : "否"): "未填寫";
+                            var responseText = item.Response.HasValue ? (item.Response.Value ? "是" : "否") : "未填寫";
 
-                            var textColorClass = item.Response.HasValue? (item.Response.Value ? "text-red-600" : "text-green-600")
+                            var textColorClass = item.Response.HasValue ? (item.Response.Value ? "text-red-600" : "text-green-600")
                                 : "text-gray-500";
 
                             <tr>
@@ -542,9 +511,9 @@
                     <tbody>
                         @foreach (var detail in Model.OrthopaedicScreeningItems)
                         {
-                            var responseText = detail.Response.HasValue? (detail.Response.Value ? "正常" : "異常"): "未填寫";
+                            var responseText = detail.Response.HasValue ? (detail.Response.Value ? "正常" : "異常") : "未填寫";
 
-                            var textColorClass = detail.Response.HasValue? (detail.Response.Value ? "text-green-600" : "text-red-600"): "text-gray-500";
+                            var textColorClass = detail.Response.HasValue ? (detail.Response.Value ? "text-green-600" : "text-red-600") : "text-gray-500";
 
                             <tr>
                                 <td class="border border-gray-300 p-2 text-center">@detail.Id</td>

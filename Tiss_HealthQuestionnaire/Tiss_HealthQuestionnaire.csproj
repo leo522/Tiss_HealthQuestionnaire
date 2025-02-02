@@ -169,6 +169,21 @@
     <Compile Include="Models\CurrentInjury.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CurrentInjuryCategory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CurrentInjuryRecord.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CurrentInjuryStatus.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CurrentInjuryType.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CurrentTreatmentMethod.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DelayedRecall.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -199,13 +214,7 @@
     <Compile Include="Models\ImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\InjuryStatus.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\InjuryStatusViewModel.cs" />
-    <Compile Include="Models\InjuryType.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MedicalandFamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -232,7 +241,10 @@
     <Compile Include="Models\PastHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PastInjuryPartRecovery.cs">
+    <Compile Include="Models\PastInjuryCategory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PastInjuryRecord.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PastInjuryStatus.cs">
@@ -475,6 +487,7 @@
     <Content Include="Views\Questionnaire\Preview.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireDone.cshtml" />
     <Content Include="Views\Questionnaire\NowTreatmentMethod.cshtml" />
+    <Content Include="Views\Questionnaire\ConcussionMedicalEvaluation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

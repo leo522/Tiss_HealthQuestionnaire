@@ -1,8 +1,10 @@
-﻿@*專注力*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcentrationViewModel>
+﻿@*醫療團隊-專注力(3)*@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.Concentration>
+
 @{
     Layout = null;
 }
+
 <div class="p-4">
     <h2 class="text-xl font-bold mb-4">3. 專注力 (Concentration): 數字顛倒測驗 (測驗四次，0錯誤；1正確)</h2>
     <div class="overflow-x-auto">
@@ -14,8 +16,7 @@
                     <th class="border border-gray-300 px-4 py-2">List C</th>
                     <th class="border border-gray-300 px-4 py-2">Y</th>
                     <th class="border border-gray-300 px-4 py-2">N</th>
-                    <th class="border border-gray-300 px-4 py-2">0</th>
-                    <th class="border border-gray-300 px-4 py-2">1</th>
+                    <th class="border border-gray-300 px-4 py-2">得分</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,20 +27,19 @@
                         <td class="border border-gray-300 px-4 py-2">@item.ListB</td>
                         <td class="border border-gray-300 px-4 py-2">@item.ListC</td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="response_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option"> Y
+                            <input type="radio" name="response_@item.Id" value="1" class="form-radio h-5 w-5 text-blue-600 concentration-option"> Y
                         </td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="response_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option"> N
+                            <input type="radio" name="response_@item.Id" value="0" class="form-radio h-5 w-5 text-blue-600 concentration-option"> N
                         </td>
-                        <td class="border border-gray-300 px-4 py-2 score-0" id="score0_@item.OrderNumber">0</td>
-                        <td class="border border-gray-300 px-4 py-2 score-1" id="score1_@item.OrderNumber">0</td>
+                        <td class="border border-gray-300 px-4 py-2 score" id="score_@item.Id">0</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr class="bg-gray-100">
-                    <td colspan="6" class="border border-gray-300 px-4 py-2 font-semibold text-right">總分</td>
-                    <td class="border border-gray-300 px-4 py-2" id="totalScore">/ 4</td>
+                    <td colspan="5" class="border border-gray-300 px-4 py-2 font-semibold text-right">總分</td>
+                    <td class="border border-gray-300 px-4 py-2" id="totalScore">0 / 4</td>
                 </tr>
             </tfoot>
         </table>
@@ -61,14 +61,12 @@
             let totalScore = 0;
             $('.concentration-option:checked').each(function () {
                 const value = parseInt($(this).val());
-                const orderNumber = $(this).attr('name').split('_')[1];
+                const id = $(this).attr('name').split('_')[1];
 
                 if (value === 1) {
-                    $(`#score1_${orderNumber}`).text('1');
-                    $(`#score0_${orderNumber}`).text('0');
+                    $(`#score_${id}`).text('1');
                 } else {
-                    $(`#score1_${orderNumber}`).text('0');
-                    $(`#score0_${orderNumber}`).text('0');
+                    $(`#score_${id}`).text('0');
                 }
                 totalScore += value;
             });

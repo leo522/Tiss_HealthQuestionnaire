@@ -12,9 +12,9 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class InjuryStatus
+    public partial class CurrentTreatmentMethod
     {
         public int Id { get; set; }
-        public string InjuryPart { get; set; }
+        public string Method { get; set; }
     }
 }

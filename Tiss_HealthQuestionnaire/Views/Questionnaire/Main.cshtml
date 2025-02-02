@@ -14,9 +14,9 @@
     <link href="~/css/SymptomsLights.css" rel="stylesheet" /> @*燈號顯示顏色*@
     <script src="~/js/SymptomLights.js"></script> @*燈號顯示更新*@
     <script src="~/js/SymptomEvaluationScore.js"></script> @*選手症狀分數相關邏輯*@
-    <script src="~/js/nowInjuryTypeLoader.js"></script> @*現在傷勢類型顯示*@
-    <script src="~/js/injuryTypeLoader.js"></script> @*過去傷勢類型顯示*@
-    <script src="~/js/ConcussionScreeningScore.js"></script> @*更新分數相關邏輯*@
+
+
+    <!--<script src="~/js/ConcussionScreeningScore.js"></script>--> @*更新分數相關邏輯*@
     <script src="~/js/formValidation.js"></script> @*表單必填驗證*@
     <script src="~/js/validateFillDate.js"></script> @*日期必填驗證*@
 </head>
@@ -156,13 +156,13 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="no" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="familyHistory_@item.ID" value="no" class="h-5 w-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="yes" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="familyHistory_@item.ID" value="yes" class="h-5 w-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="familyHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio" />
                                     </td>
                                 </tr>
                             }
@@ -197,13 +197,13 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="no" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="pastHistory_@item.ID" value="no" class="h-5 w-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="yes" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="pastHistory_@item.ID" value="yes" class="h-5 w-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio"/>
+                                        <input type="radio" name="pastHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio" />
                                     </td>
                                 </tr>
                             }
@@ -234,8 +234,8 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="presentIllness_@item.ID" value="no" class="h-5 w-5 required-radio"/> 否
-                                        <input type="radio" name="presentIllness_@item.ID" value="yes" class="h-5 w-5 required-radio"/> 是
+                                        <input type="radio" name="presentIllness_@item.ID" value="no" class="h-5 w-5 required-radio" /> 否
+                                        <input type="radio" name="presentIllness_@item.ID" value="yes" class="h-5 w-5 required-radio" /> 是
                                     </td>
                                 </tr>
                             }
@@ -363,7 +363,7 @@
                                                 else if (question.ID == 2)  // 是否曾經連續 3 個月未來生理週期 (是/否)
                                                 {
                                                     <label>
-                                                <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是
+                                                        <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是
                                                     </label>
                                                     <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio"> 否</label>
                                                 }
@@ -387,10 +387,12 @@
                     </div>
                 }
 
-                <!-- 第九步：過去傷害（已復原） -->
+                <!-- 第九題：過去傷害（已復原） -->
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9">
+                    <h1 class="text-lg font-semibold mb-4">過去傷害狀況 (已復原)</h1>
                     <h2 class="text-lg font-semibold mb-4">過去有的症狀或疼痛部位 (已復原)</h2>
                     <div class="space-y-4">
+                        <!-- 有無過去傷勢 -->
                         <div>
                             <label class="block">
                                 <input type="radio" id="pastNoInjury" name="pastInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
@@ -398,122 +400,128 @@
                             </label>
                             <label class="block">
                                 <input type="radio" id="pastHasInjury" name="pastInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                有，請詳述有症狀的部位
+                                有，請勾選過去傷害記錄
                             </label>
                         </div>
 
-                        <div id="injuryDetails" class="grid grid-cols-3 gap-4 hidden">
-                            @foreach (var item in Model.PastInjuryItems)
-                            {
-                                <div>
-                                    <div class="font-medium">@item.InjuryPart</div>
-                                    <div class="flex items-center space-x-4">
-                                        <label>
-                                            <input type="checkbox" name="pastInjuryLeft_@item.Id" class="injury-part form-checkbox h-5 w-5 text-blue-600 mr-2 "> 左
-                                        </label>
-                                        <label>
-                                            <input type="checkbox" name="pastInjuryRight_@item.Id" class="injury-part form-checkbox h-5 w-5 text-blue-600 mr-2"> 右
-                                        </label>
-                                    </div>
-                                </div>
-                            }
+                        <!-- 過去受傷部位選擇 -->
+                        <div id="injuryPartDetails" class="hidden">
+                            <table class="w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 px-4 py-2">部位</th>
+                                        <th class="border border-gray-300 px-4 py-2">左</th>
+                                        <th class="border border-gray-300 px-4 py-2">右</th>
+                                        <th class="border border-gray-300 px-4 py-2">部位</th>
+                                        <th class="border border-gray-300 px-4 py-2">左</th>
+                                        <th class="border border-gray-300 px-4 py-2">右</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.PastInjuryItems.Count; i += 2)
+                                    {
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2">@Model.PastInjuryItems[i].PastInjuryPart</td>
+                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="PastInjuryLeft" value="@Model.PastInjuryItems[i].Id"></td>
+                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="PastInjuryRight" value="@Model.PastInjuryItems[i].Id"></td>
+
+                                            @if (i + 1 < Model.PastInjuryItems.Count)
+                                            {
+                                                <td class="border border-gray-300 px-4 py-2">@Model.PastInjuryItems[i + 1].PastInjuryPart</td>
+                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="PastInjuryLeft" value="@Model.PastInjuryItems[i + 1].Id"></td>
+                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="PastInjuryRight" value="@Model.PastInjuryItems[i + 1].Id"></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 傷勢類型顯示 (靜態顯示) -->
+                        <div id="allInjuryTypesSection" class="hidden mt-4">
+                            <h3 class="text-lg font-semibold mb-2">傷勢類型</h3>
+                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這個是 JS 動態填充 -->
+                        </div>
+
+                        <!-- 治療方式顯示 -->
+                        <div id="treatmentMethodSection" class="hidden mt-4">
+                            <h3 class="text-lg font-semibold mb-2">治療方式</h3>
+                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這個是 JS 動態填充 -->
                         </div>
                     </div>
                 </div>
 
-                <!-- 第十步：過去傷害-傷勢類型 -->
-                <div id="PastInjuryTypeSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="10">
-                    <h2 class="text-lg font-semibold mb-4">過去傷害-傷勢類型</h2>
-                    <div class="grid grid-cols-3 gap-4">
-                        @*@foreach (var category in Model.PastInjuryTypesByCategory)
-                {
-                    <div>
-                        <h3 class="font-bold mb-2 border-b border-gray-400">@category.Key</h3>
-                        <select name="@category.Key" class="injury-type-select w-full border border-gray-300 p-2 rounded">
-                            <option value="">請選擇</option>
-                            @foreach (var item in category.Value)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        </select>
-                    </div>
-                }*@
-                    </div>
-                </div>
-
-                <!-- 第十一步：過去傷害-治療方式 -->
-                <div id="treatmentMethodSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
-                    <h2 class="text-lg font-semibold mb-4">過去治療方式 Treatment Methods</h2>
-                    <div class="space-y-2">
-                        @foreach (var method in Model.PastTreatmentItems)
-                        {
-                            <div class="flex items-center">
-                                <input type="checkbox" id="Pasttreatment_@method.Id" name="Pasttreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <label for="Pasttreatment_@method.Id" class="text-gray-800">@method.Method</label>
-                            </div>
-                        }
-                        <div class="flex items-center mt-4">
-                            <input type="checkbox" id="Pasttreatment_other" name="Pasttreatment_other" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                            <label for="Pasttreatment_other" class="text-gray-800">其他：</label>
-                            <input type="text" class="border-b border-gray-400 ml-2 p-1 focus:outline-none focus:border-blue-600 w-1/2" placeholder="請輸入其他治療方式">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 第十二步：目前傷害狀況 -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
-                    <h2 class="text-lg font-semibold mb-4">目前有的症狀或疼痛部位</h2>
+                <!-- 第十題：目前傷害狀況 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
+                    <h2 class="text-lg font-semibold mb-4">目前的症狀或疼痛部位</h2>
                     <div class="space-y-4">
-                        <!-- 無/有 選項 -->
+                        <!-- 有無目前傷勢 -->
                         <div>
                             <label class="block">
-                                <input type="radio" id="NowNoInjury" name="NowInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                <input type="radio" id="currentNoInjury" name="currentInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
                                 無 (若勾無，以下不必填寫)
                             </label>
                             <label class="block">
-                                <input type="radio" id="NowHasInjury" name="NowInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                有，請詳述有症狀的部位
+                                <input type="radio" id="currentHasInjury" name="currentInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
+                                有，請勾選目前傷害記錄
                             </label>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-4 NowInjuryDetails hidden">
-                            @foreach (var item in Model.NowInjuryItems)
-                            {
-                                <div>
-                                    <div class="font-medium">@item.InjuryPart</div>
-                                    <input type="checkbox" name="NowInjury_@item.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                </div>
-                            }
+                        <!-- 目前受傷部位選擇 -->
+                        <div id="currentInjuryDetails" class="hidden">
+                            <table class="w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 px-4 py-2">部位</th>
+                                        <th class="border border-gray-300 px-4 py-2">左</th>
+                                        <th class="border border-gray-300 px-4 py-2">右</th>
+                                        <th class="border border-gray-300 px-4 py-2">部位</th>
+                                        <th class="border border-gray-300 px-4 py-2">左</th>
+                                        <th class="border border-gray-300 px-4 py-2">右</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.CurrentInjuryItems.Count; i += 2)
+                                    {
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i].CurrentInjuryPart</td>
+                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i].Id"></td>
+                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i].Id"></td>
+
+                                            @if (i + 1 < Model.CurrentInjuryItems.Count)
+                                            {
+                                                <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i + 1].CurrentInjuryPart</td>
+                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
+                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                                <td class="border border-gray-300 px-4 py-2"></td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
 
-                        <div id="NowInjuryTypeSection" class="hidden mt-4"></div>
-                    </div>
-                </div>
+                        <!-- 目前傷勢類型顯示 -->
+                        <div id="currentInjuryTypesSection" class="hidden mt-4">
+                            <h3 class="text-lg font-semibold mb-2">傷勢類型</h3>
+                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
+                        </div>
 
-                <!-- 第十三步：目前傷害狀況-傷勢類型 -->
-                <div id="NowInjuryTypeSection" class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
-                    <h2 class="text-lg font-semibold mb-4">目前傷害狀況-傷勢類型</h2>
-                    <div class="grid grid-cols-3 gap-4">
-                        
-                    </div>
-                </div>
-
-                <!-- 第十四步：目前傷害狀況 - 治療方式 -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
-                    <h2 class="text-lg font-semibold mb-4">治療方式</h2>
-                    <div id="now-treatment-method-section">
-                        <div class="space-y-2">
-                            @foreach (var method in Model.NowTreatmentItems)
-                            {
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="nowTreatment_@method.Id" name="nowTreatment_@method.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                    <label for="nowTreatment_@method.Id" class="text-gray-800">@method.Method</label>
-                                </div>
-                            }
-                            <div class="flex items-center mt-4">
-                                <input type="checkbox" id="nowTreatmentOther" name="nowTreatmentOther" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                                <input type="text" class="ml-2 border rounded p-1" placeholder="請輸入其他治療方式">
-                            </div>
+                        <!-- 目前治療方式 -->
+                        <div id="currentTreatmentMethodSection" class="hidden mt-4">
+                            <h3 class="text-lg font-semibold mb-2">治療方式</h3>
+                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
                         </div>
                     </div>
                 </div>
@@ -635,7 +643,7 @@
                                     {
                                         <td class="border border-gray-300 px-4 py-2">
                                             <input type="radio" name="SymptomScore_@item.ID" value="@i"
-                                                   class="form-radio h-5 w-5 text-blue-600 score-option 
+                                                   class="form-radio h-5 w-5 text-blue-600 score-option
                                                    required-radio" data-indicator="#indicator_@item.ID">
                                         </td>
                                     }
@@ -708,63 +716,119 @@
                 <button type="button" id="prevButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded">上一步</button>
                 <button type="button" id="nextButton" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
                 <button type="submit" id="submitButton" class="hidden bg-blue-500 text-white px-4 py-2 rounded">送出預覽</button>
+                <button id="medicalTeamButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 flex items-center">
+                    醫療團隊評估
+                </button>
             </div>
         </form>
     </div>
 
+    <!-- 醫療團隊身份驗證對話框 -->
+    <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
+            <form id="trainerAuthForm">
+                <div class="form-group mb-2">
+                    <label for="trainerUserName">醫療團隊帳號</label>
+                    <input type="text" class="form-control border rounded p-2 w-full" id="trainerUserName" name="trainerUserName" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="trainerPassword">密碼</label>
+                    <input type="password" class="form-control border rounded p-2 w-full" id="trainerPassword" name="trainerPassword" required>
+                </div>
+                <button type="submit" class="btn bg-blue-500 text-white w-full p-2 rounded">驗證</button>
+            </form>
+            <button id="closeModal" class="mt-2 text-red-500 w-full text-center">取消</button>
+        </div>
+    </div>
+    <script src="~/js/injuryTypeLoader.js"></script> @*過去傷勢類型顯示*@
+    <script src="~/js/nowInjuryTypeLoader.js"></script> @*現在傷勢類型顯示*@
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let currentStep = 1; // 當前步驟
-            const steps = document.querySelectorAll('.question-step');
-            const prevButton = document.getElementById('prevButton');
-            const nextButton = document.getElementById('nextButton');
-            const submitButton = document.getElementById('submitButton');
+        document.addEventListener("DOMContentLoaded", function () {
+            let currentStep = 1;
+            const steps = document.querySelectorAll(".question-step");
+            const prevButton = document.getElementById("prevButton");
+            const nextButton = document.getElementById("nextButton");
+            const submitButton = document.getElementById("submitButton");
+            const medicalTeamButton = document.getElementById("medicalTeamButton");
+            const trainerModal = document.getElementById("athleticTrainerModal");
 
-            /**顯示當前步驟**/
             function showStep(step) {
                 steps.forEach((stepDiv, index) => {
-                    stepDiv.classList.toggle('hidden', index + 1 !== step);
+                    stepDiv.classList.toggle("hidden", index + 1 !== step);
                 });
-                prevButton.classList.toggle('hidden', step === 1);
-                nextButton.classList.toggle('hidden', step === steps.length);
-                submitButton.classList.toggle('hidden', step !== steps.length);
+                prevButton.classList.toggle("hidden", step === 1);
+                nextButton.classList.toggle("hidden", step === steps.length);
+                submitButton.classList.toggle("hidden", step !== steps.length);
+                medicalTeamButton.classList.toggle("hidden", step !== steps.length); // 只在最後一步顯示
             }
 
-            prevButton.addEventListener('click', function () {
+            prevButton.addEventListener("click", function () {
                 if (currentStep > 1) {
                     currentStep--;
                     showStep(currentStep);
                 }
             });
 
-            nextButton.addEventListener('click', function () {
+            nextButton.addEventListener("click", function () {
                 if (currentStep < steps.length) {
                     currentStep++;
                     showStep(currentStep);
                 }
             });
 
-            showStep(currentStep); //預設顯示第一步
+            showStep(currentStep); // 預設顯示第一步
 
-            /** 儲存和載入 sessionStorage 資料 **/
-            function loadSavedData() {
-                const savedData = [
-                    { key: 'OrientationScore', selector: '#OrientationScore' },
-                    { key: 'ImmediateMemoryScore', selector: '#ImmediateMemoryScore' },
-                    { key: 'ConcentrationScore', selector: '#ConcentrationScore' },
-                    { key: 'CoordinationScore', selector: '#CoordinationScore' },
-                    { key: 'DelayedRecallScore', selector: '#DelayedRecallScore' },
-                ];
-
-                savedData.forEach(({ key, selector }) => {
-                    const value = sessionStorage.getItem(key);
-                    if (value) {
-                        document.querySelector(selector).textContent = value;
-                    }
-                });
+            // 判斷是否通過醫療團隊驗證
+            function isTrainerAuthenticated() {
+                return sessionStorage.getItem("TrainerAuthenticated") === "true";
             }
 
-            loadSavedData();
+            // 顯示醫療團隊驗證對話框
+            function showTrainerAuthModal() {
+                trainerModal.classList.remove("hidden");
+            }
+
+            // 關閉對話框
+            document.getElementById("closeModal").addEventListener("click", function () {
+                trainerModal.classList.add("hidden");
+            });
+
+            // 處理醫療團隊驗證邏輯
+            document.getElementById("trainerAuthForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+                const userName = document.getElementById("trainerUserName").value;
+                const password = document.getElementById("trainerPassword").value;
+
+                fetch("/Questionnaire/ValidateAthleticTrainer", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userName, password })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            sessionStorage.setItem("TrainerAuthenticated", "true");
+                            trainerModal.classList.add("hidden");
+                            window.location.href = "/Questionnaire/ConcussionMedicalEvaluation"; // 驗證成功後跳轉
+                        } else {
+                            alert("身份驗證失敗，請確認帳號與密碼。");
+                        }
+                    })
+                    .catch(() => alert("驗證時發生錯誤，請稍後再試。"));
+            });
+
+            // 監聽醫療團隊評估按鈕點擊事件
+            medicalTeamButton.addEventListener("click", function (e) {
+                e.preventDefault();
+                if (isTrainerAuthenticated()) {
+                    window.location.href = "/Questionnaire/ConcussionMedicalEvaluation";
+                } else {
+                    showTrainerAuthModal();
+                }
+            });
         });
     </script>
 </body>

@@ -115,31 +115,49 @@ namespace Tiss_HealthQuestionnaire.Models
         public Dictionary<int, string> FemaleQuestionnaireAnswers { get; set; } = new Dictionary<int, string>();
         #endregion
 
-        #region 顯示過去傷害狀況(已復原)
+        #region 傷害類型共用
+        public class InjuryTypeViewModel
+        {
+            public string CategoryName { get; set; }
+            public string InjuryName { get; set; }
+        }
+        #endregion
+
+        #region 過去傷害狀況(已復原)
         public string PastInjuryStatusAnswer { get; set; }
-        public List<PastInjuryStatus> PastInjuryItems { get; set; } = new List<PastInjuryStatus>();
+        public List<PastInjuryStatusViewModel> PastInjuryItems { get; set; } = new List<PastInjuryStatusViewModel>();
+        public List<InjuryTypeViewModel> PastInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
+        public List<PastTreatmentMethodViewModel> PastTreatmentItems { get; set; } = new List<PastTreatmentMethodViewModel>();
+
+        public class PastInjuryStatusViewModel
+        {
+            public int Id { get; set; }
+            public string PastInjuryPart { get; set; }
+        }
+
+        public class PastTreatmentMethodViewModel
+        {
+            public int Id { get; set; }
+            public string Method { get; set; }
+        }
         #endregion
 
-        #region 顯示過去傷害狀況(已復原)-傷勢類型
-        public List<PastInjuryType> PastInjuryTypesItems { get; set; } = new List<PastInjuryType>();
-        public Dictionary<string, List<string>> PastInjuryTypesByCategory { get; set; } = new Dictionary<string, List<string>>();
-        #endregion
+        #region 目前傷害
+        public List<CurrentInjuryStatusViewModel> CurrentInjuryItems { get; set; } = new List<CurrentInjuryStatusViewModel>();
+        public List<InjuryTypeViewModel> CurrentInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
+        public List<CurrentTreatmentMethodViewModel> CurrentTreatmentItems { get; set; } = new List<CurrentTreatmentMethodViewModel>();
 
-        #region 顯示過去傷害狀況(已復原)-治療方法
-        public List<PastTreatmentMethod> PastTreatmentItems { get; set; } = new List<PastTreatmentMethod>();
-        #endregion
+        public class CurrentInjuryStatusViewModel
+        {
+            public int Id { get; set; }
+            public string CurrentInjuryPart { get; set; }
+        }
 
-        #region 目前傷害狀況
-        public List<InjuryStatus> NowInjuryItems { get; set; } = new List<InjuryStatus>();
-        #endregion
-
-        #region 目前傷害狀況-傷勢類型
-        public List<InjuryType> NowInjuryTypesItems { get; set; } = new List<InjuryType>();
-        public Dictionary<string, List<string>> NowInjuryTypesByCategory { get; set; } = new Dictionary<string, List<string>>();
-        #endregion
-
-        #region 目前傷害狀況-治療方法
-        public List<TreatmentMethod> NowTreatmentItems { get; set; } = new List<TreatmentMethod>();
+        public class CurrentTreatmentMethodViewModel
+        {
+            public int Id { get; set; }
+            public string Method { get; set; }
+        }
         #endregion
 
         #region 心血管篩檢
@@ -159,42 +177,45 @@ namespace Tiss_HealthQuestionnaire.Models
         public Dictionary<int, int> SymptomEvaluationAnswers { get; set; } // 存使用者填寫的分數
         #endregion
 
-        #region 防護員填寫-認知篩檢-定位(1)
-        public List<CognitiveScreening> CognitiveScreeningItems { get; set; }
-        public int CognitiveScreeningTotalScore { get; set; } //定位總分
+        #region 骨科篩檢
+        public List<OrthopaedicScreening> OrthopaedicScreeningItems { get; set; }
         #endregion
 
-        #region 防護員填寫-認知篩檢-短期記憶(2)
+        #region 醫療團隊-認知篩檢-定位(1)
+        public List<CognitiveScreening> CognitiveScreeningItems { get; set; }
+        public int CognitiveScreeningTotalScore { get; set; } //定位總分
+        public int ID { get; set; }
+        public string Question { get; set; }
+        public int AnswerOption1 { get; set; } // 0 或 1
+        public int AnswerOption2 { get; set; } // 0 或 1
+        #endregion
+
+        #region 醫療團隊-認知篩檢-短期記憶(2)
         public List<ImmediateMemory> ImmediateMemoryItems { get; set; }
         public int ImmediateMemoryTotalScore { get; set; } //短期記憶總分
         public string CompletionTime { get; set; } //短期記憶完成時間
         #endregion
 
-        #region 防護員填寫-認知篩檢-專注力(3)
+        #region 醫療團隊-認知篩檢-專注力(3)
         public List<Concentration> ConcentrationItems { get; set; }
         public int ConcentrationTotalScore { get; set; } // 總分
         #endregion
 
-        #region 防護員填寫-認知篩檢-協調與平衡測驗(4)
+        #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
         public List<CoordinationAndBalanceExamination> CoordinationAndBalanceItems { get; set; }
         public int CoordinationAndBalanceTotalErrors { get; set; } = 0; // 總錯誤次數
         public float CoordinationAndBalanceAverageTime { get; set; } = 0; // 平均時間
         public float CoordinationAndBalanceFastestTime { get; set; } = 0; // 最快時間
         #endregion
 
-        #region 防護員填寫-認知篩檢-延遲記憶(5)
+        #region 醫療團隊-認知篩檢-延遲記憶(5)
         public List<DelayedRecall> DelayedRecallItems { get; set; }
         public int DelayedRecallTotalScore { get; set; } //延遲記憶總分
         public string DelayedRecallStartTime { get; set; } // 測驗開始時間
         #endregion
 
-        #region 防護員填寫-認知篩檢-分數總合(6)
-        //public List<CognitiveScreeningTotalScore> CognitiveScreeningTotalScoreItems { get; set; }
+        #region 醫療團隊-認知篩檢-分數總合(6)
         public int CognitiveScreeningTotalScores { get; set; }
-        #endregion
-
-        #region 骨科篩檢
-        public List<OrthopaedicScreening> OrthopaedicScreeningItems { get; set; }
         #endregion
     }
 

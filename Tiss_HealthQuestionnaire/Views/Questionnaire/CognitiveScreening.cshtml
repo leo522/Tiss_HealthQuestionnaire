@@ -1,5 +1,5 @@
-﻿@*定位(1)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.CognitiveScreeningViewModel>
+﻿@* 醫療團隊-定位(1) *@
+@model IEnumerable<Tiss_HealthQuestionnaire.Models.CognitiveScreening>
 @{
     Layout = null;
 }
@@ -20,13 +20,13 @@
                 @foreach (var item in Model)
                 {
                     <tr class="hover:bg-gray-100">
-                        <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.ID</td>
                         <td class="border border-gray-300 px-4 py-2">@item.Question</td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="question_@item.OrderNumber" value="0" class="form-radio h-5 w-5 text-blue-600 score-option">
+                            <input type="radio" name="answer_@item.ID" value="0" class="form-radio h-5 w-5 text-blue-600 score-option">
                         </td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <input type="radio" name="question_@item.OrderNumber" value="1" class="form-radio h-5 w-5 text-blue-600 score-option">
+                            <input type="radio" name="answer_@item.ID" value="1" class="form-radio h-5 w-5 text-blue-600 score-option">
                         </td>
                     </tr>
                 }
@@ -38,60 +38,56 @@
         <span class="mr-2 text-lg font-semibold">●</span>
         <span class="mr-2">定位 (Orientation) 總分：</span>
         <span id="totalScore" class="border-b border-dotted text-lg font-semibold w-12">0</span>
-        <span class="ml-2">/ 5</span>
+        <span class="ml-2">/ @Model.Count()</span>
     </div>
 </div>
 
 <script>
-    // 將原本 $(document).ready(...) 的程式改寫為可被呼叫的函式
     function initializeOrientation() {
+        console.log("🚀 初始化認知篩檢 - 定位 (Orientation)");
+
         const scoreKey = 'OrientationScore';
 
-        // 先載入 sessionStorage 中可能已存的資料
         loadScores();
 
-        // 監聽選項變更
         $('.score-option').on('change', function () {
             updateTotalScore();
             saveScores();
         });
 
-        // 更新總分
         function updateTotalScore() {
             let totalScore = 0;
-            // 找到所有已勾選的radio
             $('input[type="radio"]:checked').each(function () {
                 const value = parseInt($(this).val(), 10);
                 if (!isNaN(value)) {
                     totalScore += value;
                 }
             });
+
             $('#totalScore').text(totalScore);
-            sessionStorage.setItem(scoreKey, totalScore);
+            localStorage.setItem(scoreKey, totalScore);
         }
 
-        // 保存選擇到 sessionStorage
         function saveScores() {
             $('input[type="radio"]').each(function () {
                 if ($(this).is(':checked')) {
-                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                    localStorage.setItem($(this).attr('name'), $(this).val());
                 }
             });
         }
 
-        // 從 sessionStorage 中載入radio的勾選情況
         function loadScores() {
             $('input[type="radio"]').each(function () {
-                const savedValue = sessionStorage.getItem($(this).attr('name'));
-                if (savedValue !== null && $(this).val() === savedValue) {
-                    $(this).prop('checked', true);
+                const savedValue = localStorage.getItem($(this).attr('name'));
+                if (savedValue !== null) {
+                    $(this).filter(`[value="${savedValue}"]`).prop("checked", true);
                 }
             });
 
-            const savedScore = sessionStorage.getItem(scoreKey);
-            if (savedScore !== null) {
-                $('#totalScore').text(savedScore);
-            }
+            updateTotalScore();
         }
     }
+
+    document.addEventListener("DOMContentLoaded", initializeOrientation);
+
 </script>

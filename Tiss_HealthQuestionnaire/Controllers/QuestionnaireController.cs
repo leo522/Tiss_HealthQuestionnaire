@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tiss_HealthQuestionnaire.Models;
+using static Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
@@ -17,59 +18,104 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 主頁
         public ActionResult Main()
         {
-            // 確認登入狀態
-            string loggedInUserName = Session["UserName"] as string;
-            if (string.IsNullOrEmpty(loggedInUserName))
+            try
             {
-                return RedirectToAction("Login", "Account");
+                // 確認登入狀態
+                string loggedInUserName = Session["UserName"] as string;
+                if (string.IsNullOrEmpty(loggedInUserName))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var user = _db.AthleteUser.FirstOrDefault(u => u.Name == loggedInUserName);
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                // 設置 ViewBag 值
+                ViewBag.Specialist = user.SportSpecialization;
+                ViewBag.FillName = user.Name;
+                ViewBag.AtheNum = user.AthleteNumber;
+                ViewBag.GenderID = user.GenderID;
+                ViewBag.ShowFemaleTab = (user.GenderID == 2);
+
+                // 取得過去傷害相關資料
+                var pastInjuryItems = GetPastInjuryItems();
+                var pastInjuryTypesByCategory = GetPastInjuryTypesByCategory();
+
+                // **轉換 過去傷害 Dictionary 為 List<InjuryTypeViewModel>**
+                var pastInjuryTypesList = _db.PastInjuryType
+                    .Join(_db.PastInjuryCategory,type => type.PastInjuryCategoryId,
+        category => category.PastInjuryCategoryId,(type, category) => new QuestionnaireViewModel.InjuryTypeViewModel
+                    {
+                        CategoryName = category.CategoryName,
+                        InjuryName = type.InjuryName
+                    }).ToList();
+
+                var pastTreatmentItems = _db.PastTreatmentMethod
+                    .Select(t => new QuestionnaireViewModel.PastTreatmentMethodViewModel
+                    {
+                        Id = t.Id,
+                        Method = t.Method
+                    }).ToList();
+
+                // 取得目前傷害相關資料
+                var currentInjuryItems = GetCurrentInjuryItems();
+                var currentInjuryTypesList = _db.CurrentInjuryType
+                    .Join(_db.CurrentInjuryCategory,
+                        type => type.CurrentInjuryCategoryId,
+                        category => category.CurrentInjuryCategoryId,
+                        (type, category) => new QuestionnaireViewModel.InjuryTypeViewModel
+                        {
+                            CategoryName = category.CategoryName,
+                            InjuryName = type.InjuryName
+                        })
+                    .ToList();
+
+                var currentTreatmentItems = _db.CurrentTreatmentMethod
+                    .Select(t => new QuestionnaireViewModel.CurrentTreatmentMethodViewModel
+                    {
+                        Id = t.Id,
+                        Method = t.Method
+                    }).ToList();
+
+                // 整合問卷資料
+                var viewModel = new QuestionnaireViewModel
+                {
+                    PastHealthItems = _db.PastHealth.ToList(),
+                    AllergicHistoryItems = _db.AllergicHistory.ToList(),
+                    FamilyHistoryItems = _db.FamilyHistory.ToList(),
+                    PastHistoryItems = _db.PastHistory.ToList(),
+                    PresentIllnessItems = _db.PresentIllness.ToList(),
+                    PastDrugsItems = _db.PastDrugs.ToList(),
+                    TUE = "no",
+                    OtherDrug = "",
+                    PastSupplementsItems = _db.PastSupplements.ToList(),
+                    FemaleQuestionnaireItems = user.GenderID == 2 ? _db.FemaleQuestionnaire.ToList() : null,
+                    PastInjuryItems = pastInjuryItems, // 過去傷害部位
+                    PastInjuryTypes = pastInjuryTypesList, // **過去傷勢類型**
+                    PastTreatmentItems = pastTreatmentItems, // **過去治療方式**
+                    CurrentInjuryItems = currentInjuryItems, // 目前受傷部位
+                    CurrentInjuryTypes = currentInjuryTypesList, // **目前傷勢類型**
+                    CurrentTreatmentItems = currentTreatmentItems, // **目前治療方式**
+                    CardiovascularScreeningItems = _db.CardiovascularScreening.ToList(),
+                    ConcussionScreeningItems = _db.ConcussionScreening.ToList(),
+                    SymptomEvaluationItems = _db.SymptomEvaluation.ToList(),
+                    OrthopaedicScreeningItems = _db.OrthopaedicScreening.ToList(),
+                    CognitiveScreeningItems = _db.CognitiveScreening.ToList(),
+                    ImmediateMemoryItems = _db.ImmediateMemory.ToList(),
+                    ConcentrationItems = _db.Concentration.ToList(),
+                    CoordinationAndBalanceItems = _db.CoordinationAndBalanceExamination.ToList(),
+                    DelayedRecallItems = _db.DelayedRecall.ToList(),
+                };
+
+                return View(viewModel);
             }
-
-            var user = _db.AthleteUser.FirstOrDefault(u => u.Name == loggedInUserName);
-            if (user == null)
+            catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return View("Error", new HandleErrorInfo(ex, "Questionnaire", "Main"));
             }
-
-            // 設置 ViewBag 值
-            ViewBag.Specialist = user.SportSpecialization;
-            ViewBag.FillName = user.Name;
-            ViewBag.AtheNum = user.AthleteNumber;
-            ViewBag.GenderID = user.GenderID;
-            ViewBag.ShowFemaleTab = (user.GenderID == 2);
-
-            // 整合問卷資料
-            var viewModel = new QuestionnaireViewModel
-            {
-                PastHealthItems = _db.PastHealth.ToList(), //過去健康檢查病史
-                AllergicHistoryItems = _db.AllergicHistory.ToList(), //過敏史
-                FamilyHistoryItems = _db.FamilyHistory.ToList(), //家族病史
-                PastHistoryItems = _db.PastHistory.ToList(), //過去病史
-                PresentIllnessItems = _db.PresentIllness.ToList(), //現在病史
-                PastDrugsItems = _db.PastDrugs.ToList(),
-                TUE = "no",  // 預設值
-                OtherDrug = "", // 預設為空
-                PastSupplementsItems = _db.PastSupplements.ToList(), //營養品
-                FemaleQuestionnaireItems = user.GenderID == 2 ? _db.FemaleQuestionnaire.ToList() : null, //女性問卷
-                PastInjuryItems = _db.PastInjuryStatus.ToList(), //過去傷害(已復原)
-                PastInjuryTypesItems = _db.PastInjuryType.ToList(), //過去傷害狀況(已復原)-傷勢類型
-                //PastInjuryTypesByCategory = pastInjuryTypesByCategory,
-                PastTreatmentItems = _db.PastTreatmentMethod.ToList(), //過去傷害狀況(已復原)-治療方法
-                NowInjuryItems = _db.InjuryStatus.ToList(), //目前傷害狀況
-                NowInjuryTypesItems = _db.InjuryType.ToList(), //目前傷害狀況-傷勢類型
-                //NowInjuryTypesByCategory = pastInjuryTypesByCategory, //目前傷害狀況-傷勢類型
-                NowTreatmentItems = _db.TreatmentMethod.ToList(), //目前傷害狀況-治療方法
-                CardiovascularScreeningItems = _db.CardiovascularScreening.ToList(), //心血管篩檢
-                ConcussionScreeningItems = _db.ConcussionScreening.ToList(), //腦震盪篩檢-選手自填-(1)
-                SymptomEvaluationItems = _db.SymptomEvaluation.ToList(), //症狀自我評估-選手自填(2)
-                OrthopaedicScreeningItems = _db.OrthopaedicScreening.ToList(), //骨科篩檢
-                CognitiveScreeningItems = _db.CognitiveScreening.ToList(), //防護員填寫-認知篩檢-定位(1)
-                ImmediateMemoryItems = _db.ImmediateMemory.ToList(), //防護員填寫-認知篩檢-短期記憶(2)
-                ConcentrationItems = _db.Concentration.ToList(), //防護員填寫-認知篩檢-專注力(3)
-                CoordinationAndBalanceItems = _db.CoordinationAndBalanceExamination.ToList(), //防護員填寫-認知篩檢-協調與平衡測驗(4)
-                DelayedRecallItems = _db.DelayedRecall.ToList(), //防護員填寫-認知篩檢-延遲記憶(5)
-            };
-
-            return View(viewModel);
         }
         #endregion
 
@@ -141,148 +187,169 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去傷害狀況 (已復原)-(1)
-        public ActionResult PastInjuryRestored() //過去有的症狀或疼痛部位
+        private List<QuestionnaireViewModel.PastInjuryStatusViewModel> GetPastInjuryItems()
         {
-            try
-            {
-                var pastInjury = _db.PastInjuryStatus.ToList();
-
-                var PastInjuryList = pastInjury.Select(injury => new PastInjuryStatusViewModel
+            return _db.PastInjuryStatus
+                .Select(injury => new QuestionnaireViewModel.PastInjuryStatusViewModel
                 {
                     Id = injury.Id,
-                    PastInjuryPart = injury.InjuryPart,
-                    PastIsSingleSelect = (injury.InjuryPart == "頭部/臉" || injury.InjuryPart == "頸椎" ||
-                                      injury.InjuryPart == "胸椎" || injury.InjuryPart == "腰椎" ||
-                                      injury.InjuryPart == "胸骨/肋骨" || injury.InjuryPart == "腹部" ||
-                                      injury.InjuryPart == "骨盆/薦椎")
+                    PastInjuryPart = injury.InjuryPart
                 }).ToList();
+        }
 
-                return View("PastInjuryRestored", PastInjuryList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+        private Dictionary<string, List<string>> GetPastInjuryTypesByCategory()
+        {
+            var pastInjuryRecords = _db.PastInjuryRecord
+                .Select(r => new
+                {
+                    Category = r.PastInjuryType.PastInjuryCategory.CategoryName,
+                    InjuryDetail = r.PastInjuryType.InjuryName
+                })
+                .ToList();
+
+            return pastInjuryRecords
+                .GroupBy(i => i.Category)
+                .ToDictionary(g => g.Key, g => g.Select(i => i.InjuryDetail).Distinct().ToList());
         }
         #endregion
 
         #region 過去傷勢類型-(2)
         [HttpGet]
-        public JsonResult PastInjuryType()
+        public JsonResult PastInjuryType(string PastinjuryPartId, bool all = false)
         {
             try
             {
-                var pastInjuryTypes = _db.PastInjuryType.ToList(); // 取得資料表內容
-
-                var injuryCategories = new Dictionary<string, string>
+                if (all) // **如果 all=true，直接回傳所有傷勢類型**
                 {
-                    { "MuscleTendon", "肌肉/肌腱" },
-                    { "Bone", "骨類" },
-                    { "Ligament", "韌帶類" },
-                    { "Nerve", "神經類" },
-                    { "CartilageSynoviumBursa", "軟骨/滑膜/滑囊類" },
-                    { "EpidermalTissue", "表皮組織" },
-                    { "BloodVessel", "血管類" },
-                    { "OrganLimb", "器官/四肢類" }
-                };
+                    var allInjuryTypes = _db.PastInjuryType
+                        .Join(_db.PastInjuryCategory,
+                            type => type.PastInjuryCategoryId,
+                            category => category.PastInjuryCategoryId,
+                            (type, category) => new { type.InjuryName, category.CategoryName })
+                        .GroupBy(i => i.CategoryName)
+                        .ToDictionary(g => g.Key, g => g.Select(i => i.InjuryName).Distinct().ToList());
 
-                var pastInjuryTypesByCategory = new Dictionary<string, List<string>>();
-
-                foreach (var category in injuryCategories.Keys)
-                {
-                    var values = pastInjuryTypes
-                        .Select(i => i.GetType().GetProperty(category)?.GetValue(i, null)?.ToString()).Where(v => !string.IsNullOrEmpty(v)).Distinct().ToList();
-
-                    pastInjuryTypesByCategory[injuryCategories[category]] = values;
+                    return Json(allInjuryTypes, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(pastInjuryTypesByCategory, JsonRequestBehavior.AllowGet);
+                if (string.IsNullOrEmpty(PastinjuryPartId))
+                {
+                    return Json(new { error = "缺少 PastinjuryPartId 參數" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var selectedPartIds = PastinjuryPartId.Split(',').Select(int.Parse).ToList();
+
+                var pastInjuryRecords = _db.PastInjuryRecord
+                    .Where(r => selectedPartIds.Contains(r.PastInjuryStatusId)) // 透過 PastInjuryStatusId 查詢
+                    .Join(_db.PastInjuryType,
+                        record => record.PastInjuryTypeId,
+                        injuryType => injuryType.PastInjuryTypeId,
+                        (record, injuryType) => new { injuryType, record })
+                    .Join(_db.PastInjuryCategory,
+                        injury => injury.injuryType.PastInjuryCategoryId,
+                        category => category.PastInjuryCategoryId,
+                        (injury, category) => new { injury.injuryType, category })
+                    .GroupBy(r => r.category.CategoryName)
+                    .ToDictionary(g => g.Key, g => g.Select(r => r.injuryType.InjuryName).Distinct().ToList());
+
+                return Json(pastInjuryRecords, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { error = "發生錯誤：" + ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { error = $"發生錯誤：{ex.Message}" }, JsonRequestBehavior.AllowGet);
             }
         }
+
         #endregion
 
         #region 過去治療方式-(3)
-        public ActionResult PastTreatmentMethod()
+        [HttpGet]
+        public JsonResult PastTreatmentMethod()
         {
-            var PastTreatmentMethod = _db.PastTreatmentMethod.ToList();
-            return View("PastTreatmentMethod", PastTreatmentMethod);
+            try
+            {
+                var pastTreatmentMethods = _db.PastTreatmentMethod
+                    .Select(t => new { t.Id, t.Method })
+                    .ToList();
+
+                return Json(pastTreatmentMethods, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = $"發生錯誤：{ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
         }
         #endregion
 
         #region 目前傷害狀況-(1)
-        public ActionResult NowInjuryRestored() //目前有的症狀或疼痛部位
+        private List<QuestionnaireViewModel.CurrentInjuryStatusViewModel> GetCurrentInjuryItems()
         {
-            try
-            {
-                var nowInjury = _db.InjuryStatus.ToList();
-
-                var injuryList = nowInjury.Select(injury => new InjuryStatusViewModel
+            return _db.CurrentInjuryStatus
+                .Select(injury => new QuestionnaireViewModel.CurrentInjuryStatusViewModel
                 {
                     Id = injury.Id,
-                    InjuryPart = injury.InjuryPart,
-                    IsSingleSelect = (injury.InjuryPart == "頭部/臉" || injury.InjuryPart == "頸椎" ||
-                                      injury.InjuryPart == "胸椎" || injury.InjuryPart == "腰椎" ||
-                                      injury.InjuryPart == "胸骨/肋骨" || injury.InjuryPart == "腹部" ||
-                                      injury.InjuryPart == "骨盆/薦椎")
+                    CurrentInjuryPart = injury.InjuryPart
                 }).ToList();
-
-                return View("NowInjuryRestored", injuryList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
         #endregion
 
         #region 目前傷勢類型-(2)
         [HttpGet]
-        public JsonResult NowInjuryType()
+        public JsonResult CurrentInjuryType(string CurrentInjuryPartId, bool all = false)
         {
             try
             {
-                var NowInjuryTypes = _db.InjuryType.ToList(); // 取得資料表內容
-
-                var NowinjuryCategories = new Dictionary<string, string>
+                if (all) // **如果 all=true，直接回傳所有傷勢類型**
                 {
-                    { "MuscleTendon", "肌肉/肌腱" },
-                    { "Bone", "骨類" },
-                    { "Ligament", "韌帶類" },
-                    { "Nerve", "神經類" },
-                    { "CartilageSynoviumBursa", "軟骨/滑膜/滑囊類" },
-                    { "EpidermalTissue", "表皮組織" },
-                    { "BloodVessel", "血管類" },
-                    { "OrganLimb", "器官/四肢類" }
-                };
+                    var allInjuryTypes = _db.CurrentInjuryType
+                        .Join(_db.CurrentInjuryCategory,
+                            type => type.CurrentInjuryCategoryId,
+                            category => category.CurrentInjuryCategoryId,
+                            (type, category) => new { type.InjuryName, category.CategoryName })
+                        .GroupBy(i => i.CategoryName)
+                        .ToDictionary(g => g.Key, g => g.Select(i => i.InjuryName).Distinct().ToList());
 
-                var NowInjuryTypesByCategory = new Dictionary<string, List<string>>();
-
-                foreach (var category in NowinjuryCategories.Keys)
-                {
-                    var values = NowInjuryTypes
-                        .Select(i => i.GetType().GetProperty(category)?.GetValue(i, null)?.ToString()).Where(v => !string.IsNullOrEmpty(v)).Distinct().ToList();
-
-                    NowInjuryTypesByCategory[NowinjuryCategories[category]] = values;
+                    return Json(allInjuryTypes, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(NowInjuryTypesByCategory, JsonRequestBehavior.AllowGet);
+                if (string.IsNullOrEmpty(CurrentInjuryPartId))
+                {
+                    return Json(new { error = "缺少 CurrentInjuryPartId 參數" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var selectedPartIds = CurrentInjuryPartId.Split(',').Select(int.Parse).ToList();
+
+                var currentInjuryRecords = _db.CurrentInjuryRecord
+                    .Where(r => selectedPartIds.Contains(r.CurrentInjuryStatusId))
+                    .Join(_db.CurrentInjuryType,
+                        record => record.CurrentInjuryTypeId,
+                        injuryType => injuryType.CurrentInjuryTypeId,
+                        (record, injuryType) => new { injuryType, record })
+                    .Join(_db.CurrentInjuryCategory,
+                        injury => injury.injuryType.CurrentInjuryCategoryId,
+                        category => category.CurrentInjuryCategoryId,
+                        (injury, category) => new { injury.injuryType, category })
+                    .GroupBy(r => r.category.CategoryName)
+                    .ToDictionary(g => g.Key, g => g.Select(r => r.injuryType.InjuryName).Distinct().ToList());
+
+                return Json(currentInjuryRecords, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { error = "發生錯誤：" + ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { error = $"發生錯誤：{ex.Message}" }, JsonRequestBehavior.AllowGet);
             }
         }
         #endregion
 
         #region 目前治療方式-(3)
-        public ActionResult NowTreatmentMethod()
+        [HttpGet]
+        public JsonResult CurrentTreatmentMethod()
         {
-            var treatmentMethod = _db.TreatmentMethod.ToList();
-            return View("NowTreatmentMethod", treatmentMethod);
+            var currentTreatmentMethods = _db.CurrentTreatmentMethod
+                .Select(t => new { t.Id, t.Method })
+                .ToList();
+
+            return Json(currentTreatmentMethods, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -377,36 +444,37 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-定位(1)
+        #endregion
+
+        #region 醫療團隊評估主頁
+        public ActionResult ConcussionMedicalEvaluation()
+        {
+            if (Session["TrainerAuthenticated"] == null || !(bool)Session["TrainerAuthenticated"])
+            {
+                return RedirectToAction("Main"); // 如果沒驗證，回到主頁
+            }
+
+            return View();
+        }
+        #endregion
+
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-定位(1)
         public ActionResult CognitiveScreening()
         {
             try
             {
-                var questions = _db.CognitiveScreening.ToList();
+                var questions = _db.CognitiveScreening.ToList(); //直接取得 List<CognitiveScreening>
 
-                // 從 Session 取出先前回答，若沒有就給空的 Dictionary
-                var savedAnswers = Session["CognitiveScreeningAnswers"] as Dictionary<int, int>
-                                   ?? new Dictionary<int, int>();
-
-                var viewModel = questions.Select((q, index) => new CognitiveScreening
-                {
-                    ID = index + 1,
-                    Question = q.Question,
-                    AnswerOption1 = savedAnswers.ContainsKey(index + 1)
-                                       ? savedAnswers[index + 1]
-                                       : 0
-                }).ToList();
-
-                return PartialView("CognitiveScreening", viewModel);
+                return PartialView("CognitiveScreening", questions); //確保回傳的是 List<CognitiveScreening>
             }
             catch (Exception ex)
             {
-                throw ex;
+                return View("Error", new HandleErrorInfo(ex, "Questionnaire", "CognitiveScreening"));
             }
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-短期記憶(2)
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-短期記憶(2)
         public ActionResult ImmediateMemory()
         {
             var questions = _db.ImmediateMemory.ToList();
@@ -444,7 +512,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-專注力(3)
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-專注力(3)
         public ActionResult Concentration()
         {
             // 從資料庫取得 (範例直接硬寫四筆)
@@ -473,51 +541,56 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-協調與平衡測驗(4)
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-協調與平衡測驗(4)
         public ActionResult CoordinationAndBalanceExamination()
         {
-            var model = new CoordinationAndBalanceExamination
-            {
-                TestFoot = "",
-                TestSurface = "",
-                Footwear = "",
-                //DoubleLegError = 0,
-                //TandemError = 0,
-                //SingleLegError = 0,
-                //FirstTime = 0,
-                //SecondTime = 0,
-                //ThirdTime = 0
-            };
+            var model = _db.CoordinationAndBalanceExamination.FirstOrDefault();
 
             if (Session["CoordinationAndBalanceData"] is CoordinationAndBalanceExamination savedData)
             {
-                model = savedData;
+                model = savedData; //若有 session 資料，覆蓋原本的
+            }
+
+            if (model == null)
+            {
+                model = new CoordinationAndBalanceExamination
+                {
+                    TestFoot = "",
+                    TestSurface = "",
+                    Footwear = "",
+                };
             }
 
             return PartialView("CoordinationAndBalanceExamination", model);
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-延遲記憶(5)
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-延遲記憶(5)
         public ActionResult DelayedRecall()
         {
             var questions = _db.DelayedRecall.ToList();
+            var delayedRecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<int, int> ?? new Dictionary<int, int>();
+            var delayedRecallStartTime = Session["DelayedRecallStartTime"] as string ?? DateTime.Now.ToString("HH:mm"); //預設為當前時間
 
-            var delayedRecallAnswers = Session["DelayedRecallAnswers"] as Dictionary<int, int>;
-            var delayedRecallStartTime = Session["DelayedRecallStartTime"] as string;
+            int totalScore = 0;
 
             var viewModel = questions.Select(q =>
             {
-                int Scores = 0;
-                delayedRecallAnswers?.TryGetValue(q.ID, out Scores);
+                int score = 0;
+                delayedRecallAnswers.TryGetValue(q.ID, out score);
+                totalScore += score; //計算總分
 
                 return new DelayedRecall
                 {
                     ID = q.ID,
                     Word = q.Word,
-                    Score0 = Scores
+                    Score0 = score //確保這個欄位名稱正確
                 };
             }).ToList();
+
+            //存回 Session，避免前端重新計算
+            Session["DelayedRecallTotalScore"] = totalScore;
+            Session["DelayedRecallStartTime"] = delayedRecallStartTime;
 
             ViewBag.DelayedRecallStartTime = delayedRecallStartTime;
 
@@ -525,7 +598,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 腦震盪篩檢-防護員評估-認知篩檢-認知篩檢分數總合(6)
+        #region 醫療團隊評估-腦震盪篩檢-認知篩檢-認知篩檢分數總合(6)
         public ActionResult CognitiveScreeningTotalScore()
         {
             var scores = _db.CognitiveScreeningScores.ToList();
@@ -589,68 +662,32 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #endregion
 
-        #region 開刀史-不使用
-        //public ActionResult SurgeryHistory()
-        //{
-        //    var surgeryHistory = _db.SurgeryHistory.ToList();
-        //    return View("SurgeryHistory", surgeryHistory);
-        //}
-        #endregion
-
-        #region 不使用--醫療史與家族史
-        //public ActionResult MedicalFamilyHistory()
-        //{
-        //    var viewModel = new List<MedicalFamilyHistoryViewModel>
-        //    {
-        //        new MedicalFamilyHistoryViewModel
-        //    {
-        //        Question = "您是否曾經在運動中有胸口疼痛、異常疲累、昏厥、心臟雜音、高血壓症狀？",
-        //        Symptoms = _db.MedicalandFamilyHistory.Where(s => s.Id <= 5).Select(s => s.Symptom).ToList()
-        //    },
-        //        new MedicalFamilyHistoryViewModel
-        //    {
-        //        Question = "您的親人是否曾經於50歲前因心臟問題死亡或失能？",
-        //        Symptoms = new List<string>() // 沒有相關症狀
-        //    },
-        //        new MedicalFamilyHistoryViewModel
-        //    {
-        //        Question = "您是否曾經被檢查出心臟雜音、股動脈脈搏異常、馬凡氏症候群、肱動脈血壓異常？",
-        //        Symptoms = _db.MedicalandFamilyHistory.Where(s => s.Id > 5).Select(s => s.Symptom).ToList()
-        //    }
-        //    };
-        //    return View("_MedicalFamilyHistory", viewModel);
-        //}
-
-        #endregion
-
-        #endregion
-
         #region 處理過去傷勢(已復原)-跳轉頁
-        [HttpPost]
-        public ActionResult pastInjuryStatusNextStep(QuestionnaireViewModel model, string pastInjuryStatus)
-        {
-            Session["PastInjuryStatus"] = model.PastInjuryStatusAnswer; // 這裡存的是 "no" 或 "yes"
-            if (pastInjuryStatus == "no")
-            {
-                return RedirectToAction("NowInjuryStatus"); // 進入目前傷害問卷
-            }
+        //[HttpPost]
+        //public ActionResult pastInjuryStatusNextStep(QuestionnaireViewModel model, string pastInjuryStatus)
+        //{
+        //    Session["PastInjuryStatus"] = model.PastInjuryStatusAnswer; // 這裡存的是 "no" 或 "yes"
+        //    if (pastInjuryStatus == "no")
+        //    {
+        //        return RedirectToAction("NowInjuryStatus"); // 進入目前傷害問卷
+        //    }
 
-            return RedirectToAction("PastInjuryType"); //否則進入傷勢類型頁面
-        }
+        //    return RedirectToAction("PastInjuryType"); //否則進入傷勢類型頁面
+        //}
 
-        //過去傷勢類型
-        [HttpPost]
-        public ActionResult pastInjuryTypesNextStep(QuestionnaireViewModel model)
-        {
-            if (model.PastInjuryTypesItems == null) //確保不為 `null`
-            {
-                model.PastInjuryTypesItems = new List<PastInjuryType>();
-            }
+        ////過去傷勢類型
+        //[HttpPost]
+        //public ActionResult pastInjuryTypesNextStep(QuestionnaireViewModel model)
+        //{
+        //    if (model.PastInjuryTypesItems == null) //確保不為 `null`
+        //    {
+        //        model.PastInjuryTypesItems = new List<PastInjuryType>();
+        //    }
 
-            Session["SelectedInjuryTypes"] = model.PastInjuryTypesItems; //存入 Session
+        //    Session["SelectedInjuryTypes"] = model.PastInjuryTypesItems; //存入 Session
 
-            return RedirectToAction("PastTreatmentMethod");
-        }
+        //    return RedirectToAction("PastTreatmentMethod");
+        //}
 
         //過去傷勢治療方法
         [HttpPost]
@@ -732,7 +769,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ProcessPastDrugs(model, form);               // 藥物史
                 ProcessPastSupplements(model, form);         // 營養品
                 ProcessFemaleQuestionnaire(model, form);     // 女性問卷
-                ProcessPastInjuryStatus(model, form);        // 過去傷害狀況 (已復原)
+                //ProcessPastInjuryStatus(model, form);        // 過去傷害狀況 (已復原)
                 //ProcessCurrentInjuryStatus(model, form);     // 目前傷害狀況
                 ProcessCardiovascularScreening(model, form); // 心血管篩檢
                 ProcessConcussionScreening(model, form);     //腦震盪篩檢-選手自填(1)
@@ -944,7 +981,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             foreach (var item in supplementsItems)
             {
-                
+
                 bool isUsed = form[$"supplement_{item.ID}"] == "on"; //表單名稱抓取方式 (supplement_@item.ID)
 
                 if (isUsed)
@@ -993,106 +1030,106 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去傷害狀況-已復原
-        private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
-        {
-            var pastInjuryItems = _db.PastInjuryStatus.ToList(); // 取得所有傷害部位
-            model.PastInjuryItems = new List<PastInjuryStatus>(); // 初始化傷害部位列表
+        //private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
+        //{
+        //    var pastInjuryItems = _db.PastInjuryStatus.ToList(); // 取得所有傷害部位
+        //    model.PastInjuryItems = new List<PastInjuryStatus>(); // 初始化傷害部位列表
 
-            foreach (var item in pastInjuryItems)
-            {
-                string partKey = $"pastinjury_{item.Id}"; // 傷害部位的 Checkbox 名稱
-                bool isInjured = form[partKey] == "on"; // 是否勾選受傷部位
+        //    foreach (var item in pastInjuryItems)
+        //    {
+        //        string partKey = $"pastinjury_{item.Id}"; // 傷害部位的 Checkbox 名稱
+        //        bool isInjured = form[partKey] == "on"; // 是否勾選受傷部位
 
-                if (isInjured)
-                {
-                    model.PastInjuryItems.Add(new PastInjuryStatus
-                    {
-                        InjuryPart = item.InjuryPart
-                    });
-                }
-            }
-        }
+        //        if (isInjured)
+        //        {
+        //            model.PastInjuryItems.Add(new PastInjuryStatus
+        //            {
+        //                InjuryPart = item.InjuryPart
+        //            });
+        //        }
+        //    }
+        //}
         #endregion
 
         #region 過去傷害狀況-治療方式
-        private void ProcessPastTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
-        {
-            var pastTreatmentMethods = _db.PastTreatmentMethod.ToList();
-            model.PastTreatmentItems = new List<PastTreatmentMethod>();
+        //private void ProcessPastTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
+        //{
+        //    var pastTreatmentMethods = _db.PastTreatmentMethod.ToList();
+        //    model.PastTreatmentItems = new List<PastTreatmentMethod>();
 
-            foreach (var method in pastTreatmentMethods)
-            {
-                string methodKey = $"Pasttreatment_{method.Id}";
+        //    foreach (var method in pastTreatmentMethods)
+        //    {
+        //        string methodKey = $"Pasttreatment_{method.Id}";
 
-                if (form[methodKey] == "on")
-                {
-                    model.PastTreatmentItems.Add(new PastTreatmentMethod
-                    {
-                        Method = method.Method
-                    });
-                }
-            }
-        }
+        //        if (form[methodKey] == "on")
+        //        {
+        //            model.PastTreatmentItems.Add(new PastTreatmentMethod
+        //            {
+        //                Method = method.Method
+        //            });
+        //        }
+        //    }
+        //}
         #endregion
 
         #region 目前傷害狀況
-        private void ProcessCurrentInjuryStatus(QuestionnaireViewModel model, FormCollection form)
-        {
-            var injuryItems = _db.InjuryStatus.ToList(); //從資料庫獲取目前的傷害部位數據
+        //private void ProcessCurrentInjuryStatus(QuestionnaireViewModel model, FormCollection form)
+        //{
+        //    var injuryItems = _db.InjuryStatus.ToList(); //從資料庫獲取目前的傷害部位數據
 
-            model.NowInjuryItems = new List<InjuryStatus>(); //初始化傷害部位詳細資料
+        //    model.NowInjuryItems = new List<InjuryStatus>(); //初始化傷害部位詳細資料
 
-            foreach (var item in injuryItems)
-            {
-                string leftPartKey = $"NowinjuryLeft_{item.Id}";
-                string rightPartKey = $"NowinjuryRight_{item.Id}";
+        //    foreach (var item in injuryItems)
+        //    {
+        //        string leftPartKey = $"NowinjuryLeft_{item.Id}";
+        //        string rightPartKey = $"NowinjuryRight_{item.Id}";
 
-                bool hasInjury = form[leftPartKey] != null || form[rightPartKey] != null; //判斷是否選擇了左側或右側的傷害
+        //        bool hasInjury = form[leftPartKey] != null || form[rightPartKey] != null; //判斷是否選擇了左側或右側的傷害
 
-                if (hasInjury)
-                {
-                    // 收集表單中固定鍵名的傷勢類型
-                    var injuryTypes = new List<string>
-                    {
-                        form["NowmuscleTendon"],          // 肌肉/肌腱
-                        form["Nowbone"],                 // 骨骼
-                        form["Nowligament"],             // 韌帶
-                        form["Nownerve"],                // 神經
-                        form["NowcartilageSynoviumBursa"], // 軟骨/滑膜/滑囊
-                        form["NowepidermalTissue"],      // 表皮組織
-                        form["NowbloodVessel"],          // 血管
-                        form["NoworganLimb"]             // 器官/四肢
-                    }.Where(x => !string.IsNullOrEmpty(x)).ToList();
+        //        if (hasInjury)
+        //        {
+        //            // 收集表單中固定鍵名的傷勢類型
+        //            var injuryTypes = new List<string>
+        //            {
+        //                form["NowmuscleTendon"],          // 肌肉/肌腱
+        //                form["Nowbone"],                 // 骨骼
+        //                form["Nowligament"],             // 韌帶
+        //                form["Nownerve"],                // 神經
+        //                form["NowcartilageSynoviumBursa"], // 軟骨/滑膜/滑囊
+        //                form["NowepidermalTissue"],      // 表皮組織
+        //                form["NowbloodVessel"],          // 血管
+        //                form["NoworganLimb"]             // 器官/四肢
+        //            }.Where(x => !string.IsNullOrEmpty(x)).ToList();
 
-                    // 將詳細信息添加到 ViewModel
-                    model.NowInjuryItems.Add(new InjuryStatus
-                    {
-                        InjuryPart = item.InjuryPart,            // 傷害部位名稱
-                        //LeftSide = !string.IsNullOrEmpty(form[leftPartKey]), // 左側是否受傷
-                        //RightSide = !string.IsNullOrEmpty(form[rightPartKey]), // 右側是否受傷
-                        //InjuryTypes = injuryTypes              // 綁定傷勢類型
-                    });
-                }
-            }
-        }
+        //            // 將詳細信息添加到 ViewModel
+        //            model.NowInjuryItems.Add(new InjuryStatus
+        //            {
+        //                InjuryPart = item.InjuryPart,            // 傷害部位名稱
+        //                //LeftSide = !string.IsNullOrEmpty(form[leftPartKey]), // 左側是否受傷
+        //                //RightSide = !string.IsNullOrEmpty(form[rightPartKey]), // 右側是否受傷
+        //                //InjuryTypes = injuryTypes              // 綁定傷勢類型
+        //            });
+        //        }
+        //    }
+        //}
         #endregion
 
         #region 目前傷害狀況-治療方式
-        private void ProcessCurrentTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
-        {
-            var treatmentMethods = _db.TreatmentMethod.ToList();
-            foreach (var method in treatmentMethods)
-            {
-                string methodKey = $"Nowtreatment_{method.Id}";
-                if (!string.IsNullOrEmpty(form[methodKey]))
-                {
-                    model.NowTreatmentItems.Add(new TreatmentMethod
-                    {
-                        Method = method.Method
-                    });
-                }
-            }
-        }
+        //private void ProcessCurrentTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
+        //{
+        //    var treatmentMethods = _db.TreatmentMethod.ToList();
+        //    foreach (var method in treatmentMethods)
+        //    {
+        //        string methodKey = $"Nowtreatment_{method.Id}";
+        //        if (!string.IsNullOrEmpty(form[methodKey]))
+        //        {
+        //            model.NowTreatmentItems.Add(new TreatmentMethod
+        //            {
+        //                Method = method.Method
+        //            });
+        //        }
+        //    }
+        //}
         #endregion
 
         #region 心血管篩檢
@@ -1300,16 +1337,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         //}
 
         #endregion
-
-        #endregion
-
-        #region session暫存
-        [HttpPost]
-        public JsonResult SaveTabData(string tabName, string tabData)
-        {
-            Session[tabName] = tabData;
-            return Json(new { success = true });
-        }
 
         #endregion
 
@@ -1693,6 +1720,5 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
         }
         #endregion
-
     }
 }

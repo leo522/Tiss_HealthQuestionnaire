@@ -14,14 +14,18 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class PastInjuryType
     {
-        public int Id { get; set; }
-        public string MuscleTendon { get; set; }
-        public string Bone { get; set; }
-        public string Ligament { get; set; }
-        public string Nerve { get; set; }
-        public string CartilageSynoviumBursa { get; set; }
-        public string EpidermalTissue { get; set; }
-        public string BloodVessel { get; set; }
-        public string OrganLimb { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PastInjuryType()
+        {
+            this.PastInjuryRecord = new HashSet<PastInjuryRecord>();
+        }
+    
+        public int PastInjuryTypeId { get; set; }
+        public int PastInjuryCategoryId { get; set; }
+        public string InjuryName { get; set; }
+    
+        public virtual PastInjuryCategory PastInjuryCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PastInjuryRecord> PastInjuryRecord { get; set; }
     }
 }

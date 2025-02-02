@@ -12,16 +12,13 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class InjuryType
+    public partial class CurrentInjuryRecord
     {
-        public int Id { get; set; }
-        public string MuscleTendon { get; set; }
-        public string Bone { get; set; }
-        public string Ligament { get; set; }
-        public string Nerve { get; set; }
-        public string CartilageSynoviumBursa { get; set; }
-        public string EpidermalTissue { get; set; }
-        public string BloodVessel { get; set; }
-        public string OrganLimb { get; set; }
+        public int CurrentInjuryRecordId { get; set; }
+        public int CurrentInjuryStatusId { get; set; }
+        public int CurrentInjuryTypeId { get; set; }
+    
+        public virtual CurrentInjuryStatus CurrentInjuryStatus { get; set; }
+        public virtual CurrentInjuryType CurrentInjuryType { get; set; }
     }
 }
