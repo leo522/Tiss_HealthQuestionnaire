@@ -14,7 +14,7 @@
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">問卷總預覽</h1>
 
-        <!-- 🔹 個人基本資料 -->
+        <!-- 個人基本資料 -->
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-blue-600 mb-4">個人基本資料</h2>
             <div class="grid grid-cols-2 gap-6 text-gray-700 text-xl">
@@ -357,7 +357,98 @@
             </div>
         }
 
-        <!-- 第十題：腦震盪篩檢-選手自填-(1) -->
+        <!-- 第九題：過去傷害（已復原） -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
+            @if (Model.PastInjuryItems.Any())
+            {
+                <ul class="list-disc pl-5">
+                    @foreach (var injury in Model.PastInjuryItems)
+                    {
+                        <li>
+                            @injury.PastInjuryPart
+                            (左: @(injury.LeftSide ? "是" : "否"), 右: @(injury.RightSide ? "是" : "否"))
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-gray-500">無過去傷害記錄</p>
+            }
+
+            <h3 class="text-lg font-semibold text-gray-800 mt-4">治療方式</h3>
+            @if (Model.PastTreatmentItems.Any())
+            {
+                <ul class="list-disc pl-5">
+                    @foreach (var treatment in Model.PastTreatmentItems)
+                    {
+                        <li>@treatment.Method</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-gray-500">無治療方式記錄</p>
+            }
+        </div>
+
+
+        <!-- 第十題：目前傷害狀況 -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況</h2>
+            @if (Model.CurrentInjuryItems.Any())
+            {
+                <ul class="list-disc pl-5">
+                    @foreach (var injury in Model.CurrentInjuryItems)
+                    {
+                        <li>
+                            @injury.CurrentInjuryPart
+                            (左: @(injury.LeftSide ? "是" : "否"), 右: @(injury.RightSide ? "是" : "否"))
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-gray-500">無目前傷害記錄</p>
+            }
+        </div>
+
+        <!-- 第11題：心血管篩檢 -->
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">心血管篩檢 Cardiovascular Screening</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                            <th class="border border-gray-300 px-4 py-2">問題</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">答案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CardiovascularScreeningItems)
+                        {
+                            var responseText = item.Response.HasValue ? (item.Response.Value ? "是" : "否") : "未填寫";
+
+                            var textColorClass = item.Response.HasValue ? (item.Response.Value ? "text-red-600" : "text-green-600")
+                                : "text-gray-500";
+
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center font-semibold @textColorClass">
+                                    @responseText
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 第12題：腦震盪篩檢-選手自填-(1) -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢-選手自填 (Concussion Screening)</h3>
             @if (Model.ConcussionScreeningItems != null && Model.ConcussionScreeningItems.Any())
@@ -412,7 +503,7 @@
             }
         </div>
 
-        <!-- 第11題：症狀自我評估-選手自填(2) -->
+        <!-- 第13題：症狀自我評估-選手自填(2) -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">症狀自我評估 (Self-assessment of Symptoms)</h3>
             @if (Model.SymptomEvaluationItems != null && Model.SymptomEvaluationItems.Any())
@@ -461,40 +552,7 @@
             }
         </div>
 
-        <!-- 第15題：心血管篩檢 -->
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-4">心血管篩檢 Cardiovascular Screening</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
-                            <th class="border border-gray-300 px-4 py-2">問題</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">答案</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.CardiovascularScreeningItems)
-                        {
-                            var responseText = item.Response.HasValue ? (item.Response.Value ? "是" : "否") : "未填寫";
-
-                            var textColorClass = item.Response.HasValue ? (item.Response.Value ? "text-red-600" : "text-green-600")
-                                : "text-gray-500";
-
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
-                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center font-semibold @textColorClass">
-                                    @responseText
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!--第18題 顯示骨科篩檢 -->
+        <!--第14題 顯示骨科篩檢 -->
         <div class="mb-8">
             <h3 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢 (Orthopaedic Screening)</h3>
             @if (Model.OrthopaedicScreeningItems != null && Model.OrthopaedicScreeningItems.Any())

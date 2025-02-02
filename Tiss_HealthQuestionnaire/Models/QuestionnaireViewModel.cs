@@ -125,14 +125,19 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 過去傷害狀況(已復原)
         public string PastInjuryStatusAnswer { get; set; }
+
         public List<PastInjuryStatusViewModel> PastInjuryItems { get; set; } = new List<PastInjuryStatusViewModel>();
+
         public List<InjuryTypeViewModel> PastInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
+
         public List<PastTreatmentMethodViewModel> PastTreatmentItems { get; set; } = new List<PastTreatmentMethodViewModel>();
 
         public class PastInjuryStatusViewModel
         {
             public int Id { get; set; }
             public string PastInjuryPart { get; set; }
+            public bool LeftSide { get; set; } //新增左側受傷
+            public bool RightSide { get; set; } //新增右側受傷
         }
 
         public class PastTreatmentMethodViewModel
@@ -144,13 +149,17 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 目前傷害
         public List<CurrentInjuryStatusViewModel> CurrentInjuryItems { get; set; } = new List<CurrentInjuryStatusViewModel>();
+
         public List<InjuryTypeViewModel> CurrentInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
+
         public List<CurrentTreatmentMethodViewModel> CurrentTreatmentItems { get; set; } = new List<CurrentTreatmentMethodViewModel>();
 
         public class CurrentInjuryStatusViewModel
         {
             public int Id { get; set; }
             public string CurrentInjuryPart { get; set; }
+            public bool LeftSide { get; set; } //新增左側受傷
+            public bool RightSide { get; set; } //新增右側受傷
         }
 
         public class CurrentTreatmentMethodViewModel

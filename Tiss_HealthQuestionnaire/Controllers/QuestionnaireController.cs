@@ -769,8 +769,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ProcessPastDrugs(model, form);               // 藥物史
                 ProcessPastSupplements(model, form);         // 營養品
                 ProcessFemaleQuestionnaire(model, form);     // 女性問卷
-                //ProcessPastInjuryStatus(model, form);        // 過去傷害狀況 (已復原)
-                //ProcessCurrentInjuryStatus(model, form);     // 目前傷害狀況
+                ProcessPastInjuryStatus(model, form);        // 過去傷害狀況 (已復原)
+                ProcessPastTreatmentMethod(model, form);     // 過去治療方式
+                ProcessCurrentInjuryStatus(model, form);     // 目前傷害狀況
+                ProcessCurrentTreatmentMethod(model, form);  // 目前治療方式
                 ProcessCardiovascularScreening(model, form); // 心血管篩檢
                 ProcessConcussionScreening(model, form);     //腦震盪篩檢-選手自填(1)
                 ProcessSymptomEvaluation(model, form);     //症狀自我評估-選手自填(2)
@@ -1030,106 +1032,102 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去傷害狀況-已復原
-        //private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
-        //{
-        //    var pastInjuryItems = _db.PastInjuryStatus.ToList(); // 取得所有傷害部位
-        //    model.PastInjuryItems = new List<PastInjuryStatus>(); // 初始化傷害部位列表
+        private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
+        {
+            var pastInjuryItems = _db.PastInjuryStatus.ToList();
+            model.PastInjuryItems = new List<QuestionnaireViewModel.PastInjuryStatusViewModel>();
 
-        //    foreach (var item in pastInjuryItems)
-        //    {
-        //        string partKey = $"pastinjury_{item.Id}"; // 傷害部位的 Checkbox 名稱
-        //        bool isInjured = form[partKey] == "on"; // 是否勾選受傷部位
+            foreach (var item in pastInjuryItems)
+            {
+                string leftKey = $"PastInjuryLeft_{item.Id}";
+                string rightKey = $"PastInjuryRight_{item.Id}";
 
-        //        if (isInjured)
-        //        {
-        //            model.PastInjuryItems.Add(new PastInjuryStatus
-        //            {
-        //                InjuryPart = item.InjuryPart
-        //            });
-        //        }
-        //    }
-        //}
+                bool isLeftInjured = form[leftKey] == "on";
+                bool isRightInjured = form[rightKey] == "on";
+
+                if (isLeftInjured || isRightInjured)
+                {
+                    model.PastInjuryItems.Add(new QuestionnaireViewModel.PastInjuryStatusViewModel
+                    {
+                        Id = item.Id,
+                        PastInjuryPart = item.InjuryPart,
+                        LeftSide = isLeftInjured,
+                        RightSide = isRightInjured
+                    });
+                }
+            }
+        }
         #endregion
 
         #region 過去傷害狀況-治療方式
-        //private void ProcessPastTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
-        //{
-        //    var pastTreatmentMethods = _db.PastTreatmentMethod.ToList();
-        //    model.PastTreatmentItems = new List<PastTreatmentMethod>();
+        private void ProcessPastTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
+        {
+            var pastTreatmentMethods = _db.PastTreatmentMethod.ToList();
+            model.PastTreatmentItems = new List<QuestionnaireViewModel.PastTreatmentMethodViewModel>();
 
-        //    foreach (var method in pastTreatmentMethods)
-        //    {
-        //        string methodKey = $"Pasttreatment_{method.Id}";
+            foreach (var method in pastTreatmentMethods)
+            {
+                string methodKey = $"Pasttreatment_{method.Id}";
 
-        //        if (form[methodKey] == "on")
-        //        {
-        //            model.PastTreatmentItems.Add(new PastTreatmentMethod
-        //            {
-        //                Method = method.Method
-        //            });
-        //        }
-        //    }
-        //}
+                if (form[methodKey] == "on")
+                {
+                    model.PastTreatmentItems.Add(new QuestionnaireViewModel.PastTreatmentMethodViewModel
+                    {
+                        Id = method.Id,
+                        Method = method.Method
+                    });
+                }
+            }
+        }
         #endregion
 
         #region 目前傷害狀況
-        //private void ProcessCurrentInjuryStatus(QuestionnaireViewModel model, FormCollection form)
-        //{
-        //    var injuryItems = _db.InjuryStatus.ToList(); //從資料庫獲取目前的傷害部位數據
+        private void ProcessCurrentInjuryStatus(QuestionnaireViewModel model, FormCollection form)
+        {
+            var injuryItems = _db.CurrentInjuryStatus.ToList();
+            model.CurrentInjuryItems = new List<QuestionnaireViewModel.CurrentInjuryStatusViewModel>();
 
-        //    model.NowInjuryItems = new List<InjuryStatus>(); //初始化傷害部位詳細資料
+            foreach (var item in injuryItems)
+            {
+                string leftPartKey = $"CurrentInjuryLeft_{item.Id}";
+                string rightPartKey = $"CurrentInjuryRight_{item.Id}";
 
-        //    foreach (var item in injuryItems)
-        //    {
-        //        string leftPartKey = $"NowinjuryLeft_{item.Id}";
-        //        string rightPartKey = $"NowinjuryRight_{item.Id}";
+                bool isLeftInjured = form[leftPartKey] == "on";
+                bool isRightInjured = form[rightPartKey] == "on";
 
-        //        bool hasInjury = form[leftPartKey] != null || form[rightPartKey] != null; //判斷是否選擇了左側或右側的傷害
-
-        //        if (hasInjury)
-        //        {
-        //            // 收集表單中固定鍵名的傷勢類型
-        //            var injuryTypes = new List<string>
-        //            {
-        //                form["NowmuscleTendon"],          // 肌肉/肌腱
-        //                form["Nowbone"],                 // 骨骼
-        //                form["Nowligament"],             // 韌帶
-        //                form["Nownerve"],                // 神經
-        //                form["NowcartilageSynoviumBursa"], // 軟骨/滑膜/滑囊
-        //                form["NowepidermalTissue"],      // 表皮組織
-        //                form["NowbloodVessel"],          // 血管
-        //                form["NoworganLimb"]             // 器官/四肢
-        //            }.Where(x => !string.IsNullOrEmpty(x)).ToList();
-
-        //            // 將詳細信息添加到 ViewModel
-        //            model.NowInjuryItems.Add(new InjuryStatus
-        //            {
-        //                InjuryPart = item.InjuryPart,            // 傷害部位名稱
-        //                //LeftSide = !string.IsNullOrEmpty(form[leftPartKey]), // 左側是否受傷
-        //                //RightSide = !string.IsNullOrEmpty(form[rightPartKey]), // 右側是否受傷
-        //                //InjuryTypes = injuryTypes              // 綁定傷勢類型
-        //            });
-        //        }
-        //    }
-        //}
+                if (isLeftInjured || isRightInjured)
+                {
+                    model.CurrentInjuryItems.Add(new QuestionnaireViewModel.CurrentInjuryStatusViewModel
+                    {
+                        Id = item.Id,
+                        CurrentInjuryPart = item.InjuryPart,
+                        LeftSide = isLeftInjured,
+                        RightSide = isRightInjured
+                    });
+                }
+            }
+        }
         #endregion
 
         #region 目前傷害狀況-治療方式
-        //private void ProcessCurrentTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
-        //{
-        //    var treatmentMethods = _db.TreatmentMethod.ToList();
-        //    foreach (var method in treatmentMethods)
-        //    {
-        //        string methodKey = $"Nowtreatment_{method.Id}";
-        //        if (!string.IsNullOrEmpty(form[methodKey]))
-        //        {
-        //            model.NowTreatmentItems.Add(new TreatmentMethod
-        //            {
-        //                Method = method.Method
-        //            });
-        //        }
-        //    }
-        //}
+        private void ProcessCurrentTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
+        {
+            var treatmentMethods = _db.CurrentTreatmentMethod.ToList();
+            model.CurrentTreatmentItems = new List<QuestionnaireViewModel.CurrentTreatmentMethodViewModel>();
+
+            foreach (var method in treatmentMethods)
+            {
+                string methodKey = $"CurrentTreatment_{method.Id}";
+                if (!string.IsNullOrEmpty(form[methodKey]))
+                {
+                    model.CurrentTreatmentItems.Add(new QuestionnaireViewModel.CurrentTreatmentMethodViewModel
+                    {
+                        Id = method.Id,
+                        Method = method.Method
+                    });
+                }
+            }
+        }
         #endregion
 
         #region 心血管篩檢
