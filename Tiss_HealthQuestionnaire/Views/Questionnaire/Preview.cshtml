@@ -358,40 +358,40 @@
         }
 
         <!-- 第九題：過去傷害（已復原） -->
-        <div class="mb-8">
-            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
-            @if (Model.PastInjuryItems.Any())
-            {
-                <ul class="list-disc pl-5">
-                    @foreach (var injury in Model.PastInjuryItems)
-                    {
-                        <li>
-                            @injury.PastInjuryPart
-                            (左: @(injury.LeftSide ? "是" : "否"), 右: @(injury.RightSide ? "是" : "否"))
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-gray-500">無過去傷害記錄</p>
-            }
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
+        <p>狀態：@(Model.PastInjuryStatusAnswer == "yes" ? "有過去傷害" : "無過去傷害")</p>
 
-            <h3 class="text-lg font-semibold text-gray-800 mt-4">治療方式</h3>
-            @if (Model.PastTreatmentItems.Any())
-            {
-                <ul class="list-disc pl-5">
-                    @foreach (var treatment in Model.PastTreatmentItems)
-                    {
-                        <li>@treatment.Method</li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-gray-500">無治療方式記錄</p>
-            }
-        </div>
+        <h3 class="text-lg font-semibold mt-4">傷勢類型</h3>
+        @if (Model.PastInjuryTypes != null && Model.PastInjuryTypes.Any())
+        {
+            <ul class="list-disc pl-5">
+                @foreach (var injury in Model.PastInjuryTypes)
+                {
+                    <li>@injury.InjuryName</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-gray-500">無傷勢類型記錄</p>
+        }
+
+        <h3 class="text-lg font-semibold mt-4">治療方式</h3>
+        @if (Model.PastTreatmentItems != null && Model.PastTreatmentItems.Any())
+        {
+            <ul class="list-disc pl-5">
+                @foreach (var treatment in Model.PastTreatmentItems)
+                {
+                    <li>@treatment.Method</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-gray-500">無治療方式記錄</p>
+        }
+    </div>
 
 
         <!-- 第十題：目前傷害狀況 -->

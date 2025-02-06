@@ -1034,6 +1034,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去傷害狀況-已復原
         private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
         {
+            model.PastInjuryStatusAnswer = form["pastInjuryStatus"]; // 讀取有/無過去傷害的選擇
+
             var pastInjuryItems = _db.PastInjuryStatus.ToList();
             model.PastInjuryItems = new List<QuestionnaireViewModel.PastInjuryStatusViewModel>();
 
@@ -1056,6 +1058,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
             }
+
         }
         #endregion
 
@@ -1067,7 +1070,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             foreach (var method in pastTreatmentMethods)
             {
-                string methodKey = $"Pasttreatment_{method.Id}";
+                string methodKey = $"PastTreatment_{method.Id}"; // 確保這裡的 Key 和表單一致
 
                 if (form[methodKey] == "on")
                 {
@@ -1075,6 +1078,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     {
                         Id = method.Id,
                         Method = method.Method
+                    });
+                }
+            }
+
+            // **如果是使用 JavaScript 產生的 checkbox，需要用這種方式讀取**
+            var selectedTreatmentMethods = form["SelectedTreatmentMethods"]?.Split(',');
+            if (selectedTreatmentMethods != null)
+            {
+                foreach (var method in selectedTreatmentMethods)
+                {
+                    model.PastTreatmentItems.Add(new QuestionnaireViewModel.PastTreatmentMethodViewModel
+                    {
+                        Method = method
                     });
                 }
             }
@@ -1089,11 +1105,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             foreach (var item in injuryItems)
             {
-                string leftPartKey = $"CurrentInjuryLeft_{item.Id}";
-                string rightPartKey = $"CurrentInjuryRight_{item.Id}";
+                string leftKey = $"CurrentInjuryLeft_{item.Id}";
+                string rightKey = $"CurrentInjuryRight_{item.Id}";
 
-                bool isLeftInjured = form[leftPartKey] == "on";
-                bool isRightInjured = form[rightPartKey] == "on";
+                bool isLeftInjured = form.AllKeys.Contains(leftKey);
+                bool isRightInjured = form.AllKeys.Contains(rightKey);
 
                 if (isLeftInjured || isRightInjured)
                 {
