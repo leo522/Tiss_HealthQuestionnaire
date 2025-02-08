@@ -20,8 +20,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                // 確認登入狀態
-                string loggedInUserName = Session["UserName"] as string;
+                string loggedInUserName = Session["UserName"] as string; //確認登入狀態
                 if (string.IsNullOrEmpty(loggedInUserName))
                 {
                     return RedirectToAction("Login", "Account");
@@ -40,25 +39,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ViewBag.GenderID = user.GenderID;
                 ViewBag.ShowFemaleTab = (user.GenderID == 2);
 
-                // 取得過去傷害相關資料
-                var pastInjuryItems = GetPastInjuryItems();
-                var pastInjuryTypesByCategory = GetPastInjuryTypesByCategory();
-
-                // **轉換 過去傷害 Dictionary 為 List<InjuryTypeViewModel>**
-                var pastInjuryTypesList = _db.PastInjuryType
-                    .Join(_db.PastInjuryCategory,type => type.PastInjuryCategoryId,
-        category => category.PastInjuryCategoryId,(type, category) => new QuestionnaireViewModel.InjuryTypeViewModel
-                    {
-                        CategoryName = category.CategoryName,
-                        InjuryName = type.InjuryName
-                    }).ToList();
-
-                var pastTreatmentItems = _db.PastTreatmentMethod
-                    .Select(t => new QuestionnaireViewModel.PastTreatmentMethodViewModel
-                    {
-                        Id = t.Id,
-                        Method = t.Method
-                    }).ToList();
+                // **補上過去傷害相關資料**
+                var pastInjuryItems = GetPastInjuryItems(); // 過去傷害部位
+                var pastInjuryTypesList = GetPastInjuryTypesList(); // 過去傷勢類型
+                var pastTreatmentItems = GetPastTreatmentItems(); // 過去治療方式
 
                 // 取得目前傷害相關資料
                 var currentInjuryItems = GetCurrentInjuryItems();
@@ -93,9 +77,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     OtherDrug = "",
                     PastSupplementsItems = _db.PastSupplements.ToList(),
                     FemaleQuestionnaireItems = user.GenderID == 2 ? _db.FemaleQuestionnaire.ToList() : null,
-                    PastInjuryItems = pastInjuryItems, // 過去傷害部位
-                    PastInjuryTypes = pastInjuryTypesList, // **過去傷勢類型**
-                    PastTreatmentItems = pastTreatmentItems, // **過去治療方式**
+                    //PastInjuryItems = pastInjuryItems, // 過去傷害部位
+                    //PastInjuryTypes = pastInjuryTypesList, // **過去傷勢類型**
+                    //PastTreatmentItems = pastTreatmentItems, // **過去治療方式**
+                    // ✅ 確保 `Model.PastInjuryItems`、`Model.PastInjuryTypes`、`Model.PastTreatmentItems` 不為 null
+                    PastInjuryStatusAnswer = "yes",  // 確保前端顯示
+                    PastInjuryItems = pastInjuryItems ?? new List<QuestionnaireViewModel.PastInjuryStatusViewModel>(),
+                    PastInjuryTypes = pastInjuryTypesList ?? new List<QuestionnaireViewModel.InjuryTypeViewModel>(),
+                    PastTreatmentItems = pastTreatmentItems ?? new List<QuestionnaireViewModel.PastTreatmentMethodViewModel>(),
                     CurrentInjuryItems = currentInjuryItems, // 目前受傷部位
                     CurrentInjuryTypes = currentInjuryTypesList, // **目前傷勢類型**
                     CurrentTreatmentItems = currentTreatmentItems, // **目前治療方式**
@@ -189,96 +178,49 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去傷害狀況 (已復原)-(1)
         private List<QuestionnaireViewModel.PastInjuryStatusViewModel> GetPastInjuryItems()
         {
-            return _db.PastInjuryStatus
-                .Select(injury => new QuestionnaireViewModel.PastInjuryStatusViewModel
-                {
-                    Id = injury.Id,
-                    PastInjuryPart = injury.InjuryPart
-                }).ToList();
-        }
+            var injuries = _db.PastInjuryStatus
+            .Select(injury => new QuestionnaireViewModel.PastInjuryStatusViewModel
+            {
+                Id = injury.Id,
+                PastInjuryPart = injury.InjuryPart
+            }).ToList();
 
-        private Dictionary<string, List<string>> GetPastInjuryTypesByCategory()
-        {
-            var pastInjuryRecords = _db.PastInjuryRecord
-                .Select(r => new
-                {
-                    Category = r.PastInjuryType.PastInjuryCategory.CategoryName,
-                    InjuryDetail = r.PastInjuryType.InjuryName
-                })
-                .ToList();
-
-            return pastInjuryRecords
-                .GroupBy(i => i.Category)
-                .ToDictionary(g => g.Key, g => g.Select(i => i.InjuryDetail).Distinct().ToList());
+            return injuries;
         }
         #endregion
 
         #region 過去傷勢類型-(2)
-        [HttpGet]
-        public JsonResult PastInjuryType(string PastinjuryPartId, bool all = false)
+        private List<QuestionnaireViewModel.InjuryTypeViewModel> GetPastInjuryTypesList()
         {
-            try
-            {
-                if (all) // **如果 all=true，直接回傳所有傷勢類型**
+            var injuryTypes = _db.PastInjuryType
+            .Join(_db.PastInjuryCategory,
+                type => type.PastInjuryCategoryId,
+                category => category.PastInjuryCategoryId,
+                (type, category) => new QuestionnaireViewModel.InjuryTypeViewModel
                 {
-                    var allInjuryTypes = _db.PastInjuryType
-                        .Join(_db.PastInjuryCategory,
-                            type => type.PastInjuryCategoryId,
-                            category => category.PastInjuryCategoryId,
-                            (type, category) => new { type.InjuryName, category.CategoryName })
-                        .GroupBy(i => i.CategoryName)
-                        .ToDictionary(g => g.Key, g => g.Select(i => i.InjuryName).Distinct().ToList());
+                    CategoryName = category.CategoryName,
+                    InjuryName = type.InjuryName
+                }).ToList();
 
-                    return Json(allInjuryTypes, JsonRequestBehavior.AllowGet);
-                }
-
-                if (string.IsNullOrEmpty(PastinjuryPartId))
-                {
-                    return Json(new { error = "缺少 PastinjuryPartId 參數" }, JsonRequestBehavior.AllowGet);
-                }
-
-                var selectedPartIds = PastinjuryPartId.Split(',').Select(int.Parse).ToList();
-
-                var pastInjuryRecords = _db.PastInjuryRecord
-                    .Where(r => selectedPartIds.Contains(r.PastInjuryStatusId)) // 透過 PastInjuryStatusId 查詢
-                    .Join(_db.PastInjuryType,
-                        record => record.PastInjuryTypeId,
-                        injuryType => injuryType.PastInjuryTypeId,
-                        (record, injuryType) => new { injuryType, record })
-                    .Join(_db.PastInjuryCategory,
-                        injury => injury.injuryType.PastInjuryCategoryId,
-                        category => category.PastInjuryCategoryId,
-                        (injury, category) => new { injury.injuryType, category })
-                    .GroupBy(r => r.category.CategoryName)
-                    .ToDictionary(g => g.Key, g => g.Select(r => r.injuryType.InjuryName).Distinct().ToList());
-
-                return Json(pastInjuryRecords, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { error = $"發生錯誤：{ex.Message}" }, JsonRequestBehavior.AllowGet);
-            }
+            return injuryTypes;
         }
+
 
         #endregion
 
         #region 過去治療方式-(3)
-        [HttpGet]
-        public JsonResult PastTreatmentMethod()
+        private List<QuestionnaireViewModel.PastTreatmentMethodViewModel> GetPastTreatmentItems()
         {
-            try
+            var treatments = _db.PastTreatmentMethod
+            .Select(t => new QuestionnaireViewModel.PastTreatmentMethodViewModel
             {
-                var pastTreatmentMethods = _db.PastTreatmentMethod
-                    .Select(t => new { t.Id, t.Method })
-                    .ToList();
+                Id = t.Id,
+                Method = t.Method
+            }).ToList();
 
-                return Json(pastTreatmentMethods, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { error = $"發生錯誤：{ex.Message}" }, JsonRequestBehavior.AllowGet);
-            }
+            return treatments;
         }
+
         #endregion
 
         #region 目前傷害狀況-(1)
@@ -1034,65 +976,28 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去傷害狀況-已復原
         private void ProcessPastInjuryStatus(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PastInjuryStatusAnswer = form["pastInjuryStatus"]; // 讀取有/無過去傷害的選擇
+            model.PastInjuryStatusAnswer = form["pastInjuryStatus"];
 
-            var pastInjuryItems = _db.PastInjuryStatus.ToList();
-            model.PastInjuryItems = new List<QuestionnaireViewModel.PastInjuryStatusViewModel>();
-
-            foreach (var item in pastInjuryItems)
+            var selectedInjuryTypes = form.GetValues("SelectedInjuryTypes");
+            if (selectedInjuryTypes != null && selectedInjuryTypes.Any())
             {
-                string leftKey = $"PastInjuryLeft_{item.Id}";
-                string rightKey = $"PastInjuryRight_{item.Id}";
-
-                bool isLeftInjured = form[leftKey] == "on";
-                bool isRightInjured = form[rightKey] == "on";
-
-                if (isLeftInjured || isRightInjured)
-                {
-                    model.PastInjuryItems.Add(new QuestionnaireViewModel.PastInjuryStatusViewModel
-                    {
-                        Id = item.Id,
-                        PastInjuryPart = item.InjuryPart,
-                        LeftSide = isLeftInjured,
-                        RightSide = isRightInjured
-                    });
-                }
+                model.PastInjuryTypes = selectedInjuryTypes
+                    .Select(type => new QuestionnaireViewModel.InjuryTypeViewModel { InjuryName = type.Trim() })
+                    .ToList();
             }
-
         }
+
         #endregion
 
         #region 過去傷害狀況-治療方式
         private void ProcessPastTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
         {
-            var pastTreatmentMethods = _db.PastTreatmentMethod.ToList();
-            model.PastTreatmentItems = new List<QuestionnaireViewModel.PastTreatmentMethodViewModel>();
-
-            foreach (var method in pastTreatmentMethods)
+            var selectedTreatmentMethods = form.GetValues("SelectedTreatmentMethods");
+            if (selectedTreatmentMethods != null && selectedTreatmentMethods.Any())
             {
-                string methodKey = $"PastTreatment_{method.Id}"; // 確保這裡的 Key 和表單一致
-
-                if (form[methodKey] == "on")
-                {
-                    model.PastTreatmentItems.Add(new QuestionnaireViewModel.PastTreatmentMethodViewModel
-                    {
-                        Id = method.Id,
-                        Method = method.Method
-                    });
-                }
-            }
-
-            // **如果是使用 JavaScript 產生的 checkbox，需要用這種方式讀取**
-            var selectedTreatmentMethods = form["SelectedTreatmentMethods"]?.Split(',');
-            if (selectedTreatmentMethods != null)
-            {
-                foreach (var method in selectedTreatmentMethods)
-                {
-                    model.PastTreatmentItems.Add(new QuestionnaireViewModel.PastTreatmentMethodViewModel
-                    {
-                        Method = method
-                    });
-                }
+                model.PastTreatmentItems = selectedTreatmentMethods
+                    .Select(method => new QuestionnaireViewModel.PastTreatmentMethodViewModel { Method = method.Trim() })
+                    .ToList();
             }
         }
         #endregion

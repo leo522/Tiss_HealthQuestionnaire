@@ -124,7 +124,8 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 過去傷害狀況(已復原)
-        public string PastInjuryStatusAnswer { get; set; }
+        //public string PastInjuryStatusAnswer { get; set; }
+        public string PastInjuryStatusAnswer { get; set; } = "yes"; //[1] 預設 "yes"
 
         public List<PastInjuryStatusViewModel> PastInjuryItems { get; set; } = new List<PastInjuryStatusViewModel>();
 
