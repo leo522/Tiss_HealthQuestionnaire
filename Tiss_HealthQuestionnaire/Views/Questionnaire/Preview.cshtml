@@ -359,166 +359,125 @@
 
         <!-- 第九題：過去傷害（已復原） -->
         <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
-        <p class="mb-4"><strong>狀態：</strong>@(Model.PastInjuryStatusAnswer == "yes" ? "有過去傷害" : "無過去傷害")</p>
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
+            <p class="mb-4"><strong>狀態：</strong>@(Model.PastInjuryStatusAnswer == "yes" ? "有過去傷害" : "無過去傷害")</p>
 
-        @if (Model.PastInjuryStatusAnswer == "yes")
-        {
-            <!-- 受傷部位 -->
-            <h3 class="text-lg font-semibold mt-4">受傷部位</h3>
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">部位 (Body Part)</th>
-                        <th class="border border-gray-300 px-4 py-2">左 (Left)</th>
-                        <th class="border border-gray-300 px-4 py-2">右 (Right)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var injury in Model.PastInjuryItems)
-                    {
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">@injury.PastInjuryPart</td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                @if (injury.LeftSide)
-                                {
-                                    <span class="text-red-600 font-semibold">是 (Yes)</span>
-                                }
-                                else
-                                {
-                                    <span class="text-gray-400">否 (No)</span>
-                                }
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                @if (injury.RightSide)
-                                {
-                                    <span class="text-red-600 font-semibold">是 (Yes)</span>
-                                }
-                                else
-                                {
-                                    <span class="text-gray-400">否 (No)</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <!-- 傷勢類型 -->
-            <h3 class="text-lg font-semibold mt-4">傷勢類型</h3>
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">傷勢類型 (Injury Type)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var injury in Model.PastInjuryTypes)
-                    {
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">@injury.InjuryName</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <!-- 治療方式 -->
-            <h3 class="text-lg font-semibold mt-4">治療方式</h3>
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">治療方式 (Treatment Method)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var treatment in Model.PastTreatmentItems)
-                    {
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">@treatment.Method</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        </div>
-
-        <!-- 第十題：目前傷害狀況 -->
-        <div class="mb-8">
-            <h2 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況</h2>
-            <p>狀態：@(Model.CurrentInjuryStatusAnswer == "yes" ? "有目前傷害" : "無目前傷害")</p>
-
-            @if (Model.CurrentInjuryStatusAnswer == "yes")
+            @if (Model.PastInjuryStatusAnswer == "yes")
             {
-                <h3 class="text-lg font-semibold mt-4">受傷部位</h3>
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">部位 (Body Part)</th>
+                            <th class="border border-gray-300 px-4 py-2">受傷部位 (Body Part)</th>
                             <th class="border border-gray-300 px-4 py-2">左 (Left)</th>
                             <th class="border border-gray-300 px-4 py-2">右 (Right)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var injury in Model.CurrentInjuryItems)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">@injury.CurrentInjuryPart</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    @if (injury.LeftSide)
-                                    {
-                                        <span class="text-red-600 font-semibold">是 (Yes)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-gray-400">否 (No)</span>
-                                    }
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    @if (injury.RightSide)
-                                    {
-                                        <span class="text-red-600 font-semibold">是 (Yes)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-gray-400">否 (No)</span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                <!-- 傷勢類型 -->
-                <h3 class="text-lg font-semibold mt-4">傷勢類型</h3>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">傷勢類型 (Injury Type)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var injury in Model.CurrentInjuryTypes)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">@injury.InjuryName</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                <!-- 治療方式 -->
-                <h3 class="text-lg font-semibold mt-4">治療方式</h3>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">治療方式 (Treatment Method)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var treatment in Model.CurrentTreatmentItems)
+                        @for (int i = 0; i < Math.Max(Model.PastInjuryItems.Count, Math.Max(Model.PastInjuryTypes.Count, Model.PastTreatmentItems.Count)); i++)
                         {
                             <tr>
-                                <td class="border border-gray-300 px-4 py-2">@treatment.Method</td>
+                                <!-- 受傷部位 -->
+                                @if (i < Model.PastInjuryItems.Count)
+                                {
+                                    var injury = Model.PastInjuryItems[i];
+                                    <td class="border border-gray-300 px-4 py-2">@injury.PastInjuryPart</td>
+                                    <td class="border border-gray-300 px-4 py-2">@Html.Raw(injury.LeftSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")</td>
+                                    <td class="border border-gray-300 px-4 py-2">@Html.Raw(injury.RightSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")</td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
+
+                                <!-- 傷勢類型 -->
+                                @if (i < Model.PastInjuryTypes.Count)
+                                {
+                                    <td class="border border-gray-300 px-4 py-2">@Model.PastInjuryTypes[i].InjuryName</td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
+
+                                <!-- 治療方式 -->
+                                @if (i < Model.PastTreatmentItems.Count)
+                                {
+                                    <td class="border border-gray-300 px-4 py-2">@Model.PastTreatmentItems[i].Method</td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- 第十題：目前傷害狀況 -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">目前傷害狀況</h2>
+            <p class="mb-4"><strong>狀態：</strong>@(Model.CurrentInjuryStatusAnswer == "yes" ? "有目前傷害" : "無目前傷害")</p>
+
+            @if (Model.CurrentInjuryStatusAnswer == "yes")
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">受傷部位 (Body Part)</th>
+                            <th class="border border-gray-300 px-4 py-2">左 (Left)</th>
+                            <th class="border border-gray-300 px-4 py-2">右 (Right)</th>
+                            <th class="border border-gray-300 px-4 py-2">傷勢類型 (Injury Type)</th>
+                            <th class="border border-gray-300 px-4 py-2">治療方式 (Treatment Method)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Math.Max(Model.CurrentInjuryItems.Count, Math.Max(Model.CurrentInjuryTypes.Count, Model.CurrentTreatmentItems.Count)); i++)
+                        {
+                            <tr>
+                                <!-- 受傷部位 -->
+                                @if (i < Model.CurrentInjuryItems.Count)
+                                {
+                                    var injury = Model.CurrentInjuryItems[i];
+                                    <td class="border border-gray-300 px-4 py-2">@injury.CurrentInjuryPart</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        @(injury.LeftSide ? Html.Raw("<span class='text-red-600 font-semibold'>是 (Yes)</span>") : Html.Raw("<span class='text-gray-400'>否 (No)</span>"))
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        @(injury.RightSide ? Html.Raw("<span class='text-red-600 font-semibold'>是 (Yes)</span>") : Html.Raw("<span class='text-gray-400'>否 (No)</span>"))
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
+
+                                <!-- 傷勢類型 -->
+                                @if (i < Model.CurrentInjuryTypes.Count)
+                                {
+                                    <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryTypes[i].InjuryName</td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
+
+                                <!-- 治療方式 -->
+                                @if (i < Model.CurrentTreatmentItems.Count)
+                                {
+                                    <td class="border border-gray-300 px-4 py-2">@Model.CurrentTreatmentItems[i].Method</td>
+                                }
+                                else
+                                {
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                }
                             </tr>
                         }
                     </tbody>
