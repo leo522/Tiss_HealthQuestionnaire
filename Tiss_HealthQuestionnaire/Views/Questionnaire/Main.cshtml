@@ -13,12 +13,12 @@
     <link href="~/css/mainStyle.css" rel="stylesheet" /> @*燈號顯示顏色*@
     <link href="~/css/SymptomsLights.css" rel="stylesheet" /> @*燈號顯示顏色*@
     <script src="~/js/SymptomLights.js"></script> @*燈號顯示更新*@
-    <!--<script src="~/js/SymptomEvaluationScore.js"></script>--> @*選手症狀分數相關邏輯*@
+    <script src="~/js/SymptomEvaluationScore.js"></script> @*選手症狀分數相關邏輯*@
     <!--<script src="~/js/ConcussionScreeningScore.js"></script>--> @*更新分數相關邏輯*@
     <script src="~/js/formValidation.js"></script> @*表單必填驗證*@
     <script src="~/js/validateFillDate.js"></script> @*日期必填驗證*@
     <!--<script src="~/js/injuryTypeLoader.js"></script>--> @*過去傷勢類型顯示*@
-    <script src="~/js/nowInjuryTypeLoader.js"></script> @*現在傷勢類型顯示*@
+    <!--<script src="~/js/nowInjuryTypeLoader.js"></script>--> @*現在傷勢類型顯示*@
 </head>
 
 <body class="bg-gray-100 p-4">
@@ -401,6 +401,7 @@
 
                     @if (Model.PastInjuryStatusAnswer == "yes")
                     {
+                        <!-- 傷勢部位 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">受傷部位</h3>
                             <table class="w-full border">
@@ -416,15 +417,19 @@
                                     {
                                         <tr>
                                             <td class="border p-2">@item.PastInjuryPart</td>
-                                            <td class="border p-2"><input type="checkbox" name="PastInjuryLeft" value="@item.Id"></td>
-                                            <td class="border p-2"><input type="checkbox" name="PastInjuryRight" value="@item.Id"></td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" name="PastInjuryLeft" value="@item.Id" @(item.LeftSide ? "checked" : "")>
+                                            </td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" name="PastInjuryRight" value="@item.Id" @(item.RightSide ? "checked" : "")>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- 傷勢類型 - 使用 Select 選單改進 UI -->
+                        <!-- 傷勢類型 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">傷勢類型</h3>
                             <select name="SelectedInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
@@ -436,7 +441,7 @@
                             </select>
                         </div>
 
-                        <!-- 治療方式 - 改用複選框列出 -->
+                        <!-- 治療方式 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">治療方式</h3>
                             <div class="grid grid-cols-2 gap-4">
@@ -450,144 +455,71 @@
                             </div>
                         </div>
                     }
-
-                    <!-- 第十題：目前傷害狀況 -->
-                    <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
-                        <h2 class="text-lg font-semibold mb-4">目前的症狀或疼痛部位</h2>
-                        <div class="space-y-4">
-                            <!-- 有無目前傷勢 -->
-                            <div>
-                                <label class="block">
-                                    <input type="radio" id="currentNoInjury" name="currentInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                    無 (若勾無，以下不必填寫)
-                                </label>
-                                <label class="block">
-                                    <input type="radio" id="currentHasInjury" name="currentInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                    有，請勾選目前傷害記錄
-                                </label>
-                            </div>
-
-                            <!-- 目前受傷部位選擇 -->
-                            <div id="currentInjuryDetails" class="hidden">
-                                <table class="w-full border-collapse border border-gray-300">
-                                    <thead>
-                                        <tr class="bg-gray-200">
-                                            <th class="border border-gray-300 px-4 py-2">部位</th>
-                                            <th class="border border-gray-300 px-4 py-2">左</th>
-                                            <th class="border border-gray-300 px-4 py-2">右</th>
-                                            <th class="border border-gray-300 px-4 py-2">部位</th>
-                                            <th class="border border-gray-300 px-4 py-2">左</th>
-                                            <th class="border border-gray-300 px-4 py-2">右</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (int i = 0; i < Model.CurrentInjuryItems.Count; i += 2)
-                                        {
-                                            <tr>
-                                                <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i].CurrentInjuryPart</td>
-                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i].Id"></td>
-                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i].Id"></td>
-
-                                                @if (i + 1 < Model.CurrentInjuryItems.Count)
-                                                {
-                                                    <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i + 1].CurrentInjuryPart</td>
-                                                    <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
-                                                    <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
-                                                }
-                                                else
-                                                {
-                                                    <td class="border border-gray-300 px-4 py-2"></td>
-                                                    <td class="border border-gray-300 px-4 py-2"></td>
-                                                    <td class="border border-gray-300 px-4 py-2"></td>
-                                                }
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- 目前傷勢類型顯示 -->
-                            <div id="currentInjuryTypesSection" class="hidden mt-4">
-                                <h3 class="text-lg font-semibold mb-2">傷勢類型</h3>
-                                <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
-                            </div>
-
-                            <!-- 目前治療方式 -->
-                            <div id="currentTreatmentMethodSection" class="hidden mt-4">
-                                <h3 class="text-lg font-semibold mb-2">治療方式</h3>
-                                <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- 第十題：目前傷害狀況 -->
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
-                    <h2 class="text-lg font-semibold mb-4">目前的症狀或疼痛部位</h2>
-                    <div class="space-y-4">
-                        <!-- 有無目前傷勢 -->
-                        <div>
-                            <label class="block">
-                                <input type="radio" id="currentNoInjury" name="currentInjuryStatus" value="no" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                無 (若勾無，以下不必填寫)
-                            </label>
-                            <label class="block">
-                                <input type="radio" id="currentHasInjury" name="currentInjuryStatus" value="yes" class="form-radio h-5 w-5 text-blue-600 mr-2">
-                                有，請勾選目前傷害記錄
-                            </label>
-                        </div>
+                    <h1 class="text-lg font-semibold mb-4">目前傷害狀況</h1>
+                    <label>
+                        <input type="radio" name="currentInjuryStatus" value="no" @(Model.CurrentInjuryStatusAnswer == "no" ? "checked" : "")>
+                        無 (若勾無，以下不必填寫)
+                    </label>
+                    <label>
+                        <input type="radio" name="currentInjuryStatus" value="yes" @(Model.CurrentInjuryStatusAnswer == "yes" ? "checked" : "")>
+                        有，請勾選目前傷害記錄
+                    </label>
 
-                        <!-- 目前受傷部位選擇 -->
-                        <div id="currentInjuryDetails" class="hidden">
-                            <table class="w-full border-collapse border border-gray-300">
+                    @if (Model.CurrentInjuryStatusAnswer == "yes")
+                    {
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">受傷部位</h3>
+                            <table class="w-full border">
                                 <thead>
-                                    <tr class="bg-gray-200">
-                                        <th class="border border-gray-300 px-4 py-2">部位</th>
-                                        <th class="border border-gray-300 px-4 py-2">左</th>
-                                        <th class="border border-gray-300 px-4 py-2">右</th>
-                                        <th class="border border-gray-300 px-4 py-2">部位</th>
-                                        <th class="border border-gray-300 px-4 py-2">左</th>
-                                        <th class="border border-gray-300 px-4 py-2">右</th>
+                                    <tr>
+                                        <th class="border p-2">部位</th>
+                                        <th class="border p-2">左</th>
+                                        <th class="border p-2">右</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (int i = 0; i < Model.CurrentInjuryItems.Count; i += 2)
+                                    @foreach (var item in Model.CurrentInjuryItems)
                                     {
                                         <tr>
-                                            <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i].CurrentInjuryPart</td>
-                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i].Id"></td>
-                                            <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i].Id"></td>
-
-                                            @if (i + 1 < Model.CurrentInjuryItems.Count)
-                                            {
-                                                <td class="border border-gray-300 px-4 py-2">@Model.CurrentInjuryItems[i + 1].CurrentInjuryPart</td>
-                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryLeft" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
-                                                <td class="border border-gray-300 px-4 py-2"><input type="checkbox" name="CurrentInjuryRight" value="@Model.CurrentInjuryItems[i + 1].Id"></td>
-                                            }
-                                            else
-                                            {
-                                                <td class="border border-gray-300 px-4 py-2"></td>
-                                                <td class="border border-gray-300 px-4 py-2"></td>
-                                                <td class="border border-gray-300 px-4 py-2"></td>
-                                            }
+                                            <td class="border p-2">@item.CurrentInjuryPart</td>
+                                            <td class="border p-2"><input type="checkbox" name="CurrentInjuryLeft" value="@item.Id"></td>
+                                            <td class="border p-2"><input type="checkbox" name="CurrentInjuryRight" value="@item.Id"></td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- 目前傷勢類型顯示 -->
-                        <div id="currentInjuryTypesSection" class="hidden mt-4">
-                            <h3 class="text-lg font-semibold mb-2">傷勢類型</h3>
-                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
+                        <!-- 傷勢類型 - 使用 Select 選單 -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">傷勢類型</h3>
+                            <select name="SelectedCurrentInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
+                                <option value="">請選擇傷勢類型</option>
+                                @foreach (var injury in Model.CurrentInjuryTypes)
+                                {
+                                    <option value="@injury.InjuryName">@injury.InjuryName</option>
+                                }
+                            </select>
                         </div>
 
-                        <!-- 目前治療方式 -->
-                        <div id="currentTreatmentMethodSection" class="hidden mt-4">
-                            <h3 class="text-lg font-semibold mb-2">治療方式</h3>
-                            <div class="grid grid-cols-3 gap-4"></div> <!-- ✅ 這裡 JS 會填充 -->
+                        <!-- 治療方式 - 改用複選框列出 -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">治療方式</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach (var treatment in Model.CurrentTreatmentItems)
+                                {
+                                    <label class="block border p-2 rounded shadow-sm">
+                                        <input type="checkbox" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
+                                        @treatment.Method
+                                    </label>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
 
                 <!-- 第11題：心血管篩檢 -->
@@ -773,6 +705,7 @@
                         </tbody>
                     </table>
                 </div>
+            
             </div>
             <!-- 分步驟按鈕 -->
             <div class="flex justify-between mt-6">

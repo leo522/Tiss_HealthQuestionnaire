@@ -149,18 +149,17 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 目前傷害
+        public string CurrentInjuryStatusAnswer { get; set; } = "no"; // 新增目前傷勢回答預設為 "no"
         public List<CurrentInjuryStatusViewModel> CurrentInjuryItems { get; set; } = new List<CurrentInjuryStatusViewModel>();
-
         public List<InjuryTypeViewModel> CurrentInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
-
         public List<CurrentTreatmentMethodViewModel> CurrentTreatmentItems { get; set; } = new List<CurrentTreatmentMethodViewModel>();
 
         public class CurrentInjuryStatusViewModel
         {
             public int Id { get; set; }
             public string CurrentInjuryPart { get; set; }
-            public bool LeftSide { get; set; } //新增左側受傷
-            public bool RightSide { get; set; } //新增右側受傷
+            public bool LeftSide { get; set; }
+            public bool RightSide { get; set; }
         }
 
         public class CurrentTreatmentMethodViewModel
