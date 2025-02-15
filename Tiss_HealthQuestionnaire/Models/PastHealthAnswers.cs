@@ -22,8 +22,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public Nullable<bool> AnswerOptionID { get; set; }
         public string RemarkAnswer { get; set; }
         public Nullable<System.DateTime> DateOfAnswer { get; set; }
-    
-        public virtual AthleteUser AthleteUser { get; set; }
-        public virtual PastHealth PastHealth { get; set; }
     }
 }

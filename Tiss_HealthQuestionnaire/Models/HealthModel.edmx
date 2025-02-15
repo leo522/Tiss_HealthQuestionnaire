@@ -17,7 +17,7 @@
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="AthleteID" />
           </Key>
           <Property Name="ID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="AthleteID" Type="int" Nullable="false" />
@@ -612,30 +612,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PastHealt__Quest__5165187F">
-          <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
-          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PastHealth">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="QuestionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PastHealt__UserI__52593CB8">
-          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="0..1" />
-          <End Role="PastHealthAnswers" Type="Self.PastHealthAnswers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AthleteUser">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__PastInjur__PastI__04459E07">
           <End Role="PastInjuryCategory" Type="Self.PastInjuryCategory" Multiplicity="1" />
           <End Role="PastInjuryType" Type="Self.PastInjuryType" Multiplicity="*" />
@@ -672,18 +648,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--產生期間發現錯誤:
-警告 6035: 關聯性 'FK_AthleteUser_Gender' 在主要端上，有不屬於資料表索引鍵的資料行。已排除此關聯性。
-        <Association Name="FK_AthleteUser_Gender" />-->
-        <Association Name="FK_QuestionnaireResponse_AthleteUser">
-          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="1" />
-          <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="*" />
+        <Association Name="FK_AthleteUser_Gender">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
+          <End Role="AthleteUser" Type="Self.AthleteUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="AthleteUser">
+            <Principal Role="Gender">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="QuestionnaireResponse">
-              <PropertyRef Name="AthleteID" />
+            <Dependent Role="AthleteUser">
+              <PropertyRef Name="GenderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -891,9 +864,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--產生期間發現錯誤:
-警告 6035: 關聯性 'FK_TemporaryQuestionnaireData_User' 在主要端上，有不屬於資料表索引鍵的資料行。已排除此關聯性。
-        <Association Name="FK_TemporaryQuestionnaireData_User" />-->
         <EntityContainer Name="HealthQuestionnaireModelStoreContainer">
           <EntitySet Name="AllergicHistory" EntityType="Self.AllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AthleteUser" EntityType="Self.AthleteUser" Schema="dbo" store:Type="Tables" />
@@ -966,14 +936,6 @@
             <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
             <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
           </AssociationSet>
-          <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="Self.FK__PastHealt__Quest__5165187F">
-            <End Role="PastHealth" EntitySet="PastHealth" />
-            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PastHealt__UserI__52593CB8" Association="Self.FK__PastHealt__UserI__52593CB8">
-            <End Role="AthleteUser" EntitySet="AthleteUser" />
-            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
-          </AssociationSet>
           <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="Self.FK__PastInjur__PastI__04459E07">
             <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
             <End Role="PastInjuryType" EntitySet="PastInjuryType" />
@@ -986,9 +948,9 @@
             <End Role="PastInjuryType" EntitySet="PastInjuryType" />
             <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
           </AssociationSet>
-          <AssociationSet Name="FK_QuestionnaireResponse_AthleteUser" Association="Self.FK_QuestionnaireResponse_AthleteUser">
+          <AssociationSet Name="FK_AthleteUser_Gender" Association="Self.FK_AthleteUser_Gender">
+            <End Role="Gender" EntitySet="Gender" />
             <End Role="AthleteUser" EntitySet="AthleteUser" />
-            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
           </AssociationSet>
           <AssociationSet Name="FK_QuestionnaireResponse_Gender" Association="Self.FK_QuestionnaireResponse_Gender">
             <End Role="Gender" EntitySet="Gender" />
@@ -1123,13 +1085,9 @@
           <EntitySet Name="TimedTandemGait" EntityType="HealthQuestionnaireModel.TimedTandemGait" />
           <EntitySet Name="Treatment" EntityType="HealthQuestionnaireModel.Treatment" />
           <EntitySet Name="TreatmentMethod" EntityType="HealthQuestionnaireModel.TreatmentMethod" />
-          <AssociationSet Name="FK__PastHealt__UserI__52593CB8" Association="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8">
+          <AssociationSet Name="FK_AthleteUser_Gender" Association="HealthQuestionnaireModel.FK_AthleteUser_Gender">
+            <End Role="Gender" EntitySet="Gender" />
             <End Role="AthleteUser" EntitySet="AthleteUser" />
-            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_QuestionnaireResponse_AthleteUser" Association="HealthQuestionnaireModel.FK_QuestionnaireResponse_AthleteUser">
-            <End Role="AthleteUser" EntitySet="AthleteUser" />
-            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
           </AssociationSet>
           <AssociationSet Name="FK__CurrentIn__Curre__0CDAE408" Association="HealthQuestionnaireModel.FK__CurrentIn__Curre__0CDAE408">
             <End Role="CurrentInjuryCategory" EntitySet="CurrentInjuryCategory" />
@@ -1146,10 +1104,6 @@
           <AssociationSet Name="FK_QuestionnaireResponse_Gender" Association="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PastHealt__Quest__5165187F" Association="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F">
-            <End Role="PastHealth" EntitySet="PastHealth" />
-            <End Role="PastHealthAnswers" EntitySet="PastHealthAnswers" />
           </AssociationSet>
           <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07">
             <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
@@ -1240,7 +1194,7 @@
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="AthleteID" />
           </Key>
           <Property Name="ID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="AthleteID" Type="Int32" Nullable="false" />
@@ -1254,8 +1208,7 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="GenderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="PastHealthAnswers" Relationship="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8" FromRole="AthleteUser" ToRole="PastHealthAnswers" />
-          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_AthleteUser" FromRole="AthleteUser" ToRole="QuestionnaireResponse" />
+          <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_AthleteUser_Gender" FromRole="AthleteUser" ToRole="Gender" />
         </EntityType>
         <EntityType Name="AthleticTrainer">
           <Key>
@@ -1413,6 +1366,7 @@
           <Property Name="GenderID" Type="Int32" />
           <Property Name="Male" Type="Boolean" />
           <Property Name="Female" Type="Boolean" />
+          <NavigationProperty Name="AthleteUser" Relationship="HealthQuestionnaireModel.FK_AthleteUser_Gender" FromRole="Gender" ToRole="AthleteUser" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender" FromRole="Gender" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ImmediateMemory">
@@ -1487,7 +1441,6 @@
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="IsYes" Type="Boolean" Nullable="false" />
           <Property Name="IsNo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PastHealthAnswers" Relationship="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F" FromRole="PastHealth" ToRole="PastHealthAnswers" />
         </EntityType>
         <EntityType Name="PastHealthAnswers">
           <Key>
@@ -1501,8 +1454,6 @@
           <Property Name="AnswerOptionID" Type="Boolean" />
           <Property Name="RemarkAnswer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="DateOfAnswer" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="AthleteUser" Relationship="HealthQuestionnaireModel.FK__PastHealt__UserI__52593CB8" FromRole="PastHealthAnswers" ToRole="AthleteUser" />
-          <NavigationProperty Name="PastHealth" Relationship="HealthQuestionnaireModel.FK__PastHealt__Quest__5165187F" FromRole="PastHealthAnswers" ToRole="PastHealth" />
         </EntityType>
         <EntityType Name="PastHistory">
           <Key>
@@ -1587,7 +1538,6 @@
           <Property Name="FillingDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Specialty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FillName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AthleteUser" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_AthleteUser" FromRole="QuestionnaireResponse" ToRole="AthleteUser" />
           <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender" FromRole="QuestionnaireResponse" ToRole="Gender" />
           <NavigationProperty Name="QuestionnaireResponseDetails" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponseDetails_Response" FromRole="QuestionnaireResponse" ToRole="QuestionnaireResponseDetails" />
           <NavigationProperty Name="ResponseAllergicHistory" Relationship="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponseAllergicHistory" />
@@ -1851,27 +1801,15 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="FK__PastHealt__UserI__52593CB8">
-          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
+        <Association Name="FK_AthleteUser_Gender">
+          <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="AthleteUser">
+            <Principal Role="Gender">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_QuestionnaireResponse_AthleteUser">
-          <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AthleteUser">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponse">
-              <PropertyRef Name="AthleteID" />
+            <Dependent Role="AthleteUser">
+              <PropertyRef Name="GenderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1920,18 +1858,6 @@
             </Principal>
             <Dependent Role="QuestionnaireResponse">
               <PropertyRef Name="GenderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PastHealt__Quest__5165187F">
-          <End Type="HealthQuestionnaireModel.PastHealth" Role="PastHealth" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.PastHealthAnswers" Role="PastHealthAnswers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PastHealth">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PastHealthAnswers">
-              <PropertyRef Name="QuestionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

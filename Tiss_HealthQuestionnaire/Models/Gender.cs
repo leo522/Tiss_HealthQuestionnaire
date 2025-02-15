@@ -17,6 +17,7 @@ namespace Tiss_HealthQuestionnaire.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Gender()
         {
+            this.AthleteUser = new HashSet<AthleteUser>();
             this.QuestionnaireResponse = new HashSet<QuestionnaireResponse>();
         }
     
@@ -25,6 +26,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public Nullable<bool> Male { get; set; }
         public Nullable<bool> Female { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AthleteUser> AthleteUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionnaireResponse> QuestionnaireResponse { get; set; }
     }

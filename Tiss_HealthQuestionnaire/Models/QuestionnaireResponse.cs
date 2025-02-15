@@ -41,7 +41,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Specialty { get; set; }
         public string FillName { get; set; }
     
-        public virtual AthleteUser AthleteUser { get; set; }
         public virtual Gender Gender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }

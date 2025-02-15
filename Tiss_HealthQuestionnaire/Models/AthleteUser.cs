@@ -14,13 +14,6 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class AthleteUser
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AthleteUser()
-        {
-            this.PastHealthAnswers = new HashSet<PastHealthAnswers>();
-            this.QuestionnaireResponse = new HashSet<QuestionnaireResponse>();
-        }
-    
         public string ID { get; set; }
         public int AthleteID { get; set; }
         public string AthleteNumber { get; set; }
@@ -34,9 +27,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public System.DateTime CreatedDate { get; set; }
         public int GenderID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PastHealthAnswers> PastHealthAnswers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionnaireResponse> QuestionnaireResponse { get; set; }
+        public virtual Gender Gender { get; set; }
     }
 }
