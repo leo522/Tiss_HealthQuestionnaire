@@ -388,11 +388,11 @@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9">
                     <h1 class="text-lg font-semibold mb-4">過去傷害狀況 (已復原)</h1>
                     <label>
-                        <input type="radio" name="pastInjuryStatus" value="no" @(Model.PastInjuryStatusAnswer == "no" ? "checked" : "")>
+                        <input type="radio" name="pastInjuryStatus" class="required-radio h-5 w-5" value="no" @(Model.PastInjuryStatusAnswer == "no" ? "checked" : "")>
                         無 (若勾無，以下不必填寫)
                     </label>
                     <label>
-                        <input type="radio" name="pastInjuryStatus" value="yes" @(Model.PastInjuryStatusAnswer == "yes" ? "checked" : "")>
+                        <input type="radio" name="pastInjuryStatus" class="required-radio h-5 w-5" value="yes" @(Model.PastInjuryStatusAnswer == "yes" ? "checked" : "")>
                         有，請勾選過去傷害記錄
                     </label>
 
@@ -415,10 +415,10 @@
                                         <tr>
                                             <td class="border p-2">@item.PastInjuryPart</td>
                                             <td class="border p-2">
-                                                <input type="checkbox" name="PastInjuryLeft" value="@item.Id" @(item.LeftSide ? "checked" : "")>
+                                                <input type="checkbox" name="PastInjuryLeft" class="required-checkbox h-5 w-5" value="@item.Id" @(item.LeftSide ? "checked" : "")>
                                             </td>
                                             <td class="border p-2">
-                                                <input type="checkbox" name="PastInjuryRight" value="@item.Id" @(item.RightSide ? "checked" : "")>
+                                                <input type="checkbox" name="PastInjuryRight" class="required-checkbox h-5 w-5" value="@item.Id" @(item.RightSide ? "checked" : "")>
                                             </td>
                                         </tr>
                                     }
@@ -429,7 +429,7 @@
                         <!-- 傷勢類型 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">傷勢類型</h3>
-                            <select name="SelectedInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
+                            <select name="SelectedInjuryTypes" class="w-full border border-gray-300 p-2 rounded h-5 w-5">
                                 <option value="">請選擇傷勢類型</option>
                                 @foreach (var injury in Model.PastInjuryTypes)
                                 {
@@ -445,7 +445,7 @@
                                 @foreach (var treatment in Model.PastTreatmentItems)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" name="SelectedTreatmentMethods" value="@treatment.Method">
+                                        <input type="checkbox" class="required-checkbox h-5 w-5" name="SelectedTreatmentMethods" value="@treatment.Method">
                                         @treatment.Method
                                     </label>
                                 }
@@ -458,11 +458,11 @@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
                     <h1 class="text-lg font-semibold mb-4">目前傷害狀況</h1>
                     <label>
-                        <input type="radio" name="currentInjuryStatus" value="no" @(Model.CurrentInjuryStatusAnswer == "no" ? "checked" : "")>
+                        <input type="radio" name="currentInjuryStatus" class="required-radio h-5 w-5" value="no" @(Model.CurrentInjuryStatusAnswer == "no" ? "checked" : "")>
                         無 (若勾無，以下不必填寫)
                     </label>
                     <label>
-                        <input type="radio" name="currentInjuryStatus" value="yes" @(Model.CurrentInjuryStatusAnswer == "yes" ? "checked" : "")>
+                        <input type="radio" name="currentInjuryStatus" class="required-radio h-5 w-5" value="yes" @(Model.CurrentInjuryStatusAnswer == "yes" ? "checked" : "")>
                         有，請勾選目前傷害記錄
                     </label>
 
@@ -483,8 +483,8 @@
                                     {
                                         <tr>
                                             <td class="border p-2">@item.CurrentInjuryPart</td>
-                                            <td class="border p-2"><input type="checkbox" name="CurrentInjuryLeft" value="@item.Id"></td>
-                                            <td class="border p-2"><input type="checkbox" name="CurrentInjuryRight" value="@item.Id"></td>
+                                            <td class="border p-2"><input type="checkbox" class="required-checkbox h-5 w-5" name="CurrentInjuryLeft" value="@item.Id"></td>
+                                            <td class="border p-2"><input type="checkbox" class="required-checkbox h-5 w-5" name="CurrentInjuryRight" value="@item.Id"></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -494,7 +494,7 @@
                         <!-- 傷勢類型 - 使用 Select 選單 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">傷勢類型</h3>
-                            <select name="SelectedCurrentInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
+                            <select name="SelectedCurrentInjuryTypes" class="w-full border border-gray-300 p-2 rounded h-5 w-5">
                                 <option value="">請選擇傷勢類型</option>
                                 @foreach (var injury in Model.CurrentInjuryTypes)
                                 {
@@ -510,7 +510,7 @@
                                 @foreach (var treatment in Model.CurrentTreatmentItems)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
+                                        <input type="checkbox" class="required-checkbox h-5 w-5" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
                                         @treatment.Method
                                     </label>
                                 }
@@ -520,7 +520,7 @@
                 </div>
 
                 <!-- 第11題：心血管篩檢 -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="15">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
                     <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -550,7 +550,7 @@
                 </div>
 
                 <!-- 第12題 腦震盪篩檢-選手自填-(1) -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="16">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
                     <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
                     <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -602,7 +602,7 @@
                 </div>
 
                 <!-- 第13題 症狀自我評估-選手自填(2) -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="17">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
                     <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
                     <table class="min-w-full bg-white border border-gray-300 text-center">
                         <thead>
@@ -661,7 +661,7 @@
                 </div>
 
                 <!-- 第14題 骨科篩檢 -->
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="26">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
                     <h2 class="text-lg font-semibold mb-4">骨科篩檢</h2>
                     <!-- 骨科篩檢表格 -->
                     <table class="min-w-full bg-white border border-gray-300 text-center">

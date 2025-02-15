@@ -35,6 +35,11 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<ConcussionScreening> ConcussionScreening { get; set; }
         public virtual DbSet<CoordinationAndBalanceExamination> CoordinationAndBalanceExamination { get; set; }
         public virtual DbSet<CurrentInjury> CurrentInjury { get; set; }
+        public virtual DbSet<CurrentInjuryCategory> CurrentInjuryCategory { get; set; }
+        public virtual DbSet<CurrentInjuryRecord> CurrentInjuryRecord { get; set; }
+        public virtual DbSet<CurrentInjuryStatus> CurrentInjuryStatus { get; set; }
+        public virtual DbSet<CurrentInjuryType> CurrentInjuryType { get; set; }
+        public virtual DbSet<CurrentTreatmentMethod> CurrentTreatmentMethod { get; set; }
         public virtual DbSet<DelayedRecall> DelayedRecall { get; set; }
         public virtual DbSet<FamilyHistory> FamilyHistory { get; set; }
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
@@ -49,9 +54,11 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PastHealthAnswers> PastHealthAnswers { get; set; }
         public virtual DbSet<PastHistory> PastHistory { get; set; }
         public virtual DbSet<PastInjuryCategory> PastInjuryCategory { get; set; }
+        public virtual DbSet<PastInjuryRecord> PastInjuryRecord { get; set; }
         public virtual DbSet<PastInjuryStatus> PastInjuryStatus { get; set; }
         public virtual DbSet<PastInjuryType> PastInjuryType { get; set; }
         public virtual DbSet<PastSupplements> PastSupplements { get; set; }
+        public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
         public virtual DbSet<PresentIllness> PresentIllness { get; set; }
         public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
         public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
@@ -86,12 +93,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
-        public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
-        public virtual DbSet<CurrentInjuryCategory> CurrentInjuryCategory { get; set; }
-        public virtual DbSet<CurrentInjuryStatus> CurrentInjuryStatus { get; set; }
-        public virtual DbSet<CurrentInjuryType> CurrentInjuryType { get; set; }
-        public virtual DbSet<CurrentTreatmentMethod> CurrentTreatmentMethod { get; set; }
-        public virtual DbSet<CurrentInjuryRecord> CurrentInjuryRecord { get; set; }
-        public virtual DbSet<PastInjuryRecord> PastInjuryRecord { get; set; }
     }
 }

@@ -185,18 +185,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     // 設定 Session 狀態為已登入
                     Session["LoggedIn"] = true;
                     Session["UserName"] = dto.Name;
-
-                    // 確認返回的 URL 是否存在並且為您所期望的頁面，否則直接導向到指定的控制器動作
-                    string returnUrl = Session["ReturnUrl"] as string;
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        // 如果沒有指定的 returnUrl 或者 returnUrl 不符合條件，重導向到 Main 動作
-                        return RedirectToAction("Main", "Questionnaire");
-                    }
+                    return RedirectToAction("Main", "Questionnaire");
                 }
                 else
                 {
