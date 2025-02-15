@@ -62,30 +62,21 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PresentIllness> PresentIllness { get; set; }
         public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
         public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
-        public virtual DbSet<QuestionnaireResponses> QuestionnaireResponses { get; set; }
         public virtual DbSet<QuestionnaireType> QuestionnaireType { get; set; }
         public virtual DbSet<ResponseAllergicHistory> ResponseAllergicHistory { get; set; }
-        public virtual DbSet<ResponseAllergicHistoryDetails> ResponseAllergicHistoryDetails { get; set; }
         public virtual DbSet<ResponseCardiovascularScreening> ResponseCardiovascularScreening { get; set; }
-        public virtual DbSet<ResponseConcentration> ResponseConcentration { get; set; }
-        public virtual DbSet<ResponseConcussionMedication> ResponseConcussionMedication { get; set; }
         public virtual DbSet<ResponseConcussionScreening> ResponseConcussionScreening { get; set; }
-        public virtual DbSet<ResponseCoordinationAndBalance> ResponseCoordinationAndBalance { get; set; }
-        public virtual DbSet<ResponseDelayedRecall> ResponseDelayedRecall { get; set; }
+        public virtual DbSet<ResponseCurrentInjuries> ResponseCurrentInjuries { get; set; }
         public virtual DbSet<ResponseFamilyHistory> ResponseFamilyHistory { get; set; }
         public virtual DbSet<ResponseFemaleQuestionnaire> ResponseFemaleQuestionnaire { get; set; }
-        public virtual DbSet<ResponseImmediateMemory> ResponseImmediateMemory { get; set; }
-        public virtual DbSet<ResponseInjury> ResponseInjury { get; set; }
-        public virtual DbSet<ResponseOrientation> ResponseOrientation { get; set; }
         public virtual DbSet<ResponseOrthopaedicScreening> ResponseOrthopaedicScreening { get; set; }
         public virtual DbSet<ResponsePastDrugs> ResponsePastDrugs { get; set; }
         public virtual DbSet<ResponsePastHealth> ResponsePastHealth { get; set; }
-        public virtual DbSet<ResponsePastHealthDetails> ResponsePastHealthDetails { get; set; }
         public virtual DbSet<ResponsePastHistory> ResponsePastHistory { get; set; }
+        public virtual DbSet<ResponsePastInjuries> ResponsePastInjuries { get; set; }
+        public virtual DbSet<ResponsePastSupplements> ResponsePastSupplements { get; set; }
         public virtual DbSet<ResponsePresentIllness> ResponsePresentIllness { get; set; }
-        public virtual DbSet<ResponseSupplements> ResponseSupplements { get; set; }
         public virtual DbSet<ResponseSymptomEvaluation> ResponseSymptomEvaluation { get; set; }
-        public virtual DbSet<ResponseTotalScores> ResponseTotalScores { get; set; }
         public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
         public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
         public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }

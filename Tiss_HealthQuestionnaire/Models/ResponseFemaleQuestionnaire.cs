@@ -14,12 +14,11 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponseFemaleQuestionnaire
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public string QuestionZh { get; set; }
-        public string QuestionEn { get; set; }
-        public string DisplayAnswer { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

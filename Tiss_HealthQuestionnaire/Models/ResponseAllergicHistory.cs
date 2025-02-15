@@ -14,18 +14,11 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponseAllergicHistory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ResponseAllergicHistory()
-        {
-            this.ResponseAllergicHistoryDetails = new HashSet<ResponseAllergicHistoryDetails>();
-        }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string AllergyType { get; set; }
+        public string Details { get; set; }
     
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public bool IsAllergic { get; set; }
-    
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResponseAllergicHistoryDetails> ResponseAllergicHistoryDetails { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     PastHealthItems = _db.PastHealth.ToList(),
                     AllergicHistoryItems = _db.AllergicHistory.ToList(),
-                    FamilyHistoryItems = _db.FamilyHistory.ToList(),
+                    FamilyHistoryItems = _db.FamilyHistory.ToList() ?? new List<FamilyHistory>(),
                     PastHistoryItems = _db.PastHistory.ToList(),
                     PresentIllnessItems = _db.PresentIllness.ToList(),
                     PastDrugsItems = _db.PastDrugs.ToList(),
@@ -637,7 +637,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 預覽頁
+        #region 問卷題目答案傳入到預覽頁
         public ActionResult Preview(QuestionnaireViewModel model)
         {
             return View("Preview", model);
@@ -776,7 +776,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 家族病史
         private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            model.FamilyHistoryItems = _db.FamilyHistory.ToList();
+            model.FamilyHistoryItems = _db.FamilyHistory.ToList() ?? new List<FamilyHistory>();
 
             foreach (var item in model.FamilyHistoryItems)
             {
@@ -1244,337 +1244,360 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 問卷存檔
-        //[HttpPost]
-        //public ActionResult SaveHealth(QuestionnaireViewModel model)
-        //{
-        //    try
-        //    {
-        //        // 保存問卷主表
-        //        var response = new QuestionnaireResponses
-        //        {
-        //            Specialist = model.Specialist,
-        //            FillName = model.FillName,
-        //            AtheNum = model.AtheNum,
-        //            Gender = model.Gender,
-        //            FillDate = model.FillDate,
-        //            SubmissionDate = DateTime.Now
-        //        };
-        //        _db.QuestionnaireResponses.Add(response);
-        //        _db.SaveChanges();
+        [HttpPost]
+        public ActionResult Submit(QuestionnaireViewModel model)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var newResponse = new QuestionnaireResponse
+                    {
+                        AthleteID = model.AtheNum,
+                        GenderID = model.Gender,
+                        FillingDate = model.FillDate,
+                        Specialty = model.Specialist,
+                        FillName = model.FillName
+                    };
 
-        //        // 儲存過去健康檢查病史
-        //        var pastHealth = new ResponsePastHealth
-        //        {
-        //            QuestionnaireResponseId = response.Id,
-        //            HasAbnormality = model.PastHealthHistory == "yes"
-        //        };
-        //        _db.ResponsePastHealth.Add(pastHealth);
-        //        _db.SaveChanges();
+                    _db.QuestionnaireResponse.Add(newResponse);
+                    _db.SaveChanges(); // 先儲存主表，取得 ID
 
-        //        foreach (var detail in model.PastHealthDetails)
-        //        {
-        //            var pastHealthDetail = new ResponsePastHealthDetails
-        //            {
-        //                PastHealthId = pastHealth.Id,
-        //                Item1 = detail.Item1,
-        //                Item2 = detail.Item2,
-        //                Item3 = detail.Item3
-        //            };
-        //            _db.ResponsePastHealthDetails.Add(pastHealthDetail);
-        //        }
+                    int responseId = newResponse.ID; // 取得新建的問卷 ID
 
-        //        // 儲存過敏史
-        //        var allergicHistory = new ResponseAllergicHistory
-        //        {
-        //            QuestionnaireResponseId = response.Id,
-        //            IsAllergic = model.AllergicHistory == "yes"
-        //        };
-        //        _db.ResponseAllergicHistory.Add(allergicHistory);
-        //        _db.SaveChanges();
+                    // 2. **新增各類型的回答數據**
+                    SavePastHealth(model, responseId);
+                    SaveAllergicHistory(model, responseId);
+                    SaveFamilyHistory(model, responseId);
+                    SavePastHistory(model, responseId);
+                    SavePresentIllness(model, responseId);
+                    SavePastDrugs(model, responseId);
+                    SavePastSupplements(model, responseId);
+                    SaveFemaleQuestionnaire(model, responseId);
+                    SavePastInjury(model, responseId);
+                    SaveCurrentInjury(model, responseId);
+                    SaveCardiovascularScreening(model, responseId);
+                    SaveConcussionScreening(model, responseId);
+                    SaveSymptomEvaluation(model, responseId);
+                    SaveOrthopaedicScreening(model, responseId);
 
-        //        foreach (var detail in model.AllergicHistoryDetails)
-        //        {
-        //            var allergicHistoryDetail = new ResponseAllergicHistoryDetails
-        //            {
-        //                AllergicHistoryId = allergicHistory.Id,
-        //                ItemZh = detail.ItemZh,
-        //                IsAllergic = detail.IsAllergic == "yes",
-        //                AllergyDescription = detail.AllergyDescription
-        //            };
-        //            _db.ResponseAllergicHistoryDetails.Add(allergicHistoryDetail);
-        //        }
+                    // 3. **提交變更**
+                    _db.SaveChanges();
+                    transaction.Commit();
 
-        //        // 儲存家族病史
-        //        foreach (var detail in model.FamilyHistoryDetails)
-        //        {
-        //            var familyHistory = new ResponseFamilyHistory
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                GeneralPartsZh = detail.GeneralPartsZh,
-        //                GeneralPartsEn = detail.GeneralPartsEn,
-        //                FamilyHistoryOption = detail.FamilyHistoryOption,
-        //                OtherFamilyHistory = detail.OtherFamilyHistory
-        //            };
-        //            _db.ResponseFamilyHistory.Add(familyHistory);
-        //        }
+                    return RedirectToAction("Success"); // 導向成功頁面
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    ModelState.AddModelError("", "儲存失敗：" + ex.Message);
+                    return View("Preview", model);
+                }
+            }
+        }
+        #endregion
 
-        //        // 儲存過去病史
-        //        foreach (var detail in model.PastHistoryDetails)
-        //        {
-        //            var pastHistory = new ResponsePastHistory
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                GeneralPartsZh = detail.GeneralPartsZh,
-        //                GeneralPartsEn = detail.GeneralPartsEn,
-        //                PastHistoryOption = detail.PastHistoryOption,
-        //                OtherPastHistory = detail.OtherPastHistory
-        //            };
-        //            _db.ResponsePastHistory.Add(pastHistory);
-        //        }
+        #region 各問卷子表的儲存
 
-        //        // 儲存現在病史
-        //        foreach (var detail in model.PresentIllnessDetails)
-        //        {
-        //            var presentIllness = new ResponsePresentIllness
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                PartsOfBodyZh = detail.PartsOfBodyZh,
-        //                ReceivingOtherTherapies = detail.ReceivingOtherTherapies == "yes"
-        //            };
-        //            _db.ResponsePresentIllness.Add(presentIllness);
-        //        }
+        #region 儲存 PastHealth (過去健康檢查)
+        private void SavePastHealth(QuestionnaireViewModel model, int responseId)
+        {
+            var pastHealth = new ResponsePastHealth
+            {
+                QuestionnaireResponseID = responseId,
+                HasAbnormalItems = model.PastHealthHistory == "yes",
+                Details = model.PastHealthResponses != null ? string.Join("; ", model.PastHealthResponses.Values) : null
+            };
+            _db.ResponsePastHealth.Add(pastHealth);
+        }
+        #endregion
 
-        //        // 儲存藥物史
-        //        foreach (var detail in model.PastDrugsDetails)
-        //        {
-        //            var pastDrugs = new ResponsePastDrugs
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                MedicationName = detail.ItemZh,
-        //                IsUsed = detail.IsUsed == "yes",
-        //                OtherDrugs = detail.OtherDrugs,
-        //                TUE = model.TUE == "yes"
-        //            };
-        //            _db.ResponsePastDrugs.Add(pastDrugs);
-        //        }
+        #region  儲存 AllergicHistory (過敏史)
+        private void SaveAllergicHistory(QuestionnaireViewModel model, int responseId)
+        {
+            if (model.AllergicHistoryItems != null)
+            {
+                foreach (var item in model.AllergicHistoryItems)
+                {
+                    var allergicHistory = new ResponseAllergicHistory
+                    {
+                        QuestionnaireResponseID = responseId,
+                        AllergyType = item.ItemZh,
+                        Details = model.AllergicHistoryResponses.ContainsKey(item.ID.ToString())
+                                  ? model.AllergicHistoryResponses[item.ID.ToString()]
+                                  : null
+                    };
+                    _db.ResponseAllergicHistory.Add(allergicHistory);
+                }
+            }
+        }
 
-        //        // 儲存營養品
-        //        foreach (var detail in model.PastSupplementsDetails)
-        //        {
-        //            var supplement = new ResponseSupplements
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                ItemZh = detail.ItemZh,
-        //                IsUsed = detail.IsUsed == "yes",
-        //                OtherSupplements = detail.OtherSupplements
-        //            };
-        //            _db.ResponseSupplements.Add(supplement);
-        //        }
+        #endregion
 
-        //        // 儲存女性問卷
-        //        if (model.Gender == 2)
-        //        {
-        //            foreach (var detail in model.FemaleQuestionnaireDetails)
-        //            {
-        //                var femaleQuestionnaire = new ResponseFemaleQuestionnaire
-        //                {
-        //                    QuestionnaireResponseId = response.Id,
-        //                    QuestionZh = detail.QuestionZh,
-        //                    QuestionEn = detail.QuestionEn,
-        //                    DisplayAnswer = detail.Answer
-        //                };
-        //                _db.ResponseFemaleQuestionnaire.Add(femaleQuestionnaire);
-        //            }
-        //        }
+        #region 儲存 FamilyHistory (家族病史)
+        private void SaveFamilyHistory(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.FamilyHistoryItems)
+            {
+                var familyHistory = new ResponseFamilyHistory
+                {
+                    QuestionnaireResponseID = responseId,
+                    Disease = item.GeneralPartsZh,
+                    Status = item.IsYes ? "Yes" : item.IsNo ? "No" : "Unknown"
+                };
+                _db.ResponseFamilyHistory.Add(familyHistory);
+            }
 
-        //        // 儲存傷害狀況
-        //        foreach (var injury in model.NowInjuryDetails)
-        //        {
-        //            var responseInjury = new ResponseInjury
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                InjuryPart = injury.InjuryPart,
-        //                LeftSide = injury.LeftSide,
-        //                RightSide = injury.RightSide,
-        //                InjuryTypes = string.Join(",", injury.InjuryTypes),
-        //                TreatmentMethods = string.Join(",", model.NowTreatmentDetails.Select(t => t.Method)),
-        //                IsCurrent = true
-        //            };
-        //            _db.ResponseInjury.Add(responseInjury);
-        //        }
+            if (!string.IsNullOrEmpty(model.OtherFamilyHistory))
+            {
+                _db.ResponseFamilyHistory.Add(new ResponseFamilyHistory
+                {
+                    QuestionnaireResponseID = responseId,
+                    Disease = "其他",
+                    Status = model.OtherFamilyHistory
+                });
+            }
+        }
 
-        //        foreach (var injury in model.PastInjuryDetails)
-        //        {
-        //            var responseInjury = new ResponseInjury
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                InjuryPart = injury.PastInjuryPart,
-        //                LeftSide = injury.LeftSide,
-        //                RightSide = injury.RightSide,
-        //                InjuryTypes = string.Join(",", injury.InjuryTypes),
-        //                TreatmentMethods = string.Join(",", model.PastTreatmentDetails.Select(t => t.Method)),
-        //                IsCurrent = false
-        //            };
-        //            _db.ResponseInjury.Add(responseInjury);
-        //        }
+        #endregion
 
-        //        // 儲存心血管篩檢
-        //        foreach (var detail in model.CardiovascularScreeningDetails)
-        //        {
-        //            var cardiovascularScreening = new ResponseCardiovascularScreening
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                Question = detail.Question,
-        //                Answer = detail.Answer
-        //            };
-        //            _db.ResponseCardiovascularScreening.Add(cardiovascularScreening);
-        //        }
+        #region 儲存 PastHistory (過去病史)
+        private void SavePastHistory(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.PastHistoryItems)
+            {
+                var pastHistory = new ResponsePastHistory
+                {
+                    QuestionnaireResponseID = responseId,
+                    Disease = item.GeneralPartsZh,
+                    Status = item.IsYes ? "Yes" : item.IsNo ? "No" : "Unknown"
+                };
+                _db.ResponsePastHistory.Add(pastHistory);
+            }
+        }
 
-        //        // 儲存腦震盪篩檢-選手
-        //        foreach (var detail in model.ConcussionScreeningDetails)
-        //        {
-        //            var concussionScreening = new ResponseConcussionScreening
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                Question = detail.Question,
-        //                Answer = detail.Answer
-        //            };
-        //            _db.ResponseConcussionScreening.Add(concussionScreening);
-        //        }
+        #endregion
 
-        //        // 儲存症狀自我評估-選手
-        //        foreach (var detail in model.SymptomEvaluationDetails)
-        //        {
-        //            var symptomEvaluation = new ResponseSymptomEvaluation
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                Symptom = detail.SymptomItem,
-        //                Score = detail.Score
-        //            };
-        //            _db.ResponseSymptomEvaluation.Add(symptomEvaluation);
-        //        }
+        #region 儲存 PresentIllness (現在病史)
+        private void SavePresentIllness(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.PresentIllnessItems)
+            {
+                var presentIllness = new ResponsePresentIllness
+                {
+                    QuestionnaireResponseID = responseId,
+                    BodyPart = item.PartsOfBodyZh,
+                    HasIssue = item.IsYes,
+                    ReceivingTherapy = item.IsYes
+                };
+                _db.ResponsePresentIllness.Add(presentIllness);
+            }
+        }
 
-        //        // 儲存骨科篩檢
-        //        foreach (var detail in model.OrthopaedicScreeningDetails)
-        //        {
-        //            var orthopaedicScreening = new ResponseOrthopaedicScreening
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                ObservationPoints = detail.ObservationPoints,
-        //                Result = detail.Result
-        //            };
-        //            _db.ResponseOrthopaedicScreening.Add(orthopaedicScreening);
-        //        }
+        #endregion
 
-        //        #region 認知篩檢 - 定位
-        //        foreach (var detail in model.CognitiveScreeningDetails)
-        //        {
-        //            var orientation = new ResponseOrientation
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                Question = detail.Question,
-        //                OrientationScore = detail.OrientationScore
-        //            };
-        //            _db.ResponseOrientation.Add(orientation);
-        //        }
-        //        #endregion
+        #region 儲存 PastDrugs (藥物史)
+        private void SavePastDrugs(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.PastDrugsItems)
+            {
+                var pastDrugs = new ResponsePastDrugs
+                {
+                    QuestionnaireResponseID = responseId,
+                    DrugName = item.ItemZh,
+                    Used = item.IsUsed
+                };
+                _db.ResponsePastDrugs.Add(pastDrugs);
+            }
+        }
 
-        //        #region 認知篩檢 - 短期記憶
-        //        foreach (var detail in model.ImmediateMemoryDetails)
-        //        {
-        //            var immediateMemory = new ResponseImmediateMemory
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                Word = detail.Word,
-        //                FirstTestScore = detail.FirstTestScore,
-        //                SecondTestScore = detail.SecondTestScore,
-        //                ThirdTestScore = detail.ThirdTestScore
-        //            };
-        //            _db.ResponseImmediateMemory.Add(immediateMemory);
-        //        }
-        //        #endregion
+        #endregion
 
-        //        #region 認知篩檢 - 專注力
-        //        foreach (var detail in model.ConcentrationDetails)
-        //        {
-        //            var concentration = new ResponseConcentration
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                ListA = detail.ListA,
-        //                ListB = detail.ListB,
-        //                ListC = detail.ListC,
-        //                Response = detail.Score == 1 ? "Y" : "N",
-        //                Score = detail.Score
-        //            };
-        //            _db.ResponseConcentration.Add(concentration);
-        //        }
-        //        #endregion
+        #region 儲存 PastSupplements (營養品)
+        private void SavePastSupplements(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.PastSupplementsItems)
+            {
+                var pastSupplements = new ResponsePastSupplements
+                {
+                    QuestionnaireResponseID = responseId,
+                    SupplementName = item.ItemZh,
+                    Used = item.IsUsed
+                };
+                _db.ResponsePastSupplements.Add(pastSupplements);
+            }
+        }
 
-        //        #region 認知篩檢 - 協調與平衡測驗
-        //        foreach (var detail in model.CoordinationAndBalanceDetails)
-        //        {
-        //            var coordinationAndBalance = new ResponseCoordinationAndBalance
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                TestFoot = detail.TestFoot,
-        //                TestSurface = detail.TestSurface,
-        //                Footwear = detail.Footwear,
-        //                DoubleLegError = detail.DoubleLegError,
-        //                TandemError = detail.TandemError,
-        //                SingleLegError = detail.SingleLegError,
-        //                FirstTime = detail.FirstTime,
-        //                SecondTime = detail.SecondTime,
-        //                ThirdTime = detail.ThirdTime,
-        //                TotalErrors = detail.TotalErrors,
-        //                AverageTime = detail.AverageTimes,
-        //                FastestTime = detail.FastestTimes
-        //            };
-        //            _db.ResponseCoordinationAndBalance.Add(coordinationAndBalance);
-        //        }
-        //        #endregion
+        #endregion
 
-        //        #region 認知篩檢 - 延遲記憶
-        //        foreach (var detail in model.DelayedRecallDetails)
-        //        {
-        //            var delayedRecall = new ResponseDelayedRecall
-        //            {
-        //                QuestionnaireResponseId = response.Id,
-        //                OrderNumber = detail.OrderNumber,
-        //                Word = detail.Word,
-        //                Score = detail.Score
-        //            };
-        //            _db.ResponseDelayedRecall.Add(delayedRecall);
-        //        }
-        //        #endregion
+        #region 儲存 FemaleQuestionnaire (女性問卷)
+        private void SaveFemaleQuestionnaire(QuestionnaireViewModel model, int responseId)
+        {
+            // 如果填寫者不是女性 (GenderID != 2)，就不存這張表
+            if (model.Gender != 2)
+            {
+                return;
+            }
 
-        //        #region 認知篩檢 - 分數總和
-        //        var totalScores = new ResponseTotalScores
-        //        {
-        //            QuestionnaireResponseId = response.Id,
-        //            OrientationScore = model.CognitiveScreeningTotalScore,
-        //            ImmediateMemoryScore = model.ImmediateMemoryTotalScore,
-        //            ConcentrationScore = model.ConcentrationTotalScore,
-        //            DelayedRecallScore = model.DelayedRecallTotalScore,
-        //        };
-        //        _db.ResponseTotalScores.Add(totalScores);
-        //        #endregion
+            foreach (var item in model.FemaleQuestionnaireItems)
+            {
+                var answer = model.FemaleQuestionnaireAnswers.ContainsKey(item.ID)
+                    ? model.FemaleQuestionnaireAnswers[item.ID]
+                    : null; // 若無回答，則存入 NULL
 
-        //        _db.SaveChanges(); // 儲存所有變更
+                var femaleQuestionnaire = new ResponseFemaleQuestionnaire
+                {
+                    QuestionnaireResponseID = responseId,
+                    Question = item.QuestionZh,  // 存問題
+                    Answer = answer              // 存答案，若為 null 就不影響
+                };
 
-        //        TempData["SuccessMessage"] = "問卷資料已成功送出！";
-        //        return RedirectToAction("Preview");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TempData["ErrorMessage"] = "發生錯誤：" + ex.Message;
-        //        return RedirectToAction("Preview", model);
-        //    }
-        //}
+                _db.ResponseFemaleQuestionnaire.Add(femaleQuestionnaire);
+            }
+        }
+        #endregion
+
+        #region 儲存 PastInjury (過去傷害狀況 - 已復原)
+        private void SavePastInjury(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.PastInjuryItems)
+            {
+                var pastInjury = new ResponsePastInjuries
+                {
+                    QuestionnaireResponseID = responseId,
+                    BodyPart = item.PastInjuryPart,
+                    Side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown",
+                    InjuryType = model.PastInjuryTypes.Any() ? string.Join(", ", model.PastInjuryTypes.Select(x => x.InjuryName)) : null,
+                    Recovered = true, // 因為是過去傷害，所以已恢復
+                    Treatment = model.PastTreatmentItems.Any() ? string.Join(", ", model.PastTreatmentItems.Select(x => x.Method)) : null
+                };
+                _db.ResponsePastInjuries.Add(pastInjury);
+            }
+        }
+
+        #endregion
+
+        #region 儲存 CurrentInjury (目前傷害狀況)
+        private void SaveCurrentInjury(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.CurrentInjuryItems)
+            {
+                var currentInjury = new ResponseCurrentInjuries
+                {
+                    QuestionnaireResponseID = responseId,
+                    BodyPart = item.CurrentInjuryPart,
+                    Side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown",
+                    InjuryType = model.CurrentInjuryTypes.Any() ? string.Join(", ", model.CurrentInjuryTypes.Select(x => x.InjuryName)) : null,
+                    Treatment = model.CurrentTreatmentItems.Any() ? string.Join(", ", model.CurrentTreatmentItems.Select(x => x.Method)) : null
+                };
+                _db.ResponseCurrentInjuries.Add(currentInjury);
+            }
+        }
+
+        #endregion
+
+        #region 儲存 Cardiovascular Screening (心血管篩檢)
+        private void SaveCardiovascularScreening(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.CardiovascularScreeningItems)
+            {
+                var cardioScreening = new ResponseCardiovascularScreening
+                {
+                    QuestionnaireResponseID = responseId,
+                    QuestionNumber = item.Id,
+                    Question = item.Question,
+                    Answer = item.Response.HasValue ? item.Response.Value : false
+                };
+                _db.ResponseCardiovascularScreening.Add(cardioScreening);
+            }
+        }
+
+        #endregion
+
+        #region 儲存 Concussion Screening (腦震盪篩檢 - 選手自填)
+        private void SaveConcussionScreening(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.ConcussionScreeningItems)
+            {
+                var concussionScreening = new ResponseConcussionScreening
+                {
+                    QuestionnaireResponseID = responseId,
+                    QuestionNumber = item.Id,
+                    Question = item.Question,
+                    Answer = model.ConcussionScreeningAnswers.ContainsKey(item.Id) && model.ConcussionScreeningAnswers[item.Id] == "是"
+                };
+                _db.ResponseConcussionScreening.Add(concussionScreening);
+            }
+
+            // 儲存藥物與備註
+            _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
+            {
+                QuestionnaireResponseID = responseId,
+                QuestionNumber = 0, // 表示這是額外資訊
+                Question = "是否服用藥物",
+                Answer = model.ConcussionScreeningMedicationAnswer == "是"
+            });
+
+            if (!string.IsNullOrEmpty(model.ConcussionScreeningMedicationDetails))
+            {
+                _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
+                {
+                    QuestionnaireResponseID = responseId,
+                    QuestionNumber = 0,
+                    Question = "服用藥物細節",
+                    Answer = true
+                });
+            }
+
+            if (!string.IsNullOrEmpty(model.ConcussionScreeningNotes))
+            {
+                _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
+                {
+                    QuestionnaireResponseID = responseId,
+                    QuestionNumber = 0,
+                    Question = "備註",
+                    Answer = true
+                });
+            }
+        }
+
+        #endregion
+
+        #region 儲存 Symptom Evaluation (症狀評估 0-6分)
+        private void SaveSymptomEvaluation(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.SymptomEvaluationItems)
+            {
+                var symptomEvaluation = new ResponseSymptomEvaluation
+                {
+                    QuestionnaireResponseID = responseId,
+                    Symptom = item.SymptomItem,
+                    Severity = model.SymptomEvaluationAnswers.ContainsKey(item.ID) ? model.SymptomEvaluationAnswers[item.ID] : 0
+                };
+                _db.ResponseSymptomEvaluation.Add(symptomEvaluation);
+            }
+        }
+
+        #endregion
+
+        #region 儲存 Orthopaedic Screening (骨科篩檢)
+        private void SaveOrthopaedicScreening(QuestionnaireViewModel model, int responseId)
+        {
+            foreach (var item in model.OrthopaedicScreeningItems)
+            {
+                var orthoScreening = new ResponseOrthopaedicScreening
+                {
+                    QuestionnaireResponseID = responseId,
+                    TestNumber = item.Id,
+                    TestName = item.Instructions,
+                    Observation = item.ObservationPoints,
+                    Result = item.Response.HasValue ? (item.Response.Value ? "Normal" : "Abnormal") : "Unknown"
+                };
+                _db.ResponseOrthopaedicScreening.Add(orthoScreening);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region 問卷完成頁

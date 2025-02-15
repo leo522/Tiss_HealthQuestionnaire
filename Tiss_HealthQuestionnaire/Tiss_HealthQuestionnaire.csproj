@@ -268,9 +268,6 @@
     <Compile Include="Models\QuestionnaireResponseDetails.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuestionnaireResponses.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
     <Compile Include="Models\QuestionnaireType.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -279,40 +276,19 @@
     <Compile Include="Models\ResponseAllergicHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResponseAllergicHistoryDetails.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ResponseCardiovascularScreening.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseConcentration.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseConcussionMedication.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResponseConcussionScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResponseCoordinationAndBalance.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseDelayedRecall.cs">
+    <Compile Include="Models\ResponseCurrentInjuries.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResponseFamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResponseFemaleQuestionnaire.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseImmediateMemory.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseInjury.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseOrientation.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResponseOrthopaedicScreening.cs">
@@ -324,22 +300,19 @@
     <Compile Include="Models\ResponsePastHealth.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResponsePastHealthDetails.cs">
+    <Compile Include="Models\ResponsePastHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResponsePastHistory.cs">
+    <Compile Include="Models\ResponsePastInjuries.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponsePastSupplements.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResponsePresentIllness.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResponseSupplements.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ResponseSymptomEvaluation.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ResponseTotalScores.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SurgeryHistory.cs">

@@ -14,12 +14,11 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponseSymptomEvaluation
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
         public string Symptom { get; set; }
-        public int Score { get; set; }
+        public int Severity { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

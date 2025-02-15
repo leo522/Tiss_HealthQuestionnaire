@@ -12,16 +12,16 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ResponseConcentration
+    public partial class ResponsePastInjuries
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public string ListA { get; set; }
-        public string ListB { get; set; }
-        public string ListC { get; set; }
-        public string Response { get; set; }
-        public int Score { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string BodyPart { get; set; }
+        public string Side { get; set; }
+        public string InjuryType { get; set; }
+        public bool Recovered { get; set; }
+        public string Treatment { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

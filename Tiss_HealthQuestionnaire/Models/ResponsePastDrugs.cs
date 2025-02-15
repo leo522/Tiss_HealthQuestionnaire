@@ -14,13 +14,12 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponsePastDrugs
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public string MedicationName { get; set; }
-        public bool IsUsed { get; set; }
-        public string OtherDrugs { get; set; }
-        public bool TUE { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string DrugName { get; set; }
+        public bool Used { get; set; }
+        public Nullable<bool> HasTUE { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

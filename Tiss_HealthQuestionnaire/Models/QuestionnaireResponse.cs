@@ -18,6 +18,20 @@ namespace Tiss_HealthQuestionnaire.Models
         public QuestionnaireResponse()
         {
             this.QuestionnaireResponseDetails = new HashSet<QuestionnaireResponseDetails>();
+            this.ResponseAllergicHistory = new HashSet<ResponseAllergicHistory>();
+            this.ResponseCardiovascularScreening = new HashSet<ResponseCardiovascularScreening>();
+            this.ResponseConcussionScreening = new HashSet<ResponseConcussionScreening>();
+            this.ResponseCurrentInjuries = new HashSet<ResponseCurrentInjuries>();
+            this.ResponseFamilyHistory = new HashSet<ResponseFamilyHistory>();
+            this.ResponseFemaleQuestionnaire = new HashSet<ResponseFemaleQuestionnaire>();
+            this.ResponseOrthopaedicScreening = new HashSet<ResponseOrthopaedicScreening>();
+            this.ResponsePastDrugs = new HashSet<ResponsePastDrugs>();
+            this.ResponsePastHealth = new HashSet<ResponsePastHealth>();
+            this.ResponsePastHistory = new HashSet<ResponsePastHistory>();
+            this.ResponsePastInjuries = new HashSet<ResponsePastInjuries>();
+            this.ResponsePastSupplements = new HashSet<ResponsePastSupplements>();
+            this.ResponsePresentIllness = new HashSet<ResponsePresentIllness>();
+            this.ResponseSymptomEvaluation = new HashSet<ResponseSymptomEvaluation>();
         }
     
         public int ID { get; set; }
@@ -31,5 +45,33 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual Gender Gender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseAllergicHistory> ResponseAllergicHistory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseCardiovascularScreening> ResponseCardiovascularScreening { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseConcussionScreening> ResponseConcussionScreening { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseCurrentInjuries> ResponseCurrentInjuries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseFamilyHistory> ResponseFamilyHistory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseFemaleQuestionnaire> ResponseFemaleQuestionnaire { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseOrthopaedicScreening> ResponseOrthopaedicScreening { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastDrugs> ResponsePastDrugs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastHealth> ResponsePastHealth { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastHistory> ResponsePastHistory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastInjuries> ResponsePastInjuries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastSupplements> ResponsePastSupplements { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePresentIllness> ResponsePresentIllness { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseSymptomEvaluation> ResponseSymptomEvaluation { get; set; }
     }
 }

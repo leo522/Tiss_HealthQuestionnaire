@@ -12,15 +12,13 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ResponseImmediateMemory
+    public partial class ResponsePastSupplements
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public string Word { get; set; }
-        public Nullable<int> FirstTestScore { get; set; }
-        public Nullable<int> SecondTestScore { get; set; }
-        public Nullable<int> ThirdTestScore { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string SupplementName { get; set; }
+        public bool Used { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

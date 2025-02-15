@@ -14,12 +14,12 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponseConcussionScreening
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public int QuestionNumber { get; set; }
         public string Question { get; set; }
-        public string Answer { get; set; }
+        public bool Answer { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

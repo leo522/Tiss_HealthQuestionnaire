@@ -14,13 +14,11 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class ResponseFamilyHistory
     {
-        public int Id { get; set; }
-        public int QuestionnaireResponseId { get; set; }
-        public string GeneralPartsZh { get; set; }
-        public string GeneralPartsEn { get; set; }
-        public string FamilyHistoryOption { get; set; }
-        public string OtherFamilyHistory { get; set; }
+        public int ID { get; set; }
+        public int QuestionnaireResponseID { get; set; }
+        public string Disease { get; set; }
+        public string Status { get; set; }
     
-        public virtual QuestionnaireResponses QuestionnaireResponses { get; set; }
+        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }
