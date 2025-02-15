@@ -360,20 +360,30 @@
                                                 else if (question.ID == 2)  // 是否曾經連續 3 個月未來生理週期 (是/否)
                                                 {
                                                     <label>
-                                                        <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是
+                                                        <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio h-5 w-5"> 是
                                                     </label>
-                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio"> 否</label>
+                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio h-5 w-5"> 否</label>
                                                 }
                                                 else if (question.ID == 3)  // 生理週期是否規律 (是/否/目前無生理週期)
                                                 {
-                                                    <label><input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是</label>
-                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no"> 否</label>
-                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="none" class="required-radio"> 目前無生理週期</label>
+                                                    <label>
+                                                        <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio h-5 w-5"> 是
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="femaleQ_@question.ID" value="no" class="h-5 w-5"> 否
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="femaleQ_@question.ID" value="none" class="required-radio h-5 w-5"> 目前無生理週期
+                                                    </label>
                                                 }
                                                 else if (question.ID == 4)  // 是否曾接受過賀爾蒙治療 (是/否)
                                                 {
-                                                    <label><input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio"> 是</label>
-                                                    <label class="ml-2"><input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio"> 否</label>
+                                                    <label>
+                                                        <input type="radio" name="femaleQ_@question.ID" value="yes" class="required-radio h-5 w-5"> 是
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="femaleQ_@question.ID" value="no" class="required-radio h-5 w-5"> 否
+                                                    </label>
                                                 }
                                             </td>
                                         </tr>
@@ -429,7 +439,7 @@
                         <!-- 傷勢類型 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">傷勢類型</h3>
-                            <select name="SelectedInjuryTypes" class="w-full border border-gray-300 p-2 rounded h-5 w-5">
+                            <select name="SelectedInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
                                 <option value="">請選擇傷勢類型</option>
                                 @foreach (var injury in Model.PastInjuryTypes)
                                 {
@@ -494,7 +504,7 @@
                         <!-- 傷勢類型 - 使用 Select 選單 -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">傷勢類型</h3>
-                            <select name="SelectedCurrentInjuryTypes" class="w-full border border-gray-300 p-2 rounded h-5 w-5">
+                            <select name="SelectedCurrentInjuryTypes" class="w-full border border-gray-300 p-2 rounded">
                                 <option value="">請選擇傷勢類型</option>
                                 @foreach (var injury in Model.CurrentInjuryTypes)
                                 {
