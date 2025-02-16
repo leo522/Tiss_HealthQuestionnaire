@@ -54,7 +54,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     PastHealthItems = _db.PastHealth.ToList(),
                     AllergicHistoryItems = _db.AllergicHistory.ToList(),
-                    FamilyHistoryItems = _db.FamilyHistory.ToList() ?? new List<FamilyHistory>(),
+                    FamilyHistoryItems = _db.FamilyHistory.ToList(),
                     PastHistoryItems = _db.PastHistory.ToList(),
                     PresentIllnessItems = _db.PresentIllness.ToList(),
                     PastDrugsItems = _db.PastDrugs.ToList(),
@@ -776,58 +776,125 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 家族病史
         private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            model.FamilyHistoryItems = _db.FamilyHistory.ToList() ?? new List<FamilyHistory>();
-
-            foreach (var item in model.FamilyHistoryItems)
+            if (model.FamilyHistoryItems == null)
             {
-                var selectedValue = form[$"familyHistory_{item.ID}"];
-
-                item.IsYes = selectedValue == "yes";
-                item.IsNo = selectedValue == "no";
-                item.IsUnknown = selectedValue == "unknown";
-
-                // 特別處理 "其他" 選項
-                if (item.ID == 10) // "其他" 的 ID 為 10
-                {
-                    model.OtherFamilyHistory = form["otherFamilyHistory"]?.Trim() ?? ""; // 存到獨立的屬性
-                }
+                model.FamilyHistoryItems = new List<FamilyHistory>();
             }
+            else
+            {
+                model.FamilyHistoryItems.Clear();
+            }
+
+            int i = 0;
+            while (form[$"FamilyHistoryItems[{i}].ID"] != null)
+            {
+                int id = int.Parse(form[$"FamilyHistoryItems[{i}].ID"]);
+                string generalPartsZh = form[$"FamilyHistoryItems[{i}].GeneralPartsZh"];
+                string option = form[$"FamilyHistoryItems[{i}].FamilyHistoryOption"];
+
+                bool isYes = option == "yes";
+                bool isNo = option == "no";
+                bool isUnknown = option == "unknown";
+
+                model.FamilyHistoryItems.Add(new FamilyHistory
+                {
+                    ID = id,
+                    GeneralPartsZh = generalPartsZh,
+                    IsYes = isYes,
+                    IsNo = isNo,
+                    IsUnknown = isUnknown
+                });
+
+                i++;
+            }
+
+            model.OtherFamilyHistory = form["OtherFamilyHistory"]?.Trim() ?? "";
         }
+
+        //private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
+        //{
+        //    model.FamilyHistoryItems = new List<FamilyHistory>();
+
+        //    foreach (var item in model.FamilyHistoryItems)
+        //    {
+        //        var selectedValue = form[$"familyHistory_{item.ID}"];
+
+        //        item.IsYes = selectedValue == "yes";
+        //        item.IsNo = selectedValue == "no";
+        //        item.IsUnknown = selectedValue == "unknown";
+
+        //        // 特別處理 "其他" 選項
+        //        if (item.ID == 10) // "其他" 的 ID 為 10
+        //        {
+        //            model.OtherFamilyHistory = form["otherFamilyHistory"]?.Trim() ?? ""; // 存到獨立的屬性
+        //        }
+        //    }
+        //}
         #endregion
 
         #region 過去病史
         private void ProcessPastHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PastHistoryItems = _db.PastHistory.ToList();
-
-            foreach (var item in model.PastHistoryItems)
+            if (model.PastHistoryItems == null)
             {
-                var selectedValue = form[$"pastHistory_{item.ID}"];
-
-                item.IsYes = selectedValue == "yes";
-                item.IsNo = selectedValue == "no";
-                item.IsUnknown = selectedValue == "unknown";
-
-                // 處理 "其他" 選項 (假設 "其他" 的 ID 是 20)
-                if (item.ID == 20)
-                {
-                    model.OtherPastHistory = form["otherPastHistory"]?.Trim() ?? "";
-                }
+                model.PastHistoryItems = new List<PastHistory>();
             }
+            else
+            {
+                model.PastHistoryItems.Clear(); // **先清除舊數據，避免重複累加**
+            }
+
+            int i = 0;
+            while (form[$"PastHistoryItems[{i}].ID"] != null)
+            {
+                int id = int.Parse(form[$"PastHistoryItems[{i}].ID"]);
+                string generalPartsZh = form[$"PastHistoryItems[{i}].GeneralPartsZh"];
+                string option = form[$"PastHistoryItems[{i}].PastHistoryOption"];
+
+                model.PastHistoryItems.Add(new PastHistory
+                {
+                    ID = id,
+                    GeneralPartsZh = generalPartsZh,
+                    IsYes = option == "yes",
+                    IsNo = option == "no",
+                    IsUnknown = option == "unknown"
+                });
+
+                i++;
+            }
+
+            model.OtherPastHistory = form["OtherPastHistory"]?.Trim() ?? "";
         }
         #endregion
 
         #region 現在病史
         private void ProcessPresentIllness(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PresentIllnessItems = _db.PresentIllness.ToList();
-
-            foreach (var item in model.PresentIllnessItems)
+            if (model.PresentIllnessItems == null)
             {
-                var selectedValue = form[$"presentIllness_{item.ID}"];
+                model.PresentIllnessItems = new List<PresentIllness>();
+            }
+            else
+            {
+                model.PresentIllnessItems.Clear(); // **先清除舊數據，避免重複累加**
+            }
 
-                item.IsYes = selectedValue == "yes";
-                item.IsNo = selectedValue == "no";
+            int i = 0;
+            while (form[$"PresentIllnessItems[{i}].ID"] != null)
+            {
+                int id = int.Parse(form[$"PresentIllnessItems[{i}].ID"]);
+                string partsOfBodyZh = form[$"PresentIllnessItems[{i}].PartsOfBodyZh"];
+                string option = form[$"PresentIllnessItems[{i}].ReceivingTherapy"];
+
+                model.PresentIllnessItems.Add(new PresentIllness
+                {
+                    ID = id,
+                    PartsOfBodyZh = partsOfBodyZh,
+                    IsYes = option == "yes",
+                    IsNo = option == "no"
+                });
+
+                i++;
             }
         }
         #endregion
@@ -835,31 +902,34 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 藥物史
         private void ProcessPastDrugs(QuestionnaireViewModel model, FormCollection form)
         {
-            var pastDrugsItems = _db.PastDrugs.ToList();
-            model.PastDrugsItems = new List<PastDrugs>();
-
-            foreach (var item in pastDrugsItems)
+            if (model.PastDrugsItems == null)
             {
-                bool isUsed = form[$"drug_{item.ID}"] == "on";
-                if (isUsed)
+                model.PastDrugsItems = new List<PastDrugs>();
+            }
+            else
+            {
+                model.PastDrugsItems.Clear(); // **先清除舊數據，避免重複累加**
+            }
+
+            int i = 0;
+            while (form[$"PastDrugsItems[{i}].ID"] != null)
+            {
+                int id = int.Parse(form[$"PastDrugsItems[{i}].ID"]);
+                string itemZh = form[$"PastDrugsItems[{i}].ItemZh"];
+                bool isUsed = form[$"PastDrugsItems[{i}].IsUsed"] == "true";
+
+                model.PastDrugsItems.Add(new PastDrugs
                 {
-                    var drug = new PastDrugs
-                    {
-                        ID = item.ID,
-                        ItemZh = item.ItemZh,
-                        ItemEn = item.ItemEn,
-                        IsUsed = true
-                    };
+                    ID = id,
+                    ItemZh = itemZh,
+                    IsUsed = isUsed
+                });
 
-                    model.PastDrugsItems.Add(drug);
-                }
+                i++;
             }
 
-            if (!string.IsNullOrEmpty(form["OtherDrug"]))
-            {
-                model.OtherDrug = form["OtherDrug"];
-            }
-
+            // 處理其他藥物選項
+            model.OtherDrug = form["OtherDrug"] ?? "";
             model.TUE = form["TUE"] ?? "未填寫";  // 如果沒填寫則顯示 "未填寫"
         }
         #endregion
@@ -867,56 +937,65 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 營養品
         private void ProcessPastSupplements(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PastSupplementsItems = new List<PastSupplements>();
-
-            var supplementsItems = _db.PastSupplements.ToList();
-
-            foreach (var item in supplementsItems)
+            if (model.PastSupplementsItems == null)
             {
+                model.PastSupplementsItems = new List<PastSupplements>();
+            }
+            else
+            {
+                model.PastSupplementsItems.Clear(); // **先清除舊數據，避免重複累加**
+            }
 
-                bool isUsed = form[$"supplement_{item.ID}"] == "on"; //表單名稱抓取方式 (supplement_@item.ID)
+            int i = 0;
+            while (form[$"PastSupplementsItems[{i}].ID"] != null)
+            {
+                int id = int.Parse(form[$"PastSupplementsItems[{i}].ID"]);
+                string itemZh = form[$"PastSupplementsItems[{i}].ItemZh"];
+                bool isUsed = form[$"PastSupplementsItems[{i}].IsUsed"] == "true";
 
-                if (isUsed)
+                model.PastSupplementsItems.Add(new PastSupplements
                 {
-                    var supplement = new PastSupplements
-                    {
-                        ID = item.ID,
-                        ItemZh = item.ItemZh,
-                        ItemEn = item.ItemEn,
-                        IsUsed = true
-                    };
+                    ID = id,
+                    ItemZh = itemZh,
+                    IsUsed = isUsed
+                });
 
-                    model.PastSupplementsItems.Add(supplement);
-                }
+                i++;
             }
-            if (!string.IsNullOrEmpty(form["OtherSupplements"]))
-            {
-                model.OtherSupplements = form["OtherSupplements"];
-            }
+
+            // 處理 "其他 (Others)" 選項
+            model.OtherSupplements = form["OtherSupplements"] ?? "";
         }
         #endregion
 
         #region 女性問卷
         private void ProcessFemaleQuestionnaire(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.Gender == 2) // 只有女性才處理
+            if (model.Gender != 2) // 只有女性才處理
             {
-                model.FemaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList(); // 取得所有女性問卷題目
-                model.FemaleQuestionnaireAnswers = new Dictionary<int, string>(); // 確保初始化
+                return;
+            }
 
-                foreach (var item in model.FemaleQuestionnaireItems)
-                {
-                    string answerKey = $"femaleQ_{item.ID}"; // 與 HTML name 對應
-                    string answer = form[answerKey] ?? "未回答"; // 取得使用者填寫的答案
+            if (model.FemaleQuestionnaireItems == null)
+            {
+                model.FemaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
+            }
 
-                    // 第一題 (第一次生理期時間) 需要處理選項
-                    if (item.ID == 1)
-                    {
-                        answer = form["femaleQ_1"] ?? "未填寫"; // 正確取得選擇的值
-                    }
+            if (model.FemaleQuestionnaireAnswers == null)
+            {
+                model.FemaleQuestionnaireAnswers = new Dictionary<int, string>();
+            }
+            else
+            {
+                model.FemaleQuestionnaireAnswers.Clear(); // **清除舊數據，避免重複填寫**
+            }
 
-                    model.FemaleQuestionnaireAnswers[item.ID] = answer; // 存入 Dictionary
-                }
+            foreach (var item in model.FemaleQuestionnaireItems)
+            {
+                string answerKey = $"FemaleQuestionnaireAnswers[{item.ID}]";
+                string answer = form[answerKey] ?? "未回答"; // 取得使用者填寫的答案
+
+                model.FemaleQuestionnaireAnswers[item.ID] = answer;
             }
         }
         #endregion
@@ -939,7 +1018,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去傷害狀況-傷勢部位
         private void ProcessPastInjuryParts(QuestionnaireViewModel model, FormCollection form)
         {
-            var pastInjuryItems = new List<QuestionnaireViewModel.PastInjuryStatusViewModel>();
+            model.PastInjuryItems = new List<QuestionnaireViewModel.PastInjuryStatusViewModel>(); // **確保初始化**
 
             var selectedLeftInjuries = form.GetValues("PastInjuryLeft")?.Select(int.Parse).ToList() ?? new List<int>();
             var selectedRightInjuries = form.GetValues("PastInjuryRight")?.Select(int.Parse).ToList() ?? new List<int>();
@@ -951,7 +1030,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 if (isLeft || isRight)
                 {
-                    pastInjuryItems.Add(new QuestionnaireViewModel.PastInjuryStatusViewModel
+                    model.PastInjuryItems.Add(new QuestionnaireViewModel.PastInjuryStatusViewModel
                     {
                         Id = injury.Id,
                         PastInjuryPart = injury.InjuryPart,
@@ -960,8 +1039,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
             }
-
-            model.PastInjuryItems = pastInjuryItems;
         }
         #endregion
 
@@ -996,7 +1073,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 目前傷害狀況-傷勢部位
         private void ProcessCurrentInjuryParts(QuestionnaireViewModel model, FormCollection form)
         {
-            var currentInjuryItems = new List<CurrentInjuryStatusViewModel>();
+            model.CurrentInjuryItems = new List<QuestionnaireViewModel.CurrentInjuryStatusViewModel>(); // **確保初始化**
 
             var selectedLeftInjuries = form.GetValues("CurrentInjuryLeft")?.Select(int.Parse).ToList() ?? new List<int>();
             var selectedRightInjuries = form.GetValues("CurrentInjuryRight")?.Select(int.Parse).ToList() ?? new List<int>();
@@ -1008,7 +1085,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 if (isLeft || isRight)
                 {
-                    currentInjuryItems.Add(new CurrentInjuryStatusViewModel
+                    model.CurrentInjuryItems.Add(new QuestionnaireViewModel.CurrentInjuryStatusViewModel
                     {
                         Id = injury.Id,
                         CurrentInjuryPart = injury.InjuryPart,
@@ -1017,8 +1094,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
             }
-
-            model.CurrentInjuryItems = currentInjuryItems;
         }
         #endregion
 
@@ -1038,24 +1113,26 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 心血管篩檢
         private void ProcessCardiovascularScreening(QuestionnaireViewModel model, FormCollection form)
         {
-            var screenings = _db.CardiovascularScreening.ToList();  // 取得題目
+            var screenings = _db.CardiovascularScreening.ToList(); // 取得所有心血管篩檢題目
             model.CardiovascularScreeningItems = new List<CardiovascularScreening>(); // 確保初始化
 
             foreach (var item in screenings)
             {
-                string answerKey = $"question_{item.Id}";  // 與 HTML input name 對應
-                string answer = form[answerKey];  // 取得使用者選擇的值 ("yes" / "no")
+                string answerKey = $"question_{item.Id}"; // 與 HTML input name 對應
+                string answer = form[answerKey]; // 取得使用者選擇的值 ("yes" / "no")
 
-                bool? response = null; // 預設為 null，避免 CS0029 錯誤
+                bool? response = null; // 預設為 null
 
-                if (answer == "yes") response = true;  // "yes" → true
-                else if (answer == "no") response = false;  // "no" → false
+                if (!string.IsNullOrEmpty(answer))
+                {
+                    response = answer == "yes"; // "yes" → true, "no" → false
+                }
 
                 model.CardiovascularScreeningItems.Add(new CardiovascularScreening
                 {
                     Id = item.Id,
                     Question = item.Question,
-                    Response = response  // 對應資料表的 `bit` (bool?)
+                    Response = response // 存入 `bit` (bool?)
                 });
             }
         }
@@ -1070,15 +1147,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
             foreach (var item in model.ConcussionScreeningItems)
             {
                 string answerKey = $"ConcussionQuestion_{item.Id}"; // 表單名稱對應
-                var answer = form[answerKey] ?? "no"; // 預設 "no"
+                string answer = form[answerKey] ?? "no"; // 預設 "no"
 
                 model.ConcussionScreeningAnswers[item.Id] = answer == "yes" ? "是" : "否"; // 轉換成中文
             }
 
             // 服用藥物 & 備註
             model.ConcussionScreeningMedicationAnswer = form["Medication"] == "yes" ? "是" : "否";
-            model.ConcussionScreeningMedicationDetails = form["MedicationDetails"] ?? "無";
-            model.ConcussionScreeningNotes = form["Notes"] ?? "無";
+            model.ConcussionScreeningMedicationDetails = form["MedicationDetails"]?.Trim() ?? "無";
+            model.ConcussionScreeningNotes = form["Notes"]?.Trim() ?? "無";
         }
         #endregion
 
@@ -1093,12 +1170,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 string scoreKey = $"SymptomScore_{item.ID}"; // 表單名稱對應
                 int score = 0; // 預設分數為 0
 
-                if (!string.IsNullOrEmpty(form[scoreKey]))
+                if (form.AllKeys.Contains(scoreKey) && !string.IsNullOrEmpty(form[scoreKey]))
                 {
                     int.TryParse(form[scoreKey], out score); // 轉換為 int
                 }
 
-                model.SymptomEvaluationAnswers[item.ID] = score; // 存入 Dictionary
+                // **手動限制分數範圍**
+                if (score < 0) score = 0;
+                if (score > 6) score = 6;
+
+                model.SymptomEvaluationAnswers[item.ID] = score;
             }
         }
         #endregion
@@ -1111,21 +1192,24 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var screenings = _db.OrthopaedicScreening.ToList(); // 取得所有骨科篩檢題目
             foreach (var item in screenings)
             {
-                string resultKey = $"Result_{item.Id}"; // 表單對應的 key
-                string answer = form[resultKey]; // 使用者選擇的值 ("normal" / "abnormal")
+                string resultKey = $"Result_{item.Id}"; // 表單名稱對應
+                string answer = form[resultKey]; // 取得使用者選擇的值 ("normal" / "abnormal")
 
-                bool? response = null; // 預設為 null 避免 CS0029 錯誤
-                if (answer == "normal") response = true;  // "正常" → `true`
-                else if (answer == "abnormal") response = false;  // "異常" → `false`
+                bool? response = null;
+                if (!string.IsNullOrEmpty(answer))
+                {
+                    if (answer == "normal") response = true;
+                    else if (answer == "abnormal") response = false;
+                }
 
                 model.OrthopaedicScreeningItems.Add(new OrthopaedicScreening
                 {
                     Id = item.Id,
                     Instructions = item.Instructions,
                     ObservationPoints = item.ObservationPoints,
-                    ResultNormal = item.ResultNormal, // 正常選項
-                    ResultAbnormal = item.ResultAbnormal, // 異常選項
-                    Response = response  // `bool?` 來對應 `bit` 型別
+                    ResultNormal = item.ResultNormal,
+                    ResultAbnormal = item.ResultAbnormal,
+                    Response = response // `bool?` 避免 null reference
                 });
             }
         }
@@ -1264,6 +1348,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     _db.SaveChanges(); // 先儲存主表，取得 ID
 
                     int responseId = newResponse.ID; // 取得新建的問卷 ID
+                    if (model.FamilyHistoryItems == null)
+                    {
+                        model.FamilyHistoryItems = new List<FamilyHistory>(); // 避免 `null` 崩潰
+                    }
 
                     // 2. **新增各類型的回答數據**
                     SavePastHealth(model, responseId);
@@ -1337,6 +1425,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 FamilyHistory (家族病史)
         private void SaveFamilyHistory(QuestionnaireViewModel model, int responseId)
         {
+            if (model.FamilyHistoryItems == null || model.FamilyHistoryItems.Count == 0)
+                return;
+
             foreach (var item in model.FamilyHistoryItems)
             {
                 var familyHistory = new ResponseFamilyHistory
@@ -1366,13 +1457,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             foreach (var item in model.PastHistoryItems)
             {
-                var pastHistory = new ResponsePastHistory
+                _db.ResponsePastHistory.Add(new ResponsePastHistory
                 {
                     QuestionnaireResponseID = responseId,
                     Disease = item.GeneralPartsZh,
                     Status = item.IsYes ? "Yes" : item.IsNo ? "No" : "Unknown"
-                };
-                _db.ResponsePastHistory.Add(pastHistory);
+                });
             }
         }
 
@@ -1409,8 +1499,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 };
                 _db.ResponsePastDrugs.Add(pastDrugs);
             }
-        }
 
+            if (!string.IsNullOrEmpty(model.OtherDrug))
+            {
+                _db.ResponsePastDrugs.Add(new ResponsePastDrugs
+                {
+                    QuestionnaireResponseID = responseId,
+                    DrugName = "其他",
+                    Used = true,
+                    //Description = model.OtherDrug
+                });
+            }
+        }
         #endregion
 
         #region 儲存 PastSupplements (營養品)
@@ -1426,30 +1526,39 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 };
                 _db.ResponsePastSupplements.Add(pastSupplements);
             }
-        }
 
+            if (!string.IsNullOrEmpty(model.OtherSupplements))
+            {
+                _db.ResponsePastSupplements.Add(new ResponsePastSupplements
+                {
+                    QuestionnaireResponseID = responseId,
+                    SupplementName = "其他",
+                    Used = true,
+                    //Description = model.OtherSupplements
+                });
+            }
+        }
         #endregion
 
         #region 儲存 FemaleQuestionnaire (女性問卷)
         private void SaveFemaleQuestionnaire(QuestionnaireViewModel model, int responseId)
         {
-            // 如果填寫者不是女性 (GenderID != 2)，就不存這張表
             if (model.Gender != 2)
             {
-                return;
+                return; // 非女性不存
             }
 
             foreach (var item in model.FemaleQuestionnaireItems)
             {
                 var answer = model.FemaleQuestionnaireAnswers.ContainsKey(item.ID)
                     ? model.FemaleQuestionnaireAnswers[item.ID]
-                    : null; // 若無回答，則存入 NULL
+                    : "未回答"; // 若無回答，則存入 "未回答"
 
                 var femaleQuestionnaire = new ResponseFemaleQuestionnaire
                 {
                     QuestionnaireResponseID = responseId,
                     Question = item.QuestionZh,  // 存問題
-                    Answer = answer              // 存答案，若為 null 就不影響
+                    Answer = answer              // 存答案
                 };
 
                 _db.ResponseFemaleQuestionnaire.Add(femaleQuestionnaire);
@@ -1460,72 +1569,118 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 PastInjury (過去傷害狀況 - 已復原)
         private void SavePastInjury(QuestionnaireViewModel model, int responseId)
         {
+            if (model.PastInjuryItems == null || !model.PastInjuryItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.PastInjuryItems)
             {
+                var injuryType = model.PastInjuryTypes != null && model.PastInjuryTypes.Any()
+                    ? string.Join(", ", model.PastInjuryTypes.Select(x => x.InjuryName))
+                    : "未填寫";
+
+                var treatment = model.PastTreatmentItems != null && model.PastTreatmentItems.Any()
+                    ? string.Join(", ", model.PastTreatmentItems.Select(x => x.Method))
+                    : "未填寫";
+
+                string side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown";
+
                 var pastInjury = new ResponsePastInjuries
                 {
                     QuestionnaireResponseID = responseId,
                     BodyPart = item.PastInjuryPart,
-                    Side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown",
-                    InjuryType = model.PastInjuryTypes.Any() ? string.Join(", ", model.PastInjuryTypes.Select(x => x.InjuryName)) : null,
-                    Recovered = true, // 因為是過去傷害，所以已恢復
-                    Treatment = model.PastTreatmentItems.Any() ? string.Join(", ", model.PastTreatmentItems.Select(x => x.Method)) : null
+                    Side = side,
+                    InjuryType = injuryType,
+                    Recovered = true, // 過去傷害已恢復
+                    Treatment = treatment
                 };
+
                 _db.ResponsePastInjuries.Add(pastInjury);
             }
         }
-
         #endregion
 
         #region 儲存 CurrentInjury (目前傷害狀況)
         private void SaveCurrentInjury(QuestionnaireViewModel model, int responseId)
         {
+            if (model.CurrentInjuryItems == null || !model.CurrentInjuryItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.CurrentInjuryItems)
             {
+                var injuryType = model.CurrentInjuryTypes != null && model.CurrentInjuryTypes.Any()
+                    ? string.Join(", ", model.CurrentInjuryTypes.Select(x => x.InjuryName))
+                    : "未填寫";
+
+                var treatment = model.CurrentTreatmentItems != null && model.CurrentTreatmentItems.Any()
+                    ? string.Join(", ", model.CurrentTreatmentItems.Select(x => x.Method))
+                    : "未填寫";
+
+                string side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown";
+
                 var currentInjury = new ResponseCurrentInjuries
                 {
                     QuestionnaireResponseID = responseId,
                     BodyPart = item.CurrentInjuryPart,
-                    Side = item.LeftSide ? (item.RightSide ? "Both" : "Left") : item.RightSide ? "Right" : "Unknown",
-                    InjuryType = model.CurrentInjuryTypes.Any() ? string.Join(", ", model.CurrentInjuryTypes.Select(x => x.InjuryName)) : null,
-                    Treatment = model.CurrentTreatmentItems.Any() ? string.Join(", ", model.CurrentTreatmentItems.Select(x => x.Method)) : null
+                    Side = side,
+                    InjuryType = injuryType,
+                    Treatment = treatment
                 };
+
                 _db.ResponseCurrentInjuries.Add(currentInjury);
             }
         }
-
         #endregion
 
         #region 儲存 Cardiovascular Screening (心血管篩檢)
         private void SaveCardiovascularScreening(QuestionnaireViewModel model, int responseId)
         {
+            if (model.CardiovascularScreeningItems == null || !model.CardiovascularScreeningItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.CardiovascularScreeningItems)
             {
+                bool answer = item.Response.HasValue ? item.Response.Value : false; // 預設 `false` 避免 `null`
+
                 var cardioScreening = new ResponseCardiovascularScreening
                 {
                     QuestionnaireResponseID = responseId,
                     QuestionNumber = item.Id,
                     Question = item.Question,
-                    Answer = item.Response.HasValue ? item.Response.Value : false
+                    Answer = answer
                 };
+
                 _db.ResponseCardiovascularScreening.Add(cardioScreening);
             }
         }
-
         #endregion
 
         #region 儲存 Concussion Screening (腦震盪篩檢 - 選手自填)
         private void SaveConcussionScreening(QuestionnaireViewModel model, int responseId)
         {
+            if (model.ConcussionScreeningItems == null || !model.ConcussionScreeningItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.ConcussionScreeningItems)
             {
+                bool answer = model.ConcussionScreeningAnswers.ContainsKey(item.Id) &&
+                              model.ConcussionScreeningAnswers[item.Id] == "是";
+
                 var concussionScreening = new ResponseConcussionScreening
                 {
                     QuestionnaireResponseID = responseId,
                     QuestionNumber = item.Id,
                     Question = item.Question,
-                    Answer = model.ConcussionScreeningAnswers.ContainsKey(item.Id) && model.ConcussionScreeningAnswers[item.Id] == "是"
+                    Answer = answer
                 };
+
                 _db.ResponseConcussionScreening.Add(concussionScreening);
             }
 
@@ -1538,46 +1693,52 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Answer = model.ConcussionScreeningMedicationAnswer == "是"
             });
 
-            if (!string.IsNullOrEmpty(model.ConcussionScreeningMedicationDetails))
+            _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
             {
-                _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
-                {
-                    QuestionnaireResponseID = responseId,
-                    QuestionNumber = 0,
-                    Question = "服用藥物細節",
-                    Answer = true
-                });
-            }
+                QuestionnaireResponseID = responseId,
+                QuestionNumber = 0,
+                Question = "服用藥物細節",
+                Answer = !string.IsNullOrEmpty(model.ConcussionScreeningMedicationDetails)
+            });
 
-            if (!string.IsNullOrEmpty(model.ConcussionScreeningNotes))
+            _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
             {
-                _db.ResponseConcussionScreening.Add(new ResponseConcussionScreening
-                {
-                    QuestionnaireResponseID = responseId,
-                    QuestionNumber = 0,
-                    Question = "備註",
-                    Answer = true
-                });
-            }
+                QuestionnaireResponseID = responseId,
+                QuestionNumber = 0,
+                Question = "備註",
+                Answer = !string.IsNullOrEmpty(model.ConcussionScreeningNotes)
+            });
         }
-
         #endregion
 
         #region 儲存 Symptom Evaluation (症狀評估 0-6分)
         private void SaveSymptomEvaluation(QuestionnaireViewModel model, int responseId)
         {
+            if (model.SymptomEvaluationItems == null || !model.SymptomEvaluationItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.SymptomEvaluationItems)
             {
+                int score = model.SymptomEvaluationAnswers.ContainsKey(item.ID)
+                    ? model.SymptomEvaluationAnswers[item.ID]
+                    : 0;
+
+                // **手動確保分數範圍**
+                if (score < 0) score = 0;
+                if (score > 6) score = 6;
+
                 var symptomEvaluation = new ResponseSymptomEvaluation
                 {
                     QuestionnaireResponseID = responseId,
                     Symptom = item.SymptomItem,
-                    Severity = model.SymptomEvaluationAnswers.ContainsKey(item.ID) ? model.SymptomEvaluationAnswers[item.ID] : 0
+                    Severity = score
                 };
+
                 _db.ResponseSymptomEvaluation.Add(symptomEvaluation);
             }
         }
-
         #endregion
 
         #region 儲存 Orthopaedic Screening (骨科篩檢)
@@ -1585,13 +1746,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             foreach (var item in model.OrthopaedicScreeningItems)
             {
+                string result = "Unknown"; // 預設值
+                if (item.Response.HasValue)
+                {
+                    result = item.Response.Value ? "Normal" : "Abnormal";
+                }
+
                 var orthoScreening = new ResponseOrthopaedicScreening
                 {
                     QuestionnaireResponseID = responseId,
                     TestNumber = item.Id,
                     TestName = item.Instructions,
                     Observation = item.ObservationPoints,
-                    Result = item.Response.HasValue ? (item.Response.Value ? "Normal" : "Abnormal") : "Unknown"
+                    Result = result
                 };
                 _db.ResponseOrthopaedicScreening.Add(orthoScreening);
             }

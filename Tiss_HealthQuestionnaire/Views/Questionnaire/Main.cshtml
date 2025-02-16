@@ -137,7 +137,7 @@
 
                 <!-- 第三題：家族病史 -->
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3">
-                    <h3 class="text-lg font-semibold mb-4">家族病史(二等親內)</h3>
+                    <h3 class="text-lg font-semibold mb-4">家族病史 (Family History) - 二等親內</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -148,31 +148,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.FamilyHistoryItems)
+                            @for (int i = 0; i < Model.FamilyHistoryItems.Count; i++)
                             {
+                                var item = Model.FamilyHistoryItems[i];
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="no" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="no" class="w-5 h-5" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="yes" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="yes" class="w-5 h-5" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="familyHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="unknown" class="w-5 h-5" />
                                     </td>
                                 </tr>
                             }
-                            <!-- 其他 (Others) 輸入框 -->
+
+                            <!-- "其他" 選項 -->
                             <tr>
-                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 Others：</td>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 (Others)：</td>
                                 <td colspan="3" class="border border-gray-300 px-4 py-2">
                                     <input type="text" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory"
-                                           class="border rounded p-2 w-full" placeholder="請填寫其他家族病史...">
+                                           class="border rounded p-2 w-full w-5 h-5" placeholder="請填寫其他家族病史...">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- 確保數據正確提交 (移到 `table` 之後) -->
+                    @for (int i = 0; i < Model.FamilyHistoryItems.Count; i++)
+                    {
+                        var item = Model.FamilyHistoryItems[i];
+                        <input type="hidden" name="FamilyHistoryItems[@i].ID" value="@item.ID" />
+                        <input type="hidden" name="FamilyHistoryItems[@i].GeneralPartsZh" value="@item.GeneralPartsZh" />
+                    }
                 </div>
 
                 <!-- 第四題：過去病史 -->
@@ -189,30 +199,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.PastHistoryItems)
+                            @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                             {
+                                var item = Model.PastHistoryItems[i];
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="no" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="no" class="w-5 h-5" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="yes" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="yes" class="w-5 h-5" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="pastHistory_@item.ID" value="unknown" class="h-5 w-5 required-radio" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="unknown" class="w-5 h-5" />
                                     </td>
                                 </tr>
                             }
-                            <!-- 其他 (Others) 輸入框 -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 Others：</td>
-                                <td colspan="3" class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="OtherPastHistory" class="border rounded p-2 w-full" placeholder="請填寫其他病史...">
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+
+                    <!-- 其他 (Others) 選項 -->
+                    <div class="mt-4">
+                        <label for="OtherPastHistory">其他 (Others)：</label>
+                        <input type="text" id="OtherPastHistory" name="OtherPastHistory" value="@Model.OtherPastHistory"
+                               class="border rounded p-2 w-full" placeholder="請填寫其他病史...">
+                    </div>
+
+                    <!-- 確保數據正確傳遞 -->
+                    @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
+                    {
+                        var item = Model.PastHistoryItems[i];
+                        <input type="hidden" name="PastHistoryItems[@i].ID" value="@item.ID" />
+                        <input type="hidden" name="PastHistoryItems[@i].GeneralPartsZh" value="@item.GeneralPartsZh" />
+                    }
                 </div>
 
                 <!-- 第五題：現在病史 -->
@@ -712,7 +731,6 @@
                         </tbody>
                     </table>
                 </div>
-            
             </div>
             <!-- 分步驟按鈕 -->
             <div class="flex justify-between mt-6">

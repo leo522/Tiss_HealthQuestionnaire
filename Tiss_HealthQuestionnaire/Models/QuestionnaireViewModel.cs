@@ -279,16 +279,6 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
-    #region 開刀史
-    public class SurgeryHistoryDetailViewModel
-    {
-        public int ItemId { get; set; }           // 手術項目ID
-        public string PartsOfBodyZh { get; set; } // 手術部位 (中文)
-        public string PartsOfBodyEn { get; set; } // 手術部位 (英文)
-        public string OperationOption { get; set; } // 是否接受手術的選擇 ("yes", "no")
-    }
-    #endregion
-
     #region 現在病史
     public class PresentIllnessDetailViewModel
     {
@@ -373,6 +363,30 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
+    #region 顯示目前傷害狀況
+    public class InjuryStatuSViewModel
+    {
+        public string InjuryPart { get; set; } // 部位名稱
+        public bool LeftSide { get; set; } // 左側是否受傷
+        public bool RightSide { get; set; } // 右側是否受傷
+        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
+    }
+    #endregion
+
+    #region 顯示目前傷害狀況(傷勢類型)
+    public class InjuryStatuTypeViewModel
+    {
+        public string Type { get; set; }
+    }
+    #endregion
+
+    #region 顯示目前傷害狀況(治療方法)
+    public class TreatmentMethoDViewModel
+    {
+        public string Method { get; set; }
+    }
+    #endregion
+
     #region 心血管篩檢
     public class CardiovascularScreeningDetailViewModel
     {
@@ -397,30 +411,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int OrderNumber { get; set; }
         public string SymptomItem { get; set; }
         public int Score { get; set; }
-    }
-    #endregion
-
-    #region 顯示目前傷害狀況
-    public class InjuryStatuSViewModel
-    {
-        public string InjuryPart { get; set; } // 部位名稱
-        public bool LeftSide { get; set; } // 左側是否受傷
-        public bool RightSide { get; set; } // 右側是否受傷
-        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
-    }
-    #endregion
-
-    #region 顯示目前傷害狀況(傷勢類型)
-    public class InjuryStatuTypeViewModel
-    {
-        public string Type { get; set; }
-    }
-    #endregion
-
-    #region 顯示目前傷害狀況(治療方法)
-    public class TreatmentMethoDViewModel
-    {
-        public string Method { get; set; }
     }
     #endregion
 
