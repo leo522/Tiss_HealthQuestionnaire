@@ -251,7 +251,7 @@ namespace Tiss_HealthQuestionnaire.Models
     }
     #endregion
 
-    #region 家族病史的每個項目
+    #region 家族病史
     public class FamilyHistoryViewModel
     {
         public int ItemId { get; set; }

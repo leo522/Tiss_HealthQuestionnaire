@@ -810,26 +810,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             model.OtherFamilyHistory = form["OtherFamilyHistory"]?.Trim() ?? "";
         }
-
-        //private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
-        //{
-        //    model.FamilyHistoryItems = new List<FamilyHistory>();
-
-        //    foreach (var item in model.FamilyHistoryItems)
-        //    {
-        //        var selectedValue = form[$"familyHistory_{item.ID}"];
-
-        //        item.IsYes = selectedValue == "yes";
-        //        item.IsNo = selectedValue == "no";
-        //        item.IsUnknown = selectedValue == "unknown";
-
-        //        // 特別處理 "其他" 選項
-        //        if (item.ID == 10) // "其他" 的 ID 為 10
-        //        {
-        //            model.OtherFamilyHistory = form["otherFamilyHistory"]?.Trim() ?? ""; // 存到獨立的屬性
-        //        }
-        //    }
-        //}
         #endregion
 
         #region 過去病史
@@ -841,7 +821,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             else
             {
-                model.PastHistoryItems.Clear(); // **先清除舊數據，避免重複累加**
+                model.PastHistoryItems.Clear();
             }
 
             int i = 0;
@@ -851,6 +831,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 string generalPartsZh = form[$"PastHistoryItems[{i}].GeneralPartsZh"];
                 string option = form[$"PastHistoryItems[{i}].PastHistoryOption"];
 
+                bool isYes = option == "yes";
+                bool isNo = option == "no";
+                bool isUnknown = option == "unknown";
+
                 model.PastHistoryItems.Add(new PastHistory
                 {
                     ID = id,
@@ -859,6 +843,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     IsNo = option == "no",
                     IsUnknown = option == "unknown"
                 });
+
+                Console.WriteLine($"PastHistory Added: ID={id}, GeneralPartsZh={generalPartsZh}, Option={option}");
 
                 i++;
             }
@@ -876,7 +862,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             else
             {
-                model.PresentIllnessItems.Clear(); // **先清除舊數據，避免重複累加**
+                model.PresentIllnessItems.Clear();
             }
 
             int i = 0;
@@ -943,7 +929,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             else
             {
-                model.PastSupplementsItems.Clear(); // **先清除舊數據，避免重複累加**
+                model.PastSupplementsItems.Clear();
             }
 
             int i = 0;
@@ -962,8 +948,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 i++;
             }
-
-            // 處理 "其他 (Others)" 選項
             model.OtherSupplements = form["OtherSupplements"] ?? "";
         }
         #endregion
@@ -1455,6 +1439,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 PastHistory (過去病史)
         private void SavePastHistory(QuestionnaireViewModel model, int responseId)
         {
+            if (model.PastHistoryItems == null || model.PastHistoryItems.Count == 0)
+            {
+                return;
+            }
+
             foreach (var item in model.PastHistoryItems)
             {
                 _db.ResponsePastHistory.Add(new ResponsePastHistory
@@ -1465,12 +1454,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 });
             }
         }
-
         #endregion
 
         #region 儲存 PresentIllness (現在病史)
         private void SavePresentIllness(QuestionnaireViewModel model, int responseId)
         {
+            if (model.PresentIllnessItems == null || model.PresentIllnessItems.Count == 0)
+            {
+                return;
+            }
+
             foreach (var item in model.PresentIllnessItems)
             {
                 var presentIllness = new ResponsePresentIllness
@@ -1483,12 +1476,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 _db.ResponsePresentIllness.Add(presentIllness);
             }
         }
-
         #endregion
 
         #region 儲存 PastDrugs (藥物史)
         private void SavePastDrugs(QuestionnaireViewModel model, int responseId)
         {
+            if (model.PastDrugsItems == null || model.PastDrugsItems.Count == 0)
+            {
+                return;
+            }
+
             foreach (var item in model.PastDrugsItems)
             {
                 var pastDrugs = new ResponsePastDrugs
@@ -1765,6 +1762,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #endregion
+
+        #region 問卷存檔成功畫面 
+        public ActionResult Sucess()
+        {
+            return View();
+        }
         #endregion
 
         #region 問卷完成頁

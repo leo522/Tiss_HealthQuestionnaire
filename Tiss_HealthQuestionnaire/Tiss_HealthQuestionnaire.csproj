@@ -365,6 +365,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="img\favicon.svg" />
     <Content Include="img\logo.svg" />
+    <Content Include="img\success.jpg" />
     <Content Include="img\問卷404.jpg" />
     <Content Include="img\問卷404_2.jpg" />
     <Content Include="js\ConcussionScreeningScore.js" />
@@ -457,6 +458,7 @@
     <Content Include="Views\Questionnaire\QuestionnaireDone.cshtml" />
     <Content Include="Views\Questionnaire\NowTreatmentMethod.cshtml" />
     <Content Include="Views\Questionnaire\ConcussionMedicalEvaluation.cshtml" />
+    <Content Include="Views\Questionnaire\Sucess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

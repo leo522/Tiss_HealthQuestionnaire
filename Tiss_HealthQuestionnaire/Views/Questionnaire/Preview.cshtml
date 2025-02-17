@@ -176,51 +176,55 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.PastHistoryItems)
+                        @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                         {
+                            var item = Model.PastHistoryItems[i];
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                 <td class="border border-gray-300 px-4 py-2">
                                     @if (item.IsYes)
                                     {
-                                        <span class="text-red-600">是 (Yes)</span>
+                                        <span class="text-red-600">是(Yes)</span>
                                     }
                                     else if (item.IsNo)
                                     {
-                                        <span class="text-green-600">否 (No)</span>
+                                        <span class="text-green-600">否(No)</span>
                                     }
                                     else if (item.IsUnknown)
                                     {
-                                        <span class="text-black-600">未知 (Unknown)</span>
+                                        <span class="text-black-600">未知(Unknow)</span>
                                     }
                                     else
                                     {
-                                        <span class="text-gray-400">未填寫</span>
+                                        <span class="text-gray-600">未填寫</span>
                                     }
                                 </td>
                             </tr>
                         }
+
+                        @if (!string.IsNullOrEmpty(Model.OtherPastHistory))
+                        {
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">其他</td>
+                                <td class="border border-gray-300 px-4 py-2">@Model.OtherPastHistory</td>
+                            </tr>
+                        }
+
                     </tbody>
                 </table>
 
                 <!-- **隱藏欄位移到 `table` 之外，避免數據重複** -->
-                @foreach (var item in Model.PastHistoryItems)
+                @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                 {
-                    <input type="hidden" name="PastHistoryItems[@item.ID].ID" value="@item.ID" />
-                    <input type="hidden" name="PastHistoryItems[@item.ID].GeneralPartsZh" value="@item.GeneralPartsZh" />
-                    <input type="hidden" name="PastHistoryItems[@item.ID].IsYes" value="@item.IsYes" />
-                    <input type="hidden" name="PastHistoryItems[@item.ID].IsNo" value="@item.IsNo" />
-                    <input type="hidden" name="PastHistoryItems[@item.ID].IsUnknown" value="@item.IsUnknown" />
+                    var item = Model.PastHistoryItems[i];
+                    <input type="hidden" name="PastHistoryItems[@i].ID" value="@item.ID" />
+                    <input type="hidden" name="PastHistoryItems[@i].GeneralPartsZh" value="@item.GeneralPartsZh" />
+                    <input type="hidden" name="PastHistoryItems[@i].IsYes" value="@item.IsYes" />
+                    <input type="hidden" name="PastHistoryItems[@i].IsNo" value="@item.IsNo" />
+                    <input type="hidden" name="PastHistoryItems[@i].IsUnknown" value="@item.IsUnknown" />
                 }
 
-                <!-- 其他選項 -->
-                @if (!string.IsNullOrEmpty(Model.OtherPastHistory))
-                {
-                    <div class="mt-4">
-                        <label>其他 (Others)：@Model.OtherPastHistory</label>
-                        <input type="hidden" name="OtherPastHistory" value="@Model.OtherPastHistory" />
-                    </div>
-                }
+                <input type="hidden" name="otherPastHistory" value="@Model.OtherPastHistory" /> <!-- 其他選項 -->
             </div>
 
             <!-- 第五題：現在病史 -->
@@ -235,8 +239,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.PresentIllnessItems)
+                        @for (int i = 0; i < Model.PresentIllnessItems.Count; i++)
                         {
+                            var item = Model.PresentIllnessItems[i];
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh (@item.PartsOfBodyEn)</td>
                                 <td class="border border-gray-300 px-4 py-2">
@@ -254,6 +259,7 @@
                                     }
                                 </td>
                             </tr>
+
                         }
                     </tbody>
                 </table>
@@ -272,8 +278,6 @@
             <!-- 第六題：藥物史 -->
             <div class="mb-8">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-4">藥物史 (PastDrugs)</h2>
-                @if (Model.PastDrugsItems != null && Model.PastDrugsItems.Any())
-                {
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -282,43 +286,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.PastDrugsItems)
+                            @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
                             {
+                                var item = Model.PastDrugsItems[i];
+
                                 <tr>
                                     <td class="border border-gray-300 p-2">@item.ItemZh (@item.ItemEn)</td>
                                     <td class="border border-gray-300 p-2
-                                    @(item.IsUsed == true ? "text-red-600 font-semibold" :
-                                    item.IsUsed == false ? "text-green-600 font-semibold" : "text-gray-500")">
+                                        @(item.IsUsed == true ? "text-red-600 font-semibold" :
+                                        item.IsUsed == false ? "text-green-600 font-semibold" : "text-gray-500")">
                                         @(item.IsUsed == true ? "是 (Yes)" :item.IsUsed == false ? "否 (No)" : "未填寫")
                                     </td>
                                 </tr>
-                                @Html.Hidden($"PastDrugsItems[{item.ID}].IsUsed", item.IsUsed)
                             }
-                            <tr>
-                                <td class="border border-gray-300 p-2 font-semibold">其他 (Others)</td>
-                                <td class="border border-gray-300 p-2">
-                                    @(!string.IsNullOrEmpty(Model.OtherDrug) ? Model.OtherDrug : "未填寫")
-                                </td>
-                                @Html.HiddenFor(m => m.OtherDrug)
-                            </tr>
 
-                            <!-- 加入「是否有申請治療用途豁免 (TUE)」 -->
-                            <tr>
-                                <td class="border border-gray-300 p-2 font-semibold">是否有申請治療用途豁免 (TUE)</td>
-                                <td class="border border-green-300 p-2">
-                                    @(Model.TUE == "yes" ? "是" : Model.TUE == "no" ? "否" : "未填寫")
-                                </td>
-                            </tr>
+                            @if(!string.IsNullOrEmpty(Model.OtherDrug))
+                            { 
+                                <tr>
+                                    <td class="border border-gray-300 p-2 font-semibold">其他 (Others)</td>
+                                    <td class="border border-gray-300 p-2 font-semibold">@Model.OtherDrug</td>
+
+                                </tr>
+                            }
                         </tbody>
                     </table>
-                }
-                else
+                @for(int i = 0; i < Model.PastDrugsItems.Count; i++)
                 {
-                    <p class="text-gray-500">未填寫</p>
+                    var item = Model.PastDrugsItems[i];
+                    <input type="hidden" name="PastDrugsItems[@i].ID" value="@item.ID"/>
+                    <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@item.ItemZh"/>
+                    <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@item.IsUsed"/>
                 }
             </div>
 
             <!-- 第七題：營養品 -->
+
             <div class="mb-8">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-4">營養品 (PastSupplements)</h2>
                 @if (Model.PastSupplementsItems != null && Model.PastSupplementsItems.Any())
