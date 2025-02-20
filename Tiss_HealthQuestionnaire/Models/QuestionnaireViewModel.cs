@@ -106,6 +106,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 營養品
+
         public List<PastSupplements> PastSupplementsItems { get; set; }
         public string OtherSupplements { get; set; } // "其他 (Others)" 輸入的補充品名稱
         #endregion

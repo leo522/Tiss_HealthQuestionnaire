@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -49,6 +50,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var currentInjuryTypesList = GetCurrentInjuryTypesList();
                 var currentTreatmentItems = GetCurrentTreatmentItems();
 
+                var supplements = _db.PastSupplements.ToList(); // 這行確保變數存在
+
                 // 整合問卷資料
                 var viewModel = new QuestionnaireViewModel
                 {
@@ -60,6 +63,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     PastDrugsItems = _db.PastDrugs.ToList(),
                     TUE = "no",
                     OtherDrug = "",
+                    //PastSupplementsItems = supplements,
                     PastSupplementsItems = _db.PastSupplements.ToList(),
                     FemaleQuestionnaireItems = user.GenderID == 2 ? _db.FemaleQuestionnaire.ToList() : null,
                     PastInjuryStatusAnswer = "yes",  // 確保前端顯示
@@ -145,6 +149,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult PastSupplements()
         {
             var pastSupplements = _db.PastSupplements.ToList();
+
             return View("PastSupplements", pastSupplements);
         }
         #endregion
@@ -674,7 +679,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "發生錯誤：" + ex.Message);
-                return View("Main", model);
+                //return View("Main", model);
+                return RedirectToAction("Error404","Error");
             }
         }
         #endregion
@@ -932,23 +938,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 model.PastSupplementsItems.Clear();
             }
 
-            int i = 0;
-            while (form[$"PastSupplementsItems[{i}].ID"] != null)
+            // 取得所有被勾選的補充品 ID
+            var selectedIds = form.GetValues("SelectedSupplements")?.Select(int.Parse).ToList() ?? new List<int>();
+
+            foreach (var id in selectedIds)
             {
-                int id = int.Parse(form[$"PastSupplementsItems[{i}].ID"]);
-                string itemZh = form[$"PastSupplementsItems[{i}].ItemZh"];
-                bool isUsed = form[$"PastSupplementsItems[{i}].IsUsed"] == "true";
+                var itemZh = form[$"PastSupplementsItems[{id - 1}].ItemZh"] ?? "未填寫"; // 根據索引取出名稱
 
                 model.PastSupplementsItems.Add(new PastSupplements
                 {
                     ID = id,
-                    ItemZh = itemZh,
-                    IsUsed = isUsed
+                    ItemZh = itemZh
                 });
-
-                i++;
             }
-            model.OtherSupplements = form["OtherSupplements"] ?? "";
+
+            model.OtherSupplements = form["OtherSupplements"];
         }
         #endregion
 
