@@ -878,12 +878,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 string partsOfBodyZh = form[$"PresentIllnessItems[{i}].PartsOfBodyZh"];
                 string option = form[$"PresentIllnessItems[{i}].ReceivingTherapy"];
 
+                // **確保至少有一個值**
+                bool isYes = option == "yes";
+                bool isNo = option == "no";
+
                 model.PresentIllnessItems.Add(new PresentIllness
                 {
                     ID = id,
                     PartsOfBodyZh = partsOfBodyZh,
-                    IsYes = option == "yes",
-                    IsNo = option == "no"
+                    IsYes = isYes,
+                    IsNo = isNo
                 });
 
                 i++;
@@ -900,29 +904,26 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             else
             {
-                model.PastDrugsItems.Clear(); // **先清除舊數據，避免重複累加**
+                model.PastDrugsItems.Clear();
             }
 
-            int i = 0;
-            while (form[$"PastDrugsItems[{i}].ID"] != null)
+            // 取得所有被勾選的藥物 ID
+            var selectedIds = form.GetValues("SelectedDrugs")?.Select(int.Parse).ToList() ?? new List<int>();
+
+            foreach (var id in selectedIds)
             {
-                int id = int.Parse(form[$"PastDrugsItems[{i}].ID"]);
-                string itemZh = form[$"PastDrugsItems[{i}].ItemZh"];
-                bool isUsed = form[$"PastDrugsItems[{i}].IsUsed"] == "true";
+                string itemZh = form[$"PastDrugsItems[{id - 1}].ItemZh"] ?? "未填寫"; // 根據索引取出名稱
 
                 model.PastDrugsItems.Add(new PastDrugs
                 {
                     ID = id,
                     ItemZh = itemZh,
-                    IsUsed = isUsed
+                    IsUsed = true
                 });
-
-                i++;
             }
 
-            // 處理其他藥物選項
+            // 確保其他藥物選項也能提交
             model.OtherDrug = form["OtherDrug"] ?? "";
-            model.TUE = form["TUE"] ?? "未填寫";  // 如果沒填寫則顯示 "未填寫"
         }
         #endregion
 
@@ -1772,53 +1773,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult Sucess()
         {
             return View();
-        }
-        #endregion
-
-        #region 問卷完成頁
-        public ActionResult QuestionnaireDone(QuestionnaireResponseViewModel model)
-        {
-            var response = new QuestionnaireResponse
-            {
-                AthleteID = model.AthleteID,
-                GenderID = model.GenderID,
-                FillingDate = DateTime.Now,
-                Specialty = model.Specialty,
-                FillName = model.FillName
-            };
-
-            _db.QuestionnaireResponse.Add(response);
-            _db.SaveChanges();
-
-            // 存檔各問卷的回覆
-            SaveQuestionnaireDetails(response.ID, model.PastHealthAnswers, "PastHealth");
-            SaveQuestionnaireDetails(response.ID, model.AllergicHistoryAnswers, "AllergicHistory");
-            SaveQuestionnaireDetails(response.ID, model.FamilyHistoryAnswers, "FamilyHistory");
-            SaveQuestionnaireDetails(response.ID, model.PastHistoryAnswers, "PastHistory");
-            SaveQuestionnaireDetails(response.ID, model.SurgeryHistoryAnswers, "SurgeryHistory");
-            SaveQuestionnaireDetails(response.ID, model.PresentIllnessAnswers, "PresentIllness");
-            SaveQuestionnaireDetails(response.ID, model.PastDrugsAnswers, "PastDrugs");
-            SaveQuestionnaireDetails(response.ID, model.PastSupplementsAnswers, "PastSupplements");
-            SaveQuestionnaireDetails(response.ID, model.FemaleQuestionnaireAnswers, "FemaleQuestionnaire");
-
-            _db.SaveChanges();
-
-            return RedirectToAction("Main");
-        }
-
-        private void SaveQuestionnaireDetails(int responseID, List<QuestionnaireAnswer> answers, string questionnaireType)
-        {
-            foreach (var answer in answers)
-            {
-                var detail = new QuestionnaireResponseDetails
-                {
-                    ResponseID = responseID,
-                    QuestionnaireType = questionnaireType,
-                    QuestionID = answer.QuestionID,
-                    Answer = answer.Answer
-                };
-                _db.QuestionnaireResponseDetails.Add(detail);
-            }
         }
         #endregion
     }

@@ -13,7 +13,7 @@
     <link href="~/css/mainStyle.css" rel="stylesheet" /> @*燈號顯示顏色*@
     <link href="~/css/SymptomsLights.css" rel="stylesheet" /> @*燈號顯示顏色*@
     <script src="~/js/SymptomLights.js"></script> @*燈號顯示更新*@
-    <!--<script src="~/js/SymptomEvaluationScore.js"></script>--> @*選手症狀分數相關邏輯*@
+    <script src="~/js/SymptomEvaluationScore.js"></script> @*選手症狀分數相關邏輯*@
     <!--<script src="~/js/ConcussionScreeningScore.js"></script>--> @*更新分數相關邏輯*@
     <script src="~/js/formValidation.js"></script> @*表單必填驗證*@
     <script src="~/js/validateFillDate.js"></script> @*日期必填驗證*@
@@ -246,11 +246,19 @@
                             @for (int i = 0; i < Model.PresentIllnessItems.Count; i++)
                             {
                                 var item = Model.PresentIllnessItems[i];
-                                <tr class="question-row">
-                                    <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="PresentIllnessItems[@i].presentIllnessOption" value="no" class="h-5 w-5 required-radio" /> 否
-                                        <input type="radio" name="PresentIllnessItems[@i].presentIllnessOption" value="yes" class="h-5 w-5 required-radio" /> 是
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh (@item.PartsOfBodyEn)</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <input type="hidden" name="PresentIllnessItems[@i].ID" value="@item.ID" />
+                                        <input type="hidden" name="PresentIllnessItems[@i].PartsOfBodyZh" value="@item.PartsOfBodyZh" />
+
+                                        <!-- 修正邏輯 -->
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no" class="h-5 w-5 required-radio"
+                                               @(item.IsNo ? "checked" : (item.IsYes ? "" : "")) /> 否
+
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes" class="h-5 w-5 required-radio"
+                                               @(item.IsYes ? "checked" : (item.IsNo ? "" : "")) /> 是
+
                                     </td>
                                 </tr>
                             }
@@ -272,10 +280,17 @@
                             @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
                             {
                                 var item = Model.PastDrugsItems[i];
-                                <tr class="question-row">
+                                <tr>
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="checkbox" name="PastDrugsItems[@i].ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                        <input type="hidden" name="PastDrugsItems[@i].ID" value="@item.ID" />
+                                        <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@item.ItemZh" />
+
+                                        <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="false" />
+                                        <input type="checkbox" name="SelectedDrugs" value="@item.ID"
+                                               class="h-5 w-5 form-checkbox required-checkbox"
+                                               @(item.IsUsed ? "checked" : "") />
+
                                     </td>
                                 </tr>
                             }
@@ -335,9 +350,6 @@
                                     </td>
                                 </tr>
                             }
-
-
-
                             <!-- "其他 (Others)" 輸入區 -->
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">其他 (Others)：</td>

@@ -455,7 +455,6 @@
     <Content Include="Views\Questionnaire\DelayedRecall.cshtml" />
     <Content Include="Views\Questionnaire\CognitiveScreeningTotalScore.cshtml" />
     <Content Include="Views\Questionnaire\Preview.cshtml" />
-    <Content Include="Views\Questionnaire\QuestionnaireDone.cshtml" />
     <Content Include="Views\Questionnaire\NowTreatmentMethod.cshtml" />
     <Content Include="Views\Questionnaire\ConcussionMedicalEvaluation.cshtml" />
     <Content Include="Views\Questionnaire\Sucess.cshtml" />
