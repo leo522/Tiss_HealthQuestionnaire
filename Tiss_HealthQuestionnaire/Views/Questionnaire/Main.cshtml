@@ -252,13 +252,14 @@
                                         <input type="hidden" name="PresentIllnessItems[@i].ID" value="@item.ID" />
                                         <input type="hidden" name="PresentIllnessItems[@i].PartsOfBodyZh" value="@item.PartsOfBodyZh" />
 
-                                        <!-- 修正邏輯 -->
-                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no" class="h-5 w-5 required-radio"
+                                        <!-- 修正 radio 預設問題 -->
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no"
+                                               class="h-5 w-5 required-radio"
                                                @(item.IsNo ? "checked" : (item.IsYes ? "" : "")) /> 否
 
-                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes" class="h-5 w-5 required-radio"
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes"
+                                               class="h-5 w-5 required-radio"
                                                @(item.IsYes ? "checked" : (item.IsNo ? "" : "")) /> 是
-
                                     </td>
                                 </tr>
                             }

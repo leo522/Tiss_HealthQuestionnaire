@@ -22,5 +22,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             return View();
         }
+
+        public ActionResult WebError()
+        {
+            return View();
+        }
     }
 }

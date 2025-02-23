@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -878,17 +879,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 string partsOfBodyZh = form[$"PresentIllnessItems[{i}].PartsOfBodyZh"];
                 string option = form[$"PresentIllnessItems[{i}].ReceivingTherapy"];
 
-                // **確保至少有一個值**
                 bool isYes = option == "yes";
                 bool isNo = option == "no";
 
-                model.PresentIllnessItems.Add(new PresentIllness
+                // **修正：只有使用者選擇才加入清單**
+                if (isYes || isNo)
                 {
-                    ID = id,
-                    PartsOfBodyZh = partsOfBodyZh,
-                    IsYes = isYes,
-                    IsNo = isNo
-                });
+                    model.PresentIllnessItems.Add(new PresentIllness
+                    {
+                        ID = id,
+                        PartsOfBodyZh = partsOfBodyZh,
+                        IsYes = isYes,
+                        IsNo = isNo
+                    });
+                }
 
                 i++;
             }
@@ -1103,27 +1107,55 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private void ProcessCardiovascularScreening(QuestionnaireViewModel model, FormCollection form)
         {
             var screenings = _db.CardiovascularScreening.ToList(); // 取得所有心血管篩檢題目
-            model.CardiovascularScreeningItems = new List<CardiovascularScreening>(); // 確保初始化
+
+            model.CardiovascularScreeningItems = new List<CardiovascularScreening>();
 
             foreach (var item in screenings)
             {
                 string answerKey = $"question_{item.Id}"; // 與 HTML input name 對應
-                string answer = form[answerKey]; // 取得使用者選擇的值 ("yes" / "no")
+                string answer = form[answerKey];
 
-                bool? response = null; // 預設為 null
-
+                bool? response = null;
                 if (!string.IsNullOrEmpty(answer))
                 {
-                    response = answer == "yes"; // "yes" → true, "no" → false
+                    response = answer == "yes";
                 }
 
                 model.CardiovascularScreeningItems.Add(new CardiovascularScreening
                 {
                     Id = item.Id,
                     Question = item.Question,
-                    Response = response // 存入 `bit` (bool?)
+                    Response = response
                 });
             }
+
+            //這行可幫助偵測問題，如果還是有 `Id=0`，會直接拋出錯誤
+            if (model.CardiovascularScreeningItems.Any(x => x.Id == 0))
+            {
+                throw new Exception("發現 ID=0 的心血管篩檢項目，請檢查資料初始化！");
+            }
+            //var screenings = _db.CardiovascularScreening.ToList(); // 取得所有心血管篩檢題目
+            //model.CardiovascularScreeningItems = new List<CardiovascularScreening>(); // 確保初始化
+
+            //foreach (var item in screenings)
+            //{
+            //    string answerKey = $"question_{item.Id}"; // 與 HTML input name 對應
+            //    string answer = form[answerKey]; // 取得使用者選擇的值 ("yes" / "no")
+
+            //    bool? response = null; // 預設為 null
+
+            //    if (!string.IsNullOrEmpty(answer))
+            //    {
+            //        response = answer == "yes"; // "yes" → true, "no" → false
+            //    }
+
+            //    model.CardiovascularScreeningItems.Add(new CardiovascularScreening
+            //    {
+            //        Id = item.Id,
+            //        Question = item.Question,
+            //        Response = response // 存入 `bit` (bool?)
+            //    });
+            //}
         }
         #endregion
 
@@ -1177,8 +1209,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private void ProcessOrthopaedicScreening(QuestionnaireViewModel model, FormCollection form)
         {
             model.OrthopaedicScreeningItems = new List<OrthopaedicScreening>(); // 確保初始化
-
             var screenings = _db.OrthopaedicScreening.ToList(); // 取得所有骨科篩檢題目
+
             foreach (var item in screenings)
             {
                 string resultKey = $"Result_{item.Id}"; // 表單名稱對應
@@ -1187,8 +1219,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 bool? response = null;
                 if (!string.IsNullOrEmpty(answer))
                 {
-                    if (answer == "normal") response = true;
-                    else if (answer == "abnormal") response = false;
+                    response = answer == "normal";
+                }
+                else
+                {
+                    response = false; // **🔹 預設為 "Abnormal"，避免 Result 為空**
                 }
 
                 model.OrthopaedicScreeningItems.Add(new OrthopaedicScreening
@@ -1198,9 +1233,34 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     ObservationPoints = item.ObservationPoints,
                     ResultNormal = item.ResultNormal,
                     ResultAbnormal = item.ResultAbnormal,
-                    Response = response // `bool?` 避免 null reference
+                    Response = response
                 });
             }
+            //model.OrthopaedicScreeningItems = new List<OrthopaedicScreening>(); // 確保初始化
+
+            //var screenings = _db.OrthopaedicScreening.ToList(); // 取得所有骨科篩檢題目
+            //foreach (var item in screenings)
+            //{
+            //    string resultKey = $"Result_{item.Id}"; // 表單名稱對應
+            //    string answer = form[resultKey]; // 取得使用者選擇的值 ("normal" / "abnormal")
+
+            //    bool? response = null;
+            //    if (!string.IsNullOrEmpty(answer))
+            //    {
+            //        if (answer == "normal") response = true;
+            //        else if (answer == "abnormal") response = false;
+            //    }
+
+            //    model.OrthopaedicScreeningItems.Add(new OrthopaedicScreening
+            //    {
+            //        Id = item.Id,
+            //        Instructions = item.Instructions,
+            //        ObservationPoints = item.ObservationPoints,
+            //        ResultNormal = item.ResultNormal,
+            //        ResultAbnormal = item.ResultAbnormal,
+            //        Response = response // `bool?` 避免 null reference
+            //    });
+            //}
         }
         #endregion
 
@@ -1362,13 +1422,48 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     _db.SaveChanges();
                     transaction.Commit();
 
-                    return RedirectToAction("Success"); // 導向成功頁面
+                    return RedirectToAction("Success", "Questionnaire"); // 導向成功頁面
                 }
+                catch (DbEntityValidationException dbEx)
+                {
+                    transaction.Rollback();
+
+                    var errorMessages = new List<string>();
+
+                    foreach (var validationResult in dbEx.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name; // 取得實體名稱
+
+                        foreach (var error in validationResult.ValidationErrors)
+                        {
+                            string errorMessage = $"實體: {entityName}, 屬性: {error.PropertyName}, 錯誤: {error.ErrorMessage}";
+                            errorMessages.Add(errorMessage);
+                        }
+                    }
+
+                    string fullErrorMessage = string.Join(" | ", errorMessages);
+
+                    // **將錯誤記錄到日誌**
+                    System.Diagnostics.Debug.WriteLine("資料驗證錯誤: " + fullErrorMessage);
+                    ModelState.AddModelError("", "發生錯誤：" + fullErrorMessage);
+
+                    return RedirectToAction("WebError", "Error");
+                }
+
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    ModelState.AddModelError("", "儲存失敗：" + ex.Message);
-                    return View("Preview", model);
+                    // 抓取更詳細的內部錯誤
+                    var detailedMessage = ex.InnerException != null ? ex.InnerException.ToString() : ex.ToString();
+
+                    // 輸出錯誤資訊到 Debug 視窗
+                    System.Diagnostics.Debug.WriteLine("完整錯誤訊息: " + detailedMessage);
+
+                    // 讓錯誤訊息更可讀
+                    ModelState.AddModelError("", "儲存失敗：" + detailedMessage);
+
+                    //return View("Preview", model);
+                    return RedirectToAction("WebError", "Error");
                 }
             }
         }
@@ -1518,6 +1613,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 PastSupplements (營養品)
         private void SavePastSupplements(QuestionnaireViewModel model, int responseId)
         {
+            if (model.PastSupplementsItems == null || model.PastSupplementsItems.Count == 0)
+            {
+                return;
+            }
+
             foreach (var item in model.PastSupplementsItems)
             {
                 var pastSupplements = new ResponsePastSupplements
@@ -1645,9 +1745,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 return;
             }
 
+            // ✅ 過濾掉 Id=0
+            model.CardiovascularScreeningItems = model.CardiovascularScreeningItems
+                .Where(x => x.Id > 0)
+                .ToList();
+
             foreach (var item in model.CardiovascularScreeningItems)
             {
-                bool answer = item.Response.HasValue ? item.Response.Value : false; // 預設 `false` 避免 `null`
+                if (string.IsNullOrWhiteSpace(item.Question))
+                {
+                    throw new Exception($"心血管篩檢項目 ID: {item.Id} 缺少問題文字");
+                }
+
+                bool answer = item.Response.HasValue ? item.Response.Value : false;
 
                 var cardioScreening = new ResponseCardiovascularScreening
                 {
@@ -1659,6 +1769,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 _db.ResponseCardiovascularScreening.Add(cardioScreening);
             }
+            //foreach (var item in model.CardiovascularScreeningItems)
+            //{
+            //    bool answer = item.Response.HasValue ? item.Response.Value : false; // 預設 `false` 避免 `null`
+
+            //    var cardioScreening = new ResponseCardiovascularScreening
+            //    {
+            //        QuestionnaireResponseID = responseId,
+            //        QuestionNumber = item.Id,
+            //        Question = item.Question,
+            //        Answer = answer
+            //    };
+
+            //    _db.ResponseCardiovascularScreening.Add(cardioScreening);
+            //}
         }
         #endregion
 
@@ -1746,24 +1870,62 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 Orthopaedic Screening (骨科篩檢)
         private void SaveOrthopaedicScreening(QuestionnaireViewModel model, int responseId)
         {
+            if (model.OrthopaedicScreeningItems == null || !model.OrthopaedicScreeningItems.Any())
+            {
+                return;
+            }
+
             foreach (var item in model.OrthopaedicScreeningItems)
             {
-                string result = "Unknown"; // 預設值
-                if (item.Response.HasValue)
+                // **確保 Result 永遠有值**
+                string resultText = item.Response.HasValue
+                    ? (item.Response.Value ? "Normal" : "Abnormal")
+                    : "Abnormal"; // **如果 `Response` 為 `null`，則預設 `Abnormal`**
+
+                // **🔹 記錄 Log，確認是否有 `null`**
+                System.Diagnostics.Debug.WriteLine($"骨科篩檢 ID: {item.Id}, Result: {resultText}");
+
+                if (string.IsNullOrEmpty(resultText))
                 {
-                    result = item.Response.Value ? "Normal" : "Abnormal";
+                    throw new Exception($"錯誤：骨科篩檢項目 ID {item.Id} 的 Result 欄位為空，請檢查！");
                 }
 
-                var orthoScreening = new ResponseOrthopaedicScreening
+                var screening = new ResponseOrthopaedicScreening
                 {
                     QuestionnaireResponseID = responseId,
                     TestNumber = item.Id,
                     TestName = item.Instructions,
                     Observation = item.ObservationPoints,
-                    Result = result
+                    Result = resultText // **確保不為 null**
                 };
-                _db.ResponseOrthopaedicScreening.Add(orthoScreening);
+
+                _db.ResponseOrthopaedicScreening.Add(screening);
             }
+            //if (model.OrthopaedicScreeningItems == null || !model.OrthopaedicScreeningItems.Any())
+            //{
+            //    return;
+            //}
+
+            //foreach (var item in model.OrthopaedicScreeningItems)
+            //{
+            //    string resultText = item.Response.HasValue ? (item.Response.Value ? "Normal" : "Abnormal") : null;
+
+            //    if (string.IsNullOrEmpty(resultText))
+            //    {
+            //        throw new Exception($"錯誤：骨科篩檢項目 ID {item.Id} 的 Result 欄位為空，請檢查！");
+            //    }
+
+            //    var screening = new ResponseOrthopaedicScreening
+            //    {
+            //        QuestionnaireResponseID = responseId,
+            //        TestNumber = item.Id,
+            //        TestName = item.Instructions,
+            //        Observation = item.ObservationPoints,
+            //        Result = resultText  // 確保符合 "Abnormal" / "Normal"
+            //    };
+
+            //    _db.ResponseOrthopaedicScreening.Add(screening);
+            //}
         }
         #endregion
 
