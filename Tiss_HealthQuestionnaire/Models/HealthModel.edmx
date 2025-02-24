@@ -372,8 +372,10 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
-          <Property Name="AllergyType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Details" Type="nvarchar" MaxLength="255" />
+          <Property Name="AllergyType" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Details" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsYes" Type="bit" Nullable="false" />
+          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ResponseCardiovascularScreening">
           <Key>
@@ -412,7 +414,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
-          <Property Name="Disease" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Disease" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="ResponseFemaleQuestionnaire">
@@ -452,7 +454,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
           <Property Name="HasAbnormalItems" Type="bit" Nullable="false" />
-          <Property Name="Details" Type="nvarchar" MaxLength="500" />
+          <Property Name="Details" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ResponsePastHistory">
           <Key>
@@ -1582,9 +1584,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
-          <Property Name="AllergyType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Details" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AllergyType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse" FromRole="ResponseAllergicHistory" ToRole="QuestionnaireResponse" />
+          <Property Name="IsYes" Type="Boolean" Nullable="false" />
+          <Property Name="IsNo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="ResponseCardiovascularScreening">
           <Key>
@@ -1626,7 +1630,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
-          <Property Name="Disease" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Disease" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseFamilyHistory_QuestionnaireResponse" FromRole="ResponseFamilyHistory" ToRole="QuestionnaireResponse" />
         </EntityType>
@@ -1670,7 +1674,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
           <Property Name="HasAbnormalItems" Type="Boolean" Nullable="false" />
-          <Property Name="Details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponsePastHealth_QuestionnaireResponse" FromRole="ResponsePastHealth" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponsePastHistory">
@@ -2497,6 +2501,8 @@
           <EntitySetMapping Name="ResponseAllergicHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseAllergicHistory">
               <MappingFragment StoreEntitySet="ResponseAllergicHistory">
+                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
+                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="AllergyType" ColumnName="AllergyType" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />

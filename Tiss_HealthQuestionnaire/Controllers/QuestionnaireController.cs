@@ -681,7 +681,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 ModelState.AddModelError("", "發生錯誤：" + ex.Message);
                 //return View("Main", model);
-                return RedirectToAction("Error404","Error");
+                return RedirectToAction("Error404", "Error");
             }
         }
         #endregion
@@ -707,76 +707,58 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去健康檢查病史
         private void ProcessPastHealth(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PastHealthItems = _db.PastHealth.ToList(); // 讀取題目
-
-            bool hasYes = false; // 判斷是否有勾選 "是"
-
+            model.PastHealthItems = _db.PastHealth.ToList();
             model.PastHealthResponses = new Dictionary<string, string>();
+            bool hasYes = false;
 
             foreach (var item in model.PastHealthItems)
             {
-                var selectedValue = form[$"pastHealth_{item.ID}"];
-                item.IsYes = selectedValue == "yes";
-                item.IsNo = selectedValue == "no";
+                string answerKey = $"pastHealth_{item.ID}";
+                string detailsKey = $"pastHealthdetails_{item.ID}";
 
-                if (item.IsYes)
+                string selectedAnswer = form[answerKey];  // 確保能讀取表單值
+                bool isYes = selectedAnswer == "yes";
+
+                item.IsYes = isYes;
+                item.IsNo = !isYes;
+
+                if (isYes)
                 {
-                    hasYes = true; // 只要有一個是 "yes"，PastHealthHistory 就是 "yes"
-
-                    // 取得詳細填寫內容
-                    var details = new List<string>();
-                    if (!string.IsNullOrEmpty(form[$"item1_{item.ID}"])) details.Add(form[$"item1_{item.ID}"]);
-                    if (!string.IsNullOrEmpty(form[$"item2_{item.ID}"])) details.Add(form[$"item2_{item.ID}"]);
-                    if (!string.IsNullOrEmpty(form[$"item3_{item.ID}"])) details.Add(form[$"item3_{item.ID}"]);
-
-                    // 如果有填寫細節，就存入 Dictionary
-                    if (details.Any())
+                    hasYes = true;
+                    string details = form[detailsKey]?.Trim();
+                    if (!string.IsNullOrEmpty(details))
                     {
-                        model.PastHealthResponses[item.ID.ToString()] = string.Join(", ", details);
+                        model.PastHealthResponses[item.ID.ToString()] = details;
                     }
                 }
             }
 
-            model.PastHealthHistory = hasYes ? "yes" : "no"; // 設定總狀態
+            model.PastHealthHistory = hasYes ? "yes" : "no";
         }
         #endregion
 
         #region 過敏史
         private void ProcessAllergicHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            model.AllergicHistoryItems = new List<AllergicHistory>();
+            model.AllergicHistoryItems = _db.AllergicHistory.ToList();
+            model.AllergicHistoryResponses = new Dictionary<string, string>();
 
-            var allergicItems = _db.AllergicHistory.ToList(); // 只讀取題目
-            foreach (var item in allergicItems)
+            foreach (var item in model.AllergicHistoryItems)
             {
-                var selectedValue = form[$"allergy_{item.ID}"];
-                var allergyDescription = form[$"details_{item.ID}"] ?? ""; // 取得過敏描述
+                string selectedValue = form[$"allergy_{item.ID}"]?.Trim();
+                string allergyDescription = form[$"details_{item.ID}"]?.Trim();
 
-                if (selectedValue == "yes") // 只存有選擇 "是" 的項目
+                item.IsYes = selectedValue == "yes";
+                item.IsNo = !item.IsYes;
+
+                if (item.IsYes)
                 {
-                    model.AllergicHistoryItems.Add(new AllergicHistory
-                    {
-                        ID = item.ID,
-                        ItemZh = item.ItemZh,
-                        ItemEn = item.ItemEn,
-                        IsYes = true,
-                        IsNo = false,
-                    });
-
-                    // 存入過敏描述
-                    if (!string.IsNullOrEmpty(allergyDescription))
-                    {
-                        if (model.AllergicHistoryResponses == null)
-                        {
-                            model.AllergicHistoryResponses = new Dictionary<string, string>();
-                        }
-                        model.AllergicHistoryResponses[item.ID.ToString()] = allergyDescription;
-                    }
+                    model.AllergicHistoryResponses[item.ID.ToString()] =
+                        !string.IsNullOrEmpty(allergyDescription) ? allergyDescription : "未填寫";
                 }
             }
 
-            // 確定過敏史的總狀態
-            model.AllergicHistory = model.AllergicHistoryItems.Any() ? "yes" : "no";
+            model.AllergicHistory = model.AllergicHistoryItems.Any(i => i.IsYes) ? "yes" : "no";
         }
         #endregion
 
@@ -797,19 +779,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 int id = int.Parse(form[$"FamilyHistoryItems[{i}].ID"]);
                 string generalPartsZh = form[$"FamilyHistoryItems[{i}].GeneralPartsZh"];
-                string option = form[$"FamilyHistoryItems[{i}].FamilyHistoryOption"];
-
-                bool isYes = option == "yes";
-                bool isNo = option == "no";
-                bool isUnknown = option == "unknown";
+                string option = form[$"FamilyHistoryItems[{i}].FamilyHistoryOption"] ?? "unknown";
 
                 model.FamilyHistoryItems.Add(new FamilyHistory
                 {
                     ID = id,
                     GeneralPartsZh = generalPartsZh,
-                    IsYes = isYes,
-                    IsNo = isNo,
-                    IsUnknown = isUnknown
+                    IsYes = (option == "yes"),
+                    IsNo = (option == "no"),
+                    IsUnknown = (option == "unknown")
                 });
 
                 i++;
@@ -1378,8 +1356,36 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #region 問卷存檔
         [HttpPost]
-        public ActionResult Submit(QuestionnaireViewModel model)
+        public ActionResult Submit(QuestionnaireViewModel model, FormCollection form)
         {
+            if (model.AllergicHistoryItems == null || !model.AllergicHistoryItems.Any())
+            {
+                model.AllergicHistoryItems = _db.AllergicHistory.ToList();
+            }
+
+            // ✅ 解析 IsYes / IsNo
+            foreach (var item in model.AllergicHistoryItems)
+            {
+                string key = $"allergy_{item.ID}";  // ✅ 取得 `radio` 按鈕的 name
+                if (form.AllKeys.Contains(key))
+                {
+                    string selectedValue = form[key];
+                    item.IsYes = selectedValue == "yes";
+                    item.IsNo = selectedValue == "no";
+                }
+            }
+
+            // ✅ 解析 Details (過敏描述)
+            model.AllergicHistoryResponses = new Dictionary<string, string>();
+            foreach (var item in model.AllergicHistoryItems)
+            {
+                string key = $"AllergicHistoryResponses[{item.ID}]";
+                if (form.AllKeys.Contains(key))
+                {
+                    model.AllergicHistoryResponses[item.ID.ToString()] = form[key];
+                }
+            }
+
             using (var transaction = _db.Database.BeginTransaction())
             {
                 try
@@ -1462,7 +1468,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     // 讓錯誤訊息更可讀
                     ModelState.AddModelError("", "儲存失敗：" + detailedMessage);
 
-                    //return View("Preview", model);
                     return RedirectToAction("WebError", "Error");
                 }
             }
@@ -1487,39 +1492,50 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region  儲存 AllergicHistory (過敏史)
         private void SaveAllergicHistory(QuestionnaireViewModel model, int responseId)
         {
-            if (model.AllergicHistoryItems != null)
+            if (model.AllergicHistoryItems == null || !model.AllergicHistoryItems.Any())
             {
-                foreach (var item in model.AllergicHistoryItems)
+                model.AllergicHistoryItems = _db.AllergicHistory.ToList();
+            }
+
+            var allergicHistories = model.AllergicHistoryItems
+                .Where(item => item.IsYes || item.IsNo) // 只存有選擇 Yes/No 的項目
+                .Select(item => new ResponseAllergicHistory
                 {
-                    var allergicHistory = new ResponseAllergicHistory
-                    {
-                        QuestionnaireResponseID = responseId,
-                        AllergyType = item.ItemZh,
-                        Details = model.AllergicHistoryResponses.ContainsKey(item.ID.ToString())
-                                  ? model.AllergicHistoryResponses[item.ID.ToString()]
-                                  : null
-                    };
-                    _db.ResponseAllergicHistory.Add(allergicHistory);
-                }
+                    QuestionnaireResponseID = responseId,
+                    AllergyType = item.ItemZh, // ✅ 存入過敏項目名稱 (ItemZh)
+                    IsYes = item.IsYes,
+                    IsNo = item.IsNo,
+                    Details = (item.IsYes && model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()))
+                              ? model.AllergicHistoryResponses[item.ID.ToString()]
+                              : null
+                }).ToList();
+
+            if (allergicHistories.Any())
+            {
+                _db.ResponseAllergicHistory.AddRange(allergicHistories);
+                _db.SaveChanges();
             }
         }
-
         #endregion
 
         #region 儲存 FamilyHistory (家族病史)
         private void SaveFamilyHistory(QuestionnaireViewModel model, int responseId)
         {
-            if (model.FamilyHistoryItems == null || model.FamilyHistoryItems.Count == 0)
-                return;
+            if (model.FamilyHistoryItems == null || model.FamilyHistoryItems.Count == 0) return;
 
             foreach (var item in model.FamilyHistoryItems)
             {
+                var status = item.IsYes ? "Yes" :
+                             item.IsNo ? "No" :
+                             item.IsUnknown ? "Unknown" : "Unknown"; // 明確設置狀態
+
                 var familyHistory = new ResponseFamilyHistory
                 {
                     QuestionnaireResponseID = responseId,
                     Disease = item.GeneralPartsZh,
-                    Status = item.IsYes ? "Yes" : item.IsNo ? "No" : "Unknown"
+                    Status = status // 設定正確狀態
                 };
+
                 _db.ResponseFamilyHistory.Add(familyHistory);
             }
 
@@ -1532,8 +1548,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     Status = model.OtherFamilyHistory
                 });
             }
-        }
 
+            _db.SaveChanges(); // 確保數據存入
+        }
         #endregion
 
         #region 儲存 PastHistory (過去病史)
@@ -1932,7 +1949,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 問卷存檔成功畫面 
-        public ActionResult Sucess()
+        public ActionResult Success()
         {
             return View();
         }

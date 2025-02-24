@@ -460,10 +460,10 @@
     <Content Include="Views\Questionnaire\Preview.cshtml" />
     <Content Include="Views\Questionnaire\NowTreatmentMethod.cshtml" />
     <Content Include="Views\Questionnaire\ConcussionMedicalEvaluation.cshtml" />
-    <Content Include="Views\Questionnaire\Sucess.cshtml" />
     <Content Include="Views\Error\WebError.cshtml" />
     <Content Include="Views\Error\Error500.cshtml" />
     <Content Include="Views\Error\Maintain.cshtml" />
+    <Content Include="Views\Questionnaire\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

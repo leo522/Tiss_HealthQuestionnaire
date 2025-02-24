@@ -18,6 +18,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public int QuestionnaireResponseID { get; set; }
         public string AllergyType { get; set; }
         public string Details { get; set; }
+        public bool IsYes { get; set; }
+        public bool IsNo { get; set; }
     
         public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }

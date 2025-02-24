@@ -14,7 +14,6 @@
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">問卷總預覽</h1>
         <form method="post" action="@Url.Action("Submit", "Questionnaire")">
-
             <!-- 個人基本資料 -->
             <div class="mb-8">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-4">個人基本資料</h2>
@@ -78,13 +77,15 @@
                     </strong>
                 </p>
                 @Html.HiddenFor(m => m.AllergicHistory)
-                @if (Model.AllergicHistoryItems?.Any() == true)
+
+                @if (Model.AllergicHistoryItems != null && Model.AllergicHistoryItems.Any())
                 {
                     <h3 class="text-lg font-bold mb-4">過敏史 詳細項目</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="border border-gray-300 px-4 py-2">過敏項目 (Item)</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否過敏</th>
                                 <th class="border border-gray-300 px-4 py-2">過敏描述 (Allergy Description)</th>
                             </tr>
                         </thead>
@@ -92,14 +93,48 @@
                             @foreach (var item in Model.AllergicHistoryItems)
                             {
                                 <tr>
-                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @(Model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()) ? Model.AllergicHistoryResponses[item.ID.ToString()] : "未填寫")
+                                        <span class="block font-medium">@item.ItemZh</span>
+                                        <span class="block text-sm text-gray-600">@item.ItemEn</span>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        @if (item.IsYes)
+                                        {
+                                            <span class="text-green-600 font-bold">✔ 是</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-red-600">✘ 否</span>
+                                        }
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        @if (item.IsYes && Model.AllergicHistoryResponses != null
+                                            && Model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()))
+                                        {
+                                            @Model.AllergicHistoryResponses[item.ID.ToString()]
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-400">—</span> <!-- 無過敏描述時顯示「—」-->
+                                        }
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+                }
+                @foreach (var item in Model.AllergicHistoryItems)
+                {
+                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ID", item.ID)
+                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ItemZh", item.ItemZh)
+                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ItemEn", item.ItemEn)
+                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].IsYes", item.IsYes)
+                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].IsNo", item.IsNo)
+
+                    if (Model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()))
+                    {
+                        @Html.Hidden($"AllergicHistoryResponses[{item.ID}]", Model.AllergicHistoryResponses[item.ID.ToString()])
+                    }
                 }
             </div>
 
@@ -114,28 +149,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.FamilyHistoryItems.Count; i++)
+                        @foreach (var item in Model.FamilyHistoryItems)
                         {
-                            var item = Model.FamilyHistoryItems[i];
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                 <td class="border border-gray-300 px-4 py-2">
-                                    @if (item.IsYes)
-                                    {
-                                        <span class="text-red-600">是 (Yes)</span>
-                                    }
-                                    else if (item.IsNo)
-                                    {
-                                        <span class="text-green-600">否 (No)</span>
-                                    }
-                                    else if (item.IsUnknown)
-                                    {
-                                        <span class="text-black-600">未知 (Unknown)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-gray-400">未填寫</span>
-                                    }
+                                    @(item.IsYes ? "是 (Yes)" : item.IsNo ? "否 (No)" : "未知 (Unknown)")
                                 </td>
                             </tr>
                         }
@@ -161,7 +180,7 @@
                     <input type="hidden" name="FamilyHistoryItems[@i].IsUnknown" value="@item.IsUnknown" />
                 }
 
-                <!-- 確保 `OtherFamilyHistory` 也能提交 -->
+                @*確保 `OtherFamilyHistory` 也能提交*@
                 <input type="hidden" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory" />
             </div>
 
