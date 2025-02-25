@@ -108,10 +108,9 @@
                                         }
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @if (item.IsYes && Model.AllergicHistoryResponses != null
-                                            && Model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()))
+                                        @if (item.IsYes && !string.IsNullOrEmpty(item.Details))
                                         {
-                                            @Model.AllergicHistoryResponses[item.ID.ToString()]
+                                            @item.Details
                                         }
                                         else
                                         {
@@ -123,18 +122,13 @@
                         </tbody>
                     </table>
                 }
-                @foreach (var item in Model.AllergicHistoryItems)
+                @for (int i = 0; i < Model.AllergicHistoryItems.Count; i++)
                 {
-                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ID", item.ID)
-                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ItemZh", item.ItemZh)
-                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].ItemEn", item.ItemEn)
-                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].IsYes", item.IsYes)
-                    @Html.Hidden($"AllergicHistoryItems[{item.ID}].IsNo", item.IsNo)
-
-                    if (Model.AllergicHistoryResponses.ContainsKey(item.ID.ToString()))
-                    {
-                        @Html.Hidden($"AllergicHistoryResponses[{item.ID}]", Model.AllergicHistoryResponses[item.ID.ToString()])
-                    }
+                    @Html.HiddenFor(m => m.AllergicHistoryItems[i].ID)
+                    @Html.HiddenFor(m => m.AllergicHistoryItems[i].ItemZh)
+                    @Html.HiddenFor(m => m.AllergicHistoryItems[i].ItemEn)
+                    <input type="hidden" name="AllergicHistoryItems[@i].IsYes" value="@Model.AllergicHistoryItems[i].IsYes.ToString().ToLower()" />
+                    <input type="hidden" name="AllergicHistoryItems[@i].Details" value="@Model.AllergicHistoryItems[i].Details" />
                 }
             </div>
 

@@ -12,8 +12,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" Nullable="false" />
-          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -1191,8 +1189,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" Nullable="false" />
-          <Property Name="IsNo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -1586,9 +1582,9 @@
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
           <Property Name="AllergyType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Details" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse" FromRole="ResponseAllergicHistory" ToRole="QuestionnaireResponse" />
           <Property Name="IsYes" Type="Boolean" Nullable="false" />
           <Property Name="IsNo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse" FromRole="ResponseAllergicHistory" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponseCardiovascularScreening">
           <Key>
@@ -2102,8 +2098,6 @@
           <EntitySetMapping Name="AllergicHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.AllergicHistory">
               <MappingFragment StoreEntitySet="AllergicHistory">
-                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
-                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
