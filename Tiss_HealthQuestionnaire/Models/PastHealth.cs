@@ -14,10 +14,17 @@ namespace Tiss_HealthQuestionnaire.Models
     
     public partial class PastHealth
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PastHealth()
+        {
+            this.ResponsePastHealth = new HashSet<ResponsePastHealth>();
+        }
+    
         public int ID { get; set; }
         public string ItemZh { get; set; }
         public string ItemEn { get; set; }
-        public bool IsYes { get; set; }
-        public bool IsNo { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponsePastHealth> ResponsePastHealth { get; set; }
     }
 }

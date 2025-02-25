@@ -251,21 +251,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" Nullable="false" />
-          <Property Name="IsNo" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PastHealthAnswers">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="QuestionID" Type="int" />
-          <Property Name="UserID" Type="nvarchar" MaxLength="10" />
-          <Property Name="SpecialIty" Type="nvarchar" MaxLength="50" />
-          <Property Name="FillerName" Type="nvarchar" MaxLength="20" />
-          <Property Name="AnswerOptionID" Type="bit" />
-          <Property Name="RemarkAnswer" Type="nvarchar" MaxLength="255" />
-          <Property Name="DateOfAnswer" Type="datetime" />
         </EntityType>
         <EntityType Name="PastHistory">
           <Key>
@@ -453,6 +438,7 @@
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
           <Property Name="HasAbnormalItems" Type="bit" Nullable="false" />
           <Property Name="Details" Type="nvarchar" MaxLength="100" />
+          <Property Name="PastHealthItemID" Type="int" />
         </EntityType>
         <EntityType Name="ResponsePastHistory">
           <Key>
@@ -780,6 +766,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ResponsePastHealth_PastHealthItem">
+          <End Role="PastHealth" Type="Self.PastHealth" Multiplicity="0..1" />
+          <End Role="ResponsePastHealth" Type="Self.ResponsePastHealth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastHealth">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponsePastHealth">
+              <PropertyRef Name="PastHealthItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ResponsePastHealth_QuestionnaireResponse">
           <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="1" />
           <End Role="ResponsePastHealth" Type="Self.ResponsePastHealth" Multiplicity="*" />
@@ -891,7 +889,6 @@
           <EntitySet Name="PasswordReset" EntityType="Self.PasswordReset" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastDrugs" EntityType="Self.PastDrugs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHealth" EntityType="Self.PastHealth" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PastHealthAnswers" EntityType="Self.PastHealthAnswers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastHistory" EntityType="Self.PastHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastInjuryCategory" EntityType="Self.PastInjuryCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PastInjuryRecord" EntityType="Self.PastInjuryRecord" Schema="dbo" store:Type="Tables" />
@@ -992,6 +989,10 @@
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponsePastDrugs" EntitySet="ResponsePastDrugs" />
           </AssociationSet>
+          <AssociationSet Name="FK_ResponsePastHealth_PastHealthItem" Association="Self.FK_ResponsePastHealth_PastHealthItem">
+            <End Role="PastHealth" EntitySet="PastHealth" />
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
+          </AssociationSet>
           <AssociationSet Name="FK_ResponsePastHealth_QuestionnaireResponse" Association="Self.FK_ResponsePastHealth_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
@@ -1052,7 +1053,6 @@
           <EntitySet Name="PasswordReset" EntityType="HealthQuestionnaireModel.PasswordReset" />
           <EntitySet Name="PastDrugs" EntityType="HealthQuestionnaireModel.PastDrugs" />
           <EntitySet Name="PastHealth" EntityType="HealthQuestionnaireModel.PastHealth" />
-          <EntitySet Name="PastHealthAnswers" EntityType="HealthQuestionnaireModel.PastHealthAnswers" />
           <EntitySet Name="PastHistory" EntityType="HealthQuestionnaireModel.PastHistory" />
           <EntitySet Name="PastInjuryCategory" EntityType="HealthQuestionnaireModel.PastInjuryCategory" />
           <EntitySet Name="PastInjuryRecord" EntityType="HealthQuestionnaireModel.PastInjuryRecord" />
@@ -1104,6 +1104,10 @@
           <AssociationSet Name="FK_QuestionnaireResponse_Gender" Association="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponsePastHealth_PastHealthItem" Association="HealthQuestionnaireModel.FK_ResponsePastHealth_PastHealthItem">
+            <End Role="PastHealth" EntitySet="PastHealth" />
+            <End Role="ResponsePastHealth" EntitySet="ResponsePastHealth" />
           </AssociationSet>
           <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07">
             <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
@@ -1437,21 +1441,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" Nullable="false" />
-          <Property Name="IsNo" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PastHealthAnswers">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QuestionID" Type="Int32" />
-          <Property Name="UserID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SpecialIty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FillerName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="AnswerOptionID" Type="Boolean" />
-          <Property Name="RemarkAnswer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DateOfAnswer" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ResponsePastHealth" Relationship="HealthQuestionnaireModel.FK_ResponsePastHealth_PastHealthItem" FromRole="PastHealth" ToRole="ResponsePastHealth" />
         </EntityType>
         <EntityType Name="PastHistory">
           <Key>
@@ -1671,6 +1661,8 @@
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
           <Property Name="HasAbnormalItems" Type="Boolean" Nullable="false" />
           <Property Name="Details" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PastHealthItemID" Type="Int32" />
+          <NavigationProperty Name="PastHealth" Relationship="HealthQuestionnaireModel.FK_ResponsePastHealth_PastHealthItem" FromRole="ResponsePastHealth" ToRole="PastHealth" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponsePastHealth_QuestionnaireResponse" FromRole="ResponsePastHealth" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponsePastHistory">
@@ -1858,6 +1850,18 @@
             </Principal>
             <Dependent Role="QuestionnaireResponse">
               <PropertyRef Name="GenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponsePastHealth_PastHealthItem">
+          <End Type="HealthQuestionnaireModel.PastHealth" Role="PastHealth" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.ResponsePastHealth" Role="ResponsePastHealth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PastHealth">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponsePastHealth">
+              <PropertyRef Name="PastHealthItemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2362,24 +2366,8 @@
           <EntitySetMapping Name="PastHealth">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHealth">
               <MappingFragment StoreEntitySet="PastHealth">
-                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
-                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PastHealthAnswers">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastHealthAnswers">
-              <MappingFragment StoreEntitySet="PastHealthAnswers">
-                <ScalarProperty Name="DateOfAnswer" ColumnName="DateOfAnswer" />
-                <ScalarProperty Name="RemarkAnswer" ColumnName="RemarkAnswer" />
-                <ScalarProperty Name="AnswerOptionID" ColumnName="AnswerOptionID" />
-                <ScalarProperty Name="FillerName" ColumnName="FillerName" />
-                <ScalarProperty Name="SpecialIty" ColumnName="SpecialIty" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2584,6 +2572,7 @@
           <EntitySetMapping Name="ResponsePastHealth">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePastHealth">
               <MappingFragment StoreEntitySet="ResponsePastHealth">
+                <ScalarProperty Name="PastHealthItemID" ColumnName="PastHealthItemID" />
                 <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="HasAbnormalItems" ColumnName="HasAbnormalItems" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />

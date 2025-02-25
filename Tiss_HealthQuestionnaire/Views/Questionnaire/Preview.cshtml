@@ -33,39 +33,49 @@
             @Html.HiddenFor(m => m.FillDate)
 
             <!--第一題：過去健康檢查病史 -->
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
-                <p class="mb-4">
-                    <strong>
-                        過去兩年內的健康檢查是否有異常項目：
-                        @QuestionnaireViewModel.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
-                    </strong>
-                </p>
-                @Html.HiddenFor(m => m.PastHealthHistory)
-                @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses?.Any() == true)
-                {
-                    <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">項目 (Item)</th>
-                                <th class="border border-gray-300 px-4 py-2">填寫內容 (Details)</th>
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
+            <p class="mb-4">
+                <strong>
+                    過去兩年內的健康檢查是否有異常項目：
+                    @QuestionnaireViewModel.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
+                </strong>
+            </p>
+            @Html.HiddenFor(m => m.PastHealthHistory)
+            @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses != null && Model.PastHealthResponses.Any())
+            {
+                <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">項目 (Item)</th>
+                            <th class="border border-gray-300 px-4 py-2">填寫內容 (Details)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PastHealthItems.Where(i => i.IsYes))
+                        {
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    @(Model.PastHealthResponses.ContainsKey(item.ID.ToString())
+                          ? Model.PastHealthResponses[item.ID.ToString()]
+                          : "未填寫")
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.PastHealthItems.Where(i => i.IsYes))
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        @(Model.PastHealthResponses.ContainsKey(item.ID.ToString()) ? Model.PastHealthResponses[item.ID.ToString()] : "未填寫")
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
+                        }
+                    </tbody>
+                </table>
+            }
+            @for (int i = 0; i < Model.PastHealthItems.Count; i++)
+            {
+                @Html.HiddenFor(m => m.PastHealthItems[i].ID)
+                @Html.HiddenFor(m => m.PastHealthItems[i].ItemZh)
+                @Html.HiddenFor(m => m.PastHealthItems[i].ItemEn)
+                <input type="hidden" name="PastHealthItems[@i].IsYes" value="@Model.PastHealthItems[i].IsYes.ToString().ToLower()" />
+                <input type="hidden" name="PastHealthItems[@i].Details" value="@Model.PastHealthItems[i].Details" />
+            }
+        </div>
 
             <!-- 第二題：過敏史 -->
             <div class="mb-8">

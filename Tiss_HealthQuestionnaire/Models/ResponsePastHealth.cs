@@ -18,7 +18,9 @@ namespace Tiss_HealthQuestionnaire.Models
         public int QuestionnaireResponseID { get; set; }
         public bool HasAbnormalItems { get; set; }
         public string Details { get; set; }
+        public Nullable<int> PastHealthItemID { get; set; }
     
+        public virtual PastHealth PastHealth { get; set; }
         public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }
 }

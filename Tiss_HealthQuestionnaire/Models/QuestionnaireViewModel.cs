@@ -78,11 +78,11 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 過去健康檢查病史
-        public List<PastHealth> PastHealthItems { get; set; }
+        //public List<PastHealth> PastHealthItems { get; set; }
+        public List<PastHealthItemViewModel> PastHealthItems { get; set; }
         #endregion
 
         #region 過敏史
-        //public List<AllergicHistory> AllergicHistoryItems { get; set; }
         public List<AllergicHistoryItemViewModel> AllergicHistoryItems { get; set; }
         #endregion
 
@@ -231,14 +231,13 @@ namespace Tiss_HealthQuestionnaire.Models
     }
 
     #region 過去健康檢查病史
-    public class PastHealthDetailViewModel
+    public class PastHealthItemViewModel
     {
-        public int ItemId { get; set; }    // 項目的ID
+        public int ID { get; set; }    // 項目的ID
         public string ItemZh { get; set; } // 中文
         public string ItemEn { get; set; }  // 英文
-        public string Item1 { get; set; } = "未回答";  // 第一個輸入框的內容
-        public string Item2 { get; set; } = "未回答";  // 第二個輸入框的內容
-        public string Item3 { get; set; } = "未回答";  // 第三個輸入框的內容
+        public bool IsYes { get; set; }
+        public string Details { get; set; }
     }
     #endregion
 
@@ -251,14 +250,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public bool IsYes { get; set; }       // 使用者回答是否有過敏
         public string Details { get; set; }   // 使用者填寫的描述
     }
-    //public class AllergicHistoryDetailViewModel
-    //{
-    //    public int ItemId { get; set; }    // 項目的ID
-    //    public string ItemZh { get; set; }
-    //    public string ItemEn { get; set; }
-    //    public string IsAllergic { get; set; }  // 是否過敏（"yes" 或 "no"）
-    //    public string AllergyDescription { get; set; }  // 過敏詳情描述
-    //}
     #endregion
 
     #region 家族病史
