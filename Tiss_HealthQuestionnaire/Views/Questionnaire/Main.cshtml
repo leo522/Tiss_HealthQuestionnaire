@@ -132,7 +132,47 @@
                     </table>
                 </div>
 
-               
+                <!-- 第三題：家族病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3">
+                    <h3 class="text-lg font-semibold mb-4">家族病史 (Family History) - 二等親內</h3>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">疾病項目</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">否</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">未知</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.FamilyHistoryItems.Count; i++)
+                            {
+                                var item = Model.FamilyHistoryItems[i];
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="family_no_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="no" class="w-5 h-5">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="family_yes_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="yes" class="w-5 h-5">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" id="family_unknown_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="unknown" class="w-5 h-5">
+                                    </td>
+                                </tr>
+                            }
+                            <!-- "其他" 選項 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">其他 (Others)：</td>
+                                <td colspan="3" class="border border-gray-300 px-4 py-2">
+                                    <input type="text" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory"
+                                           class="border rounded p-3 w-full w-5 h-5" placeholder="請填寫其他家族病史...">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
             <!-- 分步驟按鈕 -->
             <div class="flex justify-between mt-6">

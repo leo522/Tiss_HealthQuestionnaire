@@ -58,7 +58,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     PastHealthItems = GetPastHealthItemViewModel(),
                     AllergicHistoryItems = GetAllergicHistoryItemViewModels(),
-                    FamilyHistoryItems = _db.FamilyHistory.ToList(),
+                    FamilyHistoryItems = GetFamilyHistoryItemsViewModels(),
                     PastHistoryItems = _db.PastHistory.ToList(),
                     PresentIllnessItems = _db.PresentIllness.ToList(),
                     PastDrugsItems = _db.PastDrugs.ToList(),
@@ -90,7 +90,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                return View("Error", new HandleErrorInfo(ex, "Questionnaire", "Main"));
+                return View("Error", new HandleErrorInfo(ex, "Error500", "Error"));
             }
         }
         #endregion
@@ -123,6 +123,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     IsYes = false, // 預設值
                     Details = null // 預設值
                 }).ToList();
+        }
+        #endregion
+
+        #region 家族病史
+        private List<FamilyHistoryViewModel> GetFamilyHistoryItemsViewModels()
+        {
+            return _db.FamilyHistory.Select(item => new FamilyHistoryViewModel
+            {
+                ID = item.ID,
+                GeneralPartsZh = item.GeneralPartsZh,
+                IsYes = false,
+                IsNo = false,
+                IsUnknown = true
+            }).ToList();
         }
         #endregion
 
@@ -713,7 +727,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "發生錯誤：" + ex.Message);
-                //return View("Main", model);
                 return RedirectToAction("Error404", "Error");
             }
         }
@@ -783,33 +796,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 家族病史
         private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.FamilyHistoryItems == null)
+            model.FamilyHistoryItems = _db.FamilyHistory.ToList().Select(item => new FamilyHistoryViewModel
             {
-                model.FamilyHistoryItems = new List<FamilyHistory>();
-            }
-            else
-            {
-                model.FamilyHistoryItems.Clear();
-            }
-
-            int i = 0;
-            while (form[$"FamilyHistoryItems[{i}].ID"] != null)
-            {
-                int id = int.Parse(form[$"FamilyHistoryItems[{i}].ID"]);
-                string generalPartsZh = form[$"FamilyHistoryItems[{i}].GeneralPartsZh"];
-                string option = form[$"FamilyHistoryItems[{i}].FamilyHistoryOption"] ?? "unknown";
-
-                model.FamilyHistoryItems.Add(new FamilyHistory
-                {
-                    ID = id,
-                    GeneralPartsZh = generalPartsZh,
-                    IsYes = (option == "yes"),
-                    IsNo = (option == "no"),
-                    IsUnknown = (option == "unknown")
-                });
-
-                i++;
-            }
+                ID = item.ID,
+                GeneralPartsZh = item.GeneralPartsZh,
+                FamilyHistoryOption = form[$"FamilyHistoryItems[{item.ID}].FamilyHistoryOption"] ?? "unknown"
+            }).ToList();
 
             model.OtherFamilyHistory = form["OtherFamilyHistory"]?.Trim() ?? "";
         }

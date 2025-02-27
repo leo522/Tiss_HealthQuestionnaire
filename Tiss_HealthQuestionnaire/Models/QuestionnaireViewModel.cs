@@ -78,7 +78,6 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 過去健康檢查病史
-        //public List<PastHealth> PastHealthItems { get; set; }
         public List<PastHealthItemViewModel> PastHealthItems { get; set; }
         #endregion
 
@@ -87,7 +86,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 家族病史
-        public List<FamilyHistory> FamilyHistoryItems { get; set; }
+        public List<FamilyHistoryViewModel> FamilyHistoryItems { get; set; }
         public string OtherFamilyHistory { get; set; }
         #endregion
 
@@ -255,14 +254,28 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 家族病史
     public class FamilyHistoryViewModel
     {
-        public int ItemId { get; set; }
-        public string GeneralPartsZh { get; set; }
-        public string GeneralPartsEn { get; set; }
-        public string FamilyHistoryOption { get; set; }  // 可為 "yes", "no", 或 "unknown"
-        public string OtherFamilyHistory { get; set; }  // 其他家族病史
-        public bool? IsNo { get; set; }
-        public bool? IsYes { get; set; }
-        public bool? IsUnknown { get; set; }
+        public int ID { get; set; }  // 家族病史 ID
+        public string GeneralPartsZh { get; set; }  // 疾病名稱 (中文)
+
+        public bool IsYes { get; set; }  // 是否有該疾病
+        public bool IsNo { get; set; }   // 是否沒有該疾病
+        public bool IsUnknown { get; set; }  // 是否未知
+
+        public string FamilyHistoryOption
+        {
+            get
+            {
+                if (IsYes) return "yes";
+                if (IsNo) return "no";
+                return "unknown";
+            }
+            set
+            {
+                IsYes = (value == "yes");
+                IsNo = (value == "no");
+                IsUnknown = (value == "unknown");
+            }
+        }
     }
     #endregion
 

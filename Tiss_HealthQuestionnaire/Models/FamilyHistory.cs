@@ -17,8 +17,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string GeneralPartsZh { get; set; }
         public string GeneralPartsEn { get; set; }
-        public bool IsNo { get; set; }
-        public bool IsYes { get; set; }
-        public bool IsUnknown { get; set; }
     }
 }

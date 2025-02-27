@@ -160,9 +160,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GeneralPartsZh" Type="nvarchar" MaxLength="150" />
           <Property Name="GeneralPartsEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsNo" Type="bit" Nullable="false" />
-          <Property Name="IsYes" Type="bit" Nullable="false" />
-          <Property Name="IsUnknown" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -1348,9 +1345,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GeneralPartsZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="GeneralPartsEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsNo" Type="Boolean" Nullable="false" />
-          <Property Name="IsYes" Type="Boolean" Nullable="false" />
-          <Property Name="IsUnknown" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="FemaleQuestionnaire">
           <Key>
@@ -2266,9 +2260,6 @@
           <EntitySetMapping Name="FamilyHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.FamilyHistory">
               <MappingFragment StoreEntitySet="FamilyHistory">
-                <ScalarProperty Name="IsUnknown" ColumnName="IsUnknown" />
-                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
-                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
                 <ScalarProperty Name="GeneralPartsEn" ColumnName="GeneralPartsEn" />
                 <ScalarProperty Name="GeneralPartsZh" ColumnName="GeneralPartsZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

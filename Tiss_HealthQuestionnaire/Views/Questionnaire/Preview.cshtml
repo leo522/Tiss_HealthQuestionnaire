@@ -33,7 +33,7 @@
             @Html.HiddenFor(m => m.FillDate)
 
             <!--第一題：過去健康檢查病史 -->
-        <div class="mb-8">
+            <div class="mb-8">
             <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
             <p class="mb-4">
                 <strong>
@@ -145,46 +145,50 @@
             <!-- 第三題：家族病史 -->
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">家族病史 (Family History) - 二等親內</h2>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">項目</th>
-                            <th class="border border-gray-300 px-4 py-2">狀態</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.FamilyHistoryItems)
-                        {
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    @(item.IsYes ? "是 (Yes)" : item.IsNo ? "否 (No)" : "未知 (Unknown)")
-                                </td>
-                            </tr>
-                        }
 
-                        @if (!string.IsNullOrEmpty(Model.OtherFamilyHistory))
-                        {
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">其他</td>
-                                <td class="border border-gray-300 px-4 py-2">@Model.OtherFamilyHistory</td>
+                @if (Model.FamilyHistoryItems != null && Model.FamilyHistoryItems.Any())
+                {
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目</th>
+                                <th class="border border-gray-300 px-4 py-2">狀態</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.FamilyHistoryItems)
+                            {
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        @(item.FamilyHistoryOption == "yes" ? "是 (Yes)" :
+                              item.FamilyHistoryOption == "no" ? "否 (No)" :
+                              "未知 (Unknown)")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-gray-500">未填寫家族病史</p>
+                }
 
-                <!-- 確保 `FamilyHistoryItems` 可以被 POST 提交 -->
+                @if (!string.IsNullOrEmpty(Model.OtherFamilyHistory))
+                {
+                    <div class="mt-4">
+                        <p><strong>其他家族病史：</strong> @Model.OtherFamilyHistory</p>
+                    </div>
+                }
+
                 @for (int i = 0; i < Model.FamilyHistoryItems.Count; i++)
                 {
                     var item = Model.FamilyHistoryItems[i];
                     <input type="hidden" name="FamilyHistoryItems[@i].ID" value="@item.ID" />
                     <input type="hidden" name="FamilyHistoryItems[@i].GeneralPartsZh" value="@item.GeneralPartsZh" />
-                    <input type="hidden" name="FamilyHistoryItems[@i].IsYes" value="@item.IsYes" />
-                    <input type="hidden" name="FamilyHistoryItems[@i].IsNo" value="@item.IsNo" />
-                    <input type="hidden" name="FamilyHistoryItems[@i].IsUnknown" value="@item.IsUnknown" />
+                    <input type="hidden" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="@item.FamilyHistoryOption" />
                 }
-
-                @*確保 `OtherFamilyHistory` 也能提交*@
                 <input type="hidden" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory" />
             </div>
 
