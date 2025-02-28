@@ -51,6 +51,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PasswordReset> PasswordReset { get; set; }
         public virtual DbSet<PastDrugs> PastDrugs { get; set; }
         public virtual DbSet<PastHealth> PastHealth { get; set; }
+        public virtual DbSet<PastHealthAnswers> PastHealthAnswers { get; set; }
         public virtual DbSet<PastHistory> PastHistory { get; set; }
         public virtual DbSet<PastInjuryCategory> PastInjuryCategory { get; set; }
         public virtual DbSet<PastInjuryRecord> PastInjuryRecord { get; set; }

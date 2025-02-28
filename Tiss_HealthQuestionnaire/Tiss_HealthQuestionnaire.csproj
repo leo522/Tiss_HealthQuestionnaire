@@ -234,6 +234,9 @@
     <Compile Include="Models\PastHealth.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PastHealthAnswers.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PastHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>

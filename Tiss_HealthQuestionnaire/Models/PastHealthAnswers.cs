@@ -12,13 +12,15 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ResponsePastHealth
+    public partial class PastHealthAnswers
     {
         public int ID { get; set; }
-        public int QuestionnaireResponseID { get; set; }
-        public bool HasAbnormalItems { get; set; }
-        public string Details { get; set; }
-    
-        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
+        public Nullable<int> QuestionID { get; set; }
+        public string UserID { get; set; }
+        public string SpecialIty { get; set; }
+        public string FillerName { get; set; }
+        public Nullable<bool> AnswerOptionID { get; set; }
+        public string RemarkAnswer { get; set; }
+        public Nullable<System.DateTime> DateOfAnswer { get; set; }
     }
 }

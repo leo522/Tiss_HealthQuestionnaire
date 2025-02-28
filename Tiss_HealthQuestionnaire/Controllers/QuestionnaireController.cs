@@ -59,7 +59,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     PastHealthItems = GetPastHealthItemViewModel(),
                     AllergicHistoryItems = GetAllergicHistoryItemViewModels(),
                     FamilyHistoryItems = GetFamilyHistoryItemsViewModels(),
-                    PastHistoryItems = _db.PastHistory.ToList(),
+                    PastHistoryItems = GetPastHistoryViewModel(),
                     PresentIllnessItems = _db.PresentIllness.ToList(),
                     PastDrugsItems = _db.PastDrugs.ToList(),
                     TUE = "no",
@@ -130,6 +130,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private List<FamilyHistoryViewModel> GetFamilyHistoryItemsViewModels()
         {
             return _db.FamilyHistory.Select(item => new FamilyHistoryViewModel
+            {
+                ID = item.ID,
+                GeneralPartsZh = item.GeneralPartsZh,
+                IsYes = false,
+                IsNo = false,
+                IsUnknown = true
+            }).ToList();
+        }
+        #endregion
+
+        #region 過去病史
+        private List<PastHistoryViewModel> GetPastHistoryViewModel()
+        {
+            return _db.PastHistory.Select(item => new PastHistoryViewModel
             {
                 ID = item.ID,
                 GeneralPartsZh = item.GeneralPartsZh,
@@ -796,13 +810,36 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 家族病史
         private void ProcessFamilyHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            model.FamilyHistoryItems = _db.FamilyHistory.ToList().Select(item => new FamilyHistoryViewModel
-            {
-                ID = item.ID,
-                GeneralPartsZh = item.GeneralPartsZh,
-                FamilyHistoryOption = form[$"FamilyHistoryItems[{item.ID}].FamilyHistoryOption"] ?? "unknown"
-            }).ToList();
+            model.FamilyHistoryItems = new List<FamilyHistoryViewModel>();
 
+            var familyItems = _db.FamilyHistory.ToList(); // 先取得家族病史的所有題目
+            int index = 0; // **使用 `index` 避免 `ID` 取值錯誤**
+
+            foreach (var item in familyItems)
+            {
+                // **確保 `form` 讀取的是 `index`，而非 `ID`**
+                string option = form[$"FamilyHistoryItems[{index}].FamilyHistoryOption"]?.Trim().ToLower() ?? "unknown";
+
+                var newItem = new FamilyHistoryViewModel
+                {
+                    ID = item.ID, // **仍然保留正確的 ID**
+                    GeneralPartsZh = item.GeneralPartsZh,
+                    FamilyHistoryOption = option
+                };
+
+                // ✅ **確保 "Yes" / "No" / "Unknown" 被正確設置**
+                newItem.IsYes = (option == "yes");
+                newItem.IsNo = (option == "no");
+                newItem.IsUnknown = (option == "unknown");
+
+                model.FamilyHistoryItems.Add(newItem);
+
+                Console.WriteLine($"✅ [DEBUG] 家族病史 Added: ID={item.ID}, 疾病={item.GeneralPartsZh}, 選項={option}");
+
+                index++; // **索引要遞增，確保對應**
+            }
+
+            // **確保 `OtherFamilyHistory` 也有讀取**
             model.OtherFamilyHistory = form["OtherFamilyHistory"]?.Trim() ?? "";
         }
         #endregion
@@ -810,36 +847,44 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 過去病史
         private void ProcessPastHistory(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.PastHistoryItems == null)
-            {
-                model.PastHistoryItems = new List<PastHistory>();
-            }
-            else
-            {
-                model.PastHistoryItems.Clear();
-            }
+            model.PastHistoryItems = new List<PastHistoryViewModel>();
 
             int i = 0;
             while (form[$"PastHistoryItems[{i}].ID"] != null)
             {
                 int id = int.Parse(form[$"PastHistoryItems[{i}].ID"]);
                 string generalPartsZh = form[$"PastHistoryItems[{i}].GeneralPartsZh"];
-                string option = form[$"PastHistoryItems[{i}].PastHistoryOption"];
+                string option = form[$"PastHistoryItems[{i}].PastHistoryOption"]?.Trim().ToLower() ?? "unknown"; 
 
-                bool isYes = option == "yes";
-                bool isNo = option == "no";
-                bool isUnknown = option == "unknown";
-
-                model.PastHistoryItems.Add(new PastHistory
+                var newItem = new PastHistoryViewModel
                 {
                     ID = id,
                     GeneralPartsZh = generalPartsZh,
-                    IsYes = option == "yes",
-                    IsNo = option == "no",
-                    IsUnknown = option == "unknown"
-                });
+                    PastHistoryOption = option
+                };
 
-                Console.WriteLine($"PastHistory Added: ID={id}, GeneralPartsZh={generalPartsZh}, Option={option}");
+                if (option == "yes")
+                {
+                    newItem.IsYes = true;
+                    newItem.IsNo = false;
+                    newItem.IsUnknown = false;
+                }
+                else if (option == "no")
+                {
+                    newItem.IsYes = false;
+                    newItem.IsNo = true;
+                    newItem.IsUnknown = false;
+                }
+                else
+                {
+                    newItem.IsYes = false;
+                    newItem.IsNo = false;
+                    newItem.IsUnknown = true;
+                }
+
+                model.PastHistoryItems.Add(newItem);
+
+                Console.WriteLine($"✅ [DEBUG] PastHistory Added: ID={id}, Disease={generalPartsZh}, Option={option}");
 
                 i++;
             }
@@ -1449,7 +1494,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             var responses = model.PastHealthItems.Select(item => new ResponsePastHealth
             {
                 QuestionnaireResponseID = responseId,
-                PastHealthItemID = item.ID,
+                //PastHealthItemID = item.ID,
                 HasAbnormalItems = item.IsYes,
                 Details = item.IsYes ? (string.IsNullOrEmpty(item.Details) ? "未填寫" : item.Details) : null
             }).ToList();
@@ -1513,20 +1558,35 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 PastHistory (過去病史)
         private void SavePastHistory(QuestionnaireViewModel model, int responseId)
         {
-            if (model.PastHistoryItems == null || model.PastHistoryItems.Count == 0)
-            {
-                return;
-            }
+            if (model.PastHistoryItems == null || model.PastHistoryItems.Count == 0) return;
 
             foreach (var item in model.PastHistoryItems)
+            {
+                var status = item.IsYes ? "Yes" :
+                             item.IsNo ? "No" :
+                             item.IsUnknown ? "Unknown" : "Unknown"; // 明確設定狀態
+
+                var pastHistory = new ResponsePastHistory
+                {
+                    QuestionnaireResponseID = responseId,
+                    Disease = item.GeneralPartsZh, // 存入疾病名稱
+                    Status = status
+                };
+
+                _db.ResponsePastHistory.Add(pastHistory);
+            }
+
+            if (!string.IsNullOrEmpty(model.OtherPastHistory))
             {
                 _db.ResponsePastHistory.Add(new ResponsePastHistory
                 {
                     QuestionnaireResponseID = responseId,
-                    Disease = item.GeneralPartsZh,
-                    Status = item.IsYes ? "Yes" : item.IsNo ? "No" : "Unknown"
+                    Disease = "其他",
+                    Status = model.OtherPastHistory // 存入使用者輸入的其他疾病
                 });
             }
+
+            _db.SaveChanges(); // 確保數據存入
         }
         #endregion
 

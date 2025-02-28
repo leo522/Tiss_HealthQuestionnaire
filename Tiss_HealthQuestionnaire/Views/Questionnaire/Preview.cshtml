@@ -34,48 +34,48 @@
 
             <!--第一題：過去健康檢查病史 -->
             <div class="mb-8">
-            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
-            <p class="mb-4">
-                <strong>
-                    過去兩年內的健康檢查是否有異常項目：
-                    @QuestionnaireViewModel.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
-                </strong>
-            </p>
-            @Html.HiddenFor(m => m.PastHealthHistory)
-            @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses != null && Model.PastHealthResponses.Any())
-            {
-                <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 px-4 py-2">項目 (Item)</th>
-                            <th class="border border-gray-300 px-4 py-2">填寫內容 (Details)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.PastHealthItems.Where(i => i.IsYes))
-                        {
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    @(Model.PastHealthResponses.ContainsKey(item.ID.ToString())
+                <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
+                <p class="mb-4">
+                    <strong>
+                        過去兩年內的健康檢查是否有異常項目：
+                        @QuestionnaireViewModel.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
+                    </strong>
+                </p>
+                @Html.HiddenFor(m => m.PastHealthHistory)
+                @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses != null && Model.PastHealthResponses.Any())
+                {
+                    <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目 (Item)</th>
+                                <th class="border border-gray-300 px-4 py-2">填寫內容 (Details)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastHealthItems.Where(i => i.IsYes))
+                            {
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        @(Model.PastHealthResponses.ContainsKey(item.ID.ToString())
                           ? Model.PastHealthResponses[item.ID.ToString()]
                           : "未填寫")
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            @for (int i = 0; i < Model.PastHealthItems.Count; i++)
-            {
-                @Html.HiddenFor(m => m.PastHealthItems[i].ID)
-                @Html.HiddenFor(m => m.PastHealthItems[i].ItemZh)
-                @Html.HiddenFor(m => m.PastHealthItems[i].ItemEn)
-                <input type="hidden" name="PastHealthItems[@i].IsYes" value="@Model.PastHealthItems[i].IsYes.ToString().ToLower()" />
-                <input type="hidden" name="PastHealthItems[@i].Details" value="@Model.PastHealthItems[i].Details" />
-            }
-        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                @for (int i = 0; i < Model.PastHealthItems.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.PastHealthItems[i].ID)
+                    @Html.HiddenFor(m => m.PastHealthItems[i].ItemZh)
+                    @Html.HiddenFor(m => m.PastHealthItems[i].ItemEn)
+                    <input type="hidden" name="PastHealthItems[@i].IsYes" value="@Model.PastHealthItems[i].IsYes.ToString().ToLower()" />
+                    <input type="hidden" name="PastHealthItems[@i].Details" value="@Model.PastHealthItems[i].Details" />
+                }
+            </div>
 
             <!-- 第二題：過敏史 -->
             <div class="mb-8">
@@ -161,9 +161,18 @@
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @(item.FamilyHistoryOption == "yes" ? "是 (Yes)" :
-                              item.FamilyHistoryOption == "no" ? "否 (No)" :
-                              "未知 (Unknown)")
+                                        @if (item.FamilyHistoryOption == "yes")
+                                        {
+                                            <span class="text-red-600">是 (Yes)</span>
+                                        }
+                                        else if (item.FamilyHistoryOption == "no")
+                                        {
+                                            <span class="text-green-600">否 (No)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-600">未知 (Unknown)</span>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -192,6 +201,7 @@
                 <input type="hidden" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory" />
             </div>
 
+
             <!-- 第四題：過去病史 -->
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去病史 (Past History)</h2>
@@ -209,21 +219,21 @@
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                 <td class="border border-gray-300 px-4 py-2">
-                                    @if (item.IsYes)
+                                    @if (item.PastHistoryOption == "yes")
                                     {
-                                        <span class="text-red-600">是(Yes)</span>
+                                        <span class="text-red-600">是 (Yes)</span>
                                     }
-                                    else if (item.IsNo)
+                                    else if (item.PastHistoryOption == "no")
                                     {
-                                        <span class="text-green-600">否(No)</span>
+                                        <span class="text-green-600">否 (No)</span>
                                     }
-                                    else if (item.IsUnknown)
+                                    else if (item.PastHistoryOption == "unknown")
                                     {
-                                        <span class="text-black-600">未知(Unknow)</span>
+                                        <span class="text-gray-600">未知 (Unknown)</span>
                                     }
                                     else
                                     {
-                                        <span class="text-gray-600">未填寫</span>
+                                        <span class="text-gray-400">未填寫</span>
                                     }
                                 </td>
                             </tr>
@@ -232,26 +242,22 @@
                         @if (!string.IsNullOrEmpty(Model.OtherPastHistory))
                         {
                             <tr>
-                                <td class="border border-gray-300 px-4 py-2">其他</td>
+                                <td class="border border-gray-300 px-4 py-2">其他 (Others)</td>
                                 <td class="border border-gray-300 px-4 py-2">@Model.OtherPastHistory</td>
                             </tr>
                         }
-
                     </tbody>
                 </table>
 
-                <!-- **隱藏欄位移到 `table` 之外，避免數據重複** -->
+                <!-- 確保數據傳遞正確 -->
                 @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                 {
                     var item = Model.PastHistoryItems[i];
-                    <input type="hidden" name="PastHistoryItems[@i].ID" value="@item.ID" />
+                    <input type="hidden" name="PastHistoryItems[@i].ItemId" value="@item.ID" />
                     <input type="hidden" name="PastHistoryItems[@i].GeneralPartsZh" value="@item.GeneralPartsZh" />
-                    <input type="hidden" name="PastHistoryItems[@i].IsYes" value="@item.IsYes" />
-                    <input type="hidden" name="PastHistoryItems[@i].IsNo" value="@item.IsNo" />
-                    <input type="hidden" name="PastHistoryItems[@i].IsUnknown" value="@item.IsUnknown" />
+                    <input type="hidden" name="PastHistoryItems[@i].PastHistoryOption" value="@item.PastHistoryOption" />
                 }
-
-                <input type="hidden" name="otherPastHistory" value="@Model.OtherPastHistory" /> <!-- 其他選項 -->
+                <input type="hidden" name="OtherPastHistory" value="@Model.OtherPastHistory" />
             </div>
 
             <!-- 第五題：現在病史 -->

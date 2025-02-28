@@ -91,7 +91,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 過去病史
-        public List<PastHistory> PastHistoryItems { get; set; }
+        public List<PastHistoryViewModel> PastHistoryItems { get; set; }
         public string OtherPastHistory { get; set; }
         #endregion
 
@@ -280,16 +280,29 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 過去病史
-    public class PastHistoryDetailViewModel
+    public class PastHistoryViewModel
     {
-        public int ItemId { get; set; } //項目的ID
-        public string GeneralPartsZh { get; set; }
-        public string GeneralPartsEn { get; set; }
-        public string PastHistoryOption { get; set; } // "yes", "no", "unknown"
-        public string OtherPastHistory { get; set; }
-        public bool? IsNo { get; set; }
-        public bool? IsYes { get; set; }
-        public bool? IsUnknown { get; set; }
+        public int ID { get; set; } // 項目 ID
+        public string GeneralPartsZh { get; set; } // 疾病名稱 (中文)
+        public bool IsYes { get; set; }  // 是否有該疾病
+        public bool IsNo { get; set; }   // 是否沒有該疾病
+        public bool IsUnknown { get; set; }  // 是否未知
+
+        public string PastHistoryOption
+        {
+            get
+            {
+                if (IsYes) return "yes";
+                if (IsNo) return "no";
+                return "unknown";
+            }
+            set
+            {
+                IsYes = (value == "yes");
+                IsNo = (value == "no");
+                IsUnknown = (value == "unknown");
+            }
+        }
     }
     #endregion
 
