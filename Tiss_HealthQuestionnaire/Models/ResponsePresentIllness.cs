@@ -17,7 +17,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public int QuestionnaireResponseID { get; set; }
         public string BodyPart { get; set; }
-        public bool HasIssue { get; set; }
         public Nullable<bool> ReceivingTherapy { get; set; }
     
         public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }

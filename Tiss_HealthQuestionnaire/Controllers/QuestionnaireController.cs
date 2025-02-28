@@ -60,7 +60,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     AllergicHistoryItems = GetAllergicHistoryItemViewModels(),
                     FamilyHistoryItems = GetFamilyHistoryItemsViewModels(),
                     PastHistoryItems = GetPastHistoryViewModel(),
-                    PresentIllnessItems = _db.PresentIllness.ToList(),
+                    PresentIllnessItems = GetPresentIllnessViewModel(),
                     PastDrugsItems = _db.PastDrugs.ToList(),
                     TUE = "no",
                     OtherDrug = "",
@@ -150,6 +150,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 IsYes = false,
                 IsNo = false,
                 IsUnknown = true
+            }).ToList();
+        }
+        #endregion
+
+        #region 現在病史
+        private List<PresentIllnessViewModel> GetPresentIllnessViewModel()
+        {
+            return _db.PresentIllness.Select(item => new PresentIllnessViewModel
+            {
+                ID = item.ID,
+                PartsOfBodyZh = item.PartsOfBodyZh
             }).ToList();
         }
         #endregion
@@ -812,34 +823,29 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             model.FamilyHistoryItems = new List<FamilyHistoryViewModel>();
 
-            var familyItems = _db.FamilyHistory.ToList(); // 先取得家族病史的所有題目
-            int index = 0; // **使用 `index` 避免 `ID` 取值錯誤**
+            var familyItems = _db.FamilyHistory.ToList();
+            int index = 0;
 
             foreach (var item in familyItems)
             {
-                // **確保 `form` 讀取的是 `index`，而非 `ID`**
                 string option = form[$"FamilyHistoryItems[{index}].FamilyHistoryOption"]?.Trim().ToLower() ?? "unknown";
 
                 var newItem = new FamilyHistoryViewModel
                 {
-                    ID = item.ID, // **仍然保留正確的 ID**
+                    ID = item.ID,
                     GeneralPartsZh = item.GeneralPartsZh,
                     FamilyHistoryOption = option
                 };
 
-                // ✅ **確保 "Yes" / "No" / "Unknown" 被正確設置**
                 newItem.IsYes = (option == "yes");
                 newItem.IsNo = (option == "no");
                 newItem.IsUnknown = (option == "unknown");
 
                 model.FamilyHistoryItems.Add(newItem);
 
-                Console.WriteLine($"✅ [DEBUG] 家族病史 Added: ID={item.ID}, 疾病={item.GeneralPartsZh}, 選項={option}");
-
-                index++; // **索引要遞增，確保對應**
+                index++;
             }
 
-            // **確保 `OtherFamilyHistory` 也有讀取**
             model.OtherFamilyHistory = form["OtherFamilyHistory"]?.Trim() ?? "";
         }
         #endregion
@@ -896,39 +902,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 現在病史
         private void ProcessPresentIllness(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.PresentIllnessItems == null)
+            model.PresentIllnessItems = _db.PresentIllness.ToList().Select(item => new PresentIllnessViewModel
             {
-                model.PresentIllnessItems = new List<PresentIllness>();
-            }
-            else
-            {
-                model.PresentIllnessItems.Clear();
-            }
-
-            int i = 0;
-            while (form[$"PresentIllnessItems[{i}].ID"] != null)
-            {
-                int id = int.Parse(form[$"PresentIllnessItems[{i}].ID"]);
-                string partsOfBodyZh = form[$"PresentIllnessItems[{i}].PartsOfBodyZh"];
-                string option = form[$"PresentIllnessItems[{i}].ReceivingTherapy"];
-
-                bool isYes = option == "yes";
-                bool isNo = option == "no";
-
-                // **修正：只有使用者選擇才加入清單**
-                if (isYes || isNo)
-                {
-                    model.PresentIllnessItems.Add(new PresentIllness
-                    {
-                        ID = id,
-                        PartsOfBodyZh = partsOfBodyZh,
-                        IsYes = isYes,
-                        IsNo = isNo
-                    });
-                }
-
-                i++;
-            }
+                ID = item.ID,
+                PartsOfBodyZh = item.PartsOfBodyZh,
+                ReceivingTherapy = form[$"presentIllness_{item.ID}"]
+            }).ToList();
         }
         #endregion
 
@@ -1564,7 +1543,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 var status = item.IsYes ? "Yes" :
                              item.IsNo ? "No" :
-                             item.IsUnknown ? "Unknown" : "Unknown"; // 明確設定狀態
+                             item.IsUnknown ? "Unknown" : "Unknown";
 
                 var pastHistory = new ResponsePastHistory
                 {
@@ -1586,7 +1565,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 });
             }
 
-            _db.SaveChanges(); // 確保數據存入
+            _db.SaveChanges();
         }
         #endregion
 
@@ -1598,17 +1577,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 return;
             }
 
-            foreach (var item in model.PresentIllnessItems)
-            {
-                var presentIllness = new ResponsePresentIllness
+            var presentIllnessList = model.PresentIllnessItems
+                .Where(item => item.ReceivingTherapy == "yes" || item.ReceivingTherapy == "no") // 過濾出有選擇的資料
+                .Select(item => new ResponsePresentIllness
                 {
                     QuestionnaireResponseID = responseId,
                     BodyPart = item.PartsOfBodyZh,
-                    HasIssue = item.IsYes,
-                    ReceivingTherapy = item.IsYes
-                };
-                _db.ResponsePresentIllness.Add(presentIllness);
-            }
+                    ReceivingTherapy = item.ReceivingTherapy == "yes" // 轉換為布林值
+                }).ToList();
+
+            _db.ResponsePresentIllness.AddRange(presentIllnessList);
         }
         #endregion
 

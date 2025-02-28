@@ -96,7 +96,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 現在病史
-        public List<PresentIllness> PresentIllnessItems { get; set; }
+        public List<PresentIllnessViewModel> PresentIllnessItems { get; set; }
         #endregion
 
         #region 藥物史
@@ -307,12 +307,11 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 現在病史
-    public class PresentIllnessDetailViewModel
+    public class PresentIllnessViewModel
     {
-        public int ItemId { get; set; }    // 項目的ID
+        public int ID { get; set; }
         public string PartsOfBodyZh { get; set; }
-        public string PartsOfBodyEn { get; set; }
-        public string ReceivingOtherTherapies { get; set; }  // 是否接受其他治療("yes", "no")
+        public string ReceivingTherapy { get; set; }
     }
     #endregion
 

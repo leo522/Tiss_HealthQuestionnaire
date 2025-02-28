@@ -222,6 +222,40 @@
                     }
                 </div>
 
+                <!-- 第五題：現在病史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="5">
+                    <h2 class="text-lg font-semibold mb-4">現在病史 (Present Illness)</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">疾病部位</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否正在治療</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.PresentIllnessItems.Count; i++)
+                            {
+                                var item = Model.PresentIllnessItems[i];
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no" class="h-5 w-5" /> 否
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes" class="h-5 w-5" /> 是
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- 確保數據能正確送出 -->
+                    @for (int i = 0; i < Model.PresentIllnessItems.Count; i++)
+                    {
+                        var item = Model.PresentIllnessItems[i];
+                        <input type="hidden" name="PresentIllnessItems[@i].ID" value="@item.ID" />
+                        <input type="hidden" name="PresentIllnessItems[@i].PartsOfBodyZh" value="@item.PartsOfBodyZh" />
+                    }
+                </div>
+
 
             </div>
             <!-- 分步驟按鈕 -->

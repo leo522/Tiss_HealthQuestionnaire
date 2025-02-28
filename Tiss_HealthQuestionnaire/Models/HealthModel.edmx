@@ -327,8 +327,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsOfBodyZh" Type="nvarchar" MaxLength="150" />
           <Property Name="PartsOfBodyEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsYes" Type="bit" Nullable="false" />
-          <Property Name="IsNo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionnaireResponse">
           <Key>
@@ -487,7 +485,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
           <Property Name="BodyPart" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="HasIssue" Type="bit" Nullable="false" />
           <Property Name="ReceivingTherapy" Type="bit" />
         </EntityType>
         <EntityType Name="ResponseSymptomEvaluation">
@@ -1515,8 +1512,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartsOfBodyZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PartsOfBodyEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsYes" Type="Boolean" Nullable="false" />
-          <Property Name="IsNo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionnaireResponse">
           <Key>
@@ -1705,7 +1700,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionnaireResponseID" Type="Int32" Nullable="false" />
           <Property Name="BodyPart" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HasIssue" Type="Boolean" Nullable="false" />
           <Property Name="ReceivingTherapy" Type="Boolean" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponsePresentIllness_QuestionnaireResponse" FromRole="ResponsePresentIllness" ToRole="QuestionnaireResponse" />
         </EntityType>
@@ -2439,8 +2433,6 @@
           <EntitySetMapping Name="PresentIllness">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PresentIllness">
               <MappingFragment StoreEntitySet="PresentIllness">
-                <ScalarProperty Name="IsNo" ColumnName="IsNo" />
-                <ScalarProperty Name="IsYes" ColumnName="IsYes" />
                 <ScalarProperty Name="PartsOfBodyEn" ColumnName="PartsOfBodyEn" />
                 <ScalarProperty Name="PartsOfBodyZh" ColumnName="PartsOfBodyZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -2616,7 +2608,6 @@
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponsePresentIllness">
               <MappingFragment StoreEntitySet="ResponsePresentIllness">
                 <ScalarProperty Name="ReceivingTherapy" ColumnName="ReceivingTherapy" />
-                <ScalarProperty Name="HasIssue" ColumnName="HasIssue" />
                 <ScalarProperty Name="BodyPart" ColumnName="BodyPart" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
