@@ -256,6 +256,88 @@
                     }
                 </div>
 
+                <!-- 第六題：藥物史 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="6">
+                    <h2 class="text-lg font-semibold mb-4">藥物史</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否使用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastDrugsItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="checkbox" name="drug_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                    </td>
+                                </tr>
+                            }
+
+                            <!-- 其他藥物輸入框 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <label for="otherDrug">其他 (Others)，請詳述：</label>
+                                    <input type="text" id="otherDrug" name="OtherDrug" class="border border-gray-300 rounded px-2 py-1 w-full required-text hidden">
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <input type="checkbox" id="otherDrugCheck" name="drug_other" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherDrug" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- TUE (治療用途豁免) 選擇 -->
+                    <div class="mt-4 p-4 border border-gray-300 rounded-lg">
+                        <label class="font-semibold">是否有申請治療用途豁免？(TUE)</label>
+                        <div class="flex space-x-4 mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">是</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">否</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第七題：營養品 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
+                    <h2 class="text-lg font-semibold mb-4">營養品</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2">項目</th>
+                                <th class="border border-gray-300 px-4 py-2">是否使用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastSupplementsItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="checkbox" name="supplement_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                    </td>
+                                </tr>
+                            }
+
+                            <!-- "其他 (Others)" 輸入區 -->
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">其他 (Others)：</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <input type="checkbox" id="otherSupplementCheck" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherSupplementInput" />
+                                    <input type="text" id="otherSupplementInput" name="OtherSupplements" class="border rounded p-2 w-full required-text hidden">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <!-- 分步驟按鈕 -->

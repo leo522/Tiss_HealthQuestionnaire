@@ -241,7 +241,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsUsed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -311,7 +310,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemZh" Type="nvarchar" MaxLength="150" />
           <Property Name="ItemEn" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsUsed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PastTreatmentMethod">
           <Key>
@@ -1420,7 +1418,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PastHealth">
           <Key>
@@ -1496,7 +1493,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemZh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PastTreatmentMethod">
           <Key>
@@ -2337,7 +2333,6 @@
           <EntitySetMapping Name="PastDrugs">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastDrugs">
               <MappingFragment StoreEntitySet="PastDrugs">
-                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -2415,7 +2410,6 @@
           <EntitySetMapping Name="PastSupplements">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.PastSupplements">
               <MappingFragment StoreEntitySet="PastSupplements">
-                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

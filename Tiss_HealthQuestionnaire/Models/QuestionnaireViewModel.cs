@@ -100,14 +100,13 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 藥物史
-        public List<PastDrugs> PastDrugsItems { get; set; }
+        public List<PastDrugsViewModel> PastDrugsItems { get; set; }
         public string TUE { get; set; }  // 是否有申請治療用途豁免
         public string OtherDrug { get; set; }  // 其他藥物
         #endregion
 
         #region 營養品
-
-        public List<PastSupplements> PastSupplementsItems { get; set; }
+        public List<PastSupplementsViewModel> PastSupplementsItems { get; set; }
         public string OtherSupplements { get; set; } // "其他 (Others)" 輸入的補充品名稱
         #endregion
 
@@ -316,24 +315,22 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 藥物史
-    public class PastDrugsDetailViewModel
+    public class PastDrugsViewModel
     {
-        public int ItemId { get; set; }    // 藥物項目 ID
-        public string ItemZh { get; set; } // 藥物項目中文名稱
-        public string ItemEn { get; set; } // 藥物項目英文名稱
-        public string IsUsed { get; set; } // 是否使用過（"yes" 或 "no"）
-        public string OtherDrugs { get; set; } // 其他藥物使用情況描述
+        public int ID { get; set; } // 藥物項目 ID
+        public string ItemZh { get; set; } // 藥物名稱（中文）
+        public string ItemEn { get; set; } // 藥物名稱（英文）
+        public bool IsUsed { get; set; } // 是否使用
     }
     #endregion
 
     #region 營養品
-    public class PastSupplementsDetailViewModel
+    public class PastSupplementsViewModel
     {
-        public int ItemId { get; set; }    // 補充品項目 ID
+        public int ID { get; set; }    // 補充品項目 ID
         public string ItemZh { get; set; } // 補充品項目中文名稱
         public string ItemEn { get; set; } // 補充品項目英文名稱
-        public string IsUsed { get; set; }   // 是否使用過（true 或 false）
-        public string OtherSupplements { get; set; } // 其他補充品描述
+        public bool IsUsed { get; set; }   // **改為 `bool`**
     }
     #endregion
 
