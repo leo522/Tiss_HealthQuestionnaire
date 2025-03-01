@@ -111,7 +111,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 女性問卷
-        public List<FemaleQuestionnaire> FemaleQuestionnaireItems { get; set; } = new List<FemaleQuestionnaire>();
+        public List<FemaleQuestionnaireViewModel> FemaleQuestionnaireItems { get; set; } = new List<FemaleQuestionnaireViewModel>();
         public Dictionary<int, string> FemaleQuestionnaireAnswers { get; set; } = new Dictionary<int, string>();
         #endregion
 
@@ -335,30 +335,12 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 女性問卷
-    public class FemaleQuestionnaireDetailViewModel
+    public class FemaleQuestionnaireViewModel
     {
-        public int ID { get; set; } // 問題的唯一識別碼
-        public string QuestionZh { get; set; } // 問題的中文描述
-        public string QuestionEn { get; set; } // 問題的英文描述
-        public string Answer { get; set; } // 單選題的答案代碼
-
-        // 保存可選項目，鍵為選項代碼，值為選項描述（中英文）
+        public int ID { get; set; }
+        public string QuestionZh { get; set; }
+        public string QuestionEn { get; set; }
         public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
-
-        // 顯示選擇的答案（中英文對照）
-        public string DisplayAnswer
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Answer))
-                {
-                    return "未回答"; // 如果沒有回答，顯示預設
-                }
-
-                // 檢查 AnswerOptions 是否為 null 並確認包含 Answer 的鍵
-                return AnswerOptions != null && AnswerOptions.ContainsKey(Answer) ? AnswerOptions[Answer] : Answer;
-            }
-        }
     }
     #endregion
 

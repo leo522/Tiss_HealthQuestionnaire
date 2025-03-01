@@ -301,43 +301,43 @@
 
             <!-- 第六題：藥物史 -->
             <div class="mb-8">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">藥物史 (Past Drugs)</h2>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border border-gray-300 p-2">藥物名稱 (Item)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.PastDrugsItems != null && Model.PastDrugsItems.Any())
-                        {
-                            foreach (var item in Model.PastDrugsItems)
+                <h2 class="text-xl font-semibold text-blue-600 mb-4">藥物史 (Past Drugs)</h2>
+
+                @if (Model.PastDrugsItems != null && Model.PastDrugsItems.Any(i => i.IsUsed))
+                {
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 p-2">藥物名稱 (Item)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PastDrugsItems.Where(i => i.IsUsed))
                             {
                                 <tr>
                                     <td class="border border-gray-300 p-2">@item.ItemZh</td>
                                 </tr>
                             }
-                            if (!string.IsNullOrEmpty(Model.OtherDrug))
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2 font-semibold">
-                                        其他 (Others)：@Model.OtherDrug
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td class="border border-gray-300 p-2 text-gray-500">未填寫</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <p class="mt-4">
-                    <strong>是否申請治療用途豁免 (TUE)？</strong>
-                    @(Model.TUE == "yes" ? "是 (Yes)" : "否 (No)")
-                </p>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-gray-500">未填寫</p>
+                }
+
+                <p class="mt-4"><strong>是否有申請治療用途豁免 (TUE)？</strong> @(Model.TUE == "yes" ? "是" : "否")</p>
+
+                <!-- 確保 hidden 屬性傳遞參數 -->
+                @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
+                {
+                    <input type="hidden" name="PastDrugsItems[@i].ID" value="@Model.PastDrugsItems[i].ID">
+                    <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@Model.PastDrugsItems[i].ItemZh">
+                    <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@Model.PastDrugsItems[i].IsUsed.ToString().ToLower()">
+                }
+
+                <!-- 確保 TUE 也能傳遞 -->
+                <input type="hidden" name="TUE" value="@Model.TUE">
             </div>
 
             <!-- 第七題：營養品 -->
@@ -378,10 +378,9 @@
 
                 @for (int i = 0; i < Model.PastSupplementsItems.Count; i++)
                 {
-                    var item = Model.PastSupplementsItems[i];
-                    <input type="hidden" name="PastSupplementsItems[@i].ID" value="@item.ID" />
-                    <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@item.ItemZh" />
-                    <input type="hidden" name="PastSupplementsItems[@i].IsUsed" value="@item.IsUsed" />
+                    <input type="hidden" name="PastSupplementsItems[@i].ID" value="@Model.PastSupplementsItems[i].ID" />
+                    <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@Model.PastSupplementsItems[i].ItemZh" />
+                    <input type="hidden" name="PastSupplementsItems[@i].IsUsed" value="@Model.PastSupplementsItems[i].IsUsed" />
                 }
             </div>
 
@@ -405,20 +404,6 @@
                                     ? Model.FemaleQuestionnaireAnswers[item.ID]
                                     : "未回答";
 
-                                // 轉換英文答案成中文
-                                if (answer == "yes")
-                                {
-                                    answer = "是";
-                                }
-                                else if (answer == "no")
-                                {
-                                    answer = "否";
-                                }
-                                else if (answer == "none")
-                                {
-                                    answer = "目前無生理週期";
-                                }
-
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">
                                         @item.QuestionZh <br />
@@ -429,16 +414,8 @@
                             }
                         </tbody>
                     </table>
-
-                    <!-- **隱藏欄位放在 `table` 外，避免重複提交** -->
-                    @for (int i = 0; i < Model.FemaleQuestionnaireItems.Count; i++)
-                    {
-                        var item = Model.FemaleQuestionnaireItems[i];
-                        <input type="hidden" name="FemaleQuestionnaireAnswers[@item.ID]" value="@Model.FemaleQuestionnaireAnswers[item.ID]" />
-                    }
                 </div>
             }
-
             <!-- 第九題：過去傷害（已復原） -->
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>

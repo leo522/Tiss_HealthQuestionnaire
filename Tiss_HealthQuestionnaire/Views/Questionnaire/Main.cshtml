@@ -267,26 +267,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.PastDrugsItems)
+                            @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
                             {
+                                var item = Model.PastDrugsItems[i];
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="checkbox" name="drug_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                        <label>
+                                            <input type="radio" class="w-5 h-5" name="PastDrugsItems[@i].IsUsed" value="true" required> 是
+                                        </label>
+                                        <label class="ml-4">
+                                            <input type="radio" class="w-5 h-5" name="PastDrugsItems[@i].IsUsed" value="false" required> 否
+                                        </label>
+                                        <input type="hidden" name="PastDrugsItems[@i].ID" value="@item.ID">
+                                        <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@item.ItemZh">
                                     </td>
                                 </tr>
                             }
-
-                            <!-- 其他藥物輸入框 -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <label for="otherDrug">其他 (Others)，請詳述：</label>
-                                    <input type="text" id="otherDrug" name="OtherDrug" class="border border-gray-300 rounded px-2 py-1 w-full required-text hidden">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="checkbox" id="otherDrugCheck" name="drug_other" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherDrug" />
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
 
@@ -295,16 +292,17 @@
                         <label class="font-semibold">是否有申請治療用途豁免？(TUE)</label>
                         <div class="flex space-x-4 mt-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5" required />
                                 <span class="ml-2">是</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5" required />
                                 <span class="ml-2">否</span>
                             </label>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- 第七題：營養品 -->
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
@@ -317,16 +315,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.PastSupplementsItems)
+                            @for (int i = 0; i < Model.PastSupplementsItems.Count; i++)
                             {
+                                var item = Model.PastSupplementsItems[i];
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="checkbox" name="supplement_@item.ID" class="h-5 w-5 form-checkbox required-checkbox" />
+                                        <input type="checkbox" name="PastSupplementsItems[@i].IsUsed" value="true" class="h-5 w-5 form-checkbox required-checkbox" />
+                                        <input type="hidden" name="PastSupplementsItems[@i].ID" value="@item.ID" />
+                                        <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@item.ItemZh" />
                                     </td>
                                 </tr>
                             }
-
                             <!-- "其他 (Others)" 輸入區 -->
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">其他 (Others)：</td>
@@ -338,6 +338,71 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- 第八題：女性問卷 -->
+                @if (Model.FemaleQuestionnaireItems != null && Model.FemaleQuestionnaireItems.Any())
+                {
+                    <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="8">
+                        <h2 class="text-lg font-semibold mb-4">女性問卷 Female Health Questionnaire</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2">問題 Question</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-center">答案 Answer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var question in Model.FemaleQuestionnaireItems)
+                                    {
+                                        <tr class="hover:bg-gray-100 question-row">
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <span class="block font-medium">@question.QuestionZh</span>
+                                                <span class="block text-sm text-gray-600">@question.QuestionEn</span>
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                @if (question.ID == 1)  // 第一次生理期時間 (選擇年齡範圍)
+                                                {
+                                                    <select name="FemaleQuestionnaireAnswers[@question.ID]" class="border rounded px-2 py-1">
+                                                        <option value="">請選擇</option>
+                                                        <option value="10">10 歲(含)以下</option>
+                                                        <option value="11">11 歲</option>
+                                                        <option value="12">12 歲</option>
+                                                        <option value="13">13 歲</option>
+                                                        <option value="14">14 歲</option>
+                                                        <option value="15">15 歲</option>
+                                                        <option value="16">16 歲(含)以上</option>
+                                                    </select>
+                                                }
+                                                else if (question.ID == 2 || question.ID == 4)  // 是/否問題
+                                                {
+                                                    <label>
+                                                        <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="yes" class="required-radio h-5 w-5"> 是
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="no" class="required-radio h-5 w-5"> 否
+                                                    </label>
+                                                }
+                                                else if (question.ID == 3)  // 是/否/目前無生理週期
+                                                {
+                                                    <label>
+                                                        <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="yes" class="required-radio h-5 w-5"> 是
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="no" class="required-radio h-5 w-5"> 否
+                                                    </label>
+                                                    <label class="ml-2">
+                                                        <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="none" class="required-radio h-5 w-5"> 目前無生理週期
+                                                    </label>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
 
             </div>
             <!-- 分步驟按鈕 -->

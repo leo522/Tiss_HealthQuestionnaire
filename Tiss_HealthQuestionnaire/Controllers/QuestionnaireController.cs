@@ -51,8 +51,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var currentInjuryTypesList = GetCurrentInjuryTypesList();
                 var currentTreatmentItems = GetCurrentTreatmentItems();
 
-                var supplements = _db.PastSupplements.ToList(); // 這行確保變數存在
+                //var supplements = _db.PastSupplements.ToList(); // 這行確保變數存在
 
+                // 獲取女性問卷 (僅限女性)
+                var femaleQuestionnaire = GetFemaleQuestionnaireViewModel(user.GenderID);
                 // 整合問卷資料
                 var viewModel = new QuestionnaireViewModel
                 {
@@ -65,7 +67,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     TUE = "no",
                     OtherDrug = "",
                     PastSupplementsItems = GetPastSupplementsViewModel(),
-                    FemaleQuestionnaireItems = user.GenderID == 2 ? _db.FemaleQuestionnaire.ToList() : null,
+                    FemaleQuestionnaireItems = femaleQuestionnaire,
+                    FemaleQuestionnaireAnswers = new Dictionary<int, string>(),
                     PastInjuryStatusAnswer = "yes",  // 確保前端顯示
                     PastInjuryItems = pastInjuryItems ?? new List<QuestionnaireViewModel.PastInjuryStatusViewModel>(),
                     PastInjuryTypes = pastInjuryTypesList ?? new List<InjuryTypeViewModel>(),
@@ -188,6 +191,51 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     ItemEn = s.ItemEn,
                     IsUsed = false // 預設未使用
                 }).ToList();
+        }
+        #endregion
+
+        #region 女性問卷
+        private List<FemaleQuestionnaireViewModel> GetFemaleQuestionnaireViewModel(int genderID)
+        {
+            if (genderID != 2)
+            {
+                return new List<FemaleQuestionnaireViewModel>(); // 只有女性才有問卷，非女性回傳空清單
+            }
+
+            var questions = _db.FemaleQuestionnaire
+                .Select(q => new
+                {
+                    q.ID,
+                    q.QuestionZh,
+                    q.QuestionEn
+                })
+                .ToList();
+
+            var result = questions.Select(q => new FemaleQuestionnaireViewModel
+            {
+                ID = q.ID,
+                QuestionZh = q.QuestionZh,
+                QuestionEn = q.QuestionEn,
+                AnswerOptions = q.ID == 1
+                    ? new Dictionary<string, string>
+                    {
+                { "10", "10 歲(含)以下" },
+                { "11", "11 歲" },
+                { "12", "12 歲" },
+                { "13", "13 歲" },
+                { "14", "14 歲" },
+                { "15", "15 歲" },
+                { "16", "16 歲(含)以上" }
+                    }
+                    : new Dictionary<string, string>
+                    {
+                { "yes", "是" },
+                { "no", "否" },
+                { "none", "目前無生理週期" }
+                    }
+            }).ToList();
+
+            return result;
         }
         #endregion
 
@@ -928,46 +976,59 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 現在病史
         private void ProcessPresentIllness(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PresentIllnessItems = _db.PresentIllness.ToList().Select(item => new PresentIllnessViewModel
+            if (model.PresentIllnessItems == null)
             {
-                ID = item.ID,
-                PartsOfBodyZh = item.PartsOfBodyZh,
-                ReceivingTherapy = form[$"presentIllness_{item.ID}"]
-            }).ToList();
+                model.PresentIllnessItems = new List<PresentIllnessViewModel>();
+            }
+            else
+            {
+                model.PresentIllnessItems.Clear();
+            }
+
+            foreach (var illness in _db.PresentIllness.ToList())
+            {
+                string therapyValue = form[$"PresentIllnessItems[{illness.ID}].ReceivingTherapy"];
+
+                if (!string.IsNullOrEmpty(therapyValue))
+                {
+                    model.PresentIllnessItems.Add(new PresentIllnessViewModel
+                    {
+                        ID = illness.ID,
+                        PartsOfBodyZh = illness.PartsOfBodyZh,
+                        ReceivingTherapy = therapyValue // 記錄用戶選擇的值
+                    });
+                }
+            }
         }
         #endregion
 
         #region 藥物史
         private void ProcessPastDrugs(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.PastDrugsItems == null)
-            {
-                model.PastDrugsItems = new List<PastDrugsViewModel>();
-            }
-            else
-            {
-                model.PastDrugsItems.Clear();
-            }
+            model.PastDrugsItems = new List<PastDrugsViewModel>(); // **確保不為 null**
 
-            // 迭代所有藥物項目，根據表單的值來判斷是否勾選
-            foreach (var drug in _db.PastDrugs.ToList())
+            int i = 0;
+            while (form[$"PastDrugsItems[{i}].ID"] != null)
             {
-                bool isUsed = form[$"drug_{drug.ID}"] == "on"; // checkbox 勾選時的值為 "on"
+                string isUsedValue = form[$"PastDrugsItems[{i}].IsUsed"];
+                bool isUsed = isUsedValue != null && isUsedValue == "true"; // **確保 `radio button` 正確解析**
 
-                if (isUsed)
+                var drug = new PastDrugsViewModel
                 {
-                    model.PastDrugsItems.Add(new PastDrugsViewModel
-                    {
-                        ID = drug.ID,
-                        ItemZh = drug.ItemZh,
-                        IsUsed = true
-                    });
-                }
+                    ID = int.Parse(form[$"PastDrugsItems[{i}].ID"]),
+                    ItemZh = form[$"PastDrugsItems[{i}].ItemZh"],
+                    IsUsed = isUsed
+                };
+
+                model.PastDrugsItems.Add(drug);
+                System.Diagnostics.Debug.WriteLine($"解析藥物: {drug.ItemZh}, ID: {drug.ID}, 是否使用: {drug.IsUsed}");
+
+                i++;
             }
 
-            // 確保 "其他藥物" 也能提交
-            model.OtherDrug = form["OtherDrug"]?.Trim() ?? "";
-            model.TUE = form["TUE"] ?? "no"; // 是否申請治療用途豁免
+            // 解析 TUE (治療用途豁免)
+            model.TUE = form["TUE"] ?? "no";  // **確保 `TUE` 不為 null**
+            System.Diagnostics.Debug.WriteLine($"TUE 選擇: {model.TUE}");
         }
         #endregion
 
@@ -983,27 +1044,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 model.PastSupplementsItems.Clear();
             }
 
-            // **取得所有勾選的補充品 ID**
-            var selectedIds = form.AllKeys
-                .Where(key => key.StartsWith("supplement_"))
-                .Select(key => int.Parse(key.Replace("supplement_", "")))
-                .ToList();
-
-            foreach (var id in selectedIds)
+            int index = 0;
+            while (form[$"PastSupplementsItems[{index}].ID"] != null)
             {
-                var supplementItem = _db.PastSupplements.FirstOrDefault(s => s.ID == id);
-                if (supplementItem != null)
+                bool isUsed = form[$"PastSupplementsItems[{index}].IsUsed"] == "true";  // 確保 checkbox 解析
+                model.PastSupplementsItems.Add(new PastSupplementsViewModel
                 {
-                    model.PastSupplementsItems.Add(new PastSupplementsViewModel
-                    {
-                        ID = supplementItem.ID,
-                        ItemZh = supplementItem.ItemZh,
-                        IsUsed = true // 確保正確帶入
-                    });
-                }
+                    ID = int.Parse(form[$"PastSupplementsItems[{index}].ID"]),
+                    ItemZh = form[$"PastSupplementsItems[{index}].ItemZh"],
+                    IsUsed = isUsed
+                });
+                index++;
             }
 
-            // 處理 "其他營養品" 選項
+            // 解析 "其他營養品"
             model.OtherSupplements = form["OtherSupplements"]?.Trim() ?? "";
         }
         #endregion
@@ -1011,14 +1065,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 女性問卷
         private void ProcessFemaleQuestionnaire(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.Gender != 2) // 只有女性才處理
+            if (model.FemaleQuestionnaireItems == null || !model.FemaleQuestionnaireItems.Any())
             {
-                return;
-            }
-
-            if (model.FemaleQuestionnaireItems == null)
-            {
-                model.FemaleQuestionnaireItems = _db.FemaleQuestionnaire.ToList();
+                return; // 無資料不處理
             }
 
             if (model.FemaleQuestionnaireAnswers == null)
@@ -1027,15 +1076,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             else
             {
-                model.FemaleQuestionnaireAnswers.Clear(); // **清除舊數據，避免重複填寫**
+                model.FemaleQuestionnaireAnswers.Clear(); // 清除舊資料
             }
 
             foreach (var item in model.FemaleQuestionnaireItems)
             {
                 string answerKey = $"FemaleQuestionnaireAnswers[{item.ID}]";
-                string answer = form[answerKey] ?? "未回答"; // 取得使用者填寫的答案
+                string answer = form[answerKey];
 
-                model.FemaleQuestionnaireAnswers[item.ID] = answer;
+                model.FemaleQuestionnaireAnswers[item.ID] = string.IsNullOrEmpty(answer) ? "未回答" : answer;
             }
         }
         #endregion
@@ -1623,56 +1672,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 _db.ResponsePresentIllness.AddRange(presentIllnessList);
             }
-            //_db.ResponsePresentIllness.AddRange(presentIllnessList);
-            //_db.SaveChanges();
         }
         #endregion
 
         #region 儲存 PastDrugs (藥物史)
         private void SavePastDrugs(QuestionnaireViewModel model, int responseId)
         {
-            //if (model.PastDrugsItems == null || model.PastDrugsItems.Count == 0)
-            //{
-            //    return;
-            //}
-
-            //foreach (var item in model.PastDrugsItems)
-            //{
-            //    var pastDrugs = new ResponsePastDrugs
-            //    {
-            //        QuestionnaireResponseID = responseId,
-            //        DrugName = item.ItemZh,
-            //        Used = true // 因為只有勾選的才會存入
-            //    };
-            //    _db.ResponsePastDrugs.Add(pastDrugs);
-            //}
-
-            //// 儲存 "其他藥物" 選項
-            //if (!string.IsNullOrEmpty(model.OtherDrug))
-            //{
-            //    _db.ResponsePastDrugs.Add(new ResponsePastDrugs
-            //    {
-            //        QuestionnaireResponseID = responseId,
-            //        DrugName = "其他",
-            //        Used = true
-            //    });
-            //}
-
-            //// 儲存 "治療用途豁免" (TUE)
-            //_db.ResponsePastDrugs.Add(new ResponsePastDrugs
-            //{
-            //    QuestionnaireResponseID = responseId,
-            //    DrugName = "治療用途豁免 (TUE)",
-            //    Used = model.TUE == "yes"
-            //});
-            //_db.SaveChanges();
             if (model.PastDrugsItems == null || model.PastDrugsItems.Count == 0)
-            {
                 return;
-            }
 
             var pastDrugsList = model.PastDrugsItems
-                .Where(item => item.IsUsed)  // **確保只存入勾選的**
+                .Where(item => item.IsUsed)  // **確保只存入選 "是" 的項目**
                 .Select(item => new ResponsePastDrugs
                 {
                     QuestionnaireResponseID = responseId,
@@ -1681,20 +1691,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }).ToList();
 
             if (pastDrugsList.Any())
-            {
                 _db.ResponsePastDrugs.AddRange(pastDrugsList);
-            }
 
-            // **確保 "其他藥物" 也存入**
-            if (!string.IsNullOrEmpty(model.OtherDrug))
+            if (!string.IsNullOrEmpty(model.TUE))
             {
                 _db.ResponsePastDrugs.Add(new ResponsePastDrugs
                 {
                     QuestionnaireResponseID = responseId,
-                    DrugName = "其他",
-                    Used = true
+                    DrugName = "TUE",
+                    Used = model.TUE == "yes"  // **轉換為 boolean**
                 });
             }
+
+            _db.SaveChanges();
         }
         #endregion
 
@@ -1720,7 +1729,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 _db.ResponsePastSupplements.AddRange(supplementsList);
             }
 
-            // 儲存 "其他" 營養品
             if (!string.IsNullOrEmpty(model.OtherSupplements))
             {
                 _db.ResponsePastSupplements.Add(new ResponsePastSupplements
@@ -1741,26 +1749,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 FemaleQuestionnaire (女性問卷)
         private void SaveFemaleQuestionnaire(QuestionnaireViewModel model, int responseId)
         {
-            if (model.Gender != 2)
+            if (model.Gender != 2 || model.FemaleQuestionnaireAnswers == null)
             {
-                return; // 非女性不存
+                return; // 只有女性才存
             }
 
-            foreach (var item in model.FemaleQuestionnaireItems)
-            {
-                var answer = model.FemaleQuestionnaireAnswers.ContainsKey(item.ID)
-                    ? model.FemaleQuestionnaireAnswers[item.ID]
-                    : "未回答"; // 若無回答，則存入 "未回答"
-
-                var femaleQuestionnaire = new ResponseFemaleQuestionnaire
+            var femaleResponses = model.FemaleQuestionnaireItems
+                .Where(q => model.FemaleQuestionnaireAnswers.ContainsKey(q.ID)) // 確保有答案
+                .Select(q => new ResponseFemaleQuestionnaire
                 {
                     QuestionnaireResponseID = responseId,
-                    Question = item.QuestionZh,  // 存問題
-                    Answer = answer              // 存答案
-                };
+                    Question = q.QuestionZh, // 存入問題
+                    Answer = model.FemaleQuestionnaireAnswers[q.ID] // 存入答案
+                }).ToList();
 
-                _db.ResponseFemaleQuestionnaire.Add(femaleQuestionnaire);
-            }
+            _db.ResponseFemaleQuestionnaire.AddRange(femaleResponses);
         }
         #endregion
 
