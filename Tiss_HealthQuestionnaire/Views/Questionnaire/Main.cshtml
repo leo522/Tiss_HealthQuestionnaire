@@ -303,7 +303,6 @@
                     </div>
                 </div>
 
-
                 <!-- 第七題：營養品 -->
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
                     <h2 class="text-lg font-semibold mb-4">營養品</h2>
@@ -311,7 +310,7 @@
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="border border-gray-300 px-4 py-2">項目</th>
-                                <th class="border border-gray-300 px-4 py-2">是否使用</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否使用</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -321,23 +320,27 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="checkbox" name="PastSupplementsItems[@i].IsUsed" value="true" class="h-5 w-5 form-checkbox required-checkbox" />
-                                        <input type="hidden" name="PastSupplementsItems[@i].ID" value="@item.ID" />
-                                        <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@item.ItemZh" />
+                                        <label>
+                                            <input type="radio" class="w-5 h-5" name="PastSupplementsItems[@i].IsUsed" value="true" required> 是
+                                        </label>
+                                        <label class="ml-4">
+                                            <input type="radio" class="w-5 h-5" name="PastSupplementsItems[@i].IsUsed" value="false" required> 否
+                                        </label>
+                                        <input type="hidden" name="PastSupplementsItems[@i].ID" value="@item.ID">
+                                        <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@item.ItemZh">
                                     </td>
                                 </tr>
                             }
-                            <!-- "其他 (Others)" 輸入區 -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">其他 (Others)：</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="checkbox" id="otherSupplementCheck" class="h-5 w-5 form-checkbox other-checkbox" data-target="#otherSupplementInput" />
-                                    <input type="text" id="otherSupplementInput" name="OtherSupplements" class="border rounded p-2 w-full required-text hidden">
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+
+                    <!-- "其他 (Others)" 輸入區 -->
+                    <div class="mt-4">
+                        <label class="font-semibold">其他 (Others)：</label>
+                        <input type="text" id="otherSupplementInput" name="OtherSupplements" class="border rounded p-2 w-full">
+                    </div>
                 </div>
+
 
                 <!-- 第八題：女性問卷 -->
                 @if (Model.FemaleQuestionnaireItems != null && Model.FemaleQuestionnaireItems.Any())

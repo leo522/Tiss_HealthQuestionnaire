@@ -1005,7 +1005,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 藥物史
         private void ProcessPastDrugs(QuestionnaireViewModel model, FormCollection form)
         {
-            model.PastDrugsItems = new List<PastDrugsViewModel>(); // **確保不為 null**
+            model.PastDrugsItems = new List<PastDrugsViewModel>();
 
             int i = 0;
             while (form[$"PastDrugsItems[{i}].ID"] != null)
@@ -1021,7 +1021,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 };
 
                 model.PastDrugsItems.Add(drug);
-                System.Diagnostics.Debug.WriteLine($"解析藥物: {drug.ItemZh}, ID: {drug.ID}, 是否使用: {drug.IsUsed}");
 
                 i++;
             }
@@ -1035,29 +1034,30 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 營養品
         private void ProcessPastSupplements(QuestionnaireViewModel model, FormCollection form)
         {
-            if (model.PastSupplementsItems == null)
-            {
-                model.PastSupplementsItems = new List<PastSupplementsViewModel>();
-            }
-            else
-            {
-                model.PastSupplementsItems.Clear();
-            }
+            model.PastSupplementsItems = new List<PastSupplementsViewModel>();
 
             int index = 0;
             while (form[$"PastSupplementsItems[{index}].ID"] != null)
             {
-                bool isUsed = form[$"PastSupplementsItems[{index}].IsUsed"] == "true";  // 確保 checkbox 解析
-                model.PastSupplementsItems.Add(new PastSupplementsViewModel
+                string isUsedValue = form[$"PastSupplementsItems[{index}].IsUsed"];
+                bool isUsed = form.AllKeys.Contains($"PastSupplementsItems[{index}].IsUsed") &&
+                              isUsedValue == "true"; // **修正解析方式**
+
+                var supplement = new PastSupplementsViewModel
                 {
-                    ID = int.Parse(form[$"PastSupplementsItems[{index}].ID"]),
-                    ItemZh = form[$"PastSupplementsItems[{index}].ItemZh"],
+                    ID = int.Parse(form[$"PastSupplementsItems[{index}].ID"] ?? "0"),
+                    ItemZh = form[$"PastSupplementsItems[{index}].ItemZh"] ?? "",
                     IsUsed = isUsed
-                });
+                };
+
+                model.PastSupplementsItems.Add(supplement);
+
+                // Debug Log，檢查是否解析成功
+                System.Diagnostics.Debug.WriteLine($"營養品: {supplement.ItemZh}, ID: {supplement.ID}, 是否使用: {supplement.IsUsed}");
+
                 index++;
             }
 
-            // 解析 "其他營養品"
             model.OtherSupplements = form["OtherSupplements"]?.Trim() ?? "";
         }
         #endregion
@@ -1682,7 +1682,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 return;
 
             var pastDrugsList = model.PastDrugsItems
-                .Where(item => item.IsUsed)  // **確保只存入選 "是" 的項目**
+                .Where(item => item.IsUsed)  //確保只存入選 "是" 的項目
                 .Select(item => new ResponsePastDrugs
                 {
                     QuestionnaireResponseID = responseId,
@@ -1699,7 +1699,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     QuestionnaireResponseID = responseId,
                     DrugName = "TUE",
-                    Used = model.TUE == "yes"  // **轉換為 boolean**
+                    Used = model.TUE == "yes"  //轉換為 bool
                 });
             }
 
@@ -1711,12 +1711,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private void SavePastSupplements(QuestionnaireViewModel model, int responseId)
         {
             if (model.PastSupplementsItems == null || model.PastSupplementsItems.Count == 0)
-            {
                 return;
-            }
 
             var supplementsList = model.PastSupplementsItems
-                .Where(item => item.IsUsed) // **只存入有選擇的**
+                .Where(item => item.IsUsed) // **確保只存 "是" 的項目**
                 .Select(item => new ResponsePastSupplements
                 {
                     QuestionnaireResponseID = responseId,
@@ -1724,10 +1722,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     Used = true
                 }).ToList();
 
+            System.Diagnostics.Debug.WriteLine($"PastSupplements 篩選後數量: {supplementsList.Count}");
+
             if (supplementsList.Any())
-            {
                 _db.ResponsePastSupplements.AddRange(supplementsList);
-            }
 
             if (!string.IsNullOrEmpty(model.OtherSupplements))
             {
@@ -1740,9 +1738,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
 
             if (supplementsList.Any() || !string.IsNullOrEmpty(model.OtherSupplements))
-            {
-                _db.SaveChanges(); // **確保資料進入 DB**
-            }
+                _db.SaveChanges();
         }
         #endregion
 

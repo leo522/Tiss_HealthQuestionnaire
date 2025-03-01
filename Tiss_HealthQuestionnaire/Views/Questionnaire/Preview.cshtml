@@ -344,44 +344,49 @@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">營養品 (PastSupplements)</h2>
 
-                @if (Model.PastSupplementsItems != null && Model.PastSupplementsItems.Any(i => i.IsUsed))
+                @if (Model.PastSupplementsItems != null && Model.PastSupplementsItems.Count > 0)
                 {
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="border border-gray-300 p-2">營養品名稱 (Item)</th>
+                                <th class="border border-gray-300 p-2 text-center">是否使用</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.PastSupplementsItems.Where(i => i.IsUsed))
+                            @foreach (var item in Model.PastSupplementsItems)
                             {
                                 <tr>
                                     <td class="border border-gray-300 p-2">@item.ItemZh</td>
-                                </tr>
-                            }
-
-                            @if (!string.IsNullOrEmpty(Model.OtherSupplements))
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2 font-semibold">
-                                        其他 (Others)：@Model.OtherSupplements
+                                    <td class="border border-gray-300 p-2 text-center">
+                                        @(item.IsUsed ? "是" : "否")
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+
+                    <!-- `hidden input` 放置在表格外，確保表單能正確提交 -->
+                    for (int i = 0; i < Model.PastSupplementsItems.Count; i++)
+                    {
+                        <input type="hidden" name="PastSupplementsItems[@i].ID" value="@Model.PastSupplementsItems[i].ID">
+                        <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@Model.PastSupplementsItems[i].ItemZh">
+                        <input type="hidden" name="PastSupplementsItems[@i].IsUsed" value="@Model.PastSupplementsItems[i].IsUsed.ToString().ToLower()">
+                    }
                 }
                 else
                 {
                     <p class="text-gray-500">未填寫</p>
                 }
 
-                @for (int i = 0; i < Model.PastSupplementsItems.Count; i++)
+                <!-- 其他 (Others) 顯示 -->
+                @if (!string.IsNullOrEmpty(Model.OtherSupplements))
                 {
-                    <input type="hidden" name="PastSupplementsItems[@i].ID" value="@Model.PastSupplementsItems[i].ID" />
-                    <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@Model.PastSupplementsItems[i].ItemZh" />
-                    <input type="hidden" name="PastSupplementsItems[@i].IsUsed" value="@Model.PastSupplementsItems[i].IsUsed" />
+                    <p class="mt-4"><strong>其他 (Others)：</strong> @Model.OtherSupplements</p>
                 }
+
+                <!-- 確保 `hidden input` 傳遞 "其他" 營養品 -->
+                <input type="hidden" name="OtherSupplements" value="@Model.OtherSupplements">
             </div>
 
             <!-- 第八題：女性問卷 -->
