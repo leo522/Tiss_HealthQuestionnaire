@@ -248,7 +248,6 @@
                     </tbody>
                 </table>
 
-                <!-- 確保數據傳遞正確 -->
                 @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                 {
                     var item = Model.PastHistoryItems[i];
@@ -328,7 +327,6 @@
 
                 <p class="mt-4"><strong>是否有申請治療用途豁免 (TUE)？</strong> @(Model.TUE == "yes" ? "是" : "否")</p>
 
-                <!-- 確保 hidden 屬性傳遞參數 -->
                 @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
                 {
                     <input type="hidden" name="PastDrugsItems[@i].ID" value="@Model.PastDrugsItems[i].ID">
@@ -336,8 +334,7 @@
                     <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@Model.PastDrugsItems[i].IsUsed.ToString().ToLower()">
                 }
 
-                <!-- 確保 TUE 也能傳遞 -->
-                <input type="hidden" name="TUE" value="@Model.TUE">
+                <input type="hidden" name="TUE" value="@Model.TUE"> <!-- 確保 TUE 也能傳遞 -->
             </div>
 
             <!-- 第七題：營養品 -->
@@ -366,7 +363,6 @@
                         </tbody>
                     </table>
 
-                    <!-- `hidden input` 放置在表格外，確保表單能正確提交 -->
                     for (int i = 0; i < Model.PastSupplementsItems.Count; i++)
                     {
                         <input type="hidden" name="PastSupplementsItems[@i].ID" value="@Model.PastSupplementsItems[i].ID">
@@ -379,13 +375,11 @@
                     <p class="text-gray-500">未填寫</p>
                 }
 
-                <!-- 其他 (Others) 顯示 -->
                 @if (!string.IsNullOrEmpty(Model.OtherSupplements))
                 {
                     <p class="mt-4"><strong>其他 (Others)：</strong> @Model.OtherSupplements</p>
                 }
 
-                <!-- 確保 `hidden input` 傳遞 "其他" 營養品 -->
                 <input type="hidden" name="OtherSupplements" value="@Model.OtherSupplements">
             </div>
 
@@ -421,6 +415,7 @@
                     </table>
                 </div>
             }
+            
             <!-- 第九題：過去傷害（已復原） -->
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
@@ -532,28 +527,26 @@
                         <tbody>
                             @foreach (var item in Model.CardiovascularScreeningItems)
                             {
-                                var responseText = item.Response.HasValue ? (item.Response.Value ? "是" : "否") : "未填寫";
-
-                                var textColorClass = item.Response.HasValue ? (item.Response.Value ? "text-red-600" : "text-green-600")
-                                    : "text-gray-500";
+                                var responseText = item.IsUsed ? "有" : "無"; // 依照IsUsed來顯示答案
+                                var textColorClass = item.IsUsed ? "text-red-600" : "text-green-600";
 
                                 <tr>
-                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
                                     <td class="border border-gray-300 px-4 py-2">@item.Question</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center font-semibold @textColorClass">
                                         @responseText
                                     </td>
                                 </tr>
-                                @*@Html.Hidden($"CardiovascularScreeningItems[{item.Id}].Response", item.Response)*@
                             }
                         </tbody>
+
                     </table>
                     @for (int i = 0; i < Model.CardiovascularScreeningItems.Count; i++)
                     {
                         var item = Model.CardiovascularScreeningItems[i];
-                        <input type="hidden" name="CardiovascularScreeningItems[@i].Id" value="@item.Id" />
+                        <input type="hidden" name="CardiovascularScreeningItems[@i].ID" value="@item.ID" />
                         <input type="hidden" name="CardiovascularScreeningItems[@i].Question" value="@item.Question" />
-                        <input type="hidden" name="CardiovascularScreeningItems[@i].Response" value="@item.Response" />
+                        <input type="hidden" name="CardiovascularScreeningItems[@i].IsUsed" value="@(item.IsUsed ? "true" : "false")" />
                     }
                 </div>
             </div>

@@ -170,7 +170,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 心血管篩檢
-        public List<CardiovascularScreening> CardiovascularScreeningItems { get; set; }
+        public List<CardiovascularScreeningItemViewModel> CardiovascularScreeningItems { get; set; }
         #endregion
 
         #region 腦震盪篩檢-選手自填-(1)
@@ -393,11 +393,11 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 心血管篩檢
-    public class CardiovascularScreeningDetailViewModel
+    public class CardiovascularScreeningItemViewModel
     {
-        public int OrderNumber { get; set; } // 項次
-        public string Question { get; set; }  // 問題描述
-        public string Answer { get; set; }    // 答案
+        public int ID { get; set; }
+        public string Question { get; set; }
+        public bool IsUsed { get; set; }
     }
     #endregion
 
