@@ -41,22 +41,22 @@
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PastTreatmentMethod" Width="1.5" PointX="17.75" PointY="13.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.PresentIllness" Width="1.5" PointX="13.75" PointY="17.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireResponse" Width="1.5" PointX="3" PointY="25.5" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" Width="1.5" PointX="5.25" PointY="9.875" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" Width="1.5" PointX="5.25" PointY="29" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.QuestionnaireType" Width="1.5" PointX="12.75" PointY="1.375" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" Width="1.5" PointX="5.25" PointY="41" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" Width="1.5" PointX="5.25" PointY="23.875" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" Width="1.5" PointX="5.25" PointY="44" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseCurrentInjuries" Width="1.5" PointX="5.25" PointY="20.75" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" Width="1.5" PointX="5.25" PointY="7.25" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" Width="1.5" PointX="5.25" PointY="18.125" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" Width="1.5" PointX="5.25" PointY="32" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastDrugs" Width="1.5" PointX="5.25" PointY="26.5" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastHealth" Width="1.5" PointX="5.25" PointY="46.875" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastHistory" Width="1.5" PointX="5.25" PointY="15.5" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastInjuries" Width="1.5" PointX="5.25" PointY="37.75" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastSupplements" Width="1.5" PointX="5.25" PointY="12.75" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePresentIllness" Width="1.5" PointX="5.25" PointY="29.375" />
-        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" Width="1.5" PointX="5.25" PointY="35.125" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" Width="1.5" PointX="5.25" PointY="43.5" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" Width="1.5" PointX="5.25" PointY="18.125" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" Width="1.5" PointX="5.25" PointY="20.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseCurrentInjuries" Width="1.5" PointX="5.25" PointY="46.5" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" Width="1.5" PointX="5.25" PointY="23.625" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" Width="1.5" PointX="5.25" PointY="12.625" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" Width="1.5" PointX="5.25" PointY="35.125" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastDrugs" Width="1.5" PointX="5.25" PointY="15.25" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastHealth" Width="1.5" PointX="5.25" PointY="38.125" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastHistory" Width="1.5" PointX="5.25" PointY="9.875" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastInjuries" Width="1.5" PointX="5.25" PointY="31.875" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePastSupplements" Width="1.5" PointX="5.25" PointY="40.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponsePresentIllness" Width="1.5" PointX="5.25" PointY="26.375" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" Width="1.5" PointX="5.25" PointY="7.25" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.SurgeryHistory" Width="1.5" PointX="15.75" PointY="17.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.SymptomEvaluation" Width="1.5" PointX="17.75" PointY="16.75" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.TemporaryQuestionnaireData" Width="1.5" PointX="15" PointY="1" />

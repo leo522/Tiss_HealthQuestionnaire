@@ -220,7 +220,6 @@
           <Property Name="ObservationPoints" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultNormal" Type="nvarchar" MaxLength="10" />
           <Property Name="ResultAbnormal" Type="nvarchar" MaxLength="10" />
-          <Property Name="Response" Type="bit" />
         </EntityType>
         <EntityType Name="PasswordReset">
           <Key>
@@ -1395,7 +1394,6 @@
           <Property Name="ObservationPoints" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ResultNormal" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="ResultAbnormal" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Response" Type="Boolean" />
         </EntityType>
         <EntityType Name="PasswordReset">
           <Key>
@@ -2304,7 +2302,6 @@
           <EntitySetMapping Name="OrthopaedicScreening">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.OrthopaedicScreening">
               <MappingFragment StoreEntitySet="OrthopaedicScreening">
-                <ScalarProperty Name="Response" ColumnName="Response" />
                 <ScalarProperty Name="ResultAbnormal" ColumnName="ResultAbnormal" />
                 <ScalarProperty Name="ResultNormal" ColumnName="ResultNormal" />
                 <ScalarProperty Name="ObservationPoints" ColumnName="ObservationPoints" />

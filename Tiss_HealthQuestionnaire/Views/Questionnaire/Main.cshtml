@@ -407,38 +407,79 @@
                 }
 
                 <!-- 第11題：心血管篩檢 -->
-            <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
-                <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr>
-                            @*<th class="border border-gray-300 px-4 py-2 text-center">項次</th>*@
-                            <th class="border border-gray-300 px-4 py-2">問題</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">是否曾有發生過</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.CardiovascularScreeningItems.Count; i++)
-                        {
-                            var item = Model.CardiovascularScreeningItems[i];
-                            <tr class="question-row">
-                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <label>
-                                        <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="true" required> 是
-                                    </label>
-                                    <label class="ml-4">
-                                        <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="false" required> 否
-                                    </label>
-                                    <input type="hidden" name="CardiovascularScreeningItems[@i].ID" value="@item.ID">
-                                    <input type="hidden" name="CardiovascularScreeningItems[@i].ItemZh" value="@item.Question">
-                                </td>
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
+                    <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                @*<th class="border border-gray-300 px-4 py-2 text-center">項次</th>*@
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否曾有發生過</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.CardiovascularScreeningItems.Count; i++)
+                            {
+                                var item = Model.CardiovascularScreeningItems[i];
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <label>
+                                            <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="true" required> 是
+                                        </label>
+                                        <label class="ml-4">
+                                            <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="false" required> 否
+                                        </label>
+                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ID" value="@item.ID">
+                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ItemZh" value="@item.Question">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 第14題 骨科篩檢 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
+                    <h2 class="text-lg font-semibold mb-4">骨科篩檢</h2>
+                    <!-- 骨科篩檢表格 -->
+                    <table class="min-w-full bg-white border border-gray-300 text-center">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">指示操作</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">觀察重點</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">結果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.OrthopaedicScreeningItems.Count; i++)
+                            {
+                                var item = Model.OrthopaedicScreeningItems[i];
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Instructions</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.ObservationPoints</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" class="w-5 h-5" name="OrthopaedicScreeningItems[@i].Result" value="normal">
+                                            <span class="ml-2">@item.ResultNormal</span>
+                                        </label>
+                                        <label class="inline-flex items-center ml-4">
+                                            <input type="radio" class="w-5 h-5" name="OrthopaedicScreeningItems[@i].Result" value="abnormal">
+                                            <span class="ml-2">@item.ResultAbnormal</span>
+                                        </label>
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID"/>
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions"/>
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints"/>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
             <!-- 分步驟按鈕 -->
             <div class="flex justify-between mt-6">

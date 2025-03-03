@@ -187,7 +187,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 骨科篩檢
-        public List<OrthopaedicScreening> OrthopaedicScreeningItems { get; set; }
+        public List<OrthopaedicScreeningItmeViewModel> OrthopaedicScreeningItems { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-定位(1)
@@ -505,12 +505,14 @@ namespace Tiss_HealthQuestionnaire.Models
     #endregion
 
     #region 骨科篩檢
-    public class OrthopaedicScreeninGViewModel
+    public class OrthopaedicScreeningItmeViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string Instructions { get; set; }
         public string ObservationPoints { get; set; }
-        public string Result { get; set; }  //正常或異常
+        public string ResultNormal { get; set; }
+        public string ResultAbnormal { get; set; }
+        public string Result { get; set; }
     }
     #endregion
 }

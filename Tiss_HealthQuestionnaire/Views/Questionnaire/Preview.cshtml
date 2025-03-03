@@ -667,14 +667,14 @@
                                 var responseText = "未填寫"; // 預設文字
                                 var textColorClass = "text-gray-500"; // 預設顏色
 
-                                if (detail.Response.HasValue)
+                                if (!string.IsNullOrEmpty(detail.ResultNormal) && !string.IsNullOrEmpty(detail.ResultAbnormal))
                                 {
-                                    responseText = detail.Response.Value ? "正常" : "異常";
-                                    textColorClass = detail.Response.Value ? "text-green-600" : "text-red-600";
+                                    responseText = detail.Result == "normal" ? "正常" : (detail.Result == "abnormal" ? "異常" : "未填寫");
+                                    textColorClass = detail.Result == "normal" ? "text-green-600" : (detail.Result == "abnormal" ? "text-red-600" : "text-gray-500");
                                 }
 
                                 <tr>
-                                    <td class="border border-gray-300 p-2 text-center">@detail.Id</td>
+                                    <td class="border border-gray-300 p-2 text-center">@detail.ID</td>
                                     <td class="border border-gray-300 p-2">@detail.Instructions</td>
                                     <td class="border border-gray-300 p-2">@detail.ObservationPoints</td>
                                     <td class="border border-gray-300 p-2 text-center font-semibold @textColorClass">
@@ -688,12 +688,12 @@
                 @for (int i = 0; i < Model.OrthopaedicScreeningItems.Count; i++)
                 {
                     var item = Model.OrthopaedicScreeningItems[i];
-                    var resultText = item.Response.HasValue ? (item.Response.Value ? "Normal" : "Abnormal") : "";
 
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].Id" value="@item.Id" />
+                    <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID" />
                     <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions" />
                     <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints" />
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@resultText" />
+                    <input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@item.Result" />
+                    @*<input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@resultText" />*@
                 }
             </div>
 

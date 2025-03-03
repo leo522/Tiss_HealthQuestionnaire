@@ -19,6 +19,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public string ObservationPoints { get; set; }
         public string ResultNormal { get; set; }
         public string ResultAbnormal { get; set; }
-        public Nullable<bool> Response { get; set; }
     }
 }

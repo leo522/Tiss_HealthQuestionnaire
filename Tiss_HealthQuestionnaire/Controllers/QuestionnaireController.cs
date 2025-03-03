@@ -80,7 +80,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     CardiovascularScreeningItems = GetCardiovascularScreeningViewModel(), //心血管篩檢
                     ConcussionScreeningItems = _db.ConcussionScreening.ToList(),
                     SymptomEvaluationItems = _db.SymptomEvaluation.ToList(),
-                    OrthopaedicScreeningItems = _db.OrthopaedicScreening.ToList(),
+                    OrthopaedicScreeningItems = GetOrthopaedicScreeningViewModel(),
                     CognitiveScreeningItems = _db.CognitiveScreening.ToList(),
                     ImmediateMemoryItems = _db.ImmediateMemory.ToList(),
                     ConcentrationItems = _db.Concentration.ToList(),
@@ -247,6 +247,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ID = item.Id,
                 Question = item.Question,
                 IsUsed = false
+            }).ToList();
+        }
+        #endregion
+
+        #region 骨科篩檢
+        private List<OrthopaedicScreeningItmeViewModel> GetOrthopaedicScreeningViewModel()
+        {
+            return _db.OrthopaedicScreening.Select(item => new OrthopaedicScreeningItmeViewModel
+            {
+                ID = item.Id,
+                Instructions = item.Instructions,
+                ObservationPoints =item.ObservationPoints,
+                ResultNormal = item.ResultNormal,
+                ResultAbnormal = item.ResultAbnormal,
+                Result = ""
             }).ToList();
         }
         #endregion
@@ -1019,22 +1034,22 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             model.PastDrugsItems = new List<PastDrugsViewModel>();
 
-            int i = 0;
-            while (form[$"PastDrugsItems[{i}].ID"] != null)
+            int index = 0;
+            while (form[$"PastDrugsItems[{index}].ID"] != null)
             {
-                string isUsedValue = form[$"PastDrugsItems[{i}].IsUsed"];
+                string isUsedValue = form[$"PastDrugsItems[{index}].IsUsed"];
                 bool isUsed = isUsedValue != null && isUsedValue == "true";
 
                 var drug = new PastDrugsViewModel
                 {
-                    ID = int.Parse(form[$"PastDrugsItems[{i}].ID"]),
-                    ItemZh = form[$"PastDrugsItems[{i}].ItemZh"],
+                    ID = int.Parse(form[$"PastDrugsItems[{index}].ID"]),
+                    ItemZh = form[$"PastDrugsItems[{index}].ItemZh"],
                     IsUsed = isUsed
                 };
 
                 model.PastDrugsItems.Add(drug);
 
-                i++;
+                index++;
             }
 
             //TUE (治療用途豁免)
@@ -1284,59 +1299,32 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 骨科篩檢
         private void ProcessOrthopaedicScreening(QuestionnaireViewModel model, FormCollection form)
         {
-            model.OrthopaedicScreeningItems = new List<OrthopaedicScreening>(); // 確保初始化
-            var screenings = _db.OrthopaedicScreening.ToList(); // 取得所有骨科篩檢題目
+            model.OrthopaedicScreeningItems = new List<OrthopaedicScreeningItmeViewModel>(); // 確保初始化
 
-            foreach (var item in screenings)
+            int index = 0;
+
+            while (form[$"OrthopaedicScreeningItems[{index}].ID"] != null)
             {
-                string resultKey = $"Result_{item.Id}"; // 表單名稱對應
-                string answer = form[resultKey]; // 取得使用者選擇的值 ("normal" / "abnormal")
+                //string isUsedValue = form[$"OrthopaedicScreeningItems[{index}].IsUsed"];
+                //bool isUsed = isUsedValue != null && isUsedValue == "true";
+                string resultValue = form[$"OrthopaedicScreeningItems[{index}].Result"];
 
-                bool? response = null;
-                if (!string.IsNullOrEmpty(answer))
+                var orthopaedicScreening = new OrthopaedicScreeningItmeViewModel
                 {
-                    response = answer == "normal";
-                }
-                else
-                {
-                    response = false; // **🔹 預設為 "Abnormal"，避免 Result 為空**
-                }
+                    ID = int.Parse(form[$"OrthopaedicScreeningItems[{index}].ID"]),
+                    Instructions = form[$"OrthopaedicScreeningItems[{index}].Instructions"],
+                    ObservationPoints = form[$"OrthopaedicScreeningItems[{index}].ObservationPoints"],
+                    ResultNormal = "正常",
+                    ResultAbnormal = "異常",
+                    Result = resultValue
+                };
 
-                model.OrthopaedicScreeningItems.Add(new OrthopaedicScreening
-                {
-                    Id = item.Id,
-                    Instructions = item.Instructions,
-                    ObservationPoints = item.ObservationPoints,
-                    ResultNormal = item.ResultNormal,
-                    ResultAbnormal = item.ResultAbnormal,
-                    Response = response
-                });
+                model.OrthopaedicScreeningItems.Add(orthopaedicScreening);
+
+                System.Diagnostics.Debug.WriteLine($"OrthopaedicScreeningItems 篩選後數量:{model.OrthopaedicScreeningItems.Count}");
+
+                index++;
             }
-            //model.OrthopaedicScreeningItems = new List<OrthopaedicScreening>(); // 確保初始化
-
-            //var screenings = _db.OrthopaedicScreening.ToList(); // 取得所有骨科篩檢題目
-            //foreach (var item in screenings)
-            //{
-            //    string resultKey = $"Result_{item.Id}"; // 表單名稱對應
-            //    string answer = form[resultKey]; // 取得使用者選擇的值 ("normal" / "abnormal")
-
-            //    bool? response = null;
-            //    if (!string.IsNullOrEmpty(answer))
-            //    {
-            //        if (answer == "normal") response = true;
-            //        else if (answer == "abnormal") response = false;
-            //    }
-
-            //    model.OrthopaedicScreeningItems.Add(new OrthopaedicScreening
-            //    {
-            //        Id = item.Id,
-            //        Instructions = item.Instructions,
-            //        ObservationPoints = item.ObservationPoints,
-            //        ResultNormal = item.ResultNormal,
-            //        ResultAbnormal = item.ResultAbnormal,
-            //        Response = response // `bool?` 避免 null reference
-            //    });
-            //}
         }
         #endregion
 
@@ -1702,8 +1690,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     Used = true
                 }).ToList();
 
-            System.Diagnostics.Debug.WriteLine($"PastSupplements 篩選後數量: {supplementsList.Count}");
-
             if (supplementsList.Any())
                 _db.ResponsePastSupplements.AddRange(supplementsList);
 
@@ -1823,7 +1809,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 QuestionnaireResponseID = responseId,
                 QuestionNumber = item.ID,
-                
                 Answer = true
             }).ToList();
 
@@ -1918,62 +1903,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 Orthopaedic Screening (骨科篩檢)
         private void SaveOrthopaedicScreening(QuestionnaireViewModel model, int responseId)
         {
-            if (model.OrthopaedicScreeningItems == null || !model.OrthopaedicScreeningItems.Any())
-            {
-                return;
-            }
+            if (model.OrthopaedicScreeningItems == null || model.OrthopaedicScreeningItems.Count == 0) return;
 
-            foreach (var item in model.OrthopaedicScreeningItems)
-            {
-                // **確保 Result 永遠有值**
-                string resultText = item.Response.HasValue
-                    ? (item.Response.Value ? "Normal" : "Abnormal")
-                    : "Abnormal"; // **如果 `Response` 為 `null`，則預設 `Abnormal`**
-
-                // **🔹 記錄 Log，確認是否有 `null`**
-                System.Diagnostics.Debug.WriteLine($"骨科篩檢 ID: {item.Id}, Result: {resultText}");
-
-                if (string.IsNullOrEmpty(resultText))
-                {
-                    throw new Exception($"錯誤：骨科篩檢項目 ID {item.Id} 的 Result 欄位為空，請檢查！");
-                }
-
-                var screening = new ResponseOrthopaedicScreening
+            var orthopaedicScreeningList = model.OrthopaedicScreeningItems
+                .Select(item => new ResponseOrthopaedicScreening
                 {
                     QuestionnaireResponseID = responseId,
-                    TestNumber = item.Id,
+                    TestNumber = item.ID,
                     TestName = item.Instructions,
                     Observation = item.ObservationPoints,
-                    Result = resultText // **確保不為 null**
-                };
+                    Result = item.Result == "normal" ? "Normal" : "Abnormal"
+                }).ToList();
 
-                _db.ResponseOrthopaedicScreening.Add(screening);
-            }
-            //if (model.OrthopaedicScreeningItems == null || !model.OrthopaedicScreeningItems.Any())
-            //{
-            //    return;
-            //}
+            System.Diagnostics.Debug.WriteLine($"OrthopaedicScreening 篩選後數量: {orthopaedicScreeningList.Count}");
 
-            //foreach (var item in model.OrthopaedicScreeningItems)
-            //{
-            //    string resultText = item.Response.HasValue ? (item.Response.Value ? "Normal" : "Abnormal") : null;
-
-            //    if (string.IsNullOrEmpty(resultText))
-            //    {
-            //        throw new Exception($"錯誤：骨科篩檢項目 ID {item.Id} 的 Result 欄位為空，請檢查！");
-            //    }
-
-            //    var screening = new ResponseOrthopaedicScreening
-            //    {
-            //        QuestionnaireResponseID = responseId,
-            //        TestNumber = item.Id,
-            //        TestName = item.Instructions,
-            //        Observation = item.ObservationPoints,
-            //        Result = resultText  // 確保符合 "Abnormal" / "Normal"
-            //    };
-
-            //    _db.ResponseOrthopaedicScreening.Add(screening);
-            //}
+            _db.ResponseOrthopaedicScreening.AddRange(orthopaedicScreeningList);
         }
         #endregion
 
