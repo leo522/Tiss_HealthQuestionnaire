@@ -173,16 +173,14 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 腦震盪篩檢-選手自填-(1)
-        public List<ConcussionScreening> ConcussionScreeningItems { get; set; }
-        public Dictionary<int, string> ConcussionScreeningAnswers { get; set; }
+        public List<ConcussionScreeningViewModel> ConcussionScreeningItems { get; set; }
         public string ConcussionScreeningMedicationAnswer { get; set; }
         public string ConcussionScreeningMedicationDetails { get; set; }
         public string ConcussionScreeningNotes { get; set; }
         #endregion
 
         #region 症狀自我評估-選手自填(2)
-        public List<SymptomEvaluation> SymptomEvaluationItems { get; set; }
-        public Dictionary<int, int> SymptomEvaluationAnswers { get; set; }
+        public List<SymptomEvaluationViewModel> SymptomEvaluationItems { get; set; }
         #endregion
 
         #region 骨科篩檢
@@ -403,16 +401,16 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 腦震盪篩檢-選手自填(1)
     public class ConcussionScreeningViewModel
     {
-        public int OrderNumber { get; set; }
+        public int Id { get; set; }
         public string Question { get; set; }
-        public string Answer { get; set; } 
+        public string Answer { get; set; }
     }
     #endregion
 
     #region 症狀自我評估-選手自填(2)
     public class SymptomEvaluationViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string SymptomItem { get; set; }
         public int Score { get; set; }
     }

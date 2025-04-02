@@ -72,8 +72,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     CurrentInjuryTypes = currentInjuryTypesList ?? new List<InjuryTypeViewModel>(),
                     CurrentTreatmentItems = currentTreatmentItems ?? new List<CurrentTreatmentMethodViewModel>(),
                     CardiovascularScreeningItems = GetCardiovascularScreeningViewModel(),
-                    ConcussionScreeningItems = GetConcussionScreeningItems(), //腦震盪篩檢 - 選手自填
-                    SymptomEvaluationItems = GetSymptomEvaluationItems(), //症狀自我評估 - 選手自填
+                    ConcussionScreeningItems = GetConcussionScreeningViewModel(), //腦震盪篩檢 - 選手自填
+                    SymptomEvaluationItems = GetSymptomEvaluationViewModel(), //症狀自我評估 - 選手自填
                     OrthopaedicScreeningItems = GetOrthopaedicScreeningViewModel(),
                     CognitiveScreeningItems = _db.CognitiveScreening.ToList(),
                     ImmediateMemoryItems = _db.ImmediateMemory.ToList(),
@@ -246,10 +246,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 腦震盪篩檢 - 選手自填
-        private List<ConcussionScreening> GetConcussionScreeningItems()
+        private List<ConcussionScreeningViewModel> GetConcussionScreeningViewModel()
         {
-            return _db.ConcussionScreening
-                .Select(q => new ConcussionScreening
+            return _db.ConcussionScreening.Select(q => new ConcussionScreeningViewModel
                 {
                     Id = q.Id,
                     Question = q.Question
@@ -258,10 +257,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 症狀自我評估 - 選手自填
-        private List<SymptomEvaluation> GetSymptomEvaluationItems()
+        private List<SymptomEvaluationViewModel> GetSymptomEvaluationViewModel()
         {
-            return _db.SymptomEvaluation
-                .Select(q => new SymptomEvaluation
+            return _db.SymptomEvaluation.Select(q => new SymptomEvaluationViewModel
                 {
                     ID = q.ID,
                     SymptomItem = q.SymptomItem
@@ -1228,15 +1226,25 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 腦震盪篩檢-選手自填-(1)
         private void ProcessConcussionScreening(QuestionnaireViewModel model, FormCollection form)
         {
-            model.ConcussionScreeningItems = _db.ConcussionScreening.ToList();
-            model.ConcussionScreeningAnswers = new Dictionary<int, string>();
+            model.ConcussionScreeningItems = new List<ConcussionScreeningViewModel>();
 
-            foreach (var item in model.ConcussionScreeningItems)
+            int index = 0;
+            while (form[$"ConcussionScreeningItems[{index}].Id"] != null)
             {
-                string answerKey = $"ConcussionQuestion_{item.Id}";
-                string answer = form[answerKey] ?? "no";
+                int id = int.Parse(form[$"ConcussionScreeningItems[{index}].Id"]);
+                string question = _db.ConcussionScreening.Where(c => c.Id == id).Select(c => c.Question).FirstOrDefault();
+                string answerKey = $"ConcussionQuestion_{id}";
+                string rawAnswer = form[answerKey] ?? "no";
+                string answer = rawAnswer == "yes" ? "是" : "否";
 
-                model.ConcussionScreeningAnswers[item.Id] = answer == "yes" ? "是" : "否";
+                model.ConcussionScreeningItems.Add(new ConcussionScreeningViewModel
+                {
+                    Id = id,
+                    Question = question,
+                    Answer = answer
+                });
+
+                index++;
             }
 
             model.ConcussionScreeningMedicationAnswer = form["Medication"] == "yes" ? "是" : "否";
@@ -1248,14 +1256,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 症狀自我評估-選手自填-(2)
         private void ProcessSymptomEvaluation(QuestionnaireViewModel model, FormCollection form)
         {
-            model.SymptomEvaluationItems = _db.SymptomEvaluation.ToList();
-            model.SymptomEvaluationAnswers = new Dictionary<int, int>();
+            model.SymptomEvaluationItems = new List<SymptomEvaluationViewModel>();
 
-            foreach (var item in model.SymptomEvaluationItems)
+            int index = 0;
+            while (form[$"SymptomEvaluationItems[{index}].ID"] != null)
             {
-                string scoreKey = $"SymptomScore_{item.ID}"; 
-                int score = 0;
+                int id = int.Parse(form[$"SymptomEvaluationItems[{index}].ID"]);
+                string symptom = _db.SymptomEvaluation.Where(s => s.ID == id).Select(s => s.SymptomItem).FirstOrDefault();
 
+                string scoreKey = $"SymptomScore_{id}";
+                int score = 0;
                 if (form.AllKeys.Contains(scoreKey) && !string.IsNullOrEmpty(form[scoreKey]))
                 {
                     int.TryParse(form[scoreKey], out score);
@@ -1264,7 +1274,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 if (score < 0) score = 0;
                 if (score > 6) score = 6;
 
-                model.SymptomEvaluationAnswers[item.ID] = score;
+                model.SymptomEvaluationItems.Add(new SymptomEvaluationViewModel
+                {
+                    ID = id,
+                    SymptomItem = symptom,
+                    Score = score
+                });
+
+                index++;
             }
         }
         #endregion
@@ -1419,6 +1436,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 try
                 {
+                    ProcessConcussionScreening(model, form);
+                    ProcessSymptomEvaluation(model, form);
                     var newResponse = new QuestionnaireResponse
                     {
                         AthleteID = model.AtheNum,
@@ -1792,24 +1811,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 Concussion Screening (腦震盪篩檢 - 選手自填)
         private void SaveConcussionScreening(QuestionnaireViewModel model, int responseId)
         {
-            if (model.ConcussionScreeningItems == null || !model.ConcussionScreeningItems.Any())
-            {
-                return;
-            }
+            if (model.ConcussionScreeningItems == null || !model.ConcussionScreeningItems.Any()) return;
 
             foreach (var item in model.ConcussionScreeningItems)
             {
-                bool answer = model.ConcussionScreeningAnswers.ContainsKey(item.Id) &&
-                              model.ConcussionScreeningAnswers[item.Id] == "是";
-
                 var concussionScreening = new ResponseConcussionScreening
                 {
                     QuestionnaireResponseID = responseId,
                     QuestionNumber = item.Id,
                     Question = item.Question,
-                    Answer = answer
+                    Answer = item.Answer == "是"
                 };
-
                 _db.ResponseConcussionScreening.Add(concussionScreening);
             }
 
@@ -1842,27 +1854,16 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 Symptom Evaluation (症狀評估 0-6分)
         private void SaveSymptomEvaluation(QuestionnaireViewModel model, int responseId)
         {
-            if (model.SymptomEvaluationItems == null || !model.SymptomEvaluationItems.Any())
-            {
-                return;
-            }
+            if (model.SymptomEvaluationItems == null || !model.SymptomEvaluationItems.Any()) return;
 
             foreach (var item in model.SymptomEvaluationItems)
             {
-                int score = model.SymptomEvaluationAnswers.ContainsKey(item.ID)
-                    ? model.SymptomEvaluationAnswers[item.ID]
-                    : 0;
-
-                if (score < 0) score = 0;
-                if (score > 6) score = 6;
-
                 var symptomEvaluation = new ResponseSymptomEvaluation
                 {
                     QuestionnaireResponseID = responseId,
                     Symptom = item.SymptomItem,
-                    Severity = score
+                    Severity = item.Score
                 };
-
                 _db.ResponseSymptomEvaluation.Add(symptomEvaluation);
             }
         }

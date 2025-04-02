@@ -564,30 +564,22 @@
                                 <tbody>
                                     @foreach (var item in Model.ConcussionScreeningItems)
                                     {
-                                        var responseText = Model.ConcussionScreeningAnswers.ContainsKey(item.Id)
-                                            ? Model.ConcussionScreeningAnswers[item.Id]
-                                            : "未填寫";
-
                                         <tr>
                                             <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
                                             <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center font-semibold">
-                                                @responseText
-                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center font-semibold">@item.Answer</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
 
-                        @* ✅ 將 hidden input 放在表格外面 *@
-                        @foreach (var item in Model.ConcussionScreeningItems)
+                        @* hidden input *@
+                        @for (int i = 0; i < Model.ConcussionScreeningItems.Count; i++)
                         {
-                            var responseText = Model.ConcussionScreeningAnswers.ContainsKey(item.Id)
-                                ? Model.ConcussionScreeningAnswers[item.Id]
-                                : "未填寫";
-
-                            <input type="hidden" name="ConcussionQuestion_@item.Id" value="@(responseText == "是" ? "yes" : "no")" />
+                            var item = Model.ConcussionScreeningItems[i];
+                            <input type="hidden" name="ConcussionScreeningItems[@i].Id" value="@item.Id" />
+                            <input type="hidden" name="ConcussionQuestion_@item.Id" value="@(item.Answer == "是" ? "yes" : "no")" />
                         }
 
                         <div class="mt-4 space-y-2">
@@ -622,42 +614,34 @@
                                 <tbody>
                                     @foreach (var item in Model.SymptomEvaluationItems)
                                     {
-                                        int score = Model.SymptomEvaluationAnswers.ContainsKey(item.ID)
-                                            ? Model.SymptomEvaluationAnswers[item.ID]
-                                            : 0;
-
                                         <tr>
                                             <td class="border px-4 py-2">@item.ID</td>
                                             <td class="border px-4 py-2">@item.SymptomItem</td>
-                                            <td class="border px-4 py-2 font-semibold text-blue-600">
-                                                @score
-                                            </td>
+                                            <td class="border px-4 py-2 font-semibold text-blue-600">@item.Score</td>
                                         </tr>
                                     }
 
                                     <tr class="bg-gray-100 font-semibold">
                                         <td class="border px-4 py-2" colspan="2">症狀總數</td>
                                         <td class="border px-4 py-2 text-black-600">
-                                            @Model.SymptomEvaluationAnswers.Count(s => s.Value > 0)
+                                            @Model.SymptomEvaluationItems.Count(s => s.Score > 0)
                                         </td>
                                     </tr>
                                     <tr class="bg-gray-100 font-semibold">
                                         <td class="border px-4 py-2" colspan="2">症狀分數總和</td>
                                         <td class="border px-4 py-2 text-black-600">
-                                            @Model.SymptomEvaluationAnswers.Sum(s => s.Value)
+                                            @Model.SymptomEvaluationItems.Sum(s => s.Score)
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        @foreach (var item in Model.SymptomEvaluationItems)
+                        @for (int i = 0; i < Model.SymptomEvaluationItems.Count; i++)
                         {
-                            int score = Model.SymptomEvaluationAnswers.ContainsKey(item.ID)
-                                ? Model.SymptomEvaluationAnswers[item.ID]
-                                : 0;
-
-                            <input type="hidden" name="SymptomScore_@item.ID" value="@score" />
+                            var item = Model.SymptomEvaluationItems[i];
+                            <input type="hidden" name="SymptomEvaluationItems[@i].ID" value="@item.ID" />
+                            <input type="hidden" name="SymptomScore_@item.ID" value="@item.Score" />
                         }
                     </div>
                 }
