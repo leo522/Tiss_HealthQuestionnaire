@@ -1,13 +1,11 @@
-﻿@*醫療團隊-協調與平衡測驗(4)*@
-@model Tiss_HealthQuestionnaire.Models.CoordinationAndBalanceExaminationViewModel
+﻿@model Tiss_HealthQuestionnaire.Models.CoordinationAndBalanceExaminationViewModel
 @{
     Layout = null;
 }
 <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">4. 協調與平衡測驗 (Coordination and Balance Examination)</h2>
+    <h1 class="text-xl font-bold mb-4">4. 協調與平衡測驗 (Coordination and Balance Examination)</h1>
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">改良版平衡姿勢檢測 (Modified Balance Error Score System testing, mBESS)</h2>
-        <!-- 測試腳 -->
         <div class="mb-4 question-group" data-type="radio">
             <label class="font-semibold">測試腳 (非慣用腳)：</label>
             <label class="inline-flex items-center ml-2">
@@ -17,7 +15,6 @@
                 <input type="radio" name="TestFoot" value="右" @(Model.TestFoot == "右" ? "checked" : "") /> 右
             </label>
         </div>
-        <!-- 測試平面 -->
         <div class="mb-4 question-group" data-type="select">
             <label class="font-semibold">測試平面 (硬地/訓練場)：</label>
             <select name="TestSurface" class="border border-gray-300 rounded px-2 py-1 w-64">
@@ -26,7 +23,6 @@
                 <option value="訓練場" @(Model.TestSurface == "訓練場" ? "selected" : "")>訓練場</option>
             </select>
         </div>
-        <!-- 腳穿著 -->
         <div class="mb-4 question-group" data-type="select">
             <label class="font-semibold">腳穿著 (赤足/球鞋/貼紮)：</label>
             <select name="Footwear" class="border border-gray-300 rounded px-2 py-1 w-64">
@@ -37,7 +33,6 @@
             </select>
         </div>
     </div>
-    <!-- 錯誤扣分表格 -->
     <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
         <thead>
             <tr class="bg-gray-100">
@@ -73,7 +68,6 @@
         </tfoot>
     </table>
 
-    <!-- 腳跟碰腳尖快速走路 -->
     <h3 class="text-lg font-semibold mt-6 mb-2">2. 腳跟碰腳尖快速走路 (Timed Tandem Gait)：</h3>
     <table class="min-w-full bg-white border border-gray-300 text-center question-group" data-type="number">
         <thead>
@@ -103,14 +97,11 @@
         const timeKey = 'CoordinationTimeData';
 
         loadScores();
-
-        // 監聽錯誤扣分
         $('.error-input').on('input', function () {
             updateErrorCount();
             saveScores();
         });
 
-        // 監聽時間輸入
         $('.time-input').on('input', function () {
             updateTimes();
             saveScores();

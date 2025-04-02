@@ -1,5 +1,4 @@
-﻿﻿@*女性問卷*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.FemaleQuestionnaire>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.FemaleQuestionnaire>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -29,7 +28,7 @@
                                 <span class="block text-sm text-gray-600">@question.QuestionEn</span>
                             </td>
                             <td class="border border-gray-300 px-4 py-2">
-                                @if (question.ID == 1) // 第1題
+                                @if (question.ID == 1)
                                 {
                                     <div class="space-y-2">
                                         <label class="block"><input type="radio" name="femaleQuestion_@question.ID" value="10以下" class="form-radio h-5 w-5 text-blue-600 mr-2">10歲 (含) 以下</label>
@@ -41,14 +40,14 @@
                                         <label class="block"><input type="radio" name="femaleQuestion_@question.ID" value="16以上" class="form-radio h-5 w-5 text-blue-600 mr-2">16歲 (含) 以上</label>
                                     </div>
                                 }
-                                else if (question.ID == 2) // 第2題
+                                else if (question.ID == 2)
                                 {
                                     <div class="space-y-2">
                                         <label class="block"><input type="checkbox" name="femaleQuestion_@question.ID" value="yes" class="form-checkbox h-5 w-5 text-blue-600 mr-2">是 Yes</label>
                                         <label class="block"><input type="checkbox" name="femaleQuestion_@question.ID" value="no" class="form-checkbox h-5 w-5 text-blue-600 mr-2">否 No</label>
                                     </div>
                                 }
-                                else if (question.ID == 3) // 第3題
+                                else if (question.ID == 3)
                                 {
                                     <div class="space-y-2">
                                         <label class="block"><input type="checkbox" name="femaleQuestion_@question.ID" value="yes" class="form-checkbox h-5 w-5 text-blue-600 mr-2">是 Yes</label>
@@ -56,7 +55,7 @@
                                         <label class="block"><input type="checkbox" name="femaleQuestion_@question.ID" value="noCycle" class="form-checkbox h-5 w-5 text-blue-600 mr-2">目前無生理期</label>
                                     </div>
                                 }
-                                else if (question.ID == 4) // 第4題
+                                else if (question.ID == 4)
                                 {
                                     <div class="space-y-2">
                                         <label class="block"><input type="checkbox" name="femaleQuestion_@question.ID" value="yes" class="form-checkbox h-5 w-5 text-blue-600 mr-2">是 Yes</label>

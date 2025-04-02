@@ -1,5 +1,4 @@
-﻿@*心血管篩檢*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.CardiovascularScreeningViewModel>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.CardiovascularScreeningViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -25,18 +24,11 @@
                     @foreach (var item in Model)
                     {
                         <tr class="hover:bg-gray-100 question-group" data-type="radio">
-                            <!-- 使用 OrderNumber 顯示項次 -->
                             <td class="border border-gray-300 px-4 py-2 text-center">@item.OrderNumber</td>
-
-                            <!-- 問題 -->
                             <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                            <!-- 有選項 -->
                             <td class="border border-gray-300 px-4 py-2 text-center">
                                 <input type="radio" name="question_@item.OrderNumber" value="yes" class="form-radio h-5 w-5 text-blue-600">
                             </td>
-
-                            <!-- 無選項 -->
                             <td class="border border-gray-300 px-4 py-2 text-center">
                                 <input type="radio" name="question_@item.OrderNumber" value="no" class="form-radio h-5 w-5 text-blue-600">
                             </td>

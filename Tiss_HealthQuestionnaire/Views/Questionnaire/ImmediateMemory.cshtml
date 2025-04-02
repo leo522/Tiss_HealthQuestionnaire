@@ -1,5 +1,4 @@
-﻿@*醫療團隊-短期記憶(2)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.ImmediateMemoryViewModel>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.ImmediateMemoryViewModel>
 @{
     Layout = null;
 }
@@ -58,14 +57,12 @@
         </table>
     </div>
 
-    <!-- 最後完成時間 -->
     <div class="mt-4 flex items-center">
         <span class="mr-2 text-lg font-semibold">●</span>
         <span class="mr-2">最後完成時間 (分:秒)：</span>
         <input type="time" name="CompletionTime" class="border-b border-dotted text-lg font-semibold w-30 px-2" placeholder="MM:SS">
     </div>
 
-    <!-- 短期記憶總分 -->
     <div class="flex items-center mt-4">
         <span class="mr-2 text-lg font-semibold">●</span>
         <span class="mr-2">短期記憶總分：</span>
@@ -79,7 +76,6 @@
 
         loadScores();
 
-        // 監聽選項變更
         $('.memory-option').on('change', function () {
             const groupName = $(this).attr('name').split('_')[0];
             updateSingleScore(groupName);

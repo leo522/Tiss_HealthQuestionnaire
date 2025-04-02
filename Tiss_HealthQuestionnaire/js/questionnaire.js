@@ -1,18 +1,15 @@
-﻿//questionnaire.js
-// 保存當前表單數據到暫存資料表
-function saveFormDataToTemporary() {
+﻿function saveFormDataToTemporary() {
     const formData = $('#questionnaireForm').serializeArray();
     formData.forEach(item => {
         $.post('/Temporary/SaveAnswer', {
-            userId: $('#UserID').val(), // 用戶 ID，可能需要從隱藏欄位或其他地方獲取
-            questionnaireType: $('#QuestionnaireType').val(), // 動態設置當前問卷類型
-            questionId: item.name.replace(/[^\d]/g, ''), // 假設 name 包含 questionId
+            userId: $('#UserID').val(),
+            questionnaireType: $('#QuestionnaireType').val(),
+            questionId: item.name.replace(/[^\d]/g, ''),
             answer: item.value
         });
     });
 }
 
-// 加載暫存的表單數據
 function loadFormDataFromTemporary(questionnaireType) {
     $.get('/Temporary/LoadAnswers', { userId: $('#UserID').val(), questionnaireType: questionnaireType }, function (answers) {
         answers.forEach(answer => {
@@ -26,9 +23,8 @@ function loadFormDataFromTemporary(questionnaireType) {
     });
 }
 
-// 切換頁籤並加載對應的暫存數據
 function openTab(evt, tabName, url) {
-    saveFormDataToTemporary(); // 在切換頁籤時自動保存當前表單數據
+    saveFormDataToTemporary();
 
     const safeTabName = tabName.replace(/[^a-zA-Z0-9-_]/g, '');
     $('.tabcontent').hide();
@@ -43,8 +39,7 @@ function openTab(evt, tabName, url) {
         $.get(url, function (data) {
             $('<div>', { id: safeTabName, class: 'tabcontent' }).html(data).appendTo('#tabContent').show();
 
-            // 加載暫存的數據到頁面
-            loadFormDataFromTemporary(safeTabName); // 使用 safeTabName 作為 questionnaireType
+            loadFormDataFromTemporary(safeTabName);
         }).fail(function (xhr) {
             if (xhr.status === 403 || xhr.status === 401) {
                 alert('只有防護員可以訪問此頁面。');
@@ -54,7 +49,7 @@ function openTab(evt, tabName, url) {
         });
     } else {
         $('#' + safeTabName).show();
-        loadFormDataFromTemporary(safeTabName); // 若頁籤已加載過，直接加載暫存數據
+        loadFormDataFromTemporary(safeTabName);
     }
 
     if (evt) evt.preventDefault();

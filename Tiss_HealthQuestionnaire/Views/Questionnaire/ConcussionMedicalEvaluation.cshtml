@@ -1,11 +1,9 @@
-﻿@*醫療團隊評估主頁:*@
-@{
+﻿@{
     ViewBag.Title = "醫療團隊評估";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <div class="container mx-auto p-4">
     <h1 class="text-xl font-bold mb-4">醫療團隊評估問卷</h1>
-
     <div class="flex border-b">
         <button class="tab-link px-4 py-2 focus:outline-none" data-target="CognitiveScreening">認知篩檢</button>
         <button class="tab-link px-4 py-2 focus:outline-none" data-target="ImmediateMemory">短期記憶</button>
@@ -14,8 +12,6 @@
         <button class="tab-link px-4 py-2 focus:outline-none" data-target="DelayedRecall">延遲記憶</button>
         <button class="tab-link px-4 py-2 focus:outline-none" data-target="CognitiveScreeningTotalScore">總分計算</button>
     </div>
-
-    <!-- 內容區域 -->
     <div class="mt-4">
         <div id="tabContent" class="p-4 bg-white rounded shadow-md">
             <p class="text-center">請選擇上方的測驗項目。</p>
@@ -28,30 +24,23 @@
         document.querySelectorAll(".tab-link").forEach(function (tab) {
             tab.addEventListener("click", function () {
                 let target = this.getAttribute("data-target");
-
-                // 顯示當前的 Tab
                 document.querySelectorAll(".tab-link").forEach(btn => btn.classList.remove("bg-blue-500", "text-white"));
                 this.classList.add("bg-blue-500", "text-white");
-
-                // 使用 AJAX 載入對應的部分頁面
                 fetch(`/Questionnaire/${target}`)
                     .then(response => response.text())
                     .then(html => {
                         document.getElementById("tabContent").innerHTML = html;
-
-                        // 確保初始化函數執行
                         setTimeout(() => {
                             if (typeof window[`initialize${target}`] === "function") {
                                 console.log(`重新初始化 ${target}`);
                                 window[`initialize${target}`]();
                             }
-                        }, 100); // 加入 100ms 避免異步問題
+                        }, 100);
                     })
                     .catch(error => console.error("載入失敗:", error));
             });
         });
 
-        document.querySelector(".tab-link").click(); // 預設點擊第一個 Tab
+        document.querySelector(".tab-link").click();
     });
-
 </script>

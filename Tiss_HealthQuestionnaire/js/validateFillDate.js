@@ -10,18 +10,17 @@
                 confirmButtonText: "確定"
             });
             
-            fillDateInput.scrollIntoView({ behavior: "smooth", block: "center" }); //讓畫面捲動到填表日期欄位
+            fillDateInput.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            return false; //驗證失敗
+            return false;
         }
 
-        return true; //驗證成功
+        return true;
     }
 
-    //綁定填表日期驗證
     document.getElementById("submitButton").addEventListener("click", function (event) {
         if (!validateFillDate()) {
-            event.preventDefault(); //阻止表單提交
+            event.preventDefault();
         }
     });
 });

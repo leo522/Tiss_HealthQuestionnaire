@@ -10,7 +10,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 {
     public class TemporaryController : Controller
     {
-        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities(); //資料庫
+        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 保存單個問卷回答到暫存表
         [HttpPost]
@@ -18,28 +18,24 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                //檢查 SessionID 是否存在，如果不存在則生成一個新的
                 if (Session["SessionID"] == null)
                 {
-                    Session["SessionID"] = Guid.NewGuid(); // 為當前會話創建一個新的唯一 ID
+                    Session["SessionID"] = Guid.NewGuid();
                 }
-                var sessionId = (Guid)Session["SessionID"]; // 獲取唯一會話ID
+                var sessionId = (Guid)Session["SessionID"];
 
-                //檢查 AthleteNumber 是否有效
                 var userExists = _db.AthleteUser.Any(u => u.AthleteNumber == userId);
                 if (!userExists)
                 {
                     return Json(new { success = false, message = "無效的選手編號" });
                 }
 
-                //查找問卷類型的 Id
                 var questionnaireType = _db.QuestionnaireType.FirstOrDefault(q => q.Code == questionnaireTypeCode);
                 if (questionnaireType == null)
                 {
                     return Json(new { success = false, message = "無效的問卷類型" });
                 }
 
-                //嘗試解析填表日期
                 DateTime? parsedFillDate = null;
                 if (!string.IsNullOrEmpty(fillDate))
                 {
@@ -53,20 +49,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     }
                 }
 
-                //新建暫存回答記錄
                 var tempAnswer = new TemporaryQuestionnaireData
                 {
-                    UserID = userId, // 使用 AthleteNumber 作為 UserID 儲存
-                    QuestionnaireType = questionnaireTypeCode, // 設定 `QuestionnaireType` 欄位
-                    QuestionnaireTypeId = questionnaireType.Id, // 使用問卷類型的 Id
+                    UserID = userId,
+                    QuestionnaireType = questionnaireTypeCode,
+                    QuestionnaireTypeId = questionnaireType.Id,
                     QuestionID = questionId,
                     Answer = answer,
                     SessionID = sessionId,
                     IsCompleted = false,
-                    AnswerDateTime = DateTime.Now // 確保有填入時間戳記
+                    AnswerDateTime = DateTime.Now
                 };
 
-                // 添加到資料庫並保存
                 _db.TemporaryQuestionnaireData.Add(tempAnswer);
                 _db.SaveChanges();
 
@@ -86,15 +80,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                // 檢查 SessionID 是否存在，如果不存在則生成一個新的
                 if (Session["SessionID"] == null)
                 {
                     Session["SessionID"] = Guid.NewGuid();
                 }
 
-                var sessionId = (Guid)Session["SessionID"]; // 獲取ID
+                var sessionId = (Guid)Session["SessionID"];
 
-                // 查找暫存的回答
                 var answers = _db.TemporaryQuestionnaireData
                                  .Where(t => t.UserID == userId && t.SessionID == sessionId && t.QuestionnaireType == questionnaireType)
                                  .ToList();
@@ -114,7 +106,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                // 檢查 SessionID 是否存在，如果不存在則生成一個新的
                 if (Session["SessionID"] == null)
                 {
                     Session["SessionID"] = Guid.NewGuid();
@@ -123,8 +114,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var sessionId = (Guid)Session["SessionID"];
 
                 var answers = _db.TemporaryQuestionnaireData
-                                 .Where(t => t.UserID == userId && t.SessionID == sessionId && t.QuestionnaireType == questionnaireType)
-                                 .ToList();
+                                 .Where(t => t.UserID == userId && t.SessionID == sessionId && t.QuestionnaireType == questionnaireType).ToList();
 
                 foreach (var answer in answers)
                 {

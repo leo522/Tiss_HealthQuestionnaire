@@ -8,28 +8,28 @@ namespace Tiss_HealthQuestionnaire.Models
     public class QuestionnaireViewModel
     {
         #region 基本信息
-        public string Specialist { get; set; }         // 專項
-        public string FillName { get; set; }           // 填表人
-        public string AtheNum { get; set; }            // 選手編號
-        public int Gender { get; set; }                // 性別（1 = 男, 2 = 女）
-        public DateTime FillDate { get; set; }         // 填表日期
+        public string Specialist { get; set; }
+        public string FillName { get; set; }
+        public string AtheNum { get; set; }
+        public int Gender { get; set; }
+        public DateTime FillDate { get; set; }
         #endregion
 
         #region 問卷數據
-        public string PastHealthHistory { get; set; }  // 過去健康檢查病史
-        public string AllergicHistory { get; set; }    // 過敏史
-        public string FamilyHistory { get; set; }      // 家族病史
-        public string PastHistory { get; set; }        // 過去病史
-        public string SurgeryHistory { get; set; }     // 手術病史
-        public string PresentIllness { get; set; }     // 現在病史
-        public string PastSupplements { get; set; }    // 營養品
-        public string FemaleQuestionnaire { get; set; } // 女性問卷（若有）
-        public string PastInjuryRestored { get; set; } // 過去傷害狀況（已復原）
-        public string NowInjuryRestored { get; set; }  // 目前傷害狀況
-        public string CardiovascularScreening { get; set; } // 心血管篩檢
-        public string ConcussionScreening { get; set; }     // 腦震盪篩檢-選手自填
-        public string OrthopaedicScreening { get; set; }    // 骨科篩檢
-        public string CognitiveScreening { get; set; }      // 腦震盪篩檢-醫療團隊評估-定位
+        public string PastHealthHistory { get; set; }
+        public string AllergicHistory { get; set; }
+        public string FamilyHistory { get; set; }
+        public string PastHistory { get; set; }
+        public string SurgeryHistory { get; set; }
+        public string PresentIllness { get; set; }
+        public string PastSupplements { get; set; }
+        public string FemaleQuestionnaire { get; set; }
+        public string PastInjuryRestored { get; set; }
+        public string NowInjuryRestored { get; set; }
+        public string CardiovascularScreening { get; set; }
+        public string ConcussionScreening { get; set; }
+        public string OrthopaedicScreening { get; set; }
+        public string CognitiveScreening { get; set; }
         #endregion
 
         #region 中英文轉換
@@ -44,7 +44,7 @@ namespace Tiss_HealthQuestionnaire.Models
                 case "unknown":
                     return "未知 Unknown";
                 default:
-                    return "未定義 Undefined"; // 防止未知值
+                    return "未定義 Undefined";
             }
         }
         #endregion
@@ -101,13 +101,13 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 藥物史
         public List<PastDrugsViewModel> PastDrugsItems { get; set; }
-        public string TUE { get; set; }  // 是否有申請治療用途豁免
-        public string OtherDrug { get; set; }  // 其他藥物
+        public string TUE { get; set; }
+        public string OtherDrug { get; set; }
         #endregion
 
         #region 營養品
         public List<PastSupplementsViewModel> PastSupplementsItems { get; set; }
-        public string OtherSupplements { get; set; } // "其他 (Others)" 輸入的補充品名稱
+        public string OtherSupplements { get; set; }
         #endregion
 
         #region 女性問卷
@@ -124,8 +124,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 過去傷害狀況(已復原)
-        //public string PastInjuryStatusAnswer { get; set; }
-        public string PastInjuryStatusAnswer { get; set; } = "yes"; //[1] 預設 "yes"
+        public string PastInjuryStatusAnswer { get; set; } = "yes";
 
         public List<PastInjuryStatusViewModel> PastInjuryItems { get; set; } = new List<PastInjuryStatusViewModel>();
 
@@ -137,8 +136,8 @@ namespace Tiss_HealthQuestionnaire.Models
         {
             public int Id { get; set; }
             public string PastInjuryPart { get; set; }
-            public bool LeftSide { get; set; } //新增左側受傷
-            public bool RightSide { get; set; } //新增右側受傷
+            public bool LeftSide { get; set; }
+            public bool RightSide { get; set; }
         }
 
         public class PastTreatmentMethodViewModel
@@ -149,7 +148,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 目前傷害
-        public string CurrentInjuryStatusAnswer { get; set; } = "no"; // 新增目前傷勢回答預設為 "no"
+        public string CurrentInjuryStatusAnswer { get; set; } = "no";
         public List<CurrentInjuryStatusViewModel> CurrentInjuryItems { get; set; } = new List<CurrentInjuryStatusViewModel>();
         public List<InjuryTypeViewModel> CurrentInjuryTypes { get; set; } = new List<InjuryTypeViewModel>();
         public List<CurrentTreatmentMethodViewModel> CurrentTreatmentItems { get; set; } = new List<CurrentTreatmentMethodViewModel>();
@@ -174,16 +173,16 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 腦震盪篩檢-選手自填-(1)
-        public List<ConcussionScreening> ConcussionScreeningItems { get; set; } // 存題目
-        public Dictionary<int, string> ConcussionScreeningAnswers { get; set; } // 存答案
-        public string ConcussionScreeningMedicationAnswer { get; set; } // 是否服用藥物
-        public string ConcussionScreeningMedicationDetails { get; set; } // 藥物細節
-        public string ConcussionScreeningNotes { get; set; } // 備註
+        public List<ConcussionScreening> ConcussionScreeningItems { get; set; }
+        public Dictionary<int, string> ConcussionScreeningAnswers { get; set; }
+        public string ConcussionScreeningMedicationAnswer { get; set; }
+        public string ConcussionScreeningMedicationDetails { get; set; }
+        public string ConcussionScreeningNotes { get; set; }
         #endregion
 
         #region 症狀自我評估-選手自填(2)
-        public List<SymptomEvaluation> SymptomEvaluationItems { get; set; } // 存題目
-        public Dictionary<int, int> SymptomEvaluationAnswers { get; set; } // 存使用者填寫的分數
+        public List<SymptomEvaluation> SymptomEvaluationItems { get; set; }
+        public Dictionary<int, int> SymptomEvaluationAnswers { get; set; }
         #endregion
 
         #region 骨科篩檢
@@ -192,35 +191,35 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 醫療團隊-認知篩檢-定位(1)
         public List<CognitiveScreening> CognitiveScreeningItems { get; set; }
-        public int CognitiveScreeningTotalScore { get; set; } //定位總分
+        public int CognitiveScreeningTotalScore { get; set; }
         public int ID { get; set; }
         public string Question { get; set; }
-        public int AnswerOption1 { get; set; } // 0 或 1
-        public int AnswerOption2 { get; set; } // 0 或 1
+        public int AnswerOption1 { get; set; }
+        public int AnswerOption2 { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-短期記憶(2)
         public List<ImmediateMemory> ImmediateMemoryItems { get; set; }
-        public int ImmediateMemoryTotalScore { get; set; } //短期記憶總分
-        public string CompletionTime { get; set; } //短期記憶完成時間
+        public int ImmediateMemoryTotalScore { get; set; }
+        public string CompletionTime { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-專注力(3)
         public List<Concentration> ConcentrationItems { get; set; }
-        public int ConcentrationTotalScore { get; set; } // 總分
+        public int ConcentrationTotalScore { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
         public List<CoordinationAndBalanceExamination> CoordinationAndBalanceItems { get; set; }
-        public int CoordinationAndBalanceTotalErrors { get; set; } = 0; // 總錯誤次數
-        public float CoordinationAndBalanceAverageTime { get; set; } = 0; // 平均時間
-        public float CoordinationAndBalanceFastestTime { get; set; } = 0; // 最快時間
+        public int CoordinationAndBalanceTotalErrors { get; set; } = 0;
+        public float CoordinationAndBalanceAverageTime { get; set; } = 0;
+        public float CoordinationAndBalanceFastestTime { get; set; } = 0;
         #endregion
 
         #region 醫療團隊-認知篩檢-延遲記憶(5)
         public List<DelayedRecall> DelayedRecallItems { get; set; }
-        public int DelayedRecallTotalScore { get; set; } //延遲記憶總分
-        public string DelayedRecallStartTime { get; set; } // 測驗開始時間
+        public int DelayedRecallTotalScore { get; set; }
+        public string DelayedRecallStartTime { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-分數總合(6)
@@ -231,9 +230,9 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 過去健康檢查病史
     public class PastHealthItemViewModel
     {
-        public int ID { get; set; }    // 項目的ID
-        public string ItemZh { get; set; } // 中文
-        public string ItemEn { get; set; }  // 英文
+        public int ID { get; set; }
+        public string ItemZh { get; set; }
+        public string ItemEn { get; set; }
         public bool IsYes { get; set; }
         public string Details { get; set; }
     }
@@ -242,23 +241,23 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 過敏史
     public class AllergicHistoryItemViewModel
     {
-        public int ID { get; set; }           // AllergicHistory表的ID
-        public string ItemZh { get; set; }    // 題目中文名稱
-        public string ItemEn { get; set; }    // 題目英文名稱
-        public bool IsYes { get; set; }       // 使用者回答是否有過敏
-        public string Details { get; set; }   // 使用者填寫的描述
+        public int ID { get; set; }
+        public string ItemZh { get; set; }
+        public string ItemEn { get; set; }
+        public bool IsYes { get; set; }
+        public string Details { get; set; }
     }
     #endregion
 
     #region 家族病史
     public class FamilyHistoryViewModel
     {
-        public int ID { get; set; }  // 家族病史 ID
-        public string GeneralPartsZh { get; set; }  // 疾病名稱 (中文)
+        public int ID { get; set; }
+        public string GeneralPartsZh { get; set; }
 
-        public bool IsYes { get; set; }  // 是否有該疾病
-        public bool IsNo { get; set; }   // 是否沒有該疾病
-        public bool IsUnknown { get; set; }  // 是否未知
+        public bool IsYes { get; set; }
+        public bool IsNo { get; set; }
+        public bool IsUnknown { get; set; }
 
         public string FamilyHistoryOption
         {
@@ -281,11 +280,11 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 過去病史
     public class PastHistoryViewModel
     {
-        public int ID { get; set; } // 項目 ID
-        public string GeneralPartsZh { get; set; } // 疾病名稱 (中文)
-        public bool IsYes { get; set; }  // 是否有該疾病
-        public bool IsNo { get; set; }   // 是否沒有該疾病
-        public bool IsUnknown { get; set; }  // 是否未知
+        public int ID { get; set; }
+        public string GeneralPartsZh { get; set; }
+        public bool IsYes { get; set; }
+        public bool IsNo { get; set; }
+        public bool IsUnknown { get; set; }
 
         public string PastHistoryOption
         {
@@ -317,20 +316,20 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 藥物史
     public class PastDrugsViewModel
     {
-        public int ID { get; set; } // 藥物項目 ID
-        public string ItemZh { get; set; } // 藥物名稱（中文）
-        public string ItemEn { get; set; } // 藥物名稱（英文）
-        public bool IsUsed { get; set; } // 是否使用
+        public int ID { get; set; }
+        public string ItemZh { get; set; }
+        public string ItemEn { get; set; }
+        public bool IsUsed { get; set; }
     }
     #endregion
 
     #region 營養品
     public class PastSupplementsViewModel
     {
-        public int ID { get; set; }    // 補充品項目 ID
-        public string ItemZh { get; set; } // 補充品項目中文名稱
-        public string ItemEn { get; set; } // 補充品項目英文名稱
-        public bool IsUsed { get; set; }   // **改為 `bool`**
+        public int ID { get; set; }
+        public string ItemZh { get; set; }
+        public string ItemEn { get; set; }
+        public bool IsUsed { get; set; }
     }
     #endregion
 
@@ -347,10 +346,10 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 顯示過去傷害狀況(已復原)
     public class PastInjuryStatuSViewModel
     {
-        public string PastInjuryPart { get; set; } // 部位名稱
-        public bool LeftSide { get; set; } // 左側是否受傷
-        public bool RightSide { get; set; } // 右側是否受傷
-        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
+        public string PastInjuryPart { get; set; }
+        public bool LeftSide { get; set; }
+        public bool RightSide { get; set; }
+        public List<string> InjuryTypes { get; set; } = new List<string>();
     }
     #endregion
 
@@ -371,10 +370,10 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 顯示目前傷害狀況
     public class InjuryStatuSViewModel
     {
-        public string InjuryPart { get; set; } // 部位名稱
-        public bool LeftSide { get; set; } // 左側是否受傷
-        public bool RightSide { get; set; } // 右側是否受傷
-        public List<string> InjuryTypes { get; set; } = new List<string>(); // 傷勢類型列表
+        public string InjuryPart { get; set; }
+        public bool LeftSide { get; set; }
+        public bool RightSide { get; set; }
+        public List<string> InjuryTypes { get; set; } = new List<string>();
     }
     #endregion
 
@@ -404,9 +403,9 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 腦震盪篩檢-選手自填(1)
     public class ConcussionScreeningViewModel
     {
-        public int OrderNumber { get; set; }  // 問卷項次
-        public string Question { get; set; }  // 問卷問題
-        public string Answer { get; set; } // 答案 (yes/no)
+        public int OrderNumber { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; } 
     }
     #endregion
 
@@ -422,24 +421,24 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-定位(1)
     public class CognitiveScreeningViewModel
     {
-        public int OrderNumber { get; set; }  // 項次
-        public string Question { get; set; }  // 問題文字
-        public int OrientationScore { get; set; } // 定位分數
-        public int ImmediateMemoryScore { get; set; } // 短期記憶分數
-        public int ConcentrationScore { get; set; } // 專注力分數
-        public int DelayedRecallScore { get; set; } // 延遲記憶分數
-        public int TotalScore { get; set; } // 總分
+        public int OrderNumber { get; set; }
+        public string Question { get; set; }
+        public int OrientationScore { get; set; }
+        public int ImmediateMemoryScore { get; set; }
+        public int ConcentrationScore { get; set; }
+        public int DelayedRecallScore { get; set; } 
+        public int TotalScore { get; set; }
     }
     #endregion
 
     #region 醫療團隊-認知篩檢-短期記憶(2)
     public class ImmediateMemoryViewModel
     {
-        public int OrderNumber { get; set; }  // 項次
-        public string Word { get; set; }      // 顯示的詞彙
-        public int FirstTestScore { get; set; } = 0;  // 第一次測驗分數
-        public int SecondTestScore { get; set; } = 0; // 第二次測驗分數
-        public int ThirdTestScore { get; set; } = 0;  // 第三次測驗分數
+        public int OrderNumber { get; set; }
+        public string Word { get; set; }
+        public int FirstTestScore { get; set; } = 0;
+        public int SecondTestScore { get; set; } = 0;
+        public int ThirdTestScore { get; set; } = 0;
         public string CompletionTime { get; set; } = "00:00";
     }
     #endregion
@@ -447,39 +446,39 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-專注力(3)
     public class ConcentrationViewModel
     {
-        public int OrderNumber { get; set; } // 項次
-        public string ListA { get; set; }    // 列表 A
-        public string ListB { get; set; }    // 列表 B
-        public string ListC { get; set; }    // 列表 C
-        public int Score { get; set; } = 0;  // 分數 (0 或 1)
+        public int OrderNumber { get; set; }
+        public string ListA { get; set; }
+        public string ListB { get; set; }
+        public string ListC { get; set; }
+        public int Score { get; set; } = 0;
     }
     #endregion
 
     #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
     public class CoordinationAndBalanceExaminationViewModel
     {
-        public int OrderNumber { get; set; } //項次
-        public string TestFoot { get; set; } //測試腳
-        public string TestSurface { get; set; } //測試平面
-        public string Footwear { get; set; } //腳穿著
-        public int DoubleLegError { get; set; } = 0; //雙腳站立錯誤次數
-        public int TandemError { get; set; } = 0; //腳跟前後站立錯誤次數
-        public int SingleLegError { get; set; } = 0; //單腳站立錯誤次數
-        public int TotalErrors { get; set; } = 0; //錯誤次數分數
-        public float FirstTime { get; set; } = 0; //第一次測試時間
-        public float SecondTime { get; set; } = 0; //第二次測試時間
-        public float ThirdTime { get; set; } = 0; //第三次測試時間
-        public float AverageTimes { get; set; } = 0; //平均時間
-        public float FastestTimes { get; set; } = 0; //最快時間
+        public int OrderNumber { get; set; }
+        public string TestFoot { get; set; }
+        public string TestSurface { get; set; }
+        public string Footwear { get; set; }
+        public int DoubleLegError { get; set; } = 0;
+        public int TandemError { get; set; } = 0; 
+        public int SingleLegError { get; set; } = 0;
+        public int TotalErrors { get; set; } = 0;
+        public float FirstTime { get; set; } = 0;
+        public float SecondTime { get; set; } = 0;
+        public float ThirdTime { get; set; } = 0;
+        public float AverageTimes { get; set; } = 0;
+        public float FastestTimes { get; set; } = 0;
     }
     #endregion
 
     #region 醫療團隊-認知篩檢-延遲記憶(5)
     public class DelayedRecallViewModel
     {
-        public int OrderNumber { get; set; } //項次，用於顯示題目的順序
-        public string Word { get; set; } //詞彙內容
-        public int Score { get; set; } = 0; //測驗分數
+        public int OrderNumber { get; set; }
+        public string Word { get; set; }
+        public int Score { get; set; } = 0;
     }
     #endregion
 
@@ -492,16 +491,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int DelayedRecallScore { get; set; }
         public int TotalScore { get; set; }
     }
-
-    //public class CognitiveScreeningSummaryModel
-    //{
-    //    public int OrientationScore { get; set; }
-    //    public int ImmediateMemoryScore { get; set; }
-    //    public int ConcentrationScore { get; set; }
-    //    public int CoordinationScore { get; set; }
-    //    public int DelayedRecallScore { get; set; }
-    //    public int TotalScore { get; set; }
-    //}
     #endregion
 
     #region 骨科篩檢

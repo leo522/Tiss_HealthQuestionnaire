@@ -9,13 +9,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
 {
     public class ReportsController : Controller
     {
-        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities(); //資料庫
+        private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 查詢填完問卷內容
-
-        #endregion
-
-        #region 產生列印問卷
 
         #endregion
     }

@@ -1,5 +1,4 @@
-﻿/*目前傷勢狀況*/
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     const currentNoInjury = document.getElementById("currentNoInjury");
     const currentHasInjury = document.getElementById("currentHasInjury");
     const currentInjuryDetails = document.getElementById("currentInjuryDetails");
@@ -13,13 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // **控制目前傷害部位的顯示/隱藏**
     function toggleCurrentInjurySections() {
         if (currentHasInjury.checked) {
             currentInjuryDetails.classList.remove("hidden");
             currentInjuryTypeSection.classList.remove("hidden");
-            currentTreatmentMethodSection.classList.add("hidden"); // **預設隱藏治療方式**
-            loadAllCurrentInjuryTypes(); // **載入所有傷勢類型**
+            currentTreatmentMethodSection.classList.add("hidden");
+            loadAllCurrentInjuryTypes();
         } else {
             currentInjuryDetails.classList.add("hidden");
             currentInjuryTypeSection.classList.add("hidden");
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // **載入所有傷勢類型**
     function loadAllCurrentInjuryTypes() {
         fetch(`/Questionnaire/CurrentInjuryType?all=true`)
             .then(response => {
@@ -64,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInjuryTypeContainer.innerHTML = content;
                 currentInjuryTypeSection.classList.remove("hidden");
 
-                // **監聽傷勢類型選擇**
                 document.querySelectorAll(".current-injury-type").forEach(select => {
                     select.addEventListener("change", loadCurrentTreatmentMethods);
                 });
@@ -74,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // **根據選擇的傷勢類型載入治療方式**
     function loadCurrentTreatmentMethods() {
         fetch(`/Questionnaire/CurrentTreatmentMethod`)
             .then(response => {
@@ -112,11 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // **監聽 "有/無" 目前傷勢選擇**
     currentNoInjury.addEventListener("change", toggleCurrentInjurySections);
     currentHasInjury.addEventListener("change", toggleCurrentInjurySections);
 
-    // **預設隱藏**
     currentInjuryDetails.classList.add("hidden");
     currentInjuryTypeSection.classList.add("hidden");
     currentTreatmentMethodSection.classList.add("hidden");

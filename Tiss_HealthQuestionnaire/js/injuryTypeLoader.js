@@ -1,5 +1,4 @@
-﻿/*過去傷勢*/
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     const pastNoInjury = document.getElementById("pastNoInjury");
     const pastHasInjury = document.getElementById("pastHasInjury");
     const injuryPartDetails = document.getElementById("injuryPartDetails");

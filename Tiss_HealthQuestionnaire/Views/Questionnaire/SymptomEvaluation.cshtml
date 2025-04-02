@@ -1,5 +1,4 @@
-﻿@*症狀自我評估-選手-(2)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.ConcussionScreeningViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -31,7 +30,6 @@
 <body>
     <div class="p-4">
         <h1 class="text-xl font-bold mb-4">(二) 選手背景：症狀自我評估 Self-assessment of Symptoms</h1>
-        <!-- 問卷表格 -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300 text-center">
                 <thead>
@@ -49,18 +47,11 @@
                     @foreach (var item in Model)
                     {
                         <tr class="hover:bg-gray-100">
-                            <!-- 燈號顯示 -->
                             <td class="border border-gray-300 px-4 py-2">
                                 <span class="light-indicator" id="indicator_@item.OrderNumber"></span>
                             </td>
-
-                            <!-- 項次 -->
                             <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
-
-                            <!-- 症狀項目 -->
                             <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-
-                            <!-- 分數選項 -->
                             @for (int i = 0; i <= 6; i++)
                             {
                                 <td class="border border-gray-300 px-4 py-2">
@@ -73,7 +64,6 @@
             </table>
         </div>
 
-        <!-- 總計部分 -->
         <div class="flex flex-col mt-4 space-y-2">
             <div class="flex items-center">
                 <span class="mr-2 text-lg font-semibold">●</span>
@@ -98,7 +88,6 @@
 
     <script>
         $(document).ready(function () {
-            // 監聽所有的 radio 按鈕
             $('.score-option').on('change', function () {
                 updateTotals();
                 updateWarnings($(this));
@@ -108,43 +97,38 @@
                 let totalSymptoms = 0;
                 let totalScore = 0;
 
-                // 遍歷所有的症狀分數選項
                 $('input[type="radio"]:checked').each(function () {
                     let score = parseInt($(this).val());
-                    if (!isNaN(score)) { // 確認是有效數字
+                    if (!isNaN(score)) {
                         if (score > 0) {
-                            totalSymptoms += 1; // 每次有選擇大於 0 的分數就計算一個症狀
+                            totalSymptoms += 1;
                         }
-                        totalScore += score; // 累加所有選擇的分數
+                        totalScore += score;
                     }
                 });
 
-                // 更新顯示的總計數值
                 $('#totalSymptoms').text(totalSymptoms);
                 $('#totalScore').text(totalScore);
             }
 
             function updateWarnings(selectedRadio) {
                 let score = parseInt(selectedRadio.val());
-                if (isNaN(score)) return; // 跳過無效值
+                if (isNaN(score)) return;
 
                 let indicator = $(selectedRadio.data('indicator'));
-                if (indicator.length === 0) return; // 確認是否正確指向 DOM 元素
+                if (indicator.length === 0) return;
 
-                // 移除舊的顏色
                 indicator.removeClass('light-green light-yellow light-red');
 
-                // 根據分數設定燈號顏色
                 if (score >= 0 && score <= 1) {
-                    indicator.addClass('light-green'); // 綠燈
+                    indicator.addClass('light-green');
                 } else if (score >= 2 && score <= 4) {
-                    indicator.addClass('light-yellow'); // 黃燈
+                    indicator.addClass('light-yellow');
                 } else if (score >= 5 && score <= 6) {
-                    indicator.addClass('light-red'); // 紅燈
+                    indicator.addClass('light-red');
                 }
             }
 
-            // 初始化檢查
             updateTotals();
         });
     </script>

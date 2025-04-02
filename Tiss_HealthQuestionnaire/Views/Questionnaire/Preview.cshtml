@@ -14,7 +14,6 @@
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">問卷總預覽</h1>
         <form method="post" action="@Url.Action("Submit", "Questionnaire")">
-            <!-- 個人基本資料 -->
             <div class="mb-8">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-4">個人基本資料</h2>
                 <div class="grid grid-cols-2 gap-6 text-gray-700 text-xl">
@@ -25,14 +24,13 @@
                     <p><strong>填表日期:</strong> @Model.FillDate.ToString("yyyy-MM-dd")</p>
                 </div>
             </div>
-            <!-- **隱藏欄位，確保數據能送出** -->
             @Html.HiddenFor(m => m.Specialist)
             @Html.HiddenFor(m => m.FillName)
             @Html.HiddenFor(m => m.AtheNum)
             @Html.HiddenFor(m => m.Gender)
             @Html.HiddenFor(m => m.FillDate)
 
-            <!--第一題：過去健康檢查病史 -->
+            @*過去健康檢查病史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
                 <p class="mb-4">
@@ -77,7 +75,7 @@
                 }
             </div>
 
-            <!-- 第二題：過敏史 -->
+            @*過敏史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過敏史 (AllergicHistory)</h2>
                 <p class="mb-4">
@@ -124,7 +122,7 @@
                                         }
                                         else
                                         {
-                                            <span class="text-gray-400">—</span> <!-- 無過敏描述時顯示「—」-->
+                                            <span class="text-gray-400">—</span>
                                         }
                                     </td>
                                 </tr>
@@ -142,7 +140,7 @@
                 }
             </div>
 
-            <!-- 第三題：家族病史 -->
+            @*家族病史 - 二等親內*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">家族病史 (Family History) - 二等親內</h2>
 
@@ -201,7 +199,7 @@
                 <input type="hidden" name="OtherFamilyHistory" value="@Model.OtherFamilyHistory" />
             </div>
 
-            <!-- 第四題：過去病史 -->
+            @*過去病史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去病史 (Past History)</h2>
                 <table class="min-w-full bg-white border border-gray-300">
@@ -258,7 +256,7 @@
                 <input type="hidden" name="OtherPastHistory" value="@Model.OtherPastHistory" />
             </div>
 
-            <!-- 第五題：現在病史 -->
+            @*現在病史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">現在病史 (Present Illness)</h2>
 
@@ -298,7 +296,7 @@
                 }
             </div>
 
-            <!-- 第六題：藥物史 -->
+            @*藥物史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">藥物史 (Past Drugs)</h2>
 
@@ -334,10 +332,10 @@
                     <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@Model.PastDrugsItems[i].IsUsed.ToString().ToLower()">
                 }
 
-                <input type="hidden" name="TUE" value="@Model.TUE"> <!-- 確保 TUE 也能傳遞 -->
+                <input type="hidden" name="TUE" value="@Model.TUE">
             </div>
 
-            <!-- 第七題：營養品 -->
+            @*營養品*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">營養品 (PastSupplements)</h2>
 
@@ -383,8 +381,8 @@
                 <input type="hidden" name="OtherSupplements" value="@Model.OtherSupplements">
             </div>
 
-            <!-- 第八題：女性問卷 -->
-            @if (Model.Gender == 2) // 只有女性才顯示
+            @*女性問卷*@
+            @if (Model.Gender == 2)
             {
                 <div class="mb-8">
                     <h2 class="text-xl font-semibold text-blue-600 mb-4">女性問卷 (Female Questionnaire)</h2>
@@ -415,8 +413,8 @@
                     </table>
                 </div>
             }
-            
-            <!-- 第九題：過去傷害（已復原） -->
+
+            @*過去傷害狀況-已復原*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">過去傷害狀況-已復原</h2>
                 <p class="mb-4"><strong>狀態：</strong>@(Model.PastInjuryStatusAnswer == "yes" ? "有過去傷害" : "無過去傷害")</p>
@@ -451,7 +449,6 @@
                                     <td class="border border-gray-300 px-4 py-2">@injuryType</td>
                                     <td class="border border-gray-300 px-4 py-2">@treatment</td>
 
-                                    <!-- **隱藏欄位** -->
                                     @Html.Hidden($"PastInjuryItems[{i}].PastInjuryPart", injury.PastInjuryPart)
                                     @Html.Hidden($"PastInjuryItems[{i}].LeftSide", injury.LeftSide)
                                     @Html.Hidden($"PastInjuryItems[{i}].RightSide", injury.RightSide)
@@ -464,11 +461,10 @@
                 }
             </div>
 
-            <!-- 第十題：目前傷害狀況 -->
+            @*目前傷害狀況*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">目前傷害狀況</h2>
                 <p class="mb-4"><strong>狀態：</strong>@(Model.CurrentInjuryStatusAnswer == "yes" ? "有目前傷害" : "無目前傷害")</p>
-
                 @if (Model.CurrentInjuryStatusAnswer == "yes")
                 {
                     <table class="min-w-full bg-white border border-gray-300">
@@ -499,7 +495,6 @@
                                     <td class="border border-gray-300 px-4 py-2">@injuryType</td>
                                     <td class="border border-gray-300 px-4 py-2">@treatment</td>
 
-                                    <!-- **隱藏欄位** -->
                                     @Html.Hidden($"CurrentInjuryItems[{i}].CurrentInjuryPart", injury.CurrentInjuryPart)
                                     @Html.Hidden($"CurrentInjuryItems[{i}].LeftSide", injury.LeftSide)
                                     @Html.Hidden($"CurrentInjuryItems[{i}].RightSide", injury.RightSide)
@@ -512,7 +507,7 @@
                 }
             </div>
 
-            <!-- 第11題：心血管篩檢 -->
+            @*心血管篩檢*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">心血管篩檢 Cardiovascular Screening</h2>
                 <div class="overflow-x-auto">
@@ -527,7 +522,7 @@
                         <tbody>
                             @foreach (var item in Model.CardiovascularScreeningItems)
                             {
-                                var responseText = item.IsUsed ? "有" : "無"; // 依照IsUsed來顯示答案
+                                var responseText = item.IsUsed ? "有" : "無";
                                 var textColorClass = item.IsUsed ? "text-red-600" : "text-green-600";
 
                                 <tr>
@@ -551,7 +546,7 @@
                 </div>
             </div>
 
-            <!-- 第12題：腦震盪篩檢-選手自填-(1) -->
+            @*腦震盪篩檢 - 選手自填*@
             <div class="mb-8">
                 @if (Model.ConcussionScreeningItems != null && Model.ConcussionScreeningItems.Any())
                 {
@@ -580,23 +575,36 @@
                                                 @responseText
                                             </td>
                                         </tr>
-                                        @Html.Hidden($"ConcussionScreeningAnswers[{item.Id}]", responseText)
                                     }
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- 服用藥物 & 備註 -->
-                        <div class="mt-4">
+                        @* ✅ 將 hidden input 放在表格外面 *@
+                        @foreach (var item in Model.ConcussionScreeningItems)
+                        {
+                            var responseText = Model.ConcussionScreeningAnswers.ContainsKey(item.Id)
+                                ? Model.ConcussionScreeningAnswers[item.Id]
+                                : "未填寫";
+
+                            <input type="hidden" name="ConcussionQuestion_@item.Id" value="@(responseText == "是" ? "yes" : "no")" />
+                        }
+
+                        <div class="mt-4 space-y-2">
                             <p><strong>現在是否服用藥物：</strong> @Model.ConcussionScreeningMedicationAnswer</p>
+                            <input type="hidden" name="Medication" value="@(Model.ConcussionScreeningMedicationAnswer == "是" ? "yes" : "no")" />
+
                             <p><strong>服用藥物細節：</strong> @Model.ConcussionScreeningMedicationDetails</p>
+                            <input type="hidden" name="MedicationDetails" value="@Model.ConcussionScreeningMedicationDetails" />
+
                             <p><strong>備註：</strong> @Model.ConcussionScreeningNotes</p>
+                            <input type="hidden" name="Notes" value="@Model.ConcussionScreeningNotes" />
                         </div>
                     </div>
                 }
             </div>
 
-            <!-- 第13題：症狀自我評估-選手自填(2) -->
+            @*症狀自我評估 - 選手自填*@
             <div class="mb-8">
                 @if (Model.SymptomEvaluationItems != null && Model.SymptomEvaluationItems.Any())
                 {
@@ -625,9 +633,8 @@
                                                 @score
                                             </td>
                                         </tr>
-                                        @Html.Hidden($"SymptomEvaluationAnswers[{item.ID}]", score)
                                     }
-                                    <!-- 症狀統計結果 -->
+
                                     <tr class="bg-gray-100 font-semibold">
                                         <td class="border px-4 py-2" colspan="2">症狀總數</td>
                                         <td class="border px-4 py-2 text-black-600">
@@ -643,11 +650,20 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        @foreach (var item in Model.SymptomEvaluationItems)
+                        {
+                            int score = Model.SymptomEvaluationAnswers.ContainsKey(item.ID)
+                                ? Model.SymptomEvaluationAnswers[item.ID]
+                                : 0;
+
+                            <input type="hidden" name="SymptomScore_@item.ID" value="@score" />
+                        }
                     </div>
                 }
             </div>
 
-            <!--第14題 顯示骨科篩檢 -->
+            @*骨科篩檢*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢 (Orthopaedic Screening)</h2>
                 @if (Model.OrthopaedicScreeningItems != null && Model.OrthopaedicScreeningItems.Any())
@@ -664,8 +680,8 @@
                         <tbody>
                             @foreach (var detail in Model.OrthopaedicScreeningItems)
                             {
-                                var responseText = "未填寫"; // 預設文字
-                                var textColorClass = "text-gray-500"; // 預設顏色
+                                var responseText = "未填寫";
+                                var textColorClass = "text-gray-500";
 
                                 if (!string.IsNullOrEmpty(detail.ResultNormal) && !string.IsNullOrEmpty(detail.ResultAbnormal))
                                 {
@@ -693,11 +709,9 @@
                     <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions" />
                     <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints" />
                     <input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@item.Result" />
-                    @*<input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@resultText" />*@
                 }
             </div>
 
-            <!-- 操作按鈕 -->
             <div class="flex justify-between items-center mt-6">
                 <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
                     返回編輯

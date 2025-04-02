@@ -1,24 +1,19 @@
-﻿// ConcussionScreeningScore.js
-/** 更新分數相關邏輯 **/
-function updateScores() {
+﻿function updateScores() {
     const scores = {
         Orientation: sumScores('input[name^="Orientation_"]:checked'),
         ImmediateMemoryFirst: sumScores('input[name^="ImmediateMemory_first_"]:checked'),
         ImmediateMemorySecond: sumScores('input[name^="ImmediateMemory_second_"]:checked'),
         ImmediateMemoryThird: sumScores('input[name^="ImmediateMemory_third_"]:checked'),
         Concentration: sumScores('input[name^="Concentration_"]:checked'),
-        CoordinationErrors: sumScores('.error-input'), // 總錯誤次數
+        CoordinationErrors: sumScores('.error-input'),
         DelayedRecall: sumScores('input[name^="DelayedRecall_"]:checked'),
     };
 
-    // 計算短期記憶總分
     const totalImmediateMemory = scores.ImmediateMemoryFirst + scores.ImmediateMemorySecond + scores.ImmediateMemoryThird;
 
-    // 計算協調與平衡總分
     const totalErrors = scores.CoordinationErrors;
-    const coordinationScore = 30 - totalErrors; // 30 減去錯誤次數
+    const coordinationScore = 30 - totalErrors;
 
-    // 更新 DOM 顯示分數
     updateDOMScoreWithMax('OrientationTotalScore', scores.Orientation, 5);
     updateDOMScoreWithMax('ImmediateMemoryFirstTotal', scores.ImmediateMemoryFirst, 10);
     updateDOMScoreWithMax('ImmediateMemorySecondTotal', scores.ImmediateMemorySecond, 10);
@@ -27,7 +22,6 @@ function updateScores() {
     updateDOMScoreWithMax('ConcentrationTotalScore', scores.Concentration, 4);
     updateDOMScoreWithMax('Coordination_TotalErrors', totalErrors, 30);
 
-    // 顯示錯誤訊息 (若錯誤總數超過 30)
     if (totalErrors > 30) {
         Swal.fire({
             icon: 'error',
@@ -36,7 +30,6 @@ function updateScores() {
         });
     }
 
-    // 計算協調與平衡測驗的秒數
     const firstTime = parseFloat(document.querySelector('input[name="Coordination_FirstTime"]').value) || 0;
     const secondTime = parseFloat(document.querySelector('input[name="Coordination_SecondTime"]').value) || 0;
     const thirdTime = parseFloat(document.querySelector('input[name="Coordination_ThirdTime"]').value) || 0;
@@ -51,7 +44,6 @@ function updateScores() {
     updateDOMScoreWithMax('DelayedRecallTotalScore', scores.DelayedRecall, 10);
     updateDOMScoreWithMax('FinalScore', scores.Orientation + totalImmediateMemory + scores.Concentration + coordinationScore + scores.DelayedRecall, 79);
 
-    // 存入 sessionStorage，避免刷新頁面後數據消失
     sessionStorage.setItem('ImmediateMemoryFirstTotal', scores.ImmediateMemoryFirst);
     sessionStorage.setItem('ImmediateMemorySecondTotal', scores.ImmediateMemorySecond);
     sessionStorage.setItem('ImmediateMemoryThirdTotal', scores.ImmediateMemoryThird);
@@ -59,7 +51,6 @@ function updateScores() {
     updateIndicators();
 }
 
-/** 計算分數 **/
 function sumScores(selector) {
     let total = 0;
     document.querySelectorAll(selector).forEach((input) => {
@@ -68,7 +59,6 @@ function sumScores(selector) {
     return total;
 }
 
-/** 更新 DOM 分數顯示 **/
 function updateDOMScoreWithMax(id, value, max) {
     const element = document.getElementById(id);
     if (!element) return;
@@ -81,12 +71,10 @@ function updateDOMScoreWithMax(id, value, max) {
     }
 }
 
-/** 監聽 `秒數輸入框` 的變化 **/
 document.querySelectorAll('input[name^="Coordination_"]').forEach(input => {
     input.addEventListener('input', updateScores);
 });
 
-/** 監聽數據輸入變化並重新計算分數 **/
 const inputSelectors = [
     'input[name^="Orientation_"]',
     'input[name^="ImmediateMemory_"]',
@@ -100,5 +88,4 @@ inputSelectors.forEach((selector) => {
     });
 });
 
-// 初始化分數顯示
 updateScores();

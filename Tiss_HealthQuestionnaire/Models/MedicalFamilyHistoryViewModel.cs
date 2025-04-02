@@ -7,7 +7,7 @@ namespace Tiss_HealthQuestionnaire.Models
 {
     public class MedicalFamilyHistoryViewModel
     {
-        public string Question { get; set; }  // 問題文字
-        public List<string> Symptoms { get; set; }  // 相關症狀列表
+        public string Question { get; set; }
+        public List<string> Symptoms { get; set; }
     }
 }

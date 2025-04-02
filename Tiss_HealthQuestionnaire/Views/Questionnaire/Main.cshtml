@@ -10,19 +10,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健康檢查問卷</title>
     <link href="~/css/tailwind.min.css" rel="stylesheet" />
-    <link href="~/css/mainStyle.css" rel="stylesheet" /> @*燈號顯示顏色*@
-    <link href="~/css/SymptomsLights.css" rel="stylesheet" /> @*燈號顯示顏色*@
-    <script src="~/js/SymptomLights.js"></script> @*燈號顯示更新*@
-    <script src="~/js/SymptomEvaluationScore.js"></script> @*選手症狀分數相關邏輯*@
-    <!--<script src="~/js/ConcussionScreeningScore.js"></script>--> @*更新分數相關邏輯*@
-    <script src="~/js/formValidation.js"></script> @*表單必填驗證*@
-    <script src="~/js/validateFillDate.js"></script> @*日期必填驗證*@
+    <link href="~/css/mainStyle.css" rel="stylesheet" />
+    <link href="~/css/SymptomsLights.css" rel="stylesheet" />
+    <script src="~/js/SymptomLights.js"></script>
+    <script src="~/js/SymptomEvaluationScore.js"></script>
+    <script src="~/js/formValidation.js"></script>
+    <script src="~/js/validateFillDate.js"></script>
 </head>
 <body class="bg-gray-100 p-4">
     <div class="container mx-auto">
         <form id="questionnaireForm" method="post" action="/Questionnaire/Preview">
             <input type="hidden" id="formDataJson" name="formDataJson" />
-            <!-- 問卷基本資料 -->
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
                 <div class="flex flex-col md:flex-row items-center mb-4 space-x-4">
                     <label class="mr-2">
@@ -51,7 +49,7 @@
                 </div>
             </div>
             <div id="questionnaireSteps">
-                <!-- 第一題：過去健康檢查病史 -->
+                @*過去健康檢查病史*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="1">
                     <h3 class="text-lg font-semibold mb-4">過去健康檢查病史</h3>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -94,7 +92,7 @@
                     </table>
                 </div>
 
-                <!-- 第二題：過敏史 -->
+                @*過敏史*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="2">
                     <h3 class="text-lg font-semibold mb-4">過敏史</h3>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -127,14 +125,13 @@
 
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
 
-                <!-- 第三題：家族病史 -->
+                @*家族病史-二等親內*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3">
-                    <h3 class="text-lg font-semibold mb-4">家族病史 (Family History) - 二等親內</h3>
+                    <h3 class="text-lg font-semibold mb-4">家族病史 - 二等親內</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -161,7 +158,6 @@
                                     </td>
                                 </tr>
                             }
-                            <!-- "其他" 選項 -->
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2 font-semibold">其他 (Others)：</td>
                                 <td colspan="3" class="border border-gray-300 px-4 py-2">
@@ -173,7 +169,7 @@
                     </table>
                 </div>
 
-                <!-- 第四題：過去病史 -->
+                @*過去病史*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="4">
                     <h2 class="text-lg font-semibold mb-4">過去病史</h2>
                     <label>近六個月內是否發生過以下疾病？</label>
@@ -206,14 +202,12 @@
                         </tbody>
                     </table>
 
-                    <!-- 其他 (Others) 選項 -->
                     <div class="mt-4">
                         <label for="OtherPastHistory">其他 (Others)：</label>
                         <input type="text" id="OtherPastHistory" name="OtherPastHistory" value="@Model.OtherPastHistory"
                                class="border rounded p-2 w-full" placeholder="請填寫其他病史...">
                     </div>
 
-                    <!-- 確保數據正確傳遞 -->
                     @for (int i = 0; i < Model.PastHistoryItems.Count; i++)
                     {
                         var item = Model.PastHistoryItems[i];
@@ -222,9 +216,9 @@
                     }
                 </div>
 
-                <!-- 第五題：現在病史 -->
+                @*現在病史*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="5">
-                    <h2 class="text-lg font-semibold mb-4">現在病史 (Present Illness)</h2>
+                    <h2 class="text-lg font-semibold mb-4">現在病史</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -247,7 +241,6 @@
                         </tbody>
                     </table>
 
-                    <!-- 確保數據能正確送出 -->
                     @for (int i = 0; i < Model.PresentIllnessItems.Count; i++)
                     {
                         var item = Model.PresentIllnessItems[i];
@@ -256,7 +249,7 @@
                     }
                 </div>
 
-                <!-- 第六題：藥物史 -->
+                @*藥物史*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="6">
                     <h2 class="text-lg font-semibold mb-4">藥物史</h2>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -287,7 +280,6 @@
                         </tbody>
                     </table>
 
-                    <!-- TUE (治療用途豁免) 選擇 -->
                     <div class="mt-4 p-4 border border-gray-300 rounded-lg">
                         <label class="font-semibold">是否有申請治療用途豁免？(TUE)</label>
                         <div class="flex space-x-4 mt-2">
@@ -303,7 +295,7 @@
                     </div>
                 </div>
 
-                <!-- 第七題：營養品 -->
+                @*營養品*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
                     <h2 class="text-lg font-semibold mb-4">營養品</h2>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -334,18 +326,17 @@
                         </tbody>
                     </table>
 
-                    <!-- "其他 (Others)" 輸入區 -->
                     <div class="mt-4">
                         <label class="font-semibold">其他 (Others)：</label>
                         <input type="text" id="otherSupplementInput" name="OtherSupplements" class="border rounded p-2 w-full">
                     </div>
                 </div>
 
-                <!-- 第八題：女性問卷 -->
+                @*女性問卷*@
                 @if (Model.FemaleQuestionnaireItems != null && Model.FemaleQuestionnaireItems.Any())
                 {
                     <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="8">
-                        <h2 class="text-lg font-semibold mb-4">女性問卷 Female Health Questionnaire</h2>
+                        <h2 class="text-lg font-semibold mb-4">女性問卷</h2>
                         <div class="overflow-x-auto">
                             <table class="min-w-full bg-white border border-gray-300">
                                 <thead>
@@ -363,7 +354,7 @@
                                                 <span class="block text-sm text-gray-600">@question.QuestionEn</span>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-center">
-                                                @if (question.ID == 1)  // 第一次生理期時間 (選擇年齡範圍)
+                                                @if (question.ID == 1)
                                                 {
                                                     <select name="FemaleQuestionnaireAnswers[@question.ID]" class="border rounded px-2 py-1">
                                                         <option value="">請選擇</option>
@@ -376,7 +367,7 @@
                                                         <option value="16">16 歲(含)以上</option>
                                                     </select>
                                                 }
-                                                else if (question.ID == 2 || question.ID == 4)  // 是/否問題
+                                                else if (question.ID == 2 || question.ID == 4)
                                                 {
                                                     <label>
                                                         <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="yes" class="required-radio h-5 w-5"> 是
@@ -385,7 +376,7 @@
                                                         <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="no" class="required-radio h-5 w-5"> 否
                                                     </label>
                                                 }
-                                                else if (question.ID == 3)  // 是/否/目前無生理週期
+                                                else if (question.ID == 3)
                                                 {
                                                     <label>
                                                         <input type="radio" name="FemaleQuestionnaireAnswers[@question.ID]" value="yes" class="required-radio h-5 w-5"> 是
@@ -406,13 +397,130 @@
                     </div>
                 }
 
-                <!-- 第11題：心血管篩檢 -->
+                @*過去傷害(已復原)*@
+
+
+                @*目前傷害狀況*@
+
+
+                @*腦震盪篩檢-選手自填-(1)*@
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
+                    <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
+                    <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">有</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">無</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ConcussionScreeningItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- 服用藥物及備註 -->
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <label class="mr-4 font-medium">● 現在是否服用藥物：</label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">無</span>
+                            </label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">有</span>
+                            </label>
+                            <span class="ml-2">(請述明)</span>
+                            <input type="text" name="MedicationDetails" class="border border-gray-300 rounded px-2 py-1 w-64 ml-2">
+                        </div>
+                        <div class="flex items-start mt-4">
+                            <label class="mr-4 font-medium">● 備註：</label>
+                            <input type="text" name="Notes" class="border border-gray-300 rounded w-96 px-2 py-1">
+                        </div>
+                    </div>
+                </div>
+
+                @*症狀自我評估-選手自填(2)*@
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
+                    <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
+                    <table class="min-w-full bg-white border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">燈號</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">症狀</th>
+                                @for (int i = 0; i <= 6; i++)
+                                {
+                                    <th class="border border-gray-300 px-4 py-2">@i</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SymptomEvaluationItems)
+                            {
+                                <tr class="question-row">
+                                    <!-- 燈號顯示 -->
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <span class="light-indicator" id="indicator_@item.ID"></span>
+                                    </td>
+
+                                    <!-- 項次 -->
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
+
+                                    <!-- 症狀 -->
+                                    <td class="border border-gray-300 px-4 py-2">@item.SymptomItem</td>
+
+                                    <!-- 分數選項 -->
+                                    @for (int i = 0; i <= 6; i++)
+                                    {
+                                        <td class="border border-gray-300 px-4 py-2">
+                                            <input type="radio" name="SymptomScore_@item.ID" value="@i"
+                                                   class="form-radio h-5 w-5 text-blue-600 score-option
+                    required-radio" data-indicator="#indicator_@item.ID">
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- 總計 -->
+                    <div class="flex flex-col mt-4 space-y-2">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀總數：</span>
+                            <span id="TotalSymptoms" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀分數：</span>
+                            <span id="TotalScore" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                @*心血管篩檢*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
                     <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr>
-                                @*<th class="border border-gray-300 px-4 py-2 text-center">項次</th>*@
                                 <th class="border border-gray-300 px-4 py-2">問題</th>
                                 <th class="border border-gray-300 px-4 py-2 text-center">是否曾有發生過</th>
                             </tr>
@@ -439,10 +547,9 @@
                     </table>
                 </div>
 
-                <!-- 第14題 骨科篩檢 -->
+                @*骨科篩檢*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
                     <h2 class="text-lg font-semibold mb-4">骨科篩檢</h2>
-                    <!-- 骨科篩檢表格 -->
                     <table class="min-w-full bg-white border border-gray-300 text-center">
                         <thead>
                             <tr class="bg-gray-100">
@@ -469,9 +576,9 @@
                                             <input type="radio" class="w-5 h-5" name="OrthopaedicScreeningItems[@i].Result" value="abnormal">
                                             <span class="ml-2">@item.ResultAbnormal</span>
                                         </label>
-                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID"/>
-                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions"/>
-                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints"/>
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID" />
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions" />
+                                        <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints" />
 
                                     </td>
                                 </tr>
@@ -479,9 +586,8 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
-            <!-- 分步驟按鈕 -->
+
             <div class="flex justify-between mt-6">
                 <button type="button" id="prevButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded">上一步</button>
                 <button type="button" id="nextButton" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
@@ -493,7 +599,6 @@
         </form>
     </div>
 
-    <!-- 醫療團隊身份驗證對話框 -->
     <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
@@ -529,7 +634,7 @@
                 prevButton.classList.toggle("hidden", step === 1);
                 nextButton.classList.toggle("hidden", step === steps.length);
                 submitButton.classList.toggle("hidden", step !== steps.length);
-                medicalTeamButton.classList.toggle("hidden", step !== steps.length); // 只在最後一步顯示
+                medicalTeamButton.classList.toggle("hidden", step !== steps.length);
             }
 
             prevButton.addEventListener("click", function () {
@@ -546,24 +651,20 @@
                 }
             });
 
-            showStep(currentStep); // 預設顯示第一步
+            showStep(currentStep);
 
-            // 判斷是否通過醫療團隊驗證
             function isTrainerAuthenticated() {
                 return sessionStorage.getItem("TrainerAuthenticated") === "true";
             }
 
-            // 顯示醫療團隊驗證對話框
             function showTrainerAuthModal() {
                 trainerModal.classList.remove("hidden");
             }
 
-            // 關閉對話框
             document.getElementById("closeModal").addEventListener("click", function () {
                 trainerModal.classList.add("hidden");
             });
 
-            // 處理醫療團隊驗證邏輯
             document.getElementById("trainerAuthForm").addEventListener("submit", function (e) {
                 e.preventDefault();
                 const userName = document.getElementById("trainerUserName").value;
@@ -581,7 +682,7 @@
                         if (data.success) {
                             sessionStorage.setItem("TrainerAuthenticated", "true");
                             trainerModal.classList.add("hidden");
-                            window.location.href = "/Questionnaire/ConcussionMedicalEvaluation"; // 驗證成功後跳轉
+                            window.location.href = "/Questionnaire/ConcussionMedicalEvaluation";
                         } else {
                             alert("身份驗證失敗，請確認帳號與密碼。");
                         }
@@ -589,7 +690,6 @@
                     .catch(() => alert("驗證時發生錯誤，請稍後再試。"));
             });
 
-            // 監聽醫療團隊評估按鈕點擊事件
             medicalTeamButton.addEventListener("click", function (e) {
                 e.preventDefault();
                 if (isTrainerAuthenticated()) {

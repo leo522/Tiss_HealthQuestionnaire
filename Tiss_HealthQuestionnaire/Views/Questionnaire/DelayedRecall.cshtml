@@ -1,10 +1,7 @@
-﻿@*醫療團隊-延遲記憶(5)*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecall>
-
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.DelayedRecall>
 <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">5. 延遲記憶 (Delayed Recall)</h2>
-    <h3 class="text-xl font-bold mb-4">請選手回想複誦上述提到的詞彙。(0錯誤；1正確)</h3>
-
+    <h1 class="text-xl font-bold mb-4">5. 延遲記憶 (Delayed Recall)</h1>
+    <h2 class="text-xl font-bold mb-4">請選手回想複誦上述提到的詞彙。(0錯誤；1正確)</h2>
     <table class="min-w-full bg-white border border-gray-300 text-center">
         <thead>
             <tr class="bg-gray-100">
@@ -38,7 +35,6 @@
         </tfoot>
     </table>
 
-    <!-- 測驗開始時間 -->
     <div class="mt-4 flex items-center">
         <label for="testStartTime" class="mr-2 font-semibold">測驗開始時間：</label>
         <input type="time" id="testStartTime" name="testStartTime" class="border px-2 py-1 w-32" value="@ViewBag.DelayedRecallStartTime">
@@ -52,13 +48,11 @@
 
         loadScores();
 
-        // 監聽 radio 變更
         $('.memory-option').on('change', function () {
             updateTotalScore();
             saveScores();
         });
 
-        // 監聽開始時間
         $('#testStartTime').on('change', function () {
             saveScores();
         });

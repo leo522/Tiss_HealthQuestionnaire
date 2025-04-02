@@ -10,14 +10,14 @@
             }
 
             const score = parseInt(this.value);
-            indicator.className = 'light-indicator'; // 清除先前的類別
+            indicator.className = 'light-indicator';
 
             if (score === 0 || score === 1) {
-                indicator.classList.add('light-green');  // 低分：綠燈
+                indicator.classList.add('light-green');
             } else if (score >= 2 && score <= 4) {
-                indicator.classList.add('light-yellow'); // 中分：黃燈
+                indicator.classList.add('light-yellow');
             } else if (score >= 5 && score <= 6) {
-                indicator.classList.add('light-red');    // 高分：紅燈
+                indicator.classList.add('light-red');
             }
         });
     });

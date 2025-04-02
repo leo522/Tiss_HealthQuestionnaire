@@ -1,5 +1,4 @@
-﻿﻿@*骨科篩檢*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.OrthopaedicScreeningViewModel>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.OrthopaedicScreeningViewModel>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -13,7 +12,6 @@
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">骨科篩檢</h2>
 
-        <!-- 骨科篩檢表格 -->
         <table class="min-w-full bg-white border border-gray-300 text-center">
             <thead>
                 <tr class="bg-gray-100">
@@ -27,16 +25,9 @@
                 @foreach (var item in Model)
                 {
                     <tr class="hover:bg-gray-100 orthopaedic-row">
-                        <!-- 項次 -->
                         <td class="border border-gray-300 px-4 py-2">@item.OrderNumber</td>
-
-                        <!-- 指示操作 -->
                         <td class="border border-gray-300 px-4 py-2">@item.Instructions</td>
-
-                        <!-- 觀察重點 -->
                         <td class="border border-gray-300 px-4 py-2">@item.ObservationPoints</td>
-
-                        <!-- 結果選項 -->
                         <td class="border border-gray-300 px-4 py-2">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="result_@item.OrderNumber" value="normal" class="form-radio h-5 w-5 text-blue-600">
@@ -55,7 +46,6 @@
 
     <script>
         $(document).ready(function () {
-            // 行高亮效果
             $('.orthopaedic-row').hover(
                 function () {
                     $(this).addClass('bg-gray-200');
@@ -65,14 +55,12 @@
                 }
             );
 
-            // 保存用戶選擇到 sessionStorage
             $('input[type="radio"]').on('change', function () {
                 const name = $(this).attr('name');
                 const value = $(this).val();
                 sessionStorage.setItem(name, value);
             });
 
-            // 恢復用戶選擇
             $('input[type="radio"]').each(function () {
                 const name = $(this).attr('name');
                 const savedValue = sessionStorage.getItem(name);

@@ -3,17 +3,17 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #ccc; /* 預設灰色 */
+    background-color: #ccc;
 }
 
 .light-green {
-    background-color: #28a745; /* 綠色 */
+    background-color: #28a745;
 }
 
 .light-yellow {
-    background-color: #ffc107; /* 黃色 */
+    background-color: #ffc107;
 }
 
 .light-red {
-    background-color: #dc3545; /* 紅色 */
+    background-color: #dc3545;
 }

@@ -1,5 +1,4 @@
-﻿@*過去健康檢查病史*@
-@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHealth>
+﻿@model IEnumerable<Tiss_HealthQuestionnaire.Models.PastHealth>
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
@@ -31,7 +30,6 @@
                                 <span class="block text-sm text-gray-600">@item.ItemEn</span>
                             </td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
-                                <!-- 增加唯一的 name，確保資料能正確傳送 -->
                                 <input type="radio" id="pastHealth_no_@item.ID" name="pastHealth_@item.ID" value="no" class="form-radio h-5 w-5 text-blue-600">
                                 <label for="pastHealth_no_@item.ID">否</label>
                             </td>
