@@ -373,6 +373,7 @@
     <Content Include="img\問卷404_2.jpg" />
     <Content Include="js\ConcussionScreeningScore.js" />
     <Content Include="js\formValidation.js" />
+    <Content Include="js\injury-section.js" />
     <Content Include="js\injuryTypeLoader.js" />
     <Content Include="js\nowInjuryTypeLoader.js" />
     <Content Include="js\questionnaire.js" />

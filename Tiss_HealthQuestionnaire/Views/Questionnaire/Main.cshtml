@@ -16,6 +16,7 @@
     <script src="~/js/SymptomEvaluationScore.js"></script>
     <script src="~/js/formValidation.js"></script>
     <script src="~/js/validateFillDate.js"></script>
+    <script src="~/js/injury-section.js"></script>
 </head>
 <body class="bg-gray-100 p-4">
     <div class="container mx-auto">
@@ -398,130 +399,267 @@
                 }
 
                 @*過去傷害(已復原)*@
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9">
+                    <h1 class="text-lg font-semibold mb-4">過去傷害狀況 (已復原)</h1>
+                    <label>
+                        <input type="radio" name="pastInjuryStatus" class="required-radio h-5 w-5" value="no">
+                        無 (若勾無，以下不必填寫)
+                    </label>
+                    <label>
+                        <input type="radio" name="pastInjuryStatus" class="required-radio h-5 w-5" value="yes">
+                        有，請勾選過去傷害記錄
+                    </label>
+
+                    <div id="pastInjuryDetailSection" class="hidden mt-4">
+                        <!-- 受傷部位 -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">受傷部位</h3>
+                            <table class="w-full border">
+                                <thead>
+                                    <tr>
+                                        <th class="border p-2">部位</th>
+                                        <th class="border p-2">左</th>
+                                        <th class="border p-2">右</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.PastInjuryItems)
+                                    {
+                                        <tr>
+                                            <td class="border p-2">@item.PastInjuryPart</td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" class="pastInjury-injury-part-checkbox h-5 w-5" name="PastInjuryLeft" value="@item.Id">
+                                            </td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" class="pastInjury-injury-part-checkbox h-5 w-5" name="PastInjuryRight" value="@item.Id">
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 傷勢類型 -->
+                        <div class="mt-4 hidden" id="pastInjuryTypeSection">
+                            <h3 class="text-lg font-semibold">傷勢類型</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach (var injury in Model.PastInjuryTypes)
+                                {
+                                    <label class="block border p-2 rounded shadow-sm">
+                                        <input type="checkbox" class="pastInjury-injury-type-checkbox h-5 w-5" name="SelectedInjuryTypes" value="@injury.InjuryName">
+                                        @injury.InjuryName
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- 治療方式 -->
+                        <div class="mt-4 hidden" id="pastInjuryTreatmentSection">
+                            <h3 class="text-lg font-semibold">治療方式</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach (var treatment in Model.PastTreatmentItems)
+                                {
+                                    <label class="block border p-2 rounded shadow-sm">
+                                        <input type="checkbox" class="h-5 w-5" name="SelectedTreatmentMethods" value="@treatment.Method">
+                                        @treatment.Method
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 @*目前傷害狀況*@
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
+                    <h1 class="text-lg font-semibold mb-4">目前傷害狀況</h1>
+                    <label>
+                        <input type="radio" name="currentInjuryStatus" class="required-radio h-5 w-5" value="no">
+                        無 (若勾無，以下不必填寫)
+                    </label>
+                    <label>
+                        <input type="radio" name="currentInjuryStatus" class="required-radio h-5 w-5" value="yes">
+                        有，請勾選目前傷害記錄
+                    </label>
+
+                    <div id="currentInjuryDetailSection" class="hidden mt-4">
+                        <!-- 受傷部位 -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">受傷部位</h3>
+                            <table class="w-full border">
+                                <thead>
+                                    <tr>
+                                        <th class="border p-2">部位</th>
+                                        <th class="border p-2">左</th>
+                                        <th class="border p-2">右</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CurrentInjuryItems)
+                                    {
+                                        <tr>
+                                            <td class="border p-2">@item.CurrentInjuryPart</td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" class="currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryLeft" value="@item.Id">
+                                            </td>
+                                            <td class="border p-2">
+                                                <input type="checkbox" class="currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryRight" value="@item.Id">
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 傷勢類型 -->
+                        <div class="mt-4 hidden" id="currentInjuryTypeSection">
+                            <h3 class="text-lg font-semibold">傷勢類型</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach (var injury in Model.CurrentInjuryTypes)
+                                {
+                                    <label class="block border p-2 rounded shadow-sm">
+                                        <input type="checkbox" class="currentInjury-injury-type-checkbox h-5 w-5" name="SelectedCurrentInjuryTypes" value="@injury.InjuryName">
+                                        @injury.InjuryName
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- 治療方式 -->
+                        <div class="mt-4 hidden" id="currentInjuryTreatmentSection">
+                            <h3 class="text-lg font-semibold">治療方式</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach (var treatment in Model.CurrentTreatmentItems)
+                                {
+                                    <label class="block border p-2 rounded shadow-sm">
+                                        <input type="checkbox" class="h-5 w-5" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
+                                        @treatment.Method
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 @*腦震盪篩檢-選手自填-(1)*@
-            <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
-                <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
-                <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
-                            <th class="border border-gray-300 px-4 py-2">問題</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">有</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">無</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.ConcussionScreeningItems)
-                        {
-                            <tr class="question-row">
-                                <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
-                                <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="radio" name="ConcussionQuestion_@item.Id" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <input type="radio" name="ConcussionQuestion_@item.Id" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
-                                </td>
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
+                    <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
+                    <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">有</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">無</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                @for (int i = 0; i < Model.ConcussionScreeningItems.Count; i++)
-                {
-                    var item = Model.ConcussionScreeningItems[i];
-                    <input type="hidden" name="ConcussionScreeningItems[@i].Id" value="@item.Id" />
-                }
-                <!-- 服用藥物及備註 -->
-                <div class="mt-4">
-                    <div class="flex items-center">
-                        <label class="mr-4 font-medium">● 現在是否服用藥物：</label>
-                        <label class="inline-flex items-center mr-4">
-                            <input type="radio" name="Medication" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
-                            <span class="ml-2">無</span>
-                        </label>
-                        <label class="inline-flex items-center mr-4">
-                            <input type="radio" name="Medication" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
-                            <span class="ml-2">有</span>
-                        </label>
-                        <span class="ml-2">(請述明)</span>
-                        <input type="text" name="MedicationDetails" class="border border-gray-300 rounded px-2 py-1 w-64 ml-2">
-                    </div>
-                    <div class="flex items-start mt-4">
-                        <label class="mr-4 font-medium">● 備註：</label>
-                        <input type="text" name="Notes" class="border border-gray-300 rounded w-96 px-2 py-1">
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ConcussionScreeningItems)
+                            {
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <input type="radio" name="ConcussionQuestion_@item.Id" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @for (int i = 0; i < Model.ConcussionScreeningItems.Count; i++)
+                    {
+                        var item = Model.ConcussionScreeningItems[i];
+                        <input type="hidden" name="ConcussionScreeningItems[@i].Id" value="@item.Id" />
+                    }
+                    <!-- 服用藥物及備註 -->
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <label class="mr-4 font-medium">● 現在是否服用藥物：</label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="no" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">無</span>
+                            </label>
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" name="Medication" value="yes" class="form-radio h-5 w-5 text-blue-600 required-radio">
+                                <span class="ml-2">有</span>
+                            </label>
+                            <span class="ml-2">(請述明)</span>
+                            <input type="text" name="MedicationDetails" class="border border-gray-300 rounded px-2 py-1 w-64 ml-2">
+                        </div>
+                        <div class="flex items-start mt-4">
+                            <label class="mr-4 font-medium">● 備註：</label>
+                            <input type="text" name="Notes" class="border border-gray-300 rounded w-96 px-2 py-1">
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 @*症狀自我評估-選手自填(2)*@
-            <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
-                <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
-                <table class="min-w-full bg-white border border-gray-300 text-center">
-                    <thead>
-                        <tr>
-                            <th class="border border-gray-300 px-4 py-2">燈號</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
-                            <th class="border border-gray-300 px-4 py-2">症狀</th>
-                            @for (int i = 0; i <= 6; i++)
-                            {
-                                <th class="border border-gray-300 px-4 py-2">@i</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.SymptomEvaluationItems)
-                        {
-                            <tr class="question-row">
-                                <!-- 燈號顯示 -->
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="light-indicator" id="indicator_@item.ID"></span>
-                                </td>
-
-                                <!-- 項次 -->
-                                <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
-
-                                <!-- 症狀 -->
-                                <td class="border border-gray-300 px-4 py-2">@item.SymptomItem</td>
-
-                                <!-- 分數選項 -->
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
+                    <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
+                    <table class="min-w-full bg-white border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">燈號</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                <th class="border border-gray-300 px-4 py-2">症狀</th>
                                 @for (int i = 0; i <= 6; i++)
                                 {
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <input type="radio" name="SymptomScore_@item.ID" value="@i"
-                                               class="form-radio h-5 w-5 text-blue-600 score-option
-                    required-radio" data-indicator="#indicator_@item.ID">
-                                    </td>
+                                    <th class="border border-gray-300 px-4 py-2">@i</th>
                                 }
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                @for (int i = 0; i < Model.SymptomEvaluationItems.Count; i++)
-                {
-                    var item = Model.SymptomEvaluationItems[i];
-                    <input type="hidden" name="SymptomEvaluationItems[@i].ID" value="@item.ID" />
-                }
-                <!-- 總計 -->
-                <div class="flex flex-col mt-4 space-y-2">
-                    <div class="flex items-center">
-                        <span class="mr-2 text-lg font-semibold">●</span>
-                        <span class="mr-2">症狀總數：</span>
-                        <span id="TotalSymptoms" class="border-b border-dotted text-lg font-semibold">0</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="mr-2 text-lg font-semibold">●</span>
-                        <span class="mr-2">症狀分數：</span>
-                        <span id="TotalScore" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SymptomEvaluationItems)
+                            {
+                                <tr class="question-row">
+                                    <!-- 燈號顯示 -->
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <span class="light-indicator" id="indicator_@item.ID"></span>
+                                    </td>
+
+                                    <!-- 項次 -->
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
+
+                                    <!-- 症狀 -->
+                                    <td class="border border-gray-300 px-4 py-2">@item.SymptomItem</td>
+
+                                    <!-- 分數選項 -->
+                                    @for (int i = 0; i <= 6; i++)
+                                    {
+                                        <td class="border border-gray-300 px-4 py-2">
+                                            <input type="radio" name="SymptomScore_@item.ID" value="@i"
+                                                   class="form-radio h-5 w-5 text-blue-600 score-option
+                    required-radio" data-indicator="#indicator_@item.ID">
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @for (int i = 0; i < Model.SymptomEvaluationItems.Count; i++)
+                    {
+                        var item = Model.SymptomEvaluationItems[i];
+                        <input type="hidden" name="SymptomEvaluationItems[@i].ID" value="@item.ID" />
+                    }
+                    <!-- 總計 -->
+                    <div class="flex flex-col mt-4 space-y-2">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀總數：</span>
+                            <span id="TotalSymptoms" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2 text-lg font-semibold">●</span>
+                            <span class="mr-2">症狀分數：</span>
+                            <span id="TotalScore" class="border-b border-dotted text-lg font-semibold">0</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
 
                 @*心血管篩檢*@
                 <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
@@ -626,6 +764,10 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            InjurySectionHandler.init("pastInjury");
+            InjurySectionHandler.init("currentInjury");
+        });
         document.addEventListener("DOMContentLoaded", function () {
             let currentStep = 1;
             const steps = document.querySelectorAll(".question-step");
