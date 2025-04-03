@@ -62,8 +62,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     OtherDrug = "",
                     PastSupplementsItems = GetPastSupplementsViewModel(),
                     FemaleQuestionnaireItems = femaleQuestionnaire,
-                    FemaleQuestionnaireAnswers = new Dictionary<int, string>(),
-
+                    //FemaleQuestionnaireAnswers = new Dictionary<int, string>(),
                     PastInjuryStatusAnswer = "yes",
                     PastInjuryItems = pastInjuryItems ?? new List<PastInjuryStatusViewModel>(),
                     PastInjuryTypes = pastInjuryTypesList ?? new List<InjuryTypeViewModel>(),
@@ -200,39 +199,53 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
 
             var questions = _db.FemaleQuestionnaire
-                .Select(q => new
+                .Select(q => new FemaleQuestionnaireViewModel
                 {
-                    q.ID,
-                    q.QuestionZh,
-                    q.QuestionEn
-                })
-                .ToList();
+                    ID = q.ID,
+                    QuestionZh = q.QuestionZh,
+                    QuestionEn = q.QuestionEn
+                }).ToList();
 
-            var result = questions.Select(q => new FemaleQuestionnaireViewModel
-            {
-                ID = q.ID,
-                QuestionZh = q.QuestionZh,
-                QuestionEn = q.QuestionEn,
-                AnswerOptions = q.ID == 1
-                    ? new Dictionary<string, string>
-                    {
-                { "10", "10 歲(含)以下" },
-                { "11", "11 歲" },
-                { "12", "12 歲" },
-                { "13", "13 歲" },
-                { "14", "14 歲" },
-                { "15", "15 歲" },
-                { "16", "16 歲(含)以上" }
-                    }
-                    : new Dictionary<string, string>
-                    {
-                { "yes", "是" },
-                { "no", "否" },
-                { "none", "目前無生理週期" }
-                    }
-            }).ToList();
+            return questions;
+            //if (genderID != 2)
+            //{
+            //    return new List<FemaleQuestionnaireViewModel>();
+            //}
 
-            return result;
+            //var questions = _db.FemaleQuestionnaire
+            //    .Select(q => new
+            //    {
+            //        q.ID,
+            //        q.QuestionZh,
+            //        q.QuestionEn
+            //    })
+            //    .ToList();
+
+            //var result = questions.Select(q => new FemaleQuestionnaireViewModel
+            //{
+            //    ID = q.ID,
+            //    QuestionZh = q.QuestionZh,
+            //    QuestionEn = q.QuestionEn,
+            //    Answer = q.ID == 1
+            //        ? new Dictionary<string, string>
+            //        {
+            //    { "10", "10 歲(含)以下" },
+            //    { "11", "11 歲" },
+            //    { "12", "12 歲" },
+            //    { "13", "13 歲" },
+            //    { "14", "14 歲" },
+            //    { "15", "15 歲" },
+            //    { "16", "16 歲(含)以上" }
+            //        }
+            //        : new Dictionary<string, string>
+            //        {
+            //    { "yes", "是" },
+            //    { "no", "否" },
+            //    { "none", "目前無生理週期" }
+            //        }
+            //}).ToList();
+
+            //return result;
         }
         #endregion
 
@@ -868,6 +881,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
+                model.FemaleQuestionnaireItems = GetFemaleQuestionnaireViewModel(model.Gender);
                 ProcessBasicInfo(model, form);
                 ProcessPastHealth(model, form);      
                 ProcessAllergicHistory(model, form);
@@ -1133,21 +1147,33 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 return;
             }
 
-            if (model.FemaleQuestionnaireAnswers == null)
-            {
-                model.FemaleQuestionnaireAnswers = new Dictionary<int, string>();
-            }
-            else
-            {
-                model.FemaleQuestionnaireAnswers.Clear();
-            }
-
             foreach (var item in model.FemaleQuestionnaireItems)
             {
-                string answerKey = $"FemaleQuestionnaireAnswers[{item.ID}]";
-                string answer = form[answerKey];
+                string key = $"FemaleQuestionnaireAnswers[{item.ID}]";
+                string answer = form[key];
 
-                model.FemaleQuestionnaireAnswers[item.ID] = string.IsNullOrEmpty(answer) ? "未回答" : answer;
+                if (string.IsNullOrEmpty(answer))
+                {
+                    item.Answer = "未回答";
+                }
+                else
+                {
+                    switch (answer)
+                    {
+                        case "yes":
+                            item.Answer = "是";
+                            break;
+                        case "no":
+                            item.Answer = "否";
+                            break;
+                        case "none":
+                            item.Answer = "目前無生理週期";
+                            break;
+                        default:
+                            item.Answer = answer;
+                            break;
+                    }
+                }
             }
         }
         #endregion
@@ -1505,6 +1531,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ProcessConcussionScreening(model, form);
                     ProcessSymptomEvaluation(model, form);
+                    //ProcessFemaleQuestionnaire(model, form);
                     var newResponse = new QuestionnaireResponse
                     {
                         AthleteID = model.AtheNum,
@@ -1767,21 +1794,36 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 儲存 FemaleQuestionnaire (女性問卷)
         private void SaveFemaleQuestionnaire(QuestionnaireViewModel model, int responseId)
         {
-            if (model.Gender != 2 || model.FemaleQuestionnaireAnswers == null)
+            if (model.Gender != 2 || model.FemaleQuestionnaireItems == null)
             {
                 return;
             }
 
             var femaleResponses = model.FemaleQuestionnaireItems
-                .Where(q => model.FemaleQuestionnaireAnswers.ContainsKey(q.ID))
+                .Where(q => !string.IsNullOrEmpty(q.Answer))
                 .Select(q => new ResponseFemaleQuestionnaire
                 {
                     QuestionnaireResponseID = responseId,
                     Question = q.QuestionZh,
-                    Answer = model.FemaleQuestionnaireAnswers[q.ID]
+                    Answer = q.Answer
                 }).ToList();
 
             _db.ResponseFemaleQuestionnaire.AddRange(femaleResponses);
+            //if (model.Gender != 2 || model.FemaleQuestionnaireAnswers == null)
+            //{
+            //    return;
+            //}
+
+            //var femaleResponses = model.FemaleQuestionnaireItems
+            //    .Where(q => model.FemaleQuestionnaireAnswers.ContainsKey(q.ID))
+            //    .Select(q => new ResponseFemaleQuestionnaire
+            //    {
+            //        QuestionnaireResponseID = responseId,
+            //        Question = q.QuestionZh,
+            //        Answer = model.FemaleQuestionnaireAnswers[q.ID]
+            //    }).ToList();
+
+            //_db.ResponseFemaleQuestionnaire.AddRange(femaleResponses);
         }
         #endregion
 

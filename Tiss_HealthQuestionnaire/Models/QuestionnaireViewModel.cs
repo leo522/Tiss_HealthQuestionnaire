@@ -112,7 +112,7 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 女性問卷
         public List<FemaleQuestionnaireViewModel> FemaleQuestionnaireItems { get; set; } = new List<FemaleQuestionnaireViewModel>();
-        public Dictionary<int, string> FemaleQuestionnaireAnswers { get; set; } = new Dictionary<int, string>();
+        //public Dictionary<int, string> FemaleQuestionnaireAnswers { get; set; } = new Dictionary<int, string>();
         #endregion
 
         #region 傷害類型共用
@@ -337,7 +337,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string QuestionZh { get; set; }
         public string QuestionEn { get; set; }
-        public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
+        public string Answer { get; set; }
+        //public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
     }
     #endregion
 

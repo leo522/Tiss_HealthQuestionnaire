@@ -395,18 +395,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.FemaleQuestionnaireItems)
+                            @for (int i = 0; i < Model.FemaleQuestionnaireItems.Count; i++)
                             {
-                                var answer = Model.FemaleQuestionnaireAnswers.ContainsKey(item.ID)
-                                    ? Model.FemaleQuestionnaireAnswers[item.ID]
-                                    : "未回答";
-
+                                var item = Model.FemaleQuestionnaireItems[i];
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">
                                         @item.QuestionZh <br />
                                         <span class="text-gray-500">@item.QuestionEn</span>
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">@answer</td>
+                                    <td class="border border-gray-300 px-4 py-2">@item.Answer</td>
+
+                                    @Html.Hidden($"FemaleQuestionnaireItems[{i}].ID", item.ID)
+                                    @Html.Hidden($"FemaleQuestionnaireItems[{i}].QuestionZh", item.QuestionZh)
+                                    @Html.Hidden($"FemaleQuestionnaireItems[{i}].QuestionEn", item.QuestionEn)
+                                    @Html.Hidden($"FemaleQuestionnaireItems[{i}].Answer", item.Answer)
                                 </tr>
                             }
                         </tbody>
