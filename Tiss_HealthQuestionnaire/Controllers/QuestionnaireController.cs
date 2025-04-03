@@ -63,14 +63,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     PastSupplementsItems = GetPastSupplementsViewModel(),
                     FemaleQuestionnaireItems = femaleQuestionnaire,
                     FemaleQuestionnaireAnswers = new Dictionary<int, string>(),
+
                     PastInjuryStatusAnswer = "yes",
-                    PastInjuryItems = pastInjuryItems ?? new List<QuestionnaireViewModel.PastInjuryStatusViewModel>(),
+                    PastInjuryItems = pastInjuryItems ?? new List<PastInjuryStatusViewModel>(),
                     PastInjuryTypes = pastInjuryTypesList ?? new List<InjuryTypeViewModel>(),
                     PastTreatmentItems = pastTreatmentItems ?? new List<PastTreatmentMethodViewModel>(),
+
                     CurrentInjuryStatusAnswer = "yes",
                     CurrentInjuryItems = currentInjuryItems ?? new List<CurrentInjuryStatusViewModel>(),
                     CurrentInjuryTypes = currentInjuryTypesList ?? new List<InjuryTypeViewModel>(),
                     CurrentTreatmentItems = currentTreatmentItems ?? new List<CurrentTreatmentMethodViewModel>(),
+
                     CardiovascularScreeningItems = GetCardiovascularScreeningViewModel(),
                     ConcussionScreeningItems = GetConcussionScreeningViewModel(), //腦震盪篩檢 - 選手自填
                     SymptomEvaluationItems = GetSymptomEvaluationViewModel(), //症狀自我評估 - 選手自填
@@ -233,6 +236,70 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 過去傷害狀況(已復原)
+        private List<PastInjuryStatusViewModel> GetPastInjuryItems()
+        {
+            return _db.PastInjuryStatus.Select(i => new QuestionnaireViewModel.PastInjuryStatusViewModel
+            {
+                Id = i.Id,
+                PastInjuryPart = i.InjuryPart
+            }).ToList();
+        }
+
+        private List<InjuryTypeViewModel> GetPastInjuryTypesList()
+        {
+            return _db.PastInjuryType.Join(_db.PastInjuryCategory,
+                type => type.PastInjuryCategoryId,
+                cat => cat.PastInjuryCategoryId,
+                (type, cat) => new QuestionnaireViewModel.InjuryTypeViewModel
+                {
+                    InjuryName = type.InjuryName,
+                    CategoryName = cat.CategoryName
+                }).ToList();
+        }
+
+        private List<PastTreatmentMethodViewModel> GetPastTreatmentItems()
+        {
+            return _db.PastTreatmentMethod.Select(t => new PastTreatmentMethodViewModel
+            {
+                Id = t.Id,
+                Method = t.Method
+            }).ToList();
+        }
+        #endregion
+
+        #region 目前傷害狀況
+        private List<CurrentInjuryStatusViewModel> GetCurrentInjuryItems()
+        {
+            return _db.CurrentInjuryStatus.Select(i => new CurrentInjuryStatusViewModel
+            {
+                Id = i.Id,
+                CurrentInjuryPart = i.InjuryPart
+            }).ToList();
+        }
+
+        private List<InjuryTypeViewModel> GetCurrentInjuryTypesList()
+        {
+            return _db.CurrentInjuryType.Join(_db.CurrentInjuryCategory,
+                type => type.CurrentInjuryCategoryId,
+                cat => cat.CurrentInjuryCategoryId,
+                (type, cat) => new InjuryTypeViewModel
+                {
+                    InjuryName = type.InjuryName,
+                    CategoryName = cat.CategoryName
+                }).ToList();
+        }
+
+        private List<CurrentTreatmentMethodViewModel> GetCurrentTreatmentItems()
+        {
+            return _db.CurrentTreatmentMethod.Select(t => new CurrentTreatmentMethodViewModel
+            {
+                Id = t.Id,
+                Method = t.Method
+            }).ToList();
+        }
+        #endregion
+
         #region 心血管篩檢
         private List<CardiovascularScreeningItemViewModel> GetCardiovascularScreeningViewModel()
         {
@@ -353,10 +420,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去傷害狀況 (已復原)-(1)
-        private List<QuestionnaireViewModel.PastInjuryStatusViewModel> GetPastInjuryItems()
+        private List<PastInjuryStatusViewModel> PastInjury()
         {
             var injuries = _db.PastInjuryStatus
-            .Select(injury => new QuestionnaireViewModel.PastInjuryStatusViewModel
+            .Select(injury => new PastInjuryStatusViewModel
             {
                 Id = injury.Id,
                 PastInjuryPart = injury.InjuryPart
@@ -367,13 +434,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去傷勢類型-(2)
-        private List<QuestionnaireViewModel.InjuryTypeViewModel> GetPastInjuryTypesList()
+        private List<InjuryTypeViewModel> PastInjuryTypes()
         {
             var injuryTypes = _db.PastInjuryType
             .Join(_db.PastInjuryCategory,
                 type => type.PastInjuryCategoryId,
                 category => category.PastInjuryCategoryId,
-                (type, category) => new QuestionnaireViewModel.InjuryTypeViewModel
+                (type, category) => new InjuryTypeViewModel
                 {
                     CategoryName = category.CategoryName,
                     InjuryName = type.InjuryName
@@ -384,10 +451,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 過去治療方式-(3)
-        private List<QuestionnaireViewModel.PastTreatmentMethodViewModel> GetPastTreatmentItems()
+        private List<PastTreatmentMethodViewModel> PastTreatment()
         {
             var treatments = _db.PastTreatmentMethod
-            .Select(t => new QuestionnaireViewModel.PastTreatmentMethodViewModel
+            .Select(t => new PastTreatmentMethodViewModel
             {
                 Id = t.Id,
                 Method = t.Method
@@ -398,7 +465,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 目前傷害狀況-(1)
-        private List<QuestionnaireViewModel.CurrentInjuryStatusViewModel> GetCurrentInjuryItems()
+        private List<CurrentInjuryStatusViewModel> CurrentInjury()
         {
             var currentInjury = _db.CurrentInjuryStatus.Select(injury => new CurrentInjuryStatusViewModel
             {
@@ -411,7 +478,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 目前傷勢類型-(2)
-        private List<QuestionnaireViewModel.InjuryTypeViewModel> GetCurrentInjuryTypesList()
+        private List<InjuryTypeViewModel> CurrentInjuryTypes()
         {
             var currentInjurtTypes = _db.CurrentInjuryType.Join(_db.CurrentInjuryCategory, type => type.CurrentInjuryCategoryId, category => category.CurrentInjuryCategoryId, (type, category) => new InjuryTypeViewModel
             {
@@ -424,7 +491,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 目前治療方式-(3)
-        private List<QuestionnaireViewModel.CurrentTreatmentMethodViewModel> GetCurrentTreatmentItems()
+        private List<CurrentTreatmentMethodViewModel> CurrentTreatment()
         {
             var CurrentTreaments = _db.CurrentTreatmentMethod.Select(t => new CurrentTreatmentMethodViewModel
             {
@@ -1145,7 +1212,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             model.CurrentInjuryStatusAnswer = form["currentInjuryStatus"];
 
-            var selectedInjuryTypes = form.GetValues("SelectedInjuryTypes");
+            var selectedInjuryTypes = form.GetValues("SelectedCurrentInjuryTypes");
 
             if (selectedInjuryTypes != null && selectedInjuryTypes.Any())
             {
@@ -1185,7 +1252,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 目前傷害狀況-治療方式
         private void ProcessCurrentTreatmentMethod(QuestionnaireViewModel model, FormCollection form)
         {
-            var selectedTreatmentMethods = form.GetValues("SelectedTreatmentMethods");
+            var selectedTreatmentMethods = form.GetValues("SelectedCurrentTreatmentMethods");
 
             if (selectedTreatmentMethods != null && selectedTreatmentMethods.Any())
             {

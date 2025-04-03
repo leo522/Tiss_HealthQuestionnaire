@@ -249,7 +249,6 @@
     <Compile Include="Models\PastInjuryStatus.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PastInjuryStatusViewModel.cs" />
     <Compile Include="Models\PastInjuryType.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
