@@ -31,9 +31,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
 
             string formattedAthleteID = nextAthleteID.ToString("D5");
-
             Session["NextAthleteID"] = formattedAthleteID;
-
             ViewBag.AthleteID = formattedAthleteID;
 
             return View();
@@ -72,22 +70,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
-                var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-                if (!emailRegex.IsMatch(email))
-                {
-                    ViewBag.ErrorMessage = "無效的 Email 格式";
-                    ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
-                }
-
-                if (string.IsNullOrWhiteSpace(athleteNumber))
-                {
-                    ViewBag.ErrorMessage = "選手編號必須填寫。";
-                    ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
-                }
-
-                var encryptedPwd = ComputeSha256Hash(pwd);
+                var salt = GenerateSalt();
+                var encryptedPwd = ComputeSha256Hash(pwd, salt);
 
                 var newUser = new AthleteUser
                 {
@@ -95,6 +79,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     AthleteNumber = athleteNumber,
                     Name = userName,
                     Password = encryptedPwd,
+                    Salt = salt,
                     Email = email,
                     SportSpecialization = sportSpecialization,
                     BirthDate = birthDate,
@@ -106,29 +91,37 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 _db.AthleteUser.Add(newUser);
                 _db.SaveChanges();
-
                 Session.Remove("NextAthleteID");
 
                 return RedirectToAction("Login");
             }
-            catch (DbEntityValidationException ex)
+            catch (Exception ex)
             {
-                foreach (var validationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
-                    }
-                }
-                ViewBag.ErrorMessage = "資料驗證失敗，請檢查所有必填欄位是否正確填寫。";
+                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
                 ViewBag.GenderList = _db.Gender.ToList();
                 return View();
             }
-            catch (Exception ex)
+        }
+        #endregion
+
+        #region 密碼加密 + Salt
+        private static string GenerateSalt()
+        {
+            byte[] saltBytes = new byte[16];
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                Console.WriteLine("其他錯誤: " + ex.Message);
-                ViewBag.GenderList = _db.Gender.ToList();
-                return View();
+                rng.GetBytes(saltBytes);
+            }
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        private static string ComputeSha256Hash(string rawData, string salt)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] combined = Encoding.UTF8.GetBytes(salt + rawData);
+                byte[] bytes = sha256Hash.ComputeHash(combined);
+                return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
             }
         }
         #endregion
@@ -162,76 +155,86 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                string hashedPwd = ComputeSha256Hash(pwd);
-                var dto = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber && u.Password == hashedPwd);
-
-                if (dto != null)
+                var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber);
+                if (user == null)
                 {
-                    _db.SaveChanges();
+                    ViewBag.ErrorMessage = "帳號錯誤";
+                    return View();
+                }
 
+                var hashedPwd = ComputeSha256Hash(pwd, user.Salt);
+
+                if (user.Password == hashedPwd)
+                {
                     Session["LoggedIn"] = true;
-                    Session["UserName"] = dto.Name;
+                    Session["UserName"] = user.Name;
                     return RedirectToAction("Main", "Questionnaire");
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "帳號或密碼錯誤";
+                    ViewBag.ErrorMessage = "密碼錯誤";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("其他錯誤: " + ex.Message);
+                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
                 return View("Error");
             }
         }
         #endregion
 
-        #region 忘記密碼
+        #region 重設定密碼
+        [HttpGet]
         public ActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult SendResetLink(string Email)
+        public ActionResult ForgotPassword(string athleteNumber, string newPassword, string confirmPassword)
         {
             try
             {
-                var user = _db.AthleteUser.FirstOrDefault(u => u.Email == Email);
-
-                if (user == null)
+                if (string.IsNullOrWhiteSpace(athleteNumber) || string.IsNullOrWhiteSpace(newPassword))
                 {
-                    ViewBag.ErrorMessage = "此Email尚未註冊";
-                    return View("ForgotPassword");
+                    ViewBag.ErrorMessage = "請填寫完整欄位";
+                    return View();
                 }
 
-                var resetToken = Guid.NewGuid().ToString();
-
-                var resetPW = new PasswordReset
+                if (newPassword != confirmPassword)
                 {
-                    Email = Email,
-                    Token = resetToken,
-                    ExpiryDate = DateTime.Now.AddMinutes(10),
-                    UserAccount = user.Name,
-                    changeDate = DateTime.Now
-                };
-                _db.PasswordReset.Add(resetPW);
+                    ViewBag.ErrorMessage = "兩次輸入的密碼不一致";
+                    return View();
+                }
+
+                if (newPassword.Length < 6)
+                {
+                    ViewBag.ErrorMessage = "密碼長度至少需6位";
+                    return View();
+                }
+
+                var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber);
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = "查無此帳號";
+                    return View();
+                }
+
+                var newSalt = GenerateSalt();
+                var newHashedPwd = ComputeSha256Hash(newPassword, newSalt);
+
+                user.Salt = newSalt;
+                user.Password = newHashedPwd;
                 _db.SaveChanges();
 
-                var resetLink = Url.Action("ResetPassword", "Account", new { token = resetToken }, Request.Url.Scheme);
-
-                var emailBody = $"請點擊以下連結重置您的密碼：{resetLink}，連結有效時間為10分鐘";
-
-                SendEmail(Email, "重置密碼", emailBody);
-
-                ViewBag.Message = "重置密碼連結已發送至您的郵箱";
-                return View("ForgotPassword");
+                ViewBag.Message = "密碼重設成功，請重新登入";
+                return View();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("其他錯誤: " + ex.Message);
-                return View("Error");
+                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                return View();
             }
         }
         #endregion
@@ -246,146 +249,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             string returnUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : Url.Action("Login", "Account");
 
             return Redirect(returnUrl);
-        }
-        #endregion
-
-        #region 發送重設密碼信件
-        private void SendEmail(string toEmail, string subject, string body, string attachmentPath = null)
-        {
-            var fromEmail = "@tiss.org.tw";
-            var fromPassword = "";
-            var displayName = "運科中心資訊組";
-
-
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential(fromEmail, fromPassword),
-                EnableSsl = true,
-            };
-
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(fromEmail, displayName),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
-            };
-
-            foreach (var email in toEmail.Split(','))
-            {
-                mailMessage.To.Add(email.Trim());
-            }
-
-            if (!string.IsNullOrEmpty(attachmentPath))
-            {
-                Attachment attachment = new Attachment(attachmentPath);
-                mailMessage.Attachments.Add(attachment);
-            }
-
-            try
-            {
-                smtpClient.Send(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("郵件發送失敗: " + ex.Message);
-            }
-        }
-        #endregion
-
-        #region 重置密碼
-        public ActionResult ResetPassword(string token)
-        {
-            try
-            {
-                var resetRequest = _db.PasswordReset.SingleOrDefault(r => r.Token == token && r.ExpiryDate > DateTime.Now);
-
-                if (resetRequest == null)
-                {
-                    ViewBag.ErrorMessage = "無效或過期的要求";
-                    return View("Error");
-                }
-
-                var model = new ResetPasswordViewModel
-                {
-                    Token = token
-                };
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("其他錯誤: " + ex.Message);
-                return View("Error");
-            }
-
-        }
-
-        [HttpPost]
-        public ActionResult ResetPassword(ResetPasswordViewModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    foreach (var error in errors)
-                    {
-                        Console.WriteLine(error.ErrorMessage);
-                    }
-                    return View(model);
-                }
-
-                var resetRequest = _db.PasswordReset
-                    .FirstOrDefault(r => r.Token == model.Token && r.ExpiryDate > DateTime.Now);
-
-                if (resetRequest == null)
-                {
-                    ViewBag.ErrorMessage = "無效或過期的要求";
-                    return View("Error");
-                }
-
-                var user = _db.AthleteUser
-                    .FirstOrDefault(u => u.Email == resetRequest.Email);
-
-                if (user == null)
-                {
-                    ViewBag.ErrorMessage = "無效的帳號";
-                    return View("Error");
-                }
-
-                user.Password = ComputeSha256Hash(model.NewPassword);
-
-                resetRequest.UserAccount = user.Name;
-                resetRequest.changeDate = DateTime.Now;
-
-                _db.PasswordReset.Remove(resetRequest);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("其他錯誤: " + ex.Message);
-                return View("Error");
-            }
-
-            try
-            {
-                _db.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var validationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Console.WriteLine($"Property: {validationError.PropertyName}, Error: {validationError.ErrorMessage}");
-                    }
-                }
-                throw;
-            }
-
-            ViewBag.Message = "您的密碼已成功重置";
-            return RedirectToAction("Login");
         }
         #endregion
     }

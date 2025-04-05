@@ -31,6 +31,7 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="GenderID" Type="int" Nullable="false" />
+          <Property Name="Salt" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="AthleticTrainer">
           <Key>
@@ -1197,6 +1198,7 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="GenderID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_AthleteUser_Gender" FromRole="AthleteUser" ToRole="Gender" />
+          <Property Name="Salt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AthleticTrainer">
           <Key>
@@ -2085,6 +2087,7 @@
           <EntitySetMapping Name="AthleteUser">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleteUser">
               <MappingFragment StoreEntitySet="AthleteUser">
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="GenderID" ColumnName="GenderID" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

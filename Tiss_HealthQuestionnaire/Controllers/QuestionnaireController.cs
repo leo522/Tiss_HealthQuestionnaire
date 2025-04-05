@@ -1531,7 +1531,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ProcessConcussionScreening(model, form);
                     ProcessSymptomEvaluation(model, form);
-                    //ProcessFemaleQuestionnaire(model, form);
+
                     var newResponse = new QuestionnaireResponse
                     {
                         AthleteID = model.AtheNum,

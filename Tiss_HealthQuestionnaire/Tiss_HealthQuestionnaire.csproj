@@ -131,8 +131,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
+    <Compile Include="Controllers\QuestionnairePreviewController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
-    <Compile Include="Controllers\TemporaryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -267,7 +267,6 @@
     <Compile Include="Models\QuestionnaireResponseDetails.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuestionnaireResponseViewModel.cs" />
     <Compile Include="Models\QuestionnaireType.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -336,7 +335,6 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -355,6 +353,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="css\loginStyle.css" />
     <Content Include="css\mainStyle.css" />
     <Content Include="css\registerStyle.css" />
     <Content Include="css\SymptomsLights.css" />
@@ -467,6 +466,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\QuestionnairePreview\" />
     <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>

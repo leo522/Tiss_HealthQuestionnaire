@@ -26,6 +26,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public Nullable<bool> IsActive { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public int GenderID { get; set; }
+        public string Salt { get; set; }
     
         public virtual Gender Gender { get; set; }
     }
