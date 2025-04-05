@@ -1,0 +1,98 @@
+﻿@model Tiss_HealthQuestionnaire.Models.MedicalViewModel
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">1. 認知篩檢 (Cognitive Screening)</h1>
+        <p class="text-gray-600 mb-6">請根據選手對下列問題的回答，選擇是否正確。</p>
+        <form method="post" action="@Url.Action("CognitiveScreening", "MedicalEvaluation")">
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 text-center">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">項次</th>
+                            <th class="border border-gray-300 px-4 py-2">問題</th>
+                            <th class="border border-gray-300 px-4 py-2">0 (錯誤)</th>
+                            <th class="border border-gray-300 px-4 py-2">1 (正確)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CognitiveScreeningItems)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">@item.ID</td>
+                                <td class="border border-gray-300 px-4 py-2 text-left">@item.Question</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <input type="radio" class="form-radio h-5 w-5 score-option" name="question_@item.ID" value="0" />
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <input type="radio" class="form-radio h-5 w-5 score-option" name="question_@item.ID" value="1" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center mt-6">
+                <span class="mr-2 text-lg font-semibold text-gray-700">定位總分：</span>
+                <span id="totalScore" class="text-xl font-bold text-blue-600">0</span>
+                <span class="ml-2 text-gray-600">/ @Model.CognitiveScreeningItems.Count()</span>
+            </div>
+
+            <div class="mt-6">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded shadow">
+                    下一題
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function initializeOrientation() {
+        const scoreKey = 'OrientationScore';
+
+        loadScores();
+
+        $('.score-option').on('change', function () {
+            updateTotalScore();
+            saveScores();
+        });
+
+        function updateTotalScore() {
+            let totalScore = 0;
+            $('input[type="radio"]:checked').each(function () {
+                const value = parseInt($(this).val(), 10);
+                if (!isNaN(value)) {
+                    totalScore += value;
+                }
+            });
+
+            $('#totalScore').text(totalScore);
+            sessionStorage.setItem(scoreKey, totalScore);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+        }
+
+        function loadScores() {
+            $('input[type="radio"]').each(function () {
+                const savedValue = sessionStorage.getItem($(this).attr('name'));
+                if (savedValue !== null) {
+                    $(this).filter(`[value="${savedValue}"]`).prop("checked", true);
+                }
+            });
+
+            updateTotalScore();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", initializeOrientation);
+</script>

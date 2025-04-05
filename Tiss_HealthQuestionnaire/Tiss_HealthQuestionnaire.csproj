@@ -130,8 +130,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MedicalEvaluationController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\QuestionnairePreviewController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -156,6 +156,7 @@
     <Compile Include="Models\CognitiveScreeningScores.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CognitiveStepStatusViewModel.cs" />
     <Compile Include="Models\Concentration.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -213,11 +214,18 @@
     <Compile Include="Models\ImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImmediateMemory_Backup.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ImmediateMemory_Obsolete.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\InjuryStatusViewModel.cs" />
     <Compile Include="Models\MedicalandFamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
+    <Compile Include="Models\MedicalViewModel.cs" />
     <Compile Include="Models\ModifiedBalanceTest.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -450,23 +458,23 @@
     <Content Include="Views\Questionnaire\NowInjuryType.cshtml" />
     <Content Include="Views\Questionnaire\ConcussionScreening.cshtml" />
     <Content Include="Views\Questionnaire\SymptomEvaluation.cshtml" />
-    <Content Include="Views\Questionnaire\CognitiveScreening.cshtml" />
-    <Content Include="Views\Questionnaire\ImmediateMemory.cshtml" />
-    <Content Include="Views\Questionnaire\Concentration.cshtml" />
-    <Content Include="Views\Questionnaire\CoordinationAndBalanceExamination.cshtml" />
-    <Content Include="Views\Questionnaire\DelayedRecall.cshtml" />
-    <Content Include="Views\Questionnaire\CognitiveScreeningTotalScore.cshtml" />
     <Content Include="Views\Questionnaire\Preview.cshtml" />
     <Content Include="Views\Questionnaire\NowTreatmentMethod.cshtml" />
-    <Content Include="Views\Questionnaire\ConcussionMedicalEvaluation.cshtml" />
     <Content Include="Views\Error\WebError.cshtml" />
     <Content Include="Views\Error\Error500.cshtml" />
     <Content Include="Views\Error\Maintain.cshtml" />
     <Content Include="Views\Questionnaire\Success.cshtml" />
+    <Content Include="Views\MedicalEvaluation\ConcussionMedicalEvaluation.cshtml" />
+    <Content Include="Views\MedicalEvaluation\CognitiveScreening.cshtml" />
+    <Content Include="Views\MedicalEvaluation\ImmediateMemory.cshtml" />
+    <Content Include="Views\MedicalEvaluation\Concentration.cshtml" />
+    <Content Include="Views\MedicalEvaluation\CoordinationAndBalanceExamination.cshtml" />
+    <Content Include="Views\MedicalEvaluation\DelayedRecall.cshtml" />
+    <Content Include="Views\MedicalEvaluation\CognitiveScreeningTotalScore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\QuestionnairePreview\" />
+    <Folder Include="Views\MedicalTeam\" />
     <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>

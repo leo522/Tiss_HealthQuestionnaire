@@ -1,0 +1,116 @@
+﻿@model Tiss_HealthQuestionnaire.Models.MedicalViewModel
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-blue-800 mb-4">5. 延遲記憶 (Delayed Recall)</h1>
+        <p class="mb-6 text-gray-700">請選手回想並複誦上述曾出現的詞彙，每題勾選「1」代表正確、勾選「0」代表錯誤。</p>
+
+        <form method="post" action="@Url.Action("DelayedRecall", "MedicalEvaluation")">
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 text-center rounded">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border px-4 py-2">詞彙</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DelayedRecallItems)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="border px-4 py-2">@item.Word</td>
+                                <td class="border px-4 py-2">
+                                    <div class="flex justify-center gap-6">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="score_@item.ID" value="0" class="form-radio memory-option w-5 h-5">
+                                            <span class="ml-1">0</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="score_@item.ID" value="1" class="form-radio memory-option w-5 h-5">
+                                            <span class="ml-1">1</span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-gray-100 font-semibold">
+                        <tr>
+                            <td class="border px-4 py-2">總分</td>
+                            <td class="border px-4 py-2">
+                                <span id="totalScore">0</span> / @Model.DelayedRecallItems.Count()
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="mt-6 flex items-center gap-4">
+                <label for="testStartTime" class="text-lg font-medium text-gray-700">📅 測驗開始時間：</label>
+                <input type="time" id="testStartTime" name="testStartTime" class="border border-gray-300 rounded px-3 py-1 w-36" value="@Model.DelayedRecallStartTime">
+            </div>
+
+            <div class="mt-6 text-right">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded shadow">
+                    下一題（總分計算）
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function initializeDelayedRecall() {
+        const scoreKey = 'DelayedRecallTotalScore';
+        const timeKey = 'DelayedRecallStartTime';
+
+        loadScores();
+
+        $('.memory-option').on('change', function () {
+            updateTotalScore();
+            saveScores();
+        });
+
+        $('#testStartTime').on('change', function () {
+            saveScores();
+        });
+
+        function updateTotalScore() {
+            let total = 0;
+            $('.memory-option:checked').each(function () {
+                total += parseInt($(this).val());
+            });
+            $('#totalScore').text(total);
+            sessionStorage.setItem(scoreKey, total);
+        }
+
+        function saveScores() {
+            $('.memory-option').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+            const time = $('#testStartTime').val();
+            sessionStorage.setItem(timeKey, time);
+        }
+
+        function loadScores() {
+            $('.memory-option').each(function () {
+                const val = sessionStorage.getItem($(this).attr('name'));
+                if (val !== null && $(this).val() === val) {
+                    $(this).prop('checked', true);
+                }
+            });
+
+            const score = sessionStorage.getItem(scoreKey);
+            if (score !== null) $('#totalScore').text(score);
+
+            const savedTime = sessionStorage.getItem(timeKey);
+            if (savedTime !== null) $('#testStartTime').val(savedTime);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", initializeDelayedRecall);
+</script>

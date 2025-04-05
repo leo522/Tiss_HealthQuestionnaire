@@ -12,12 +12,15 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ImmediateMemory
+    public partial class ImmediateMemory_Obsolete
     {
         public int ID { get; set; }
         public string Word { get; set; }
-        public Nullable<int> FirstTest { get; set; }
-        public Nullable<int> SecondTest { get; set; }
-        public Nullable<int> ThirdTest { get; set; }
+        public Nullable<int> FirstTest0 { get; set; }
+        public Nullable<int> FirstTest1 { get; set; }
+        public Nullable<int> SecondTest0 { get; set; }
+        public Nullable<int> SecondTest1 { get; set; }
+        public Nullable<int> ThirdTest0 { get; set; }
+        public Nullable<int> ThirdTest1 { get; set; }
     }
 }

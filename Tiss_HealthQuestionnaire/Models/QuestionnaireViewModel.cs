@@ -112,7 +112,6 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 女性問卷
         public List<FemaleQuestionnaireViewModel> FemaleQuestionnaireItems { get; set; } = new List<FemaleQuestionnaireViewModel>();
-        //public Dictionary<int, string> FemaleQuestionnaireAnswers { get; set; } = new Dictionary<int, string>();
         #endregion
 
         #region 傷害類型共用
@@ -185,43 +184,6 @@ namespace Tiss_HealthQuestionnaire.Models
 
         #region 骨科篩檢
         public List<OrthopaedicScreeningItmeViewModel> OrthopaedicScreeningItems { get; set; }
-        #endregion
-
-        #region 醫療團隊-認知篩檢-定位(1)
-        public List<CognitiveScreening> CognitiveScreeningItems { get; set; }
-        public int CognitiveScreeningTotalScore { get; set; }
-        public int ID { get; set; }
-        public string Question { get; set; }
-        public int AnswerOption1 { get; set; }
-        public int AnswerOption2 { get; set; }
-        #endregion
-
-        #region 醫療團隊-認知篩檢-短期記憶(2)
-        public List<ImmediateMemory> ImmediateMemoryItems { get; set; }
-        public int ImmediateMemoryTotalScore { get; set; }
-        public string CompletionTime { get; set; }
-        #endregion
-
-        #region 醫療團隊-認知篩檢-專注力(3)
-        public List<Concentration> ConcentrationItems { get; set; }
-        public int ConcentrationTotalScore { get; set; }
-        #endregion
-
-        #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
-        public List<CoordinationAndBalanceExamination> CoordinationAndBalanceItems { get; set; }
-        public int CoordinationAndBalanceTotalErrors { get; set; } = 0;
-        public float CoordinationAndBalanceAverageTime { get; set; } = 0;
-        public float CoordinationAndBalanceFastestTime { get; set; } = 0;
-        #endregion
-
-        #region 醫療團隊-認知篩檢-延遲記憶(5)
-        public List<DelayedRecall> DelayedRecallItems { get; set; }
-        public int DelayedRecallTotalScore { get; set; }
-        public string DelayedRecallStartTime { get; set; }
-        #endregion
-
-        #region 醫療團隊-認知篩檢-分數總合(6)
-        public int CognitiveScreeningTotalScores { get; set; }
         #endregion
     }
 
@@ -338,7 +300,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string QuestionZh { get; set; }
         public string QuestionEn { get; set; }
         public string Answer { get; set; }
-        //public Dictionary<string, string> AnswerOptions { get; set; } = new Dictionary<string, string>();
     }
     #endregion
 
@@ -414,81 +375,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string SymptomItem { get; set; }
         public int Score { get; set; }
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-定位(1)
-    public class CognitiveScreeningViewModel
-    {
-        public int OrderNumber { get; set; }
-        public string Question { get; set; }
-        public int OrientationScore { get; set; }
-        public int ImmediateMemoryScore { get; set; }
-        public int ConcentrationScore { get; set; }
-        public int DelayedRecallScore { get; set; } 
-        public int TotalScore { get; set; }
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-短期記憶(2)
-    public class ImmediateMemoryViewModel
-    {
-        public int OrderNumber { get; set; }
-        public string Word { get; set; }
-        public int FirstTestScore { get; set; } = 0;
-        public int SecondTestScore { get; set; } = 0;
-        public int ThirdTestScore { get; set; } = 0;
-        public string CompletionTime { get; set; } = "00:00";
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-專注力(3)
-    public class ConcentrationViewModel
-    {
-        public int OrderNumber { get; set; }
-        public string ListA { get; set; }
-        public string ListB { get; set; }
-        public string ListC { get; set; }
-        public int Score { get; set; } = 0;
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
-    public class CoordinationAndBalanceExaminationViewModel
-    {
-        public int OrderNumber { get; set; }
-        public string TestFoot { get; set; }
-        public string TestSurface { get; set; }
-        public string Footwear { get; set; }
-        public int DoubleLegError { get; set; } = 0;
-        public int TandemError { get; set; } = 0; 
-        public int SingleLegError { get; set; } = 0;
-        public int TotalErrors { get; set; } = 0;
-        public float FirstTime { get; set; } = 0;
-        public float SecondTime { get; set; } = 0;
-        public float ThirdTime { get; set; } = 0;
-        public float AverageTimes { get; set; } = 0;
-        public float FastestTimes { get; set; } = 0;
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-延遲記憶(5)
-    public class DelayedRecallViewModel
-    {
-        public int OrderNumber { get; set; }
-        public string Word { get; set; }
-        public int Score { get; set; } = 0;
-    }
-    #endregion
-
-    #region 醫療團隊-認知篩檢-分數總合(6)
-    public class CognitiveScreeningTotalScoreViewModel
-    {
-        public int OrientationScore { get; set; }
-        public int ImmediateMemoryScore { get; set; }
-        public int ConcentrationScore { get; set; }
-        public int DelayedRecallScore { get; set; }
-        public int TotalScore { get; set; }
     }
     #endregion
 

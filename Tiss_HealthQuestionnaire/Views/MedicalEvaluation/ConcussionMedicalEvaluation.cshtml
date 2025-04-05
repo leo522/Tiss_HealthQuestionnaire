@@ -1,0 +1,95 @@
+﻿@model Tiss_HealthQuestionnaire.Models.MedicalViewModel
+@{
+    ViewBag.Title = "醫療團隊評估";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+
+    var status = Model.CognitiveStepStatus;
+}
+
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">醫療團隊評估問卷</h1>
+        <p class="text-gray-600 mb-6">
+            本問卷依照腦震盪認知評估的建議進行，共包含 6 個部分。請依序填寫完成。
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Step 1 -->
+            <div class="@(status.Step1Completed ? "bg-green-100 border-green-500" : "bg-blue-100 border-blue-500") border-l-4 p-4 rounded shadow">
+                <h2 class="font-bold @(status.Step1Completed ? "text-green-700" : "text-blue-700") mb-1">1. 認知篩檢 (定位)</h2>
+                <p class="text-sm text-gray-700 mb-2">測試選手對時間與空間的基本定位能力。</p>
+                <a href="@Url.Action("CognitiveScreening", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始填寫</a>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="@(status.Step2Completed ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-400") border-l-4 p-4 rounded shadow @(status.Step1Completed ? "" : "opacity-50")">
+                <h2 class="font-bold @(status.Step2Completed ? "text-green-700" : "text-gray-600") mb-1">2. 短期記憶</h2>
+                <p class="text-sm text-gray-700 mb-2">進行 3 次詞彙記憶測驗。</p>
+                @if (status.Step1Completed)
+                {
+                    <a href="@Url.Action("ImmediateMemory", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始填寫</a>
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">尚未完成前一題</span>
+                }
+            </div>
+
+            <!-- Step 3 -->
+            <div class="@(status.Step3Completed ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-400") border-l-4 p-4 rounded shadow @(status.Step2Completed ? "" : "opacity-50")">
+                <h2 class="font-bold @(status.Step3Completed ? "text-green-700" : "text-gray-600") mb-1">3. 專注力</h2>
+                <p class="text-sm text-gray-700 mb-2">數列倒序判斷測驗。</p>
+                @if (status.Step2Completed)
+                {
+                    <a href="@Url.Action("Concentration", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始填寫</a>
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">尚未完成前一題</span>
+                }
+            </div>
+
+            <!-- Step 4 -->
+            <div class="@(status.Step4Completed ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-400") border-l-4 p-4 rounded shadow @(status.Step3Completed ? "" : "opacity-50")">
+                <h2 class="font-bold @(status.Step4Completed ? "text-green-700" : "text-gray-600") mb-1">4. 協調與平衡</h2>
+                <p class="text-sm text-gray-700 mb-2">姿勢平衡與走路測驗。</p>
+                @if (status.Step3Completed)
+                {
+                    <a href="@Url.Action("CoordinationAndBalanceExamination", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始填寫</a>
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">尚未完成前一題</span>
+                }
+            </div>
+
+            <!-- Step 5 -->
+            <div class="@(status.Step5Completed ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-400") border-l-4 p-4 rounded shadow @(status.Step4Completed ? "" : "opacity-50")">
+                <h2 class="font-bold @(status.Step5Completed ? "text-green-700" : "text-gray-600") mb-1">5. 延遲記憶</h2>
+                <p class="text-sm text-gray-700 mb-2">回憶之前詞彙的能力。</p>
+                @if (status.Step4Completed)
+                {
+                    <a href="@Url.Action("DelayedRecall", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始填寫</a>
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">尚未完成前一題</span>
+                }
+            </div>
+
+            <!-- Step 6 -->
+            <div class="@(status.Step6Completed ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-400") border-l-4 p-4 rounded shadow @(status.Step5Completed ? "" : "opacity-50")">
+                <h2 class="font-bold @(status.Step6Completed ? "text-green-700" : "text-gray-600") mb-1">6. 總分計算</h2>
+                <p class="text-sm text-gray-700 mb-2">總結前面所有測驗的分數。</p>
+                @if (status.Step5Completed)
+                {
+                    <a href="@Url.Action("CognitiveScreeningTotalScore", "MedicalEvaluation")" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">查看總分</a>
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">尚未完成前一題</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

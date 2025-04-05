@@ -45,6 +45,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
+        public virtual DbSet<ImmediateMemory_Obsolete> ImmediateMemory_Obsolete { get; set; }
         public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
         public virtual DbSet<ModifiedBalanceTest> ModifiedBalanceTest { get; set; }
         public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
@@ -84,5 +85,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
+        public virtual DbSet<ImmediateMemory_Backup> ImmediateMemory_Backup { get; set; }
     }
 }

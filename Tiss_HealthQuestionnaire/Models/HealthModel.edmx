@@ -186,6 +186,29 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Word" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstTest" Type="int" />
+          <Property Name="SecondTest" Type="int" />
+          <Property Name="ThirdTest" Type="int" />
+        </EntityType>
+        <EntityType Name="ImmediateMemory_Backup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstTest0" Type="int" />
+          <Property Name="FirstTest1" Type="int" />
+          <Property Name="SecondTest0" Type="int" />
+          <Property Name="SecondTest1" Type="int" />
+          <Property Name="ThirdTest0" Type="int" />
+          <Property Name="ThirdTest1" Type="int" />
+        </EntityType>
+        <EntityType Name="ImmediateMemory_Obsolete">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" />
           <Property Name="FirstTest0" Type="int" />
           <Property Name="FirstTest1" Type="int" />
           <Property Name="SecondTest0" Type="int" />
@@ -874,6 +897,8 @@
           <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImmediateMemory" EntityType="Self.ImmediateMemory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImmediateMemory_Backup" EntityType="Self.ImmediateMemory_Backup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImmediateMemory_Obsolete" EntityType="Self.ImmediateMemory_Obsolete" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="Self.MedicalandFamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ModifiedBalanceTest" EntityType="Self.ModifiedBalanceTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrthopaedicScreening" EntityType="Self.OrthopaedicScreening" Schema="dbo" store:Type="Tables" />
@@ -1035,6 +1060,7 @@
           <EntitySet Name="FemaleQuestionnaire" EntityType="HealthQuestionnaireModel.FemaleQuestionnaire" />
           <EntitySet Name="Gender" EntityType="HealthQuestionnaireModel.Gender" />
           <EntitySet Name="ImmediateMemory" EntityType="HealthQuestionnaireModel.ImmediateMemory" />
+          <EntitySet Name="ImmediateMemory_Obsolete" EntityType="HealthQuestionnaireModel.ImmediateMemory_Obsolete" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="HealthQuestionnaireModel.MedicalandFamilyHistory" />
           <EntitySet Name="ModifiedBalanceTest" EntityType="HealthQuestionnaireModel.ModifiedBalanceTest" />
           <EntitySet Name="OrthopaedicScreening" EntityType="HealthQuestionnaireModel.OrthopaedicScreening" />
@@ -1074,6 +1100,7 @@
           <EntitySet Name="TimedTandemGait" EntityType="HealthQuestionnaireModel.TimedTandemGait" />
           <EntitySet Name="Treatment" EntityType="HealthQuestionnaireModel.Treatment" />
           <EntitySet Name="TreatmentMethod" EntityType="HealthQuestionnaireModel.TreatmentMethod" />
+          <EntitySet Name="ImmediateMemory_Backup" EntityType="HealthQuestionnaireModel.ImmediateMemory_Backup" />
           <AssociationSet Name="FK_AthleteUser_Gender" Association="HealthQuestionnaireModel.FK_AthleteUser_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="AthleteUser" EntitySet="AthleteUser" />
@@ -1197,8 +1224,8 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="GenderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_AthleteUser_Gender" FromRole="AthleteUser" ToRole="Gender" />
           <Property Name="Salt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_AthleteUser_Gender" FromRole="AthleteUser" ToRole="Gender" />
         </EntityType>
         <EntityType Name="AthleticTrainer">
           <Key>
@@ -1356,6 +1383,16 @@
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender" FromRole="Gender" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ImmediateMemory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstTest" Type="Int32" />
+          <Property Name="SecondTest" Type="Int32" />
+          <Property Name="ThirdTest" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ImmediateMemory_Obsolete">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1778,6 +1815,19 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ImmediateMemory_Backup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstTest0" Type="Int32" />
+          <Property Name="FirstTest1" Type="Int32" />
+          <Property Name="SecondTest0" Type="Int32" />
+          <Property Name="SecondTest1" Type="Int32" />
+          <Property Name="ThirdTest0" Type="Int32" />
+          <Property Name="ThirdTest1" Type="Int32" />
         </EntityType>
         <Association Name="FK_AthleteUser_Gender">
           <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="1" />
@@ -2270,6 +2320,17 @@
           <EntitySetMapping Name="ImmediateMemory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ImmediateMemory">
               <MappingFragment StoreEntitySet="ImmediateMemory">
+                <ScalarProperty Name="ThirdTest" ColumnName="ThirdTest" />
+                <ScalarProperty Name="SecondTest" ColumnName="SecondTest" />
+                <ScalarProperty Name="FirstTest" ColumnName="FirstTest" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImmediateMemory_Obsolete">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ImmediateMemory_Obsolete">
+              <MappingFragment StoreEntitySet="ImmediateMemory_Obsolete">
                 <ScalarProperty Name="ThirdTest1" ColumnName="ThirdTest1" />
                 <ScalarProperty Name="ThirdTest0" ColumnName="ThirdTest0" />
                 <ScalarProperty Name="SecondTest1" ColumnName="SecondTest1" />
@@ -2689,6 +2750,20 @@
               <MappingFragment StoreEntitySet="TreatmentMethod">
                 <ScalarProperty Name="Method" ColumnName="Method" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImmediateMemory_Backup">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ImmediateMemory_Backup">
+              <MappingFragment StoreEntitySet="ImmediateMemory_Backup">
+                <ScalarProperty Name="ThirdTest1" ColumnName="ThirdTest1" />
+                <ScalarProperty Name="ThirdTest0" ColumnName="ThirdTest0" />
+                <ScalarProperty Name="SecondTest1" ColumnName="SecondTest1" />
+                <ScalarProperty Name="SecondTest0" ColumnName="SecondTest0" />
+                <ScalarProperty Name="FirstTest1" ColumnName="FirstTest1" />
+                <ScalarProperty Name="FirstTest0" ColumnName="FirstTest0" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

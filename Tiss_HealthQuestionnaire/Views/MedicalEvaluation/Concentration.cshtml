@@ -1,0 +1,99 @@
+﻿@model Tiss_HealthQuestionnaire.Models.MedicalViewModel
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-blue-800 mb-4">3. 專注力 (Concentration)</h1>
+        <p class="text-gray-700 mb-6">請依據下列數列判斷是否為倒數排列，勾選 Y（正確）或 N（錯誤）。</p>
+
+        <form method="post" action="@Url.Action("Concentration", "MedicalEvaluation")">
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300 text-center rounded">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border px-4 py-2">List A</th>
+                            <th class="border px-4 py-2">List B</th>
+                            <th class="border px-4 py-2">List C</th>
+                            <th class="border px-4 py-2">Y</th>
+                            <th class="border px-4 py-2">N</th>
+                            <th class="border px-4 py-2">得分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ConcentrationItems)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="border px-4 py-2">@item.ListA</td>
+                                <td class="border px-4 py-2">@item.ListB</td>
+                                <td class="border px-4 py-2">@item.ListC</td>
+                                <td class="border px-4 py-2">
+                                    <input type="radio" name="response_@item.Id" value="1" class="form-radio h-5 w-5 concentration-option"> Y
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <input type="radio" name="response_@item.Id" value="0" class="form-radio h-5 w-5 concentration-option"> N
+                                </td>
+                                <td class="border px-4 py-2" id="score_@item.Id">0</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-gray-100 font-semibold">
+                        <tr>
+                            <td colspan="5" class="text-right border px-4 py-2">總分</td>
+                            <td class="border px-4 py-2" id="totalScore">0 / @Model.ConcentrationItems.Count()</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="mt-6 text-right">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">下一題</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function initializeConcentration() {
+        const scoreKey = 'ConcentrationScore';
+
+        loadScores();
+
+        $('.concentration-option').on('change', function () {
+            updateScores();
+            saveScores();
+        });
+
+        function updateScores() {
+            let totalScore = 0;
+            $('.concentration-option:checked').each(function () {
+                const value = parseInt($(this).val());
+                const id = $(this).attr('name').split('_')[1];
+                $(`#score_${id}`).text(value === 1 ? '1' : '0');
+                totalScore += value;
+            });
+            $('#totalScore').text(`${totalScore} / ${$('.concentration-option').length / 2}`);
+            sessionStorage.setItem(scoreKey, totalScore);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+        }
+
+        function loadScores() {
+            $('input[type="radio"]').each(function () {
+                const savedValue = sessionStorage.getItem($(this).attr('name'));
+                if (savedValue !== null && $(this).val() === savedValue) {
+                    $(this).prop('checked', true);
+                }
+            });
+            updateScores();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", initializeConcentration);
+</script>

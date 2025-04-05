@@ -818,7 +818,7 @@
                 const userName = document.getElementById("trainerUserName").value;
                 const password = document.getElementById("trainerPassword").value;
 
-                fetch("/Questionnaire/ValidateAthleticTrainer", {
+                fetch("/MedicalEvaluation/ValidateAthleticTrainer", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -830,7 +830,7 @@
                         if (data.success) {
                             sessionStorage.setItem("TrainerAuthenticated", "true");
                             trainerModal.classList.add("hidden");
-                            window.location.href = "/Questionnaire/ConcussionMedicalEvaluation";
+                            window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
                         } else {
                             alert("身份驗證失敗，請確認帳號與密碼。");
                         }
@@ -841,7 +841,7 @@
             medicalTeamButton.addEventListener("click", function (e) {
                 e.preventDefault();
                 if (isTrainerAuthenticated()) {
-                    window.location.href = "/Questionnaire/ConcussionMedicalEvaluation";
+                    window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
                 } else {
                     showTrainerAuthModal();
                 }

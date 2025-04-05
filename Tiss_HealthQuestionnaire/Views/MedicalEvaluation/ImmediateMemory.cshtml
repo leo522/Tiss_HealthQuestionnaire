@@ -1,0 +1,122 @@
+﻿@model Tiss_HealthQuestionnaire.Models.MedicalViewModel
+@{
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<form method="post" action="@Url.Action("ImmediateMemory", "MedicalEvaluation")">
+    <div class="p-6 bg-white rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-blue-800">2. 短期記憶 (Immediate Memory)</h1>
+        <p class="mb-4 text-gray-700">請依序進行三次記憶測驗，每次勾選「1」代表正確、勾選「0」代表錯誤。</p>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 text-center rounded">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border px-4 py-2">詞彙</th>
+                        <th class="border px-4 py-2">第一次</th>
+                        <th class="border px-4 py-2">第二次</th>
+                        <th class="border px-4 py-2">第三次</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ImmediateMemoryItems)
+                    {
+                        <tr class="hover:bg-gray-50">
+                            <td class="border px-4 py-2 font-medium">@Html.Encode(item.Word)</td>
+                            @for (int i = 0; i < 3; i++)
+                            {
+                                var round = i == 0 ? "first" : i == 1 ? "second" : "third";
+                                <td class="border px-4 py-2">
+                                    <div class="flex justify-center items-center gap-3">
+                                        <label>
+                                            <input type="radio" name="@($"{round}_{item.ID}")" value="0" class="form-radio memory-option h-5 w-5" />
+                                            <span class="ml-1">0</span>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="@($"{round}_{item.ID}")" value="1" class="form-radio memory-option h-5 w-5" />
+                                            <span class="ml-1">1</span>
+                                        </label>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="bg-gray-100 font-semibold">
+                    <tr>
+                        <td class="border px-4 py-2">每次分數</td>
+                        <td class="border px-4 py-2" id="firstTotal">/ 10</td>
+                        <td class="border px-4 py-2" id="secondTotal">/ 10</td>
+                        <td class="border px-4 py-2" id="thirdTotal">/ 10</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="mt-6 flex items-center gap-3">
+            <span class="text-lg font-semibold">📅 完成時間：</span>
+            <input type="time" name="CompletionTime" class="border border-gray-300 rounded px-3 py-1 w-36" value="@Model.CompletionTime">
+        </div>
+
+        <div class="mt-4 flex items-center gap-2">
+            <span class="text-lg font-semibold">📊 總分：</span>
+            <span id="totalScore" class="text-xl font-bold text-blue-700">@Model.ImmediateMemoryTotalScore</span>
+            <span>/ 30</span>
+        </div>
+
+        <div class="mt-6 text-right">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 shadow">下一題</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const scoreKey = 'ImmediateMemoryScore';
+
+        loadScores();
+
+        $('.memory-option').on('change', function () {
+            const groupName = $(this).attr('name').split('_')[0];
+            updateSingleScore(groupName);
+            saveScores();
+        });
+
+        function updateSingleScore(groupName) {
+            let total = 0;
+            $(`input[name^="${groupName}_"]:checked`).each(function () {
+                total += parseInt($(this).val());
+            });
+            $(`#${groupName}Total`).text(`${total} / 10`);
+            updateTotalScore();
+        }
+
+        function updateTotalScore() {
+            const first = parseInt($('#firstTotal').text().split('/')[0]) || 0;
+            const second = parseInt($('#secondTotal').text().split('/')[0]) || 0;
+            const third = parseInt($('#thirdTotal').text().split('/')[0]) || 0;
+            const total = first + second + third;
+            $('#totalScore').text(total);
+            sessionStorage.setItem(scoreKey, total);
+        }
+
+        function saveScores() {
+            $('input[type="radio"]').each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name'), $(this).val());
+                }
+            });
+        }
+
+        function loadScores() {
+            $('input[type="radio"]').each(function () {
+                const val = sessionStorage.getItem($(this).attr('name'));
+                if (val !== null && $(this).val() === val) {
+                    $(this).prop('checked', true);
+                }
+            });
+            updateSingleScore('first');
+            updateSingleScore('second');
+            updateSingleScore('third');
+        }
+    });
+</script>
