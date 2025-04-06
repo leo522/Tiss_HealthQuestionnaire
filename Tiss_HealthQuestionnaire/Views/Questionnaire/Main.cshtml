@@ -742,24 +742,43 @@
             </div>
         </form>
     </div>
-
-    <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
-            <form id="trainerAuthForm">
-                <div class="form-group mb-2">
-                    <label for="trainerUserName">醫療團隊帳號</label>
-                    <input type="text" class="form-control border rounded p-2 w-full" id="trainerUserName" name="trainerUserName" required>
+            <form id="trainerAuthForm" method="post" action="@Url.Action("RedirectToMedicalEvaluation", "Questionnaire")">
+                <div class="mb-4">
+                    <label for="trainerUserName" class="block mb-1">醫療團隊帳號</label>
+                    <input type="text" class="border rounded p-2 w-full" id="trainerUserName" name="userName" required />
                 </div>
-                <div class="form-group mb-4">
-                    <label for="trainerPassword">密碼</label>
-                    <input type="password" class="form-control border rounded p-2 w-full" id="trainerPassword" name="trainerPassword" required>
+                <div class="mb-4">
+                    <label for="trainerPassword" class="block mb-1">密碼</label>
+                    <input type="password" class="border rounded p-2 w-full" id="trainerPassword" name="password" required />
                 </div>
-                <button type="submit" class="btn bg-blue-500 text-white w-full p-2 rounded">驗證</button>
+                <div class="flex justify-between items-center">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">登入</button>
+                    <button type="button" id="closeModal" class="text-red-500">取消</button>
+                </div>
             </form>
-            <button id="closeModal" class="mt-2 text-red-500 w-full text-center">取消</button>
         </div>
     </div>
+
+    @*<div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
+                <form id="trainerAuthForm">
+                    <div class="form-group mb-2">
+                        <label for="trainerUserName">醫療團隊帳號</label>
+                        <input type="text" class="form-control border rounded p-2 w-full" id="trainerUserName" name="trainerUserName" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="trainerPassword">密碼</label>
+                        <input type="password" class="form-control border rounded p-2 w-full" id="trainerPassword" name="trainerPassword" required>
+                    </div>
+                    <button type="submit" class="btn bg-blue-500 text-white w-full p-2 rounded">驗證</button>
+                </form>
+                <button id="closeModal" class="mt-2 text-red-500 w-full text-center">取消</button>
+            </div>
+        </div>*@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -812,40 +831,47 @@
             document.getElementById("closeModal").addEventListener("click", function () {
                 trainerModal.classList.add("hidden");
             });
-
-            document.getElementById("trainerAuthForm").addEventListener("submit", function (e) {
+            document.getElementById("medicalTeamButton").addEventListener("click", function (e) {
                 e.preventDefault();
-                const userName = document.getElementById("trainerUserName").value;
-                const password = document.getElementById("trainerPassword").value;
-
-                fetch("/MedicalEvaluation/ValidateAthleticTrainer", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ userName, password })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            sessionStorage.setItem("TrainerAuthenticated", "true");
-                            trainerModal.classList.add("hidden");
-                            window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
-                        } else {
-                            alert("身份驗證失敗，請確認帳號與密碼。");
-                        }
-                    })
-                    .catch(() => alert("驗證時發生錯誤，請稍後再試。"));
+                document.getElementById("athleticTrainerModal").classList.remove("hidden");
             });
 
-            medicalTeamButton.addEventListener("click", function (e) {
-                e.preventDefault();
-                if (isTrainerAuthenticated()) {
-                    window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
-                } else {
-                    showTrainerAuthModal();
-                }
+            document.getElementById("closeModal").addEventListener("click", function () {
+                document.getElementById("athleticTrainerModal").classList.add("hidden");
             });
+            //document.getElementById("trainerAuthForm").addEventListener("submit", function (e) {
+            //    e.preventDefault();
+            //    const userName = document.getElementById("trainerUserName").value;
+            //    const password = document.getElementById("trainerPassword").value;
+
+            //    fetch("/MedicalEvaluation/ValidateAthleticTrainer", {
+            //        method: "POST",
+            //        headers: {
+            //            "Content-Type": "application/json"
+            //        },
+            //        body: JSON.stringify({ userName, password })
+            //    })
+            //        .then(response => response.json())
+            //        .then(data => {
+            //            if (data.success) {
+            //                sessionStorage.setItem("TrainerAuthenticated", "true");
+            //                trainerModal.classList.add("hidden");
+            //                window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
+            //            } else {
+            //                alert("身份驗證失敗，請確認帳號與密碼。");
+            //            }
+            //        })
+            //        .catch(() => alert("驗證時發生錯誤，請稍後再試。"));
+            //});
+
+            //medicalTeamButton.addEventListener("click", function (e) {
+            //    e.preventDefault();
+            //    if (isTrainerAuthenticated()) {
+            //        window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
+            //    } else {
+            //        showTrainerAuthModal();
+            //    }
+            //});
         });
     </script>
 </body>

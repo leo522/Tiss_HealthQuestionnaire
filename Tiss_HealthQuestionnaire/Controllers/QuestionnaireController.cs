@@ -492,7 +492,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ProcessCardiovascularScreening(model, form);
                 ProcessConcussionScreening(model, form);
                 ProcessSymptomEvaluation(model, form);
-                //ProcessCognitiveScreening(model, form); //認知篩檢
+                ProcessCognitiveScreening(model, form); //認知篩檢
                 ProcessOrthopaedicScreening(model, form);
 
                 return View("Preview", model);
@@ -1001,6 +1001,41 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 醫療團隊評估
+        private void ProcessCognitiveScreening(QuestionnaireViewModel model, FormCollection form)
+        {
+            model.OrientationScore = int.Parse(form["OrientationScore"] ?? "0");
+            model.ImmediateMemoryScore = int.Parse(form["ImmediateMemoryScore"] ?? "0");
+            model.CompletionTime = form["CompletionTime"] ?? "00:00";
+            model.ConcentrationScore = int.Parse(form["ConcentrationScore"] ?? "0");
+            model.CoordinationErrors = int.Parse(form["CoordinationError"] ?? "0");
+            model.CoordinationAverageTime = float.Parse(form["CoordinationAvg"] ?? "0");
+            model.CoordinationFastestTime = float.Parse(form["CoordinationFast"] ?? "0");
+            model.DelayedRecallScore = int.Parse(form["DelayedRecallTotalScore"] ?? "0");
+            model.CognitiveScreeningTotalScore = int.Parse(form["CognitiveScreeningTotalScores"] ?? "0");
+        }
+        #endregion 
+
+        #region 醫療團隊-認知篩檢 (1~6)
+        [HttpPost]
+        public ActionResult PreviewFromMedical(FormCollection form)
+        {
+            var model = new QuestionnaireViewModel
+            {
+                OrientationScore = int.Parse(form["OrientationScore"] ?? "0"),
+                ImmediateMemoryScore = int.Parse(form["ImmediateMemoryScore"] ?? "0"),
+                CompletionTime = form["CompletionTime"] ?? "00:00",
+                ConcentrationScore = int.Parse(form["ConcentrationScore"] ?? "0"),
+                CoordinationErrors = int.Parse(form["CoordinationError"] ?? "0"),
+                CoordinationAverageTime = float.Parse(form["CoordinationAverageTime"] ?? "0"),
+                CoordinationFastestTime = float.Parse(form["CoordinationFastestTime"] ?? "0"),
+                DelayedRecallScore = int.Parse(form["DelayedRecallTotalScore"] ?? "0"),
+                CognitiveScreeningTotalScore = int.Parse(form["CognitiveScreeningTotalScores"] ?? "0")
+            };
+
+            return View("Preview", model);
+        }
+        #endregion
         #endregion
 
         #region 問卷存檔
@@ -1485,6 +1520,34 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult Success()
         {
             return View();
+        }
+        #endregion
+
+        #region 跳轉到醫療防護團隊題目頁及身分驗證
+        [HttpPost]
+        public ActionResult RedirectToMedicalEvaluation(string userName, string password)
+        {
+            var trainer = _db.Test_AthleticTrainer.FirstOrDefault(at => at.ATName == userName && at.IsActive);
+
+            if (trainer != null && VerifyPassword(password, trainer.ATNumber))
+            {
+                Session["TrainerAuthenticated"] = true;
+                Session["TrainerUserName"] = userName;
+
+                return RedirectToAction("ConcussionMedicalEvaluation", "MedicalEvaluation");
+            }
+
+            ViewBag.AuthError = "身份驗證失敗，請確認帳號與密碼。";
+
+            var user = GetLoggedInUser();
+            var model = CreateQuestionnaireViewModel(user?.GenderID ?? 1);
+            SetUserViewBag(user);
+            return View("Main", model);
+        }
+
+        private bool VerifyPassword(string inputPassword, string storedPassword)
+        {
+            return inputPassword == storedPassword;
         }
         #endregion
     }

@@ -2,51 +2,70 @@
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
-<div class="container mx-auto px-4 py-6">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h1 class="text-2xl font-bold text-blue-800 mb-4">6. 認知篩檢分數總合</h1>
+@using (Html.BeginForm("PreviewFromMedical", "Questionnaire", FormMethod.Post))
+{
+    <div class="container mx-auto px-4 py-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-2xl font-bold text-blue-800 mb-4">6. 認知篩檢分數總合</h1>
 
-        <table class="min-w-full border border-gray-300 text-center rounded">
-            <thead class="bg-gray-100 font-semibold">
-                <tr>
-                    <th class="border px-4 py-2">項目</th>
-                    <th class="border px-4 py-2">分數</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="border px-4 py-2">定位 (Orientation)</td>
-                    <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 5</td>
-                </tr>
-                <tr>
-                    <td class="border px-4 py-2">短期記憶 (Immediate Memory)</td>
-                    <td class="border px-4 py-2">@Model.ImmediateMemoryTotalScore / 30</td>
-                </tr>
-                <tr>
-                    <td class="border px-4 py-2">專注力 (Concentration)</td>
-                    <td class="border px-4 py-2">@Model.ConcentrationTotalScore / 4</td>
-                </tr>
-                <tr>
-                    <td class="border px-4 py-2">協調與平衡 (Coordination)</td>
-                    <td class="border px-4 py-2">
-                        @(30 - Model.CoordinationAndBalanceTotalErrors < 0 ? 0 : 30 - Model.CoordinationAndBalanceTotalErrors) / 30
-                    </td>
-                </tr>
-                <tr>
-                    <td class="border px-4 py-2">延遲記憶 (Delayed Recall)</td>
-                    <td class="border px-4 py-2">@Model.DelayedRecallTotalScore / 10</td>
-                </tr>
-                <tr class="bg-gray-100 font-bold">
-                    <td class="border px-4 py-2">總分</td>
-                    <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScores / 79</td>
-                </tr>
-            </tbody>
-        </table>
+            <table class="min-w-full border border-gray-300 text-center rounded">
+                <thead class="bg-gray-100 font-semibold">
+                    <tr>
+                        <th class="border px-4 py-2">項目</th>
+                        <th class="border px-4 py-2">分數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border px-4 py-2">定位 (Orientation)</td>
+                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 5</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">短期記憶 (Immediate Memory)</td>
+                        <td class="border px-4 py-2">@Model.ImmediateMemoryTotalScore / 30</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">專注力 (Concentration)</td>
+                        <td class="border px-4 py-2">@Model.ConcentrationTotalScore / 4</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">協調與平衡 (Coordination)</td>
+                        <td class="border px-4 py-2">
+                            @(30 - Model.CoordinationAndBalanceTotalErrors < 0 ? 0 : 30 - Model.CoordinationAndBalanceTotalErrors) / 30
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">延遲記憶 (Delayed Recall)</td>
+                        <td class="border px-4 py-2">@Model.DelayedRecallTotalScore / 10</td>
+                    </tr>
+                    <tr class="bg-gray-100 font-bold">
+                        <td class="border px-4 py-2">總分</td>
+                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScores / 79</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            @Html.Hidden("OrientationScore", Model.CognitiveScreeningTotalScore)
+            @Html.Hidden("ImmediateMemoryScore", Model.ImmediateMemoryTotalScore)
+            @Html.Hidden("CompletionTime", Model.CompletionTime)
+            @Html.Hidden("ConcentrationScore", Model.ConcentrationTotalScore)
+            @Html.Hidden("CoordinationError", Model.CoordinationAndBalanceTotalErrors)
+            @Html.Hidden("CoordinationAverageTime", Model.CoordinationAndBalanceAverageTime)
+            @Html.Hidden("CoordinationFastestTime", Model.CoordinationAndBalanceFastestTime)
+            @Html.Hidden("DelayedRecallTotalScore", Model.DelayedRecallTotalScore)
+            @Html.Hidden("CognitiveScreeningTotalScores", Model.CognitiveScreeningTotalScores)
+
+            <div class="mt-6 flex justify-between">
+                <a href="@Url.Action("ConcussionMedicalEvaluation", "MedicalEvaluation")"
+                   class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-2 rounded shadow">
+                    回到醫療團隊評估主頁
+                </a>
+
+                <button type="submit"
+                        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded shadow">
+                    前往預覽頁
+                </button>
+            </div>
+        </div>
     </div>
-</div>
-<div class="mt-6 text-right">
-    <a href="@Url.Action("ConcussionMedicalEvaluation", "MedicalEvaluation")"
-       class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-2 rounded shadow">
-        回到醫療團隊評估主頁
-    </a>
-</div>
+}

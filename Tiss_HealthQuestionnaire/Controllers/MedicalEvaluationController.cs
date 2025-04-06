@@ -323,7 +323,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 醫療團隊-認知篩檢 (1~6)
+        #region 醫療團隊-認知篩檢 (1~6)-用不到?!
         //private void ProcessCognitiveScreening(MedicalViewModel model, FormCollection form)
         //{
         //    try
@@ -448,29 +448,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         //        throw new ApplicationException("處理認知篩檢資料時發生錯誤。", ex);
         //    }
         //}
-        #endregion
-
-        #region 防護員AT驗證身分
-        [HttpPost]
-        public JsonResult ValidateAthleticTrainer(string userName, string password)
-        {
-            var trainer = _db.Test_AthleticTrainer.FirstOrDefault(at => at.ATName == userName && at.IsActive);
-
-            if (trainer != null && VerifyPassword(password, trainer.ATNumber))
-            {
-                Session["TrainerAuthenticated"] = true;
-                Session["TrainerUserName"] = userName;
-
-                return Json(new { success = true });
-            }
-
-            return Json(new { success = false });
-        }
-
-        private bool VerifyPassword(string inputPassword, string storedPassword)
-        {
-            return inputPassword == storedPassword;
-        }
         #endregion
     }
 }

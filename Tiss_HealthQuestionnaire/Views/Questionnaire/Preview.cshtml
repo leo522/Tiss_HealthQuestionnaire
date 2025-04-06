@@ -698,6 +698,45 @@
                 }
             </div>
 
+            @**醫療團隊評估*@
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-blue-600 mb-4">認知篩檢結果 (Cognitive Screening)</h2>
+                <table class="min-w-full bg-white border border-gray-300 text-center">
+                    <thead class="bg-gray-100 font-bold">
+                        <tr>
+                            <th class="border px-4 py-2">項目</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border px-4 py-2">定位 (Orientation)</td>
+                            <td class="border px-4 py-2">@Model.OrientationScore / 5</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">短期記憶 (Immediate Memory)</td>
+                            <td class="border px-4 py-2">@Model.ImmediateMemoryScore / 30</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">專注力 (Concentration)</td>
+                            <td class="border px-4 py-2">@Model.ConcentrationScore / 4</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">協調與平衡</td>
+                            <td class="border px-4 py-2">@Math.Max(0, 30 - Model.CoordinationErrors) / 30</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">延遲記憶 (Delayed Recall)</td>
+                            <td class="border px-4 py-2">@Model.DelayedRecallScore / 10</td>
+                        </tr>
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="border px-4 py-2">總分</td>
+                            <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 79</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="flex justify-between items-center mt-6">
                 <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
                     返回編輯
