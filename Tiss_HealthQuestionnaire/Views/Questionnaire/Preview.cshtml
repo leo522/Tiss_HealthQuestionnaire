@@ -31,18 +31,23 @@
             @Html.HiddenFor(m => m.FillDate)
 
             @*過去健康檢查病史*@
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
-                <p class="mb-4">
-                    <strong>
-                        過去兩年內的健康檢查是否有異常項目：
+            <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">過去健康檢查病史 (PastHealth)</h2>
+
+            <p class="mb-4">
+                <strong>
+                    過去兩年內的健康檢查是否有異常項目：
+                    <span class="@(Model.PastHealthHistory == "yes" ? "text-red-500 font-semibold" : "text-black")">
                         @QuestionnaireViewModel.ConvertYesNoToLocalizedString(Model.PastHealthHistory)
-                    </strong>
-                </p>
-                @Html.HiddenFor(m => m.PastHealthHistory)
-                @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses != null && Model.PastHealthResponses.Any())
-                {
-                    <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
+                    </span>
+                </strong>
+            </p>
+            @Html.HiddenFor(m => m.PastHealthHistory)
+
+            @if (Model.PastHealthHistory == "yes" && Model.PastHealthResponses != null && Model.PastHealthResponses.Any())
+            {
+                <h3 class="text-lg font-bold mb-4">詳細異常項目</h3>
+                <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -57,23 +62,25 @@
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2">
                                         @(Model.PastHealthResponses.ContainsKey(item.ID.ToString())
-                          ? Model.PastHealthResponses[item.ID.ToString()]
-                          : "未填寫")
+                                    ? Model.PastHealthResponses[item.ID.ToString()]
+                                    : "<span class='text-gray-400'>未填寫</span>")
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                }
-                @for (int i = 0; i < Model.PastHealthItems.Count; i++)
-                {
-                    @Html.HiddenFor(m => m.PastHealthItems[i].ID)
-                    @Html.HiddenFor(m => m.PastHealthItems[i].ItemZh)
-                    @Html.HiddenFor(m => m.PastHealthItems[i].ItemEn)
-                    <input type="hidden" name="PastHealthItems[@i].IsYes" value="@Model.PastHealthItems[i].IsYes.ToString().ToLower()" />
-                    <input type="hidden" name="PastHealthItems[@i].Details" value="@Model.PastHealthItems[i].Details" />
-                }
-            </div>
+                </div>
+            }
+
+            @for (int i = 0; i < Model.PastHealthItems.Count; i++)
+            {
+                @Html.HiddenFor(m => m.PastHealthItems[i].ID)
+                @Html.HiddenFor(m => m.PastHealthItems[i].ItemZh)
+                @Html.HiddenFor(m => m.PastHealthItems[i].ItemEn)
+                <input type="hidden" name="PastHealthItems[@i].IsYes" value="@Model.PastHealthItems[i].IsYes.ToString().ToLower()" />
+                <input type="hidden" name="PastHealthItems[@i].Details" value="@Model.PastHealthItems[i].Details" />
+            }
+        </div>
 
             @*過敏史*@
             <div class="mb-8">
@@ -108,11 +115,11 @@
                                     <td class="border border-gray-300 px-4 py-2 text-center">
                                         @if (item.IsYes)
                                         {
-                                            <span class="text-green-600 font-bold">✔ 是</span>
+                                            <span class="text-red-600 font-bold">是</span>
                                         }
                                         else
                                         {
-                                            <span class="text-red-600">✘ 否</span>
+                                            <span class="text-600">否</span>
                                         }
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">
@@ -161,15 +168,15 @@
                                     <td class="border border-gray-300 px-4 py-2">
                                         @if (item.FamilyHistoryOption == "yes")
                                         {
-                                            <span class="text-red-600">是 (Yes)</span>
+                                            <span class="text-red-600">是</span>
                                         }
                                         else if (item.FamilyHistoryOption == "no")
                                         {
-                                            <span class="text-green-600">否 (No)</span>
+                                            <span class="text-black-600">否</span>
                                         }
                                         else
                                         {
-                                            <span class="text-gray-600">未知 (Unknown)</span>
+                                            <span class="text-gray-600">未知</span>
                                         }
                                     </td>
                                 </tr>
@@ -218,15 +225,15 @@
                                 <td class="border border-gray-300 px-4 py-2">
                                     @if (item.PastHistoryOption == "yes")
                                     {
-                                        <span class="text-red-600">是 (Yes)</span>
+                                        <span class="text-red-600">是</span>
                                     }
                                     else if (item.PastHistoryOption == "no")
                                     {
-                                        <span class="text-green-600">否 (No)</span>
+                                        <span class="text-black-600">否</span>
                                     }
                                     else if (item.PastHistoryOption == "unknown")
                                     {
-                                        <span class="text-gray-600">未知 (Unknown)</span>
+                                        <span class="text-gray-600">未知</span>
                                     }
                                     else
                                     {
@@ -259,7 +266,6 @@
             @*現在病史*@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-blue-600 mb-4">現在病史 (Present Illness)</h2>
-
                 @if (Model.PresentIllnessItems != null && Model.PresentIllnessItems.Any())
                 {
                     <table class="min-w-full bg-white border border-gray-300">
@@ -275,7 +281,9 @@
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @(item.ReceivingTherapy == "yes" ? "是 (Yes)" : "否 (No)")
+                                        <span class="@(item.ReceivingTherapy == "yes" ? "text-red-500 font-semibold" : "text-black")">
+                                            @(item.ReceivingTherapy == "yes" ? "是" : "否")
+                                        </span>
                                     </td>
                                 </tr>
                             }
@@ -297,42 +305,47 @@
             </div>
 
             @*藥物史*@
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold text-blue-600 mb-4">藥物史 (Past Drugs)</h2>
+            <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-blue-600 mb-4">藥物史 (Past Drugs)</h2>
 
-                @if (Model.PastDrugsItems != null && Model.PastDrugsItems.Any(i => i.IsUsed))
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">藥物名稱 (Item)</th>
+            @if (Model.PastDrugsItems != null && Model.PastDrugsItems.Any(i => i.IsUsed))
+            {
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 p-2">藥物名稱 (Item)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PastDrugsItems.Where(i => i.IsUsed))
+                        {
+                            <tr>
+                                <td class="border border-gray-300 p-2">@item.ItemZh</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.PastDrugsItems.Where(i => i.IsUsed))
-                            {
-                                <tr>
-                                    <td class="border border-gray-300 p-2">@item.ItemZh</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <p class="text-gray-500">未填寫</p>
-                }
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-gray-500">未填寫</p>
+            }
 
-                <p class="mt-4"><strong>是否有申請治療用途豁免 (TUE)？</strong> @(Model.TUE == "yes" ? "是" : "否")</p>
+            <p class="mt-4">
+                <strong>是否有申請治療用途豁免 (TUE)？</strong>
+                <span class="@(Model.TUE == "yes" ? "text-red-600 font-bold" : "text-black")">
+                    @(Model.TUE == "yes" ? "是" : "否")
+                </span>
+            </p>
 
-                @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
-                {
-                    <input type="hidden" name="PastDrugsItems[@i].ID" value="@Model.PastDrugsItems[i].ID">
-                    <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@Model.PastDrugsItems[i].ItemZh">
-                    <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@Model.PastDrugsItems[i].IsUsed.ToString().ToLower()">
-                }
+            @for (int i = 0; i < Model.PastDrugsItems.Count; i++)
+            {
+                <input type="hidden" name="PastDrugsItems[@i].ID" value="@Model.PastDrugsItems[i].ID" />
+                <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@Model.PastDrugsItems[i].ItemZh" />
+                <input type="hidden" name="PastDrugsItems[@i].IsUsed" value="@Model.PastDrugsItems[i].IsUsed.ToString().ToLower()" />
+            }
 
-                <input type="hidden" name="TUE" value="@Model.TUE">
+                <input type="hidden" name="TUE" value="@Model.TUE" />
             </div>
 
             @*營養品*@
@@ -354,7 +367,9 @@
                                 <tr>
                                     <td class="border border-gray-300 p-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 p-2 text-center">
-                                        @(item.IsUsed ? "是" : "否")
+                                        <span class="@(item.IsUsed ? "text-red-500 font-semibold" : "text-black")">
+                                            @(item.IsUsed ? "是" : "否")
+                                        </span>
                                     </td>
                                 </tr>
                             }
@@ -443,10 +458,10 @@
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">@injury.PastInjuryPart</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @Html.Raw(injury.LeftSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")
+                                        @Html.Raw(injury.LeftSide ? "<span class='text-red-600 font-semibold'>是</span>" : "<span class='text-gray-400'>否</span>")
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @Html.Raw(injury.RightSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")
+                                        @Html.Raw(injury.RightSide ? "<span class='text-red-600 font-semibold'>是</span>" : "<span class='text-gray-400'>否</span>")
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">@injuryType</td>
                                     <td class="border border-gray-300 px-4 py-2">@treatment</td>
@@ -489,10 +504,10 @@
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2">@injury.CurrentInjuryPart</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @Html.Raw(injury.LeftSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")
+                                        @Html.Raw(injury.LeftSide ? "<span class='text-red-600 font-semibold'>是</span>" : "<span class='text-gray-400'>否</span>")
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        @Html.Raw(injury.RightSide ? "<span class='text-red-600 font-semibold'>是 (Yes)</span>" : "<span class='text-gray-400'>否 (No)</span>")
+                                        @Html.Raw(injury.RightSide ? "<span class='text-red-600 font-semibold'>是</span>" : "<span class='text-gray-400'>否</span>")
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">@injuryType</td>
                                     <td class="border border-gray-300 px-4 py-2">@treatment</td>
@@ -525,7 +540,7 @@
                             @foreach (var item in Model.CardiovascularScreeningItems)
                             {
                                 var responseText = item.IsUsed ? "有" : "無";
-                                var textColorClass = item.IsUsed ? "text-red-600" : "text-green-600";
+                                var textColorClass = item.IsUsed ? "text-red-600" : "text-black-600";
 
                                 <tr>
                                     <td class="border border-gray-300 px-4 py-2 text-center">@item.ID</td>
@@ -550,53 +565,69 @@
 
             @*腦震盪篩檢 - 選手自填*@
             <div class="mb-8">
-                @if (Model.ConcussionScreeningItems != null && Model.ConcussionScreeningItems.Any())
-                {
-                    <div class="mb-8">
-                        <h2 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢 - 選手自填 (Concussion Screening)</h2>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white border border-gray-300">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
-                                        <th class="border border-gray-300 px-4 py-2">問題</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-center">答案</th>
+            @if (Model.ConcussionScreeningItems != null && Model.ConcussionScreeningItems.Any())
+            {
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-blue-600 mb-4">腦震盪篩檢 - 選手自填 (Concussion Screening)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2 text-center">項次</th>
+                                    <th class="border border-gray-300 px-4 py-2">問題</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-center">答案</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ConcussionScreeningItems)
+                                {
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
+                                        <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                            <span class="@(item.Answer == "是" ? "text-red-500 font-semibold" : "text-black")">
+                                                @item.Answer
+                                            </span>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.ConcussionScreeningItems)
-                                    {
-                                        <tr>
-                                            <td class="border border-gray-300 px-4 py-2 text-center">@item.Id</td>
-                                            <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                            <td class="border border-gray-300 px-4 py-2 text-center font-semibold">@item.Answer</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
 
-                        @* hidden input *@
-                        @for (int i = 0; i < Model.ConcussionScreeningItems.Count; i++)
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 text-center" colspan="2"><strong>現在是否服用藥物</strong></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <span class="@(Model.ConcussionScreeningMedicationAnswer == "是" ? "text-red-500 font-semibold" : "text-black")">
+                                            @Model.ConcussionScreeningMedicationAnswer
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 text-center" colspan="2"><strong>服用藥物細節</strong></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@Model.ConcussionScreeningMedicationDetails</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 text-center" colspan="2"><strong>備註</strong></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">@Model.ConcussionScreeningNotes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    @{
+                        for (int i = 0; i < Model.ConcussionScreeningItems.Count; i++)
                         {
                             var item = Model.ConcussionScreeningItems[i];
-                            <input type="hidden" name="ConcussionScreeningItems[@i].Id" value="@item.Id" />
-                            <input type="hidden" name="ConcussionQuestion_@item.Id" value="@(item.Answer == "是" ? "yes" : "no")" />
+                            <text>
+                                <input type="hidden" name="ConcussionScreeningItems[@i].Id" value="@item.Id" />
+                                <input type="hidden" name="ConcussionQuestion_@item.Id" value="@(item.Answer == "是" ? "yes" : "no")" />
+                            </text>
                         }
+                    }
 
-                        <div class="mt-4 space-y-2">
-                            <p><strong>現在是否服用藥物：</strong> @Model.ConcussionScreeningMedicationAnswer</p>
-                            <input type="hidden" name="Medication" value="@(Model.ConcussionScreeningMedicationAnswer == "是" ? "yes" : "no")" />
-
-                            <p><strong>服用藥物細節：</strong> @Model.ConcussionScreeningMedicationDetails</p>
-                            <input type="hidden" name="MedicationDetails" value="@Model.ConcussionScreeningMedicationDetails" />
-
-                            <p><strong>備註：</strong> @Model.ConcussionScreeningNotes</p>
-                            <input type="hidden" name="Notes" value="@Model.ConcussionScreeningNotes" />
-                        </div>
-                    </div>
-                }
-            </div>
+                    <input type="hidden" name="Medication" value="@(Model.ConcussionScreeningMedicationAnswer == "是" ? "yes" : "no")" />
+                    <input type="hidden" name="MedicationDetails" value="@Model.ConcussionScreeningMedicationDetails" />
+                    <input type="hidden" name="Notes" value="@Model.ConcussionScreeningNotes" />
+                </div>
+            }
+        </div>
 
             @*症狀自我評估 - 選手自填*@
             <div class="mb-8">
@@ -672,7 +703,7 @@
                                 if (!string.IsNullOrEmpty(detail.ResultNormal) && !string.IsNullOrEmpty(detail.ResultAbnormal))
                                 {
                                     responseText = detail.Result == "normal" ? "正常" : (detail.Result == "abnormal" ? "異常" : "未填寫");
-                                    textColorClass = detail.Result == "normal" ? "text-green-600" : (detail.Result == "abnormal" ? "text-red-600" : "text-gray-500");
+                                    textColorClass = detail.Result == "normal" ? "text-black-600" : (detail.Result == "abnormal" ? "text-red-600" : "text-gray-500");
                                 }
 
                                 <tr>
