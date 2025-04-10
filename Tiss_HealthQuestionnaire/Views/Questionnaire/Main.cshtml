@@ -22,6 +22,8 @@
     <div class="container mx-auto">
         <form id="questionnaireForm" method="post" action="/Questionnaire/Preview">
             <input type="hidden" id="formDataJson" name="formDataJson" />
+
+            @*基本資料*@
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
                 <div class="flex flex-col md:flex-row items-center mb-4 space-x-4">
                     <label class="mr-2">
@@ -51,7 +53,7 @@
             </div>
             <div id="questionnaireSteps">
                 @*過去健康檢查病史*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="1">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="1" data-section-name="過去健康檢查病史">
                     <h3 class="text-lg font-semibold mb-4">過去健康檢查病史</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -94,7 +96,7 @@
                 </div>
 
                 @*過敏史*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="2">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="2" data-section-name="過敏史">
                     <h3 class="text-lg font-semibold mb-4">過敏史</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -131,7 +133,7 @@
                 </div>
 
                 @*家族病史-二等親內*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="3" data-section-name="家族病史(二等親內)">
                     <h3 class="text-lg font-semibold mb-4">家族病史 - 二等親內</h3>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -149,13 +151,13 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" id="family_no_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="no" class="w-5 h-5">
+                                        <input type="radio" id="family_no_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="no" class="w-5 h-5 required-radio">
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" id="family_yes_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="yes" class="w-5 h-5">
+                                        <input type="radio" id="family_yes_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="yes" class="w-5 h-5 required-radio">
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" id="family_unknown_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="unknown" class="w-5 h-5">
+                                        <input type="radio" id="family_unknown_@i" name="FamilyHistoryItems[@i].FamilyHistoryOption" value="unknown" class="w-5 h-5 required-radio">
                                     </td>
                                 </tr>
                             }
@@ -171,7 +173,7 @@
                 </div>
 
                 @*過去病史*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="4">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="4" data-section-name="過去病史">
                     <h2 class="text-lg font-semibold mb-4">過去病史</h2>
                     <label>近六個月內是否發生過以下疾病？</label>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -190,13 +192,13 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.GeneralPartsZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="no" class="w-5 h-5" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="no" class="w-5 h-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="yes" class="w-5 h-5" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="yes" class="w-5 h-5 required-radio" />
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="unknown" class="w-5 h-5" />
+                                        <input type="radio" name="PastHistoryItems[@i].PastHistoryOption" value="unknown" class="w-5 h-5 required-radio" />
                                     </td>
                                 </tr>
                             }
@@ -218,7 +220,7 @@
                 </div>
 
                 @*現在病史*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="5">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="5" data-section-name="現在病史">
                     <h2 class="text-lg font-semibold mb-4">現在病史</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -234,8 +236,8 @@
                                 <tr class="question-row">
                                     <td class="border border-gray-300 px-4 py-2">@item.PartsOfBodyZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no" class="h-5 w-5" /> 否
-                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes" class="h-5 w-5" /> 是
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="no" class="required-radio h-5 w-5" /> 否
+                                        <input type="radio" name="PresentIllnessItems[@i].ReceivingTherapy" value="yes" class="required-radio h-5 w-5" /> 是
                                     </td>
                                 </tr>
                             }
@@ -251,7 +253,7 @@
                 </div>
 
                 @*藥物史*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="6">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="6" data-section-name="藥物史">
                     <h2 class="text-lg font-semibold mb-4">藥物史</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -268,10 +270,10 @@
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
                                         <label>
-                                            <input type="radio" class="w-5 h-5" name="PastDrugsItems[@i].IsUsed" value="true" required> 是
+                                            <input type="radio" name="PastDrugsItems[@i].IsUsed" value="true" class="required-radio w-5 h-5" /> 是
                                         </label>
                                         <label class="ml-4">
-                                            <input type="radio" class="w-5 h-5" name="PastDrugsItems[@i].IsUsed" value="false" required> 否
+                                            <input type="radio" name="PastDrugsItems[@i].IsUsed" value="false" class="required-radio w-5 h-5" /> 否
                                         </label>
                                         <input type="hidden" name="PastDrugsItems[@i].ID" value="@item.ID">
                                         <input type="hidden" name="PastDrugsItems[@i].ItemZh" value="@item.ItemZh">
@@ -285,11 +287,11 @@
                         <label class="font-semibold">是否有申請治療用途豁免？(TUE)</label>
                         <div class="flex space-x-4 mt-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="TUE" value="yes" class="form-radio h-5 w-5" required />
+                                <input type="radio" name="TUE" value="yes" class="form-radio required-radio h-5 w-5"/>
                                 <span class="ml-2">是</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="TUE" value="no" class="form-radio h-5 w-5" required />
+                                <input type="radio" name="TUE" value="no" class="form-radio required-radio h-5 w-5" />
                                 <span class="ml-2">否</span>
                             </label>
                         </div>
@@ -297,7 +299,7 @@
                 </div>
 
                 @*營養品*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="7" data-section-name="營養品">
                     <h2 class="text-lg font-semibold mb-4">營養品</h2>
                     <table class="min-w-full bg-white border border-gray-300">
                         <thead>
@@ -314,10 +316,10 @@
                                     <td class="border border-gray-300 px-4 py-2">@item.ItemZh</td>
                                     <td class="border border-gray-300 px-4 py-2 text-center">
                                         <label>
-                                            <input type="radio" class="w-5 h-5" name="PastSupplementsItems[@i].IsUsed" value="true" required> 是
+                                            <input type="radio" name="PastSupplementsItems[@i].IsUsed" value="true" class="required-radio w-5 h-5" /> 是
                                         </label>
                                         <label class="ml-4">
-                                            <input type="radio" class="w-5 h-5" name="PastSupplementsItems[@i].IsUsed" value="false" required> 否
+                                            <input type="radio" name="PastSupplementsItems[@i].IsUsed" value="false" class="required-radio w-5 h-5" /> 否
                                         </label>
                                         <input type="hidden" name="PastSupplementsItems[@i].ID" value="@item.ID">
                                         <input type="hidden" name="PastSupplementsItems[@i].ItemZh" value="@item.ItemZh">
@@ -357,7 +359,7 @@
                                             <td class="border border-gray-300 px-4 py-2 text-center">
                                                 @if (question.ID == 1)
                                                 {
-                                                    <select name="FemaleQuestionnaireAnswers[@question.ID]" class="border rounded px-2 py-1">
+                                                    <select name="FemaleQuestionnaireAnswers[@question.ID]" class="required-select border rounded px-2 py-1">
                                                         <option value="">請選擇</option>
                                                         <option value="10">10 歲(含)以下</option>
                                                         <option value="11">11 歲</option>
@@ -399,7 +401,7 @@
                 }
 
                 @*過去傷害(已復原)*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="9" data-section-name="過去傷害(已復原)">
                     <h1 class="text-lg font-semibold mb-4">過去傷害狀況 (已復原)</h1>
                     <label>
                         <input type="radio" name="pastInjuryStatus" class="required-radio h-5 w-5" value="no">
@@ -446,7 +448,7 @@
                                 @foreach (var injury in Model.PastInjuryTypes)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" class="pastInjury-injury-type-checkbox h-5 w-5" name="SelectedInjuryTypes" value="@injury.InjuryName">
+                                        <input type="checkbox" class="required-checkbox pastInjury-injury-type-checkbox h-5 w-5" name="SelectedInjuryTypes" value="@injury.InjuryName">
                                         @injury.InjuryName
                                     </label>
                                 }
@@ -460,7 +462,7 @@
                                 @foreach (var treatment in Model.PastTreatmentItems)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" class="h-5 w-5" name="SelectedTreatmentMethods" value="@treatment.Method">
+                                        <input type="checkbox" class="required-checkbox h-5 w-5" name="SelectedTreatmentMethods" value="@treatment.Method">
                                         @treatment.Method
                                     </label>
                                 }
@@ -470,7 +472,7 @@
                 </div>
 
                 @*目前傷害狀況*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4" data-step="10" data-section-name="目前傷害狀況">
                     <h1 class="text-lg font-semibold mb-4">目前傷害狀況</h1>
                     <label>
                         <input type="radio" name="currentInjuryStatus" class="required-radio h-5 w-5" value="no">
@@ -499,10 +501,10 @@
                                         <tr>
                                             <td class="border p-2">@item.CurrentInjuryPart</td>
                                             <td class="border p-2">
-                                                <input type="checkbox" class="currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryLeft" value="@item.Id">
+                                                <input type="checkbox" class="required-checkbox currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryLeft" value="@item.Id">
                                             </td>
                                             <td class="border p-2">
-                                                <input type="checkbox" class="currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryRight" value="@item.Id">
+                                                <input type="checkbox" class="required-checkbox currentInjury-injury-part-checkbox h-5 w-5" name="CurrentInjuryRight" value="@item.Id">
                                             </td>
                                         </tr>
                                     }
@@ -517,7 +519,7 @@
                                 @foreach (var injury in Model.CurrentInjuryTypes)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" class="currentInjury-injury-type-checkbox h-5 w-5" name="SelectedCurrentInjuryTypes" value="@injury.InjuryName">
+                                        <input type="checkbox" class="required-checkbox currentInjury-injury-type-checkbox h-5 w-5" name="SelectedCurrentInjuryTypes" value="@injury.InjuryName">
                                         @injury.InjuryName
                                     </label>
                                 }
@@ -531,7 +533,7 @@
                                 @foreach (var treatment in Model.CurrentTreatmentItems)
                                 {
                                     <label class="block border p-2 rounded shadow-sm">
-                                        <input type="checkbox" class="h-5 w-5" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
+                                        <input type="checkbox" class="required-checkbox h-5 w-5" name="SelectedCurrentTreatmentMethods" value="@treatment.Method">
                                         @treatment.Method
                                     </label>
                                 }
@@ -540,8 +542,40 @@
                     </div>
                 </div>
 
+                @*心血管篩檢*@
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11" data-section-name="心血管篩檢">
+                    <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">問題</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center">是否曾有發生過</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.CardiovascularScreeningItems.Count; i++)
+                            {
+                                var item = Model.CardiovascularScreeningItems[i];
+                                <tr class="question-row">
+                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <label>
+                                            <input type="radio" name="CardiovascularScreeningItems[@i].IsUsed" value="true" class="required-radio w-5 h-5" /> 是
+                                        </label>
+                                        <label class="ml-4">
+                                            <input type="radio" name="CardiovascularScreeningItems[@i].IsUsed" value="false" class="required-radio w-5 h-5" /> 否
+                                        </label>
+                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ID" value="@item.ID">
+                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ItemZh" value="@item.Question">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
                 @*腦震盪篩檢-選手自填-(1)*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="12" data-section-name="腦震盪篩檢-選手自填">
                     <h2 class="text-lg font-semibold mb-2">腦震盪篩檢</h2>
                     <h2 class="text-lg font-semibold mb-4">選手背景:您是否曾經有下列病史(症狀)</h2>
                     <table class="min-w-full bg-white border border-gray-300">
@@ -597,7 +631,7 @@
                 </div>
 
                 @*症狀自我評估-選手自填(2)*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="13" data-section-name="症狀自我評估-選手自填(2)">
                     <h2 class="text-lg font-semibold mb-4">症狀自我評估-(0分沒有症狀，6分症狀嚴重)</h2>
                     <table class="min-w-full bg-white border border-gray-300 text-center">
                         <thead>
@@ -659,40 +693,8 @@
                     </div>
                 </div>
 
-                @*心血管篩檢*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="11">
-                    <h2 class="text-lg font-semibold mb-4">心血管篩檢</h2>
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr>
-                                <th class="border border-gray-300 px-4 py-2">問題</th>
-                                <th class="border border-gray-300 px-4 py-2 text-center">是否曾有發生過</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.CardiovascularScreeningItems.Count; i++)
-                            {
-                                var item = Model.CardiovascularScreeningItems[i];
-                                <tr class="question-row">
-                                    <td class="border border-gray-300 px-4 py-2">@item.Question</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-center">
-                                        <label>
-                                            <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="true" required> 是
-                                        </label>
-                                        <label class="ml-4">
-                                            <input type="radio" class="w-5 h-5" name="CardiovascularScreeningItems[@i].IsUsed" value="false" required> 否
-                                        </label>
-                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ID" value="@item.ID">
-                                        <input type="hidden" name="CardiovascularScreeningItems[@i].ItemZh" value="@item.Question">
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
                 @*骨科篩檢*@
-                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14">
+                <div class="question-step bg-white p-6 rounded-lg shadow-md mb-4 hidden" data-step="14" data-section-name="骨科篩檢">
                     <h2 class="text-lg font-semibold mb-4">骨科篩檢</h2>
                     <table class="min-w-full bg-white border border-gray-300 text-center">
                         <thead>
@@ -713,11 +715,11 @@
                                     <td class="border border-gray-300 px-4 py-2">@item.ObservationPoints</td>
                                     <td class="border border-gray-300 px-4 py-2">
                                         <label class="inline-flex items-center">
-                                            <input type="radio" class="w-5 h-5" name="OrthopaedicScreeningItems[@i].Result" value="normal">
+                                            <input type="radio" name="OrthopaedicScreeningItems[@i].Result" value="normal" class="w-5 h-5 required-radio" />
                                             <span class="ml-2">@item.ResultNormal</span>
                                         </label>
                                         <label class="inline-flex items-center ml-4">
-                                            <input type="radio" class="w-5 h-5" name="OrthopaedicScreeningItems[@i].Result" value="abnormal">
+                                            <input type="radio" name="OrthopaedicScreeningItems[@i].Result" value="abnormal" class="w-5 h-5 required-radio" />
                                             <span class="ml-2">@item.ResultAbnormal</span>
                                         </label>
                                         <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID" />
@@ -736,63 +738,17 @@
                 <button type="button" id="prevButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded">上一步</button>
                 <button type="button" id="nextButton" class="bg-green-500 text-white px-4 py-2 rounded">下一步</button>
                 <button type="submit" id="submitButton" class="hidden bg-blue-500 text-white px-4 py-2 rounded">送出預覽</button>
-                <button id="medicalTeamButton" class="hidden bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 flex items-center">
-                    醫療團隊評估
-                </button>
             </div>
         </form>
     </div>
-    <div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
-            <form id="trainerAuthForm" method="post" action="@Url.Action("RedirectToMedicalEvaluation", "Questionnaire")">
-                <div class="mb-4">
-                    <label for="trainerUserName" class="block mb-1">醫療團隊帳號</label>
-                    <input type="text" class="border rounded p-2 w-full" id="trainerUserName" name="userName" required />
-                </div>
-                <div class="mb-4">
-                    <label for="trainerPassword" class="block mb-1">密碼</label>
-                    <input type="password" class="border rounded p-2 w-full" id="trainerPassword" name="password" required />
-                </div>
-                <div class="flex justify-between items-center">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">登入</button>
-                    <button type="button" id="closeModal" class="text-red-500">取消</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    @*<div id="athleticTrainerModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-lg font-semibold mb-4">醫療團隊身份驗證</h3>
-                <form id="trainerAuthForm">
-                    <div class="form-group mb-2">
-                        <label for="trainerUserName">醫療團隊帳號</label>
-                        <input type="text" class="form-control border rounded p-2 w-full" id="trainerUserName" name="trainerUserName" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="trainerPassword">密碼</label>
-                        <input type="password" class="form-control border rounded p-2 w-full" id="trainerPassword" name="trainerPassword" required>
-                    </div>
-                    <button type="submit" class="btn bg-blue-500 text-white w-full p-2 rounded">驗證</button>
-                </form>
-                <button id="closeModal" class="mt-2 text-red-500 w-full text-center">取消</button>
-            </div>
-        </div>*@
-
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            InjurySectionHandler.init("pastInjury");
-            InjurySectionHandler.init("currentInjury");
-        });
         document.addEventListener("DOMContentLoaded", function () {
             let currentStep = 1;
             const steps = document.querySelectorAll(".question-step");
             const prevButton = document.getElementById("prevButton");
             const nextButton = document.getElementById("nextButton");
             const submitButton = document.getElementById("submitButton");
-            const medicalTeamButton = document.getElementById("medicalTeamButton");
-            const trainerModal = document.getElementById("athleticTrainerModal");
+            const form = document.getElementById("questionnaireForm");
 
             function showStep(step) {
                 steps.forEach((stepDiv, index) => {
@@ -801,8 +757,80 @@
                 prevButton.classList.toggle("hidden", step === 1);
                 nextButton.classList.toggle("hidden", step === steps.length);
                 submitButton.classList.toggle("hidden", step !== steps.length);
-                medicalTeamButton.classList.toggle("hidden", step !== steps.length);
             }
+
+            function clearValidationErrors() {
+                document.querySelectorAll(".border-red-500").forEach(el => el.classList.remove("border-red-500"));
+            }
+
+            //function validateAllSteps() {
+            //    clearValidationErrors();
+            //    let firstErrorElement = null;
+            //    const errorSections = [];
+
+            //    steps.forEach((section, idx) => {
+            //        const sectionTitle = section.dataset.sectionName || `第 ${idx + 1} 步`;
+            //        let sectionHasError = false;
+
+            //        const radios = section.querySelectorAll("input.required-radio[type='radio']");
+            //        const groupedNames = [...new Set(Array.from(radios).map(r => r.name))];
+            //        groupedNames.forEach(name => {
+            //            const group = section.querySelectorAll(`input[name='${name}']`);
+            //            const hasChecked = Array.from(group).some(r => r.checked);
+            //            if (!hasChecked) {
+            //                sectionHasError = true;
+            //                group.forEach(r => r.classList.add("border-red-500"));
+            //                if (!firstErrorElement) firstErrorElement = section;
+            //            }
+            //        });
+
+            //        section.querySelectorAll(".required-text").forEach(input => {
+            //            if (input.offsetParent !== null && input.value.trim() === "") {
+            //                sectionHasError = true;
+            //                input.classList.add("border-red-500");
+            //                if (!firstErrorElement) firstErrorElement = section;
+            //            }
+            //        });
+
+            //        const checkboxes = section.querySelectorAll(".required-checkbox");
+            //        if (checkboxes.length > 0) {
+            //            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            //            if (!anyChecked) {
+            //                sectionHasError = true;
+            //                checkboxes.forEach(cb => cb.classList.add("border-red-500"));
+            //                if (!firstErrorElement) firstErrorElement = section;
+            //            }
+            //        }
+
+            //        if (sectionHasError) {
+            //            errorSections.push(sectionTitle);
+            //        }
+            //    });
+
+            //    if (errorSections.length > 0) {
+            //        Swal.fire({
+            //            icon: "error",
+            //            title: "請完成以下問卷項目",
+            //            html: errorSections.map(name => `<b>${name}</b>`).join("<br>"),
+            //            confirmButtonText: "確定"
+            //        });
+
+            //        if (firstErrorElement) {
+            //            firstErrorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+            //        }
+
+            //        return false;
+            //    }
+
+            //    return true;
+            //}
+            submitButton.addEventListener("click", function (e) {
+                if (typeof validateAllSteps === 'function' && !validateAllSteps()) {
+                    e.preventDefault();
+                } else {
+                    form.submit();
+                }
+            });
 
             prevButton.addEventListener("click", function () {
                 if (currentStep > 1) {
@@ -818,61 +846,17 @@
                 }
             });
 
+            submitButton.addEventListener("click", function (e) {
+                if (!validateAllSteps()) {
+                    e.preventDefault();
+                } else {
+                    form.submit();
+                }
+            });
+
             showStep(currentStep);
-
-            function isTrainerAuthenticated() {
-                return sessionStorage.getItem("TrainerAuthenticated") === "true";
-            }
-
-            function showTrainerAuthModal() {
-                trainerModal.classList.remove("hidden");
-            }
-
-            document.getElementById("closeModal").addEventListener("click", function () {
-                trainerModal.classList.add("hidden");
-            });
-            document.getElementById("medicalTeamButton").addEventListener("click", function (e) {
-                e.preventDefault();
-                document.getElementById("athleticTrainerModal").classList.remove("hidden");
-            });
-
-            document.getElementById("closeModal").addEventListener("click", function () {
-                document.getElementById("athleticTrainerModal").classList.add("hidden");
-            });
-            //document.getElementById("trainerAuthForm").addEventListener("submit", function (e) {
-            //    e.preventDefault();
-            //    const userName = document.getElementById("trainerUserName").value;
-            //    const password = document.getElementById("trainerPassword").value;
-
-            //    fetch("/MedicalEvaluation/ValidateAthleticTrainer", {
-            //        method: "POST",
-            //        headers: {
-            //            "Content-Type": "application/json"
-            //        },
-            //        body: JSON.stringify({ userName, password })
-            //    })
-            //        .then(response => response.json())
-            //        .then(data => {
-            //            if (data.success) {
-            //                sessionStorage.setItem("TrainerAuthenticated", "true");
-            //                trainerModal.classList.add("hidden");
-            //                window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
-            //            } else {
-            //                alert("身份驗證失敗，請確認帳號與密碼。");
-            //            }
-            //        })
-            //        .catch(() => alert("驗證時發生錯誤，請稍後再試。"));
-            //});
-
-            //medicalTeamButton.addEventListener("click", function (e) {
-            //    e.preventDefault();
-            //    if (isTrainerAuthenticated()) {
-            //        window.location.href = "/MedicalEvaluation/ConcussionMedicalEvaluation";
-            //    } else {
-            //        showTrainerAuthModal();
-            //    }
-            //});
         });
     </script>
+
 </body>
 </html>

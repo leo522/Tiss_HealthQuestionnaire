@@ -258,11 +258,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public ActionResult ForgotPassword(string athleteNumber, string newPassword, string confirmPassword)
+        public ActionResult ForgotPassword(string role, string account, string newPassword, string confirmPassword)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(athleteNumber) || string.IsNullOrWhiteSpace(newPassword))
+                if (string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(account) ||
+                    string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
                 {
                     ViewBag.ErrorMessage = "請填寫完整欄位";
                     return View();
@@ -280,20 +281,40 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
-                var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber);
-                if (user == null)
-                {
-                    ViewBag.ErrorMessage = "查無此帳號";
-                    return View();
-                }
-
                 var newSalt = GenerateSalt();
                 var newHashedPwd = ComputeSha256Hash(newPassword, newSalt);
 
-                user.Salt = newSalt;
-                user.Password = newHashedPwd;
-                _db.SaveChanges();
+                if (role == "athlete")
+                {
+                    var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == account);
+                    if (user == null)
+                    {
+                        ViewBag.ErrorMessage = "查無此選手帳號";
+                        return View();
+                    }
 
+                    user.Salt = newSalt;
+                    user.Password = newHashedPwd;
+                }
+                else if (role == "trainer")
+                {
+                    var trainer = _db.AthleticTrainer.FirstOrDefault(t => t.ATName == account);
+                    if (trainer == null)
+                    {
+                        ViewBag.ErrorMessage = "查無此防護員帳號";
+                        return View();
+                    }
+
+                    trainer.Salt = newSalt;
+                    trainer.Password = newHashedPwd;
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "身份資訊錯誤";
+                    return View();
+                }
+
+                _db.SaveChanges();
                 ViewBag.Message = "密碼重設成功，請重新登入";
                 return View();
             }

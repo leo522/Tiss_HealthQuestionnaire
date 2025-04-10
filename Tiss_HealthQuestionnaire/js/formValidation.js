@@ -1,82 +1,96 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    function validateForm() {
-        let isValid = true;
-        let firstErrorElement = null;
-        let errorSections = new Set();
+﻿let steps = null;
 
-        document.querySelectorAll(".error-text").forEach(el => el.classList.add("hidden"));
-        document.querySelectorAll(".required-radio, .required-checkbox, .required-text").forEach(el => el.classList.remove("border-red-500"));
+function clearValidationErrors() {
+    document.querySelectorAll(".border-red-500").forEach(el => el.classList.remove("border-red-500"));
+}
 
-        document.querySelectorAll(".question-step").forEach(section => {
-            const sectionTitle = section.querySelector("h3, h2")?.innerText.trim();
-            let sectionHasError = false;
+function validateAllSteps() {
+    if (!steps) steps = document.querySelectorAll(".question-step");
 
-            section.querySelectorAll(".required-radio").forEach(radio => {
-                const name = radio.getAttribute("name");
-                const radios = section.querySelectorAll(`input[name="${name}"]`);
-                const checked = [...radios].some(r => r.checked);
+    clearValidationErrors();
+    let firstErrorElement = null;
+    const errorSections = [];
 
-                if (!checked) {
-                    isValid = false;
+    steps.forEach((section, idx) => {
+        const sectionTitle = section.dataset.sectionName || `第 ${idx + 1} 步`;
+        let sectionHasError = false;
+        const sectionName = section.dataset.sectionName;
+
+        if (sectionName === "過去傷害(已復原)" || sectionName === "目前傷害狀況") {
+            const isYes = section.querySelector(`input[name='${sectionName === "過去傷害(已復原)" ? "pastInjuryStatus" : "currentInjuryStatus"}'][value='yes']:checked`);
+            if (isYes) {
+                const partSelector = sectionName === "過去傷害(已復原)" ? ".pastInjury-injury-part-checkbox" : ".currentInjury-injury-part-checkbox";
+                const typeSelector = sectionName === "過去傷害(已復原)" ? ".pastInjury-injury-type-checkbox" : ".currentInjury-injury-type-checkbox";
+                const treatSelector = sectionName === "過去傷害(已復原)" ? "input[name='SelectedTreatmentMethods']" : "input[name='SelectedCurrentTreatmentMethods']";
+
+                const part = section.querySelectorAll(partSelector);
+                const type = section.querySelectorAll(typeSelector);
+                const treat = section.querySelectorAll(treatSelector);
+
+                const validPart = Array.from(part).some(cb => cb.checked);
+                const validType = Array.from(type).some(cb => cb.checked);
+                const validTreat = Array.from(treat).some(cb => cb.checked);
+
+                if (!validPart || !validType || !validTreat) {
                     sectionHasError = true;
-                    radios.forEach(r => r.classList.add("border-red-500"));
+                    [...part, ...type, ...treat].forEach(cb => cb.classList.add("border-red-500"));
                     if (!firstErrorElement) firstErrorElement = section;
                 }
-            });
+            } else {
+                return; // 若選「無」，略過驗證
+            }
+        }
 
-            const checkboxes = section.querySelectorAll(".required-checkbox");
-            let anyChecked = [...checkboxes].some(cb => cb.checked);
-            if (checkboxes.length > 0 && !anyChecked) {
-                isValid = false;
+        // 一般欄位驗證
+        const radios = section.querySelectorAll("input.required-radio[type='radio']");
+        const groupedNames = [...new Set(Array.from(radios).map(r => r.name))];
+        groupedNames.forEach(name => {
+            const group = section.querySelectorAll(`input[name='${name}']`);
+            const hasChecked = Array.from(group).some(r => r.checked);
+            if (!hasChecked) {
+                sectionHasError = true;
+                group.forEach(r => r.classList.add("border-red-500"));
+                if (!firstErrorElement) firstErrorElement = section;
+            }
+        });
+
+        section.querySelectorAll(".required-text").forEach(input => {
+            if (input.offsetParent !== null && input.value.trim() === "") {
+                sectionHasError = true;
+                input.classList.add("border-red-500");
+                if (!firstErrorElement) firstErrorElement = section;
+            }
+        });
+
+        const checkboxes = section.querySelectorAll(".required-checkbox");
+        if (checkboxes.length > 0) {
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            if (!anyChecked) {
                 sectionHasError = true;
                 checkboxes.forEach(cb => cb.classList.add("border-red-500"));
                 if (!firstErrorElement) firstErrorElement = section;
             }
+        }
 
-            section.querySelectorAll(".other-checkbox").forEach(otherCheckbox => {
-                const relatedTextField = document.querySelector(otherCheckbox.dataset.target);
-                if (otherCheckbox.checked && relatedTextField && relatedTextField.value.trim() === "") {
-                    isValid = false;
-                    sectionHasError = true;
-                    relatedTextField.classList.add("border-red-500");
-                    if (!firstErrorElement) firstErrorElement = section;
-                }
-            });
+        if (sectionHasError) {
+            errorSections.push(sectionTitle);
+        }
+    });
 
-            if (sectionHasError && sectionTitle) {
-                errorSections.add(sectionTitle);
-            }
+    if (errorSections.length > 0) {
+        Swal.fire({
+            icon: "error",
+            title: "請完成以下問卷項目",
+            html: errorSections.map(name => `<b>${name}</b>`).join("<br>"),
+            confirmButtonText: "確定"
         });
 
-        if (!isValid) {
-            Swal.fire({
-                icon: "error",
-                title: "請完成以下問卷項目",
-                html: [...errorSections].map(title => `<b>${title}</b>`).join("<br>"),
-                confirmButtonText: "確定"
-            });
-
-            if (firstErrorElement) {
-                firstErrorElement.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
+        if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
-        return isValid;
+        return false;
     }
 
-    document.body.addEventListener("change", function (event) {
-        const target = event.target;
-        if (target.classList.contains("other-checkbox")) {
-            const relatedTextField = document.querySelector(target.dataset.target);
-            if (relatedTextField) {
-                relatedTextField.classList.toggle("hidden", !target.checked);
-            }
-        }
-    });
-
-    document.getElementById("submitButton").addEventListener("click", function (event) {
-        if (!validateForm()) {
-            event.preventDefault();
-        }
-    });
-});
+    return true;
+}
