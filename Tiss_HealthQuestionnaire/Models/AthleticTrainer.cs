@@ -22,5 +22,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+        public string Password { get; set; }
+        public string Salt { get; set; }
     }
 }

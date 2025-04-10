@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Tiss_HealthQuestionnaire.Models;
 using static Tiss_HealthQuestionnaire.Models.AccountViewModel;
+using System.Security.Principal;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
@@ -18,8 +19,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
     {
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
-        #region 註冊
-        public ActionResult Register()
+        #region 註冊身分選擇
+        public ActionResult SelectRole()
+        {
+            return View();
+        }
+        #endregion
+
+        #region 選手註冊
+        public ActionResult RegisterAthlete()
         {
             ViewBag.GenderList = _db.Gender.ToList();
 
@@ -34,11 +42,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
             Session["NextAthleteID"] = formattedAthleteID;
             ViewBag.AthleteID = formattedAthleteID;
 
-            return View();
+            return View(); // Views/Account/RegisterAthlete.cshtml
         }
 
         [HttpPost]
-        public ActionResult Register(string athleteNumber, string userName, string pwd, string email, int genderID, string sportSpecialization, DateTime birthDate)
+        public ActionResult RegisterAthlete(string athleteNumber, string userName, string pwd, string email, int genderID, string sportSpecialization, DateTime birthDate)
         {
             try
             {
@@ -46,28 +54,28 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "註冊過程中發生錯誤，請重新嘗試。";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
+                    return View("RegisterAthlete");
                 }
 
                 if (!int.TryParse(Session["NextAthleteID"].ToString(), out int athleteID))
                 {
                     ViewBag.ErrorMessage = "編號格式錯誤，請重新註冊。";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
+                    return View("RegisterAthlete");
                 }
 
                 if (string.IsNullOrWhiteSpace(pwd) || pwd.Length < 6)
                 {
                     ViewBag.ErrorMessage = "密碼長度至少要6位數";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
+                    return View("RegisterAthlete");
                 }
 
                 if (_db.AthleteUser.Any(u => u.Name == userName))
                 {
                     ViewBag.ErrorMessage = "該帳號已存在";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View();
+                    return View("RegisterAthlete");
                 }
 
                 var salt = GenerateSalt();
@@ -93,13 +101,67 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 _db.SaveChanges();
                 Session.Remove("NextAthleteID");
 
+                TempData["RegisterMessage"] = "註冊成功，請登入";
                 return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
                 ViewBag.GenderList = _db.Gender.ToList();
-                return View();
+                return View("RegisterAthlete");
+            }
+        }
+        #endregion
+
+        #region 防護員註冊
+        public ActionResult RegisterTrainer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RegisterTrainer(string userName, string pwd, string title, string department, string expertise)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(pwd) || pwd.Length < 6)
+                {
+                    ViewBag.ErrorMessage = "密碼長度至少要6位數";
+                    return View("RegisterTrainer");
+                }
+
+                if (_db.AthleticTrainer.Any(t => t.ATName == userName))
+                {
+                    ViewBag.ErrorMessage = "該帳號已存在";
+                    return View("RegisterTrainer");
+                }
+
+                var salt = GenerateSalt();
+                var encryptedPwd = ComputeSha256Hash(pwd, salt);
+
+                var newTrainer = new AthleticTrainer
+                {
+                    ATName = userName,
+                    Title = title,
+                    Department = department,
+                    Expertise = expertise,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = encryptedPwd,
+                    Salt = salt
+                };
+
+                _db.AthleticTrainer.Add(newTrainer);
+                _db.SaveChanges();
+
+                TempData["RegisterMessage"] = "防護員註冊成功，請登入";
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                return View("RegisterTrainer");
             }
         }
         #endregion
@@ -144,37 +206,41 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 登入
-        public ActionResult Login()
+        public ActionResult Login(string role)
         {
-            Session.Clear();
-            return View();
+            ViewBag.Role = role;
+            return View("Login");
         }
 
         [HttpPost]
-        public ActionResult Login(string athleteNumber, string pwd)
+        public ActionResult Login(string role, string account, string pwd)
         {
             try
             {
-                var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == athleteNumber);
-                if (user == null)
+                if (role == "athlete")
                 {
-                    ViewBag.ErrorMessage = "帳號錯誤";
-                    return View();
+                    var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == account);
+                    if (user != null && user.Password == ComputeSha256Hash(pwd, user.Salt))
+                    {
+                        Session["UserRole"] = "athlete";
+                        Session["UserName"] = user.Name;
+                        return RedirectToAction("Main", "Questionnaire");
+                    }
+                }
+                else if (role == "trainer")
+                {
+                    var trainer = _db.AthleticTrainer.FirstOrDefault(t => t.ATName == account);
+                    if (trainer != null && pwd == "TISStrainer") // 密碼驗證機制
+                    {
+                        Session["UserRole"] = "trainer";
+                        Session["UserName"] = trainer.ATName;
+                        return RedirectToAction("Main", "MedicalEvaluation");
+                    }
                 }
 
-                var hashedPwd = ComputeSha256Hash(pwd, user.Salt);
-
-                if (user.Password == hashedPwd)
-                {
-                    Session["LoggedIn"] = true;
-                    Session["UserName"] = user.Name;
-                    return RedirectToAction("Main", "Questionnaire");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "密碼錯誤";
-                    return View();
-                }
+                ViewBag.Role = role;
+                ViewBag.ErrorMessage = "帳號或密碼錯誤";
+                return View("Login");
             }
             catch (Exception ex)
             {

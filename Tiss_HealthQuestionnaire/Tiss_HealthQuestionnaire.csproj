@@ -435,7 +435,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_HealthLayout.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Questionnaire\Main.cshtml" />
@@ -471,6 +470,9 @@
     <Content Include="Views\MedicalEvaluation\CoordinationAndBalanceExamination.cshtml" />
     <Content Include="Views\MedicalEvaluation\DelayedRecall.cshtml" />
     <Content Include="Views\MedicalEvaluation\CognitiveScreeningTotalScore.cshtml" />
+    <Content Include="Views\Account\SelectRole.cshtml" />
+    <Content Include="Views\Account\RegisterAthlete.cshtml" />
+    <Content Include="Views\Account\RegisterTrainer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
