@@ -1,4 +1,6 @@
-﻿let steps = null;
+﻿/*驗證選手問卷題目必填*/
+
+let steps = null;
 
 function clearValidationErrors() {
     document.querySelectorAll(".border-red-500").forEach(el => el.classList.remove("border-red-500"));

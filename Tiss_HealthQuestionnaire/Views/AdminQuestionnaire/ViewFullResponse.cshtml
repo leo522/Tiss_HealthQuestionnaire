@@ -1,0 +1,355 @@
+﻿@model Tiss_HealthQuestionnaire.Models.AdminViewResponseViewModel
+@{
+    ViewBag.Title = "問卷填寫紀錄檢視";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<h1 class="text-2xl font-bold mb-6">問卷填寫紀錄：@Model.AthleteID - @Model.FillName</h1>
+
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <p><strong>填寫日期：</strong>@Model.FillingDate.ToString("yyyy-MM-dd")</p>
+    <p><strong>選手編號：</strong>@Model.AthleteID</p>
+    <p><strong>填寫人：</strong>@Model.FillName</p>
+</div>
+
+@*1.過去健康檢查病史*@
+@if (Model.PastHealthList != null && Model.PastHealthList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">過去健康檢查病史</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">是否異常</th>
+                    <th class="border border-gray-300 px-4 py-2">備註</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PastHealthList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">@((item.HasAbnormalItems) ? "是" : "否")</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.Details</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*2.過敏史*@
+@if (Model.AllergicHistoryList != null && Model.AllergicHistoryList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">過敏史</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">過敏項目</th>
+                    <th class="border border-gray-300 px-4 py-2">是否過敏</th>
+                    <th class="border border-gray-300 px-4 py-2">細節</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AllergicHistoryList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">@item.AllergyType</td>
+                        <td class="border border-gray-300 px-4 py-2">@(item.IsYes ? "是" : "否")</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.Details</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*3.家族病史(二等親)*@
+@if (Model.FamilyHistoryList != null && Model.FamilyHistoryList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">家族病史(二等親)</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">疾病</th>
+                    <th class="border border-gray-300 px-4 py-2">狀態</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FamilyHistoryList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">@item.Disease</td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            @(item.Status == "Yes" ? "是" : item.Status == "No" ? "否" : "未知")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*4.過去病史*@
+@if (Model.PastHistoryList != null && Model.PastHistoryList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">過去病史</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">疾病</th>
+                    <th class="border border-gray-300 px-4 py-2">狀態</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PastHistoryList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">@item.Disease</td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            @(item.Status == "Yes" ? "是" : item.Status == "No" ? "否" : "未知")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*5.現在病史*@
+@if (Model.PresentIllnessList != null && Model.PresentIllnessList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">現在病史</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">部位</th>
+                    <th class="border border-gray-300 px-4 py-2">是否正在治療</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PresentIllnessList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">@item.BodyPart</td>
+                        <td class="border border-gray-300 px-4 py-2">@((item.ReceivingTherapy == true) ? "是" : "否")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*6.藥物史*@
+@if (Model.PastDrugsList != null && Model.PastDrugsList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">藥物史</h2>
+        <ul class="list-disc pl-6">
+            @foreach (var drug in Model.PastDrugsList)
+            {
+                <li>@drug.DrugName</li>
+            }
+        </ul>
+    </div>
+}
+
+@*7.營養品*@
+@if (Model.PastSupplementsList != null && Model.PastSupplementsList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">營養品</h2>
+        <ul class="list-disc pl-6">
+            @foreach (var item in Model.PastSupplementsList)
+            {
+                <li>@item.SupplementName</li>
+            }
+        </ul>
+    </div>
+}
+
+@*8.女性問卷*@
+@if (Model.FemaleQuestionnaireList != null && Model.FemaleQuestionnaireList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">女性問卷</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">問題</th>
+                    <th class="border px-4 py-2">答案</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FemaleQuestionnaireList)
+                {
+                    <tr>
+                        <td class="border px-4 py-2">@item.Question</td>
+                        <td class="border px-4 py-2">@item.Answer</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*9.過去傷害*@
+@if (Model.PastInjuryList != null && Model.PastInjuryList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">過去傷害狀況（已復原）</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">部位</th>
+                    <th class="border px-4 py-2">側別</th>
+                    <th class="border px-4 py-2">傷勢類型</th>
+                    <th class="border px-4 py-2">治療方式</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var injury in Model.PastInjuryList)
+                {
+                    <tr>
+                        <td class="border px-4 py-2">@injury.BodyPart</td>
+                        <td class="border px-4 py-2">@injury.Side</td>
+                        <td class="border px-4 py-2">@injury.InjuryType</td>
+                        <td class="border px-4 py-2">@injury.Treatment</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*10.現在去傷害*@
+@if (Model.CurrentInjuryList != null && Model.CurrentInjuryList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">目前傷害狀況</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">部位</th>
+                    <th class="border px-4 py-2">側別</th>
+                    <th class="border px-4 py-2">傷勢類型</th>
+                    <th class="border px-4 py-2">治療方式</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var injury in Model.CurrentInjuryList)
+                {
+                    <tr>
+                        <td class="border px-4 py-2">@injury.BodyPart</td>
+                        <td class="border px-4 py-2">@injury.Side</td>
+                        <td class="border px-4 py-2">@injury.InjuryType</td>
+                        <td class="border px-4 py-2">@injury.Treatment</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*11.心血管篩檢*@
+@if (Model.CardiovascularList != null && Model.CardiovascularList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">心血管篩檢</h2>
+        <ul class="list-disc pl-6">
+            @foreach (var item in Model.CardiovascularList)
+            {
+                <li>@item.QuestionNumber. @Html.Raw(item.QuestionText)</li>
+            }
+        </ul>
+    </div>
+}
+
+@*12.腦震盪篩檢 - 選手自填*@
+@if (Model.ConcussionScreeningList != null && Model.ConcussionScreeningList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">腦震盪篩檢 - 選手自填</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">問題</th>
+                    <th class="border px-4 py-2">是否發生</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ConcussionScreeningList)
+                {
+                    <tr>
+                        <td class="border px-4 py-2">@item.Question</td>
+                        <td class="border px-4 py-2">@((item.Answer == true) ? "是" : "否")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@*13.症狀自我評估 - 選手自填*@
+@if (Model.SymptomEvaluationList != null && Model.SymptomEvaluationList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">症狀自我評估</h2>
+        <table class="min-w-full bg-white border border-gray-300 text-center">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">症狀</th>
+                    <th class="border border-gray-300 px-4 py-2">嚴重程度 (0~6分)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SymptomEvaluationList)
+                {
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2 text-left">@item.Symptom</td>
+                        <td class="border border-gray-300 px-4 py-2">@item.Severity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@*14.骨科篩檢*@
+@if (Model.OrthopaedicScreeningList != null && Model.OrthopaedicScreeningList.Any())
+{
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4">骨科篩檢</h2>
+        <table class="min-w-full bg-white border border-gray-300 text-center">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">編號</th>
+                    <th class="border px-4 py-2">指示操作</th>
+                    <th class="border px-4 py-2">觀察重點</th>
+                    <th class="border px-4 py-2">結果</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrthopaedicScreeningList)
+                {
+                    <tr>
+                        <td class="border px-4 py-2">@item.TestNumber</td>
+                        <td class="border px-4 py-2">@item.TestName</td>
+                        <td class="border px-4 py-2">@item.Observation</td>
+                        <td class="border px-4 py-2">@((item.Result == "Normal") ? "正常" : "異常")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="text-center">
+    <a href="@Url.Action("SelectAthlete", "AdminQuestionnaire")" class="inline-block bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
+        返回選擇頁
+    </a>
+</div>

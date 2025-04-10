@@ -1424,7 +1424,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     QuestionnaireResponseID = responseId,
                     QuestionNumber = item.ID,
-                    Answer = true
+                    Answer = true,
+                    QuestionText = item.ItemZh
                 }).ToList();
 
             System.Diagnostics.Debug.WriteLine($"CardiovascularScreening 篩選後數量: {cardiovascularList.Count}");

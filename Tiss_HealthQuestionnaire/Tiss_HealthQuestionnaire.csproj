@@ -129,6 +129,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminQuestionnaireController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MedicalEvaluationController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
@@ -137,6 +138,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\AdminViewResponseViewModel.cs" />
     <Compile Include="Models\AllergicHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -473,6 +475,8 @@
     <Content Include="Views\Account\SelectRole.cshtml" />
     <Content Include="Views\Account\RegisterAthlete.cshtml" />
     <Content Include="Views\Account\RegisterTrainer.cshtml" />
+    <Content Include="Views\AdminQuestionnaire\SelectAthlete.cshtml" />
+    <Content Include="Views\AdminQuestionnaire\ViewFullResponse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

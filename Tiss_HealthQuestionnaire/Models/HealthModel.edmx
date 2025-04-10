@@ -399,6 +399,7 @@
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
           <Property Name="QuestionNumber" Type="int" Nullable="false" />
           <Property Name="Answer" Type="bit" Nullable="false" />
+          <Property Name="QuestionText" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ResponseConcussionScreening">
           <Key>
@@ -1616,6 +1617,7 @@
           <Property Name="QuestionNumber" Type="Int32" Nullable="false" />
           <Property Name="Answer" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseCardiovascularScreening_QuestionnaireResponse" FromRole="ResponseCardiovascularScreening" ToRole="QuestionnaireResponse" />
+          <Property Name="QuestionText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ResponseConcussionScreening">
           <Key>
@@ -2543,6 +2545,7 @@
           <EntitySetMapping Name="ResponseCardiovascularScreening">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseCardiovascularScreening">
               <MappingFragment StoreEntitySet="ResponseCardiovascularScreening">
+                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
                 <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="QuestionNumber" ColumnName="QuestionNumber" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />

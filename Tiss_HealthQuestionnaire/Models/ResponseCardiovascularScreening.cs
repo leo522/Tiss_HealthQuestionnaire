@@ -18,6 +18,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public int QuestionnaireResponseID { get; set; }
         public int QuestionNumber { get; set; }
         public bool Answer { get; set; }
+        public string QuestionText { get; set; }
     
         public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
     }

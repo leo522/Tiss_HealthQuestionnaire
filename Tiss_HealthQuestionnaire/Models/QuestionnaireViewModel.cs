@@ -369,6 +369,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string Question { get; set; }
         public bool IsUsed { get; set; }
+        public string ItemZh { get; set; }
     }
     #endregion
 
