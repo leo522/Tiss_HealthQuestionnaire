@@ -138,8 +138,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\AdminProfile.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AdminViewResponseViewModel.cs" />
     <Compile Include="Models\AllergicHistory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AthleteProfile.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AthleteUser.cs">
@@ -189,6 +195,9 @@
     <Compile Include="Models\DelayedRecall.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorLog.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -216,21 +225,15 @@
     <Compile Include="Models\ImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ImmediateMemory_Backup.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ImmediateMemory_Obsolete.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\InjuryStatusViewModel.cs" />
+    <Compile Include="Models\LoginLog.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MedicalandFamilyHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
     <Compile Include="Models\MedicalViewModel.cs" />
-    <Compile Include="Models\ModifiedBalanceTest.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -329,6 +332,15 @@
     <Compile Include="Models\SymptomEvaluation.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SystemLog.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemUser.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Team.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TemporaryQuestionnaireData.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -338,10 +350,16 @@
     <Compile Include="Models\TimedTandemGait.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrainerProfile.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Treatment.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TreatmentMethod.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRole.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -477,6 +495,7 @@
     <Content Include="Views\Account\RegisterTrainer.cshtml" />
     <Content Include="Views\AdminQuestionnaire\SelectAthlete.cshtml" />
     <Content Include="Views\AdminQuestionnaire\ViewFullResponse.cshtml" />
+    <Content Include="Views\Account\RegisterAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

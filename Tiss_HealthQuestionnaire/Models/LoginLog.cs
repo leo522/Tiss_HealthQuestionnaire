@@ -12,15 +12,14 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ImmediateMemory_Backup
+    public partial class LoginLog
     {
-        public int ID { get; set; }
-        public string Word { get; set; }
-        public Nullable<int> FirstTest0 { get; set; }
-        public Nullable<int> FirstTest1 { get; set; }
-        public Nullable<int> SecondTest0 { get; set; }
-        public Nullable<int> SecondTest1 { get; set; }
-        public Nullable<int> ThirdTest0 { get; set; }
-        public Nullable<int> ThirdTest1 { get; set; }
+        public int LoginID { get; set; }
+        public int UserID { get; set; }
+        public System.DateTime LoginTime { get; set; }
+        public string IPAddress { get; set; }
+        public string UserAgent { get; set; }
+    
+        public virtual SystemUser SystemUser { get; set; }
     }
 }

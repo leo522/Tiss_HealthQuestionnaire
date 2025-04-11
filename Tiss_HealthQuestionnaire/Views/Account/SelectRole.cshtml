@@ -6,6 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <title>選擇身份</title>
+    <link rel="icon" href="~/img/favicon.svg" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/loginStyle.css" rel="stylesheet" />
 </head>
@@ -18,11 +19,13 @@
         <div class="mt-4">
             <a href="@Url.Action("Login", "Account", new { role = "athlete" })" class="btn btn-primary btn-block">選手登入</a>
             <a href="@Url.Action("Login", "Account", new { role = "trainer" })" class="btn btn-success btn-block">防護員登入</a>
+            <a href="@Url.Action("Login", "Account", new { role = "admin" })" class="btn btn-danger btn-block">管理員登入</a>
         </div>
 
         <div class="mt-3">
-            <a href="@Url.Action("RegisterAthlete", "Account", new { role = "athlete" })">註冊選手帳號</a> |
-            <a href="@Url.Action("RegisterTrainer", "Account", new { role = "trainer" })">註冊防護員帳號</a>
+            <a href="@Url.Action("SelectRole", "Account", new { role = "athlete" })">註冊選手帳號</a> |
+            <a href="@Url.Action("SelectRole", "Account", new { role = "trainer" })">註冊防護員帳號</a> |
+            <a href="@Url.Action("SelectRole", "Account", new { role = "admin" })">註冊管理員帳號</a>
         </div>
     </div>
 </body>

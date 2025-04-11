@@ -16,7 +16,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string GenderDisplay => GenderID == 1 ? "男" : "女";
         public DateTime FillingDate { get; set; }
 
-
         public List<ResponsePastHealth> PastHealthList { get; set; }
         public List<ResponseAllergicHistory> AllergicHistoryList { get; set; }
         public List<ResponseFamilyHistory> FamilyHistoryList { get; set; }

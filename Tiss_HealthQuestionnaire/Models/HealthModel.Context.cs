@@ -45,9 +45,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
-        public virtual DbSet<ImmediateMemory_Obsolete> ImmediateMemory_Obsolete { get; set; }
         public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
-        public virtual DbSet<ModifiedBalanceTest> ModifiedBalanceTest { get; set; }
         public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
         public virtual DbSet<PasswordReset> PasswordReset { get; set; }
         public virtual DbSet<PastDrugs> PastDrugs { get; set; }
@@ -85,6 +83,14 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
-        public virtual DbSet<ImmediateMemory_Backup> ImmediateMemory_Backup { get; set; }
+        public virtual DbSet<AdminProfile> AdminProfile { get; set; }
+        public virtual DbSet<AthleteProfile> AthleteProfile { get; set; }
+        public virtual DbSet<ErrorLog> ErrorLog { get; set; }
+        public virtual DbSet<LoginLog> LoginLog { get; set; }
+        public virtual DbSet<SystemLog> SystemLog { get; set; }
+        public virtual DbSet<SystemUser> SystemUser { get; set; }
+        public virtual DbSet<Team> Team { get; set; }
+        public virtual DbSet<TrainerProfile> TrainerProfile { get; set; }
+        public virtual DbSet<UserRole> UserRole { get; set; }
     }
 }

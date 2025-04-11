@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>管理員註冊</title>
+    <link rel="icon" href="~/img/favicon.svg" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/registerStyle.css" rel="stylesheet" />
+    <script src="~/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="register-container">
+        <div class="text-center">
+            <img src="~/img/logo.svg" alt="Logo圖標" style="height: 45px; width: 100%;">
+        </div>
+
+        <form action="/AdminAccount/RegisterAdmin" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="userName" title="管理員帳號">管理員帳號</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="請輸入帳號名稱" required />
+            </div>
+            <div class="form-group">
+                <label for="email" title="Email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="請輸入 Email" required />
+            </div>
+            <div class="form-group">
+                <label for="password" title="密碼">密碼</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="請輸入密碼（至少6位）" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" title="註冊">註冊</button>
+        </form>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mt-3" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+    </div>
+</body>
+</html>

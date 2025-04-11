@@ -12,6 +12,7 @@ using System.Web.Security;
 using Tiss_HealthQuestionnaire.Models;
 using static Tiss_HealthQuestionnaire.Models.AccountViewModel;
 using System.Security.Principal;
+using System.Data;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
@@ -20,9 +21,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 註冊身分選擇
-        public ActionResult SelectRole()
+        public ActionResult SelectRole(string role)
         {
-            return View();
+            switch (role?.ToLower())
+            {
+                case "athlete":
+                    return RedirectToAction("RegisterAthlete");
+                case "trainer":
+                    return RedirectToAction("RegisterTrainer");
+                case "admin":
+                    return RedirectToAction("RegisterAdmin");
+                default:
+                    return View();
+            }
         }
         #endregion
 
@@ -30,78 +41,68 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult RegisterAthlete()
         {
             ViewBag.GenderList = _db.Gender.ToList();
-
-            int nextAthleteID = 1;
-            var maxAthleteID = _db.AthleteUser.Max(a => (int?)a.AthleteID);
-            if (maxAthleteID.HasValue)
-            {
-                nextAthleteID = maxAthleteID.Value + 1;
-            }
-
-            string formattedAthleteID = nextAthleteID.ToString("D5");
-            Session["NextAthleteID"] = formattedAthleteID;
-            ViewBag.AthleteID = formattedAthleteID;
-
-            return View(); // Views/Account/RegisterAthlete.cshtml
+            return View();
         }
 
         [HttpPost]
-        public ActionResult RegisterAthlete(string athleteNumber, string userName, string pwd, string email, int genderID, string sportSpecialization, DateTime birthDate)
+        public ActionResult RegisterAthlete(string userName, string password, string email, string athleteNumber, string sportSpecialization, DateTime birthDate, int genderID)
         {
             try
             {
-                if (Session["NextAthleteID"] == null)
+                if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 {
-                    ViewBag.ErrorMessage = "註冊過程中發生錯誤，請重新嘗試。";
+                    ViewBag.ErrorMessage = "密碼長度至少為6位數";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View("RegisterAthlete");
+                    return View();
                 }
 
-                if (!int.TryParse(Session["NextAthleteID"].ToString(), out int athleteID))
+                if (_db.SystemUser.Any(u => u.UserName == userName))
                 {
-                    ViewBag.ErrorMessage = "編號格式錯誤，請重新註冊。";
+                    ViewBag.ErrorMessage = "此帳號名稱已被使用";
                     ViewBag.GenderList = _db.Gender.ToList();
-                    return View("RegisterAthlete");
-                }
-
-                if (string.IsNullOrWhiteSpace(pwd) || pwd.Length < 6)
-                {
-                    ViewBag.ErrorMessage = "密碼長度至少要6位數";
-                    ViewBag.GenderList = _db.Gender.ToList();
-                    return View("RegisterAthlete");
-                }
-
-                if (_db.AthleteUser.Any(u => u.Name == userName))
-                {
-                    ViewBag.ErrorMessage = "該帳號已存在";
-                    ViewBag.GenderList = _db.Gender.ToList();
-                    return View("RegisterAthlete");
+                    return View();
                 }
 
                 var salt = GenerateSalt();
-                var encryptedPwd = ComputeSha256Hash(pwd, salt);
+                var hashedPwd = ComputeSha256Hash(password, salt);
 
-                var newUser = new AthleteUser
+                var systemUser = new SystemUser
                 {
-                    AthleteID = athleteID,
-                    AthleteNumber = athleteNumber,
-                    Name = userName,
-                    Password = encryptedPwd,
+                    UserName = userName,
+                    Password = hashedPwd,
                     Salt = salt,
                     Email = email,
-                    SportSpecialization = sportSpecialization,
-                    BirthDate = birthDate,
-                    CreatedDate = DateTime.Now,
+                    RoleID = 1, //選手角色
                     IsActive = true,
-                    Registered = false,
-                    GenderID = genderID,
+                    CreatedDate = DateTime.Now
                 };
-
-                _db.AthleteUser.Add(newUser);
+                _db.SystemUser.Add(systemUser);
                 _db.SaveChanges();
-                Session.Remove("NextAthleteID");
 
-                TempData["RegisterMessage"] = "註冊成功，請登入";
+                var userId = systemUser.UserID;
+                var athlete = new AthleteProfile
+                {
+                    UserID = userId,
+                    AthleteNumber = athleteNumber,
+                    Name = userName,
+                    BirthDate = birthDate,
+                    GenderID = genderID,
+                    SportSpecialization = sportSpecialization
+                };
+                _db.AthleteProfile.Add(athlete);
+                _db.SaveChanges();
+
+                _db.SystemLog.Add(new SystemLog
+                {
+                    UserID = userId,
+                    Action = "RegisterAthlete",
+                    Message = "新選手註冊成功",
+                    LogDate = DateTime.Now
+                });
+
+                _db.SaveChanges();
+
+                TempData["RegisterMessage"] = "註冊成功，請登入。";
                 return RedirectToAction("Login");
             }
             catch (Exception ex)
@@ -120,39 +121,67 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterTrainer(string userName, string pwd, string title, string department, string expertise)
+        public ActionResult RegisterTrainer(string userName, string password, string title, string department, string expertise, string email)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(pwd) || pwd.Length < 6)
+                if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 {
-                    ViewBag.ErrorMessage = "密碼長度至少要6位數";
-                    return View("RegisterTrainer");
+                    ViewBag.ErrorMessage = "密碼長度至少需6位";
+                    return View();
                 }
 
-                if (_db.AthleticTrainer.Any(t => t.ATName == userName))
+                if (_db.SystemUser.Any(u => u.UserName == userName))
                 {
-                    ViewBag.ErrorMessage = "該帳號已存在";
-                    return View("RegisterTrainer");
+                    ViewBag.ErrorMessage = "帳號已存在";
+                    return View();
                 }
 
                 var salt = GenerateSalt();
-                var encryptedPwd = ComputeSha256Hash(pwd, salt);
+                var hashedPwd = ComputeSha256Hash(password, salt);
 
-                var newTrainer = new AthleticTrainer
+                var trainerRoleId = _db.UserRole.FirstOrDefault(r => r.RoleName == "Trainer")?.RoleID;
+                if (trainerRoleId == null)
                 {
+                    ViewBag.ErrorMessage = "系統錯誤：找不到防護員角色";
+                    return View();
+                }
+
+                var systemUser = new SystemUser
+                {
+                    UserName = userName,
+                    Password = hashedPwd,
+                    Salt = salt,
+                    Email = email,
+                    RoleID = trainerRoleId.Value,
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                };
+
+                _db.SystemUser.Add(systemUser);
+                _db.SaveChanges();
+
+                var trainerProfile = new TrainerProfile
+                {
+                    TrainerID = systemUser.UserID,
+                    UserID = systemUser.UserID,
                     ATName = userName,
                     Title = title,
                     Department = department,
-                    Expertise = expertise,
-                    CreatedDate = DateTime.Now,
-                    UpdatedDate = DateTime.Now,
-                    IsActive = true,
-                    Password = encryptedPwd,
-                    Salt = salt
+                    Expertise = expertise
                 };
 
-                _db.AthleticTrainer.Add(newTrainer);
+                _db.TrainerProfile.Add(trainerProfile);
+
+                _db.SystemLog.Add(new SystemLog
+                {
+                    UserID = systemUser.UserID,
+                    Action = "RegisterTrainer",
+                    Target = userName,
+                    Message = "註冊新防護員帳號",
+                    LogDate = DateTime.Now
+                });
+
                 _db.SaveChanges();
 
                 TempData["RegisterMessage"] = "防護員註冊成功，請登入";
@@ -166,23 +195,99 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 管理員註冊
+        public ActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterAdmin(string userName, string email, string password)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+                {
+                    ViewBag.ErrorMessage = "密碼長度至少需6位";
+                    return View("RegisterAdmin");
+                }
+
+                if (_db.SystemUser.Any(u => u.UserName == userName))
+                {
+                    ViewBag.ErrorMessage = "帳號已存在";
+                    return View("RegisterAdmin");
+                }
+
+                var salt = GenerateSalt();
+                var hashedPassword = ComputeSha256Hash(password, salt);
+
+                int adminRoleId = _db.UserRole.FirstOrDefault(r => r.RoleName == "Admin")?.RoleID ?? 0;
+                if (adminRoleId == 0)
+                {
+                    ViewBag.ErrorMessage = "尚未設定管理員角色，請聯絡系統管理者";
+                    return View("RegisterAdmin");
+                }
+
+                var newSystemUser = new SystemUser
+                {
+                    UserName = userName,
+                    Password = hashedPassword,
+                    Salt = salt,
+                    Email = email,
+                    RoleID = adminRoleId,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true
+                };
+
+                _db.SystemUser.Add(newSystemUser);
+                _db.SaveChanges();
+
+                _db.AdminProfile.Add(new AdminProfile
+                {
+                    UserID = newSystemUser.UserID,
+                    AdminName = userName
+                });
+                _db.SaveChanges();
+
+                _db.SystemLog.Add(new SystemLog
+                {
+                    UserID = newSystemUser.UserID,
+                    Action = "註冊管理員",
+                    Target = userName,
+                    Message = "成功註冊管理員帳號",
+                    LogDate = DateTime.Now
+                });
+                _db.SaveChanges();
+
+                TempData["RegisterMessage"] = "管理員註冊成功，請登入";
+                return RedirectToAction("Login", "Account");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                return View("RegisterAdmin");
+            }
+        }
+        #endregion
+
         #region 密碼加密 + Salt
         private static string GenerateSalt()
         {
-            byte[] saltBytes = new byte[16];
+            var bytes = new byte[16];
             using (var rng = new RNGCryptoServiceProvider())
             {
-                rng.GetBytes(saltBytes);
+                rng.GetBytes(bytes);
             }
-            return Convert.ToBase64String(saltBytes);
+            return Convert.ToBase64String(bytes);
         }
 
-        private static string ComputeSha256Hash(string rawData, string salt)
+        private static string ComputeSha256Hash(string input, string salt)
         {
-            using (SHA256 sha256Hash = SHA256.Create())
+            using (var sha256 = SHA256.Create())
             {
-                byte[] combined = Encoding.UTF8.GetBytes(salt + rawData);
-                byte[] bytes = sha256Hash.ComputeHash(combined);
+                var raw = Encoding.UTF8.GetBytes(salt + input);
+                var bytes = sha256.ComputeHash(raw);
                 return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
             }
         }
@@ -217,30 +322,55 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                if (role == "athlete")
+                if (string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(pwd))
                 {
-                    var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == account);
-                    if (user != null && user.Password == ComputeSha256Hash(pwd, user.Salt))
-                    {
-                        Session["UserRole"] = "athlete";
-                        Session["UserName"] = user.Name;
-                        return RedirectToAction("Main", "Questionnaire");
-                    }
-                }
-                else if (role == "trainer")
-                {
-                    var trainer = _db.AthleticTrainer.FirstOrDefault(t => t.ATName == account);
-                    if (trainer != null && pwd == "TISStrainer") // 密碼驗證機制
-                    {
-                        Session["UserRole"] = "trainer";
-                        Session["UserName"] = trainer.ATName;
-                        return RedirectToAction("Main", "MedicalEvaluation");
-                    }
+                    ViewBag.ErrorMessage = "請填寫所有欄位";
+                    ViewBag.Role = role;
+                    return View("Login");
                 }
 
-                ViewBag.Role = role;
-                ViewBag.ErrorMessage = "帳號或密碼錯誤";
-                return View("Login");
+                var user = _db.SystemUser.FirstOrDefault(u => u.UserName == account);
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = "查無此帳號";
+                    ViewBag.Role = role;
+                    return View("Login");
+                }
+
+                var hashedInputPwd = ComputeSha256Hash(pwd, user.Salt);
+                if (user.Password != hashedInputPwd)
+                {
+                    ViewBag.ErrorMessage = "密碼錯誤";
+                    ViewBag.Role = role;
+                    return View("Login");
+                }
+
+                var roleName = _db.UserRole.FirstOrDefault(r => r.RoleID == user.RoleID)?.RoleName;
+                Session["UserRole"] = roleName?.ToLower();
+                Session["UserName"] = user.UserName;
+                Session["UserID"] = user.UserID;
+
+                _db.SystemLog.Add(new SystemLog
+                {
+                    UserID = user.UserID,
+                    Action = "登入",
+                    Message = $"使用者 {user.UserName} 成功登入 ({roleName})",
+                    LogDate = DateTime.Now
+                });
+                _db.SaveChanges();
+
+                switch (roleName?.ToLower())
+                {
+                    case "athlete":
+                        return RedirectToAction("Main", "Questionnaire");
+                    case "trainer":
+                        return RedirectToAction("Main", "MedicalEvaluation");
+                    case "admin":
+                        return RedirectToAction("Dashboard", "Admin");
+                    default:
+                        ViewBag.ErrorMessage = "身份錯誤";
+                        return View("Login");
+                }
             }
             catch (Exception ex)
             {

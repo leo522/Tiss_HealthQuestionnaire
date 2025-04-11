@@ -6,6 +6,7 @@
 
 <h1 class="text-2xl font-bold mb-6">問卷填寫紀錄：@Model.AthleteID - @Model.FillName</h1>
 
+@*基本資料*@
 <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <p><strong>填寫日期：</strong>@Model.FillingDate.ToString("yyyy-MM-dd")</p>
     <p><strong>選手編號：</strong>@Model.AthleteID</p>
@@ -317,7 +318,6 @@
         </table>
     </div>
 }
-
 
 @*14.骨科篩檢*@
 @if (Model.OrthopaedicScreeningList != null && Model.OrthopaedicScreeningList.Any())

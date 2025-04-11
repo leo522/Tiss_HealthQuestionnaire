@@ -12,14 +12,12 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ModifiedBalanceTest
+    public partial class AdminProfile
     {
-        public int Id { get; set; }
-        public string TestFoot { get; set; }
-        public string TestSurface { get; set; }
-        public string Footwear { get; set; }
-        public Nullable<int> DoubleLegErrorCount { get; set; }
-        public Nullable<int> TandemStanceErrorCount { get; set; }
-        public Nullable<int> SingleLegErrorCount { get; set; }
+        public int AdminID { get; set; }
+        public int UserID { get; set; }
+        public string AdminName { get; set; }
+    
+        public virtual SystemUser SystemUser { get; set; }
     }
 }
