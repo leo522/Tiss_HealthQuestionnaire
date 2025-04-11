@@ -129,11 +129,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminLogController.cs" />
     <Compile Include="Controllers\AdminQuestionnaireController.cs" />
+    <Compile Include="Controllers\AdminTeamController.cs" />
+    <Compile Include="Controllers\AdminUserController.cs" />
+    <Compile Include="Controllers\BaseAuthController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MedicalEvaluationController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -146,6 +149,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AthleteProfile.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AthleteTeam.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AthleteUser.cs">
@@ -353,6 +359,9 @@
     <Compile Include="Models\TrainerProfile.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrainerTeam.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Treatment.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -363,6 +372,11 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AdminEditRoleViewModel.cs" />
+    <Compile Include="ViewModels\AdminLogViewModel.cs" />
+    <Compile Include="ViewModels\AdminUserViewModel.cs" />
+    <Compile Include="ViewModels\AssignTeamMembersViewModel.cs" />
+    <Compile Include="ViewModels\TeamViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -496,11 +510,18 @@
     <Content Include="Views\AdminQuestionnaire\SelectAthlete.cshtml" />
     <Content Include="Views\AdminQuestionnaire\ViewFullResponse.cshtml" />
     <Content Include="Views\Account\RegisterAdmin.cshtml" />
+    <Content Include="Views\AdminUser\UserList.cshtml" />
+    <Content Include="Views\AdminUser\EditUserRole.cshtml" />
+    <Content Include="Views\AdminTeam\TeamList.cshtml" />
+    <Content Include="Views\AdminTeam\CreateTeam.cshtml" />
+    <Content Include="Views\AdminTeam\EditTeam.cshtml" />
+    <Content Include="Views\AdminTeam\AssignMembers.cshtml" />
+    <Content Include="Views\AdminLog\LogList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BaseAuth\" />
     <Folder Include="Views\MedicalTeam\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

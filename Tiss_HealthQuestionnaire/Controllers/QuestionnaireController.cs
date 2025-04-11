@@ -13,8 +13,10 @@ using static Tiss_HealthQuestionnaire.Models.QuestionnaireViewModel;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
-    public class QuestionnaireController : Controller
+    public class QuestionnaireController : BaseAuthController
     {
+        protected override string[] AllowedRoles => new[] { "athlete" ,"admin"};
+
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 主頁

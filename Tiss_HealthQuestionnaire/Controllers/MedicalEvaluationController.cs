@@ -7,8 +7,10 @@ using Tiss_HealthQuestionnaire.Models;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
-    public class MedicalEvaluationController : Controller
+    public class MedicalEvaluationController : BaseAuthController
     {
+        protected override string[] AllowedRoles => new[] { "trainer", "admin" };
+
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 醫療團隊評估主頁

@@ -1,0 +1,40 @@
+﻿@model List<Tiss_HealthQuestionnaire.ViewModels.TeamViewModel>
+@{
+    ViewBag.Title = "隊伍管理";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<link rel="icon" href="~/img/favicon.svg" />
+<h1 class="text-2xl font-bold mb-4">隊伍清單</h1>
+<div class="mb-3">
+    <a href="@Url.Action("CreateTeam", "AdminTeam")" class="btn btn-success">新增隊伍</a>
+</div>
+<table class="table table-bordered table-striped table-responsive">
+    <thead class="thead-light">
+        <tr>
+            <th>隊伍名稱</th>
+            <th>運動類別</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team in Model)
+        {
+            <tr>
+                <td>@team.TeamName</td>
+                <td>@team.SportType</td>
+                <td>@team.CreatedDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a href="@Url.Action("EditTeam", "AdminTeam", new { id = team.TeamID })" class="btn btn-sm btn-primary">編輯</a>
+                    <a href="@Url.Action("AssignMembers", "AdminTeam", new { id = team.TeamID })" class="btn btn-sm btn-info ml-1">指派成員</a>
+                    @using (Html.BeginForm("DeleteTeam", "AdminTeam", FormMethod.Post, new { onsubmit = "return confirm('確定要刪除此隊伍嗎？');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", team.TeamID)
+                        <button type="submit" class="btn btn-sm btn-danger ml-1">刪除</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -25,7 +25,10 @@ namespace Tiss_HealthQuestionnaire.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AdminProfile> AdminProfile { get; set; }
         public virtual DbSet<AllergicHistory> AllergicHistory { get; set; }
+        public virtual DbSet<AthleteProfile> AthleteProfile { get; set; }
+        public virtual DbSet<AthleteTeam> AthleteTeam { get; set; }
         public virtual DbSet<AthleteUser> AthleteUser { get; set; }
         public virtual DbSet<AthleticTrainer> AthleticTrainer { get; set; }
         public virtual DbSet<CardiovascularScreening> CardiovascularScreening { get; set; }
@@ -41,10 +44,12 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<CurrentInjuryType> CurrentInjuryType { get; set; }
         public virtual DbSet<CurrentTreatmentMethod> CurrentTreatmentMethod { get; set; }
         public virtual DbSet<DelayedRecall> DelayedRecall { get; set; }
+        public virtual DbSet<ErrorLog> ErrorLog { get; set; }
         public virtual DbSet<FamilyHistory> FamilyHistory { get; set; }
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
+        public virtual DbSet<LoginLog> LoginLog { get; set; }
         public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
         public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
         public virtual DbSet<PasswordReset> PasswordReset { get; set; }
@@ -78,19 +83,16 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<ResponseSymptomEvaluation> ResponseSymptomEvaluation { get; set; }
         public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
         public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
-        public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
-        public virtual DbSet<Test_AthleticTrainer> Test_AthleticTrainer { get; set; }
-        public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
-        public virtual DbSet<Treatment> Treatment { get; set; }
-        public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
-        public virtual DbSet<AdminProfile> AdminProfile { get; set; }
-        public virtual DbSet<AthleteProfile> AthleteProfile { get; set; }
-        public virtual DbSet<ErrorLog> ErrorLog { get; set; }
-        public virtual DbSet<LoginLog> LoginLog { get; set; }
         public virtual DbSet<SystemLog> SystemLog { get; set; }
         public virtual DbSet<SystemUser> SystemUser { get; set; }
         public virtual DbSet<Team> Team { get; set; }
+        public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
+        public virtual DbSet<Test_AthleticTrainer> Test_AthleticTrainer { get; set; }
+        public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<TrainerProfile> TrainerProfile { get; set; }
+        public virtual DbSet<TrainerTeam> TrainerTeam { get; set; }
+        public virtual DbSet<Treatment> Treatment { get; set; }
+        public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
     }
 }

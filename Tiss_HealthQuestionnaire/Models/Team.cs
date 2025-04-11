@@ -17,8 +17,8 @@ namespace Tiss_HealthQuestionnaire.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Team()
         {
-            this.AthleteProfile = new HashSet<AthleteProfile>();
-            this.TrainerProfile = new HashSet<TrainerProfile>();
+            this.AthleteTeam = new HashSet<AthleteTeam>();
+            this.TrainerTeam = new HashSet<TrainerTeam>();
         }
     
         public int TeamID { get; set; }
@@ -27,8 +27,8 @@ namespace Tiss_HealthQuestionnaire.Models
         public System.DateTime CreatedDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AthleteProfile> AthleteProfile { get; set; }
+        public virtual ICollection<AthleteTeam> AthleteTeam { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TrainerProfile> TrainerProfile { get; set; }
+        public virtual ICollection<TrainerTeam> TrainerTeam { get; set; }
     }
 }

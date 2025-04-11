@@ -1,0 +1,55 @@
+﻿@model Tiss_HealthQuestionnaire.ViewModels.AdminLogFilterViewModel
+@{
+    ViewBag.Title = "操作紀錄查詢";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<link rel="icon" href="~/img/favicon.svg" />
+<h1 class="text-2xl font-bold mb-4">系統操作紀錄</h1>
+
+@using (Html.BeginForm("LogList", "AdminLog", FormMethod.Get))
+{
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <label>帳號名稱</label>
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label>操作動作</label>
+            @Html.TextBoxFor(m => m.Action, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label>起始日期</label>
+            @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <label>結束日期</label>
+            @Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control" })
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">查詢</button>
+}
+
+<table class="table table-bordered table-striped mt-4">
+    <thead class="thead-light">
+        <tr>
+            <th>帳號</th>
+            <th>動作</th>
+            <th>目標</th>
+            <th>訊息</th>
+            <th>時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.Results)
+        {
+            <tr>
+                <td>@log.UserName</td>
+                <td>@log.Action</td>
+                <td>@log.Target</td>
+                <td>@log.Message</td>
+                <td>@log.LogDate.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

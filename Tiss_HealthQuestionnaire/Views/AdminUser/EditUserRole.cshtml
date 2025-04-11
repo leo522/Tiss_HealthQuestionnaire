@@ -1,0 +1,22 @@
+﻿@model Tiss_HealthQuestionnaire.ViewModels.AdminEditRoleViewModel
+@{
+    ViewBag.Title = "編輯使用者角色";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<link rel="icon" href="~/img/favicon.svg" />
+<h1 class="text-xl font-semibold mb-4">編輯角色：@Model.UserName</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="RoleID">角色</label>
+        @Html.DropDownListFor(model => model.RoleID, (SelectList)ViewBag.RoleList, "請選擇角色", new { @class = "form-control" })
+        @Html.HiddenFor(model => model.UserID)
+        @Html.HiddenFor(model => model.UserName)
+    </div>
+
+    <button type="submit" class="btn btn-primary">儲存變更</button>
+    <a href="@Url.Action("UserList", "AdminUser")" class="btn btn-secondary ml-2">取消</a>
+}

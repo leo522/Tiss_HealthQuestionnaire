@@ -7,8 +7,10 @@ using Tiss_HealthQuestionnaire.Models;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
-    public class AdminQuestionnaireController : Controller
+    public class AdminQuestionnaireController : BaseAuthController
     {
+        protected override string[] AllowedRoles => new[] { "admin" };
+
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 載入選手清單，提供選擇

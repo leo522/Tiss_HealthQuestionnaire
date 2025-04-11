@@ -37,11 +37,11 @@
         </EntityType>
         <EntityType Name="AthleteTeam">
           <Key>
-            <PropertyRef Name="AthleteID" />
-            <PropertyRef Name="TeamID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="AthleteID" Type="int" Nullable="false" />
           <Property Name="TeamID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -640,9 +640,9 @@
         </EntityType>
         <EntityType Name="TrainerTeam">
           <Key>
-            <PropertyRef Name="TrainerID" />
-            <PropertyRef Name="TeamID" />
+            <PropertyRef Name="ID" />
           </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TrainerID" Type="int" Nullable="false" />
           <Property Name="TeamID" Type="int" Nullable="false" />
         </EntityType>
@@ -812,7 +812,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TrainerAt__Athle__43F60EC8">
+        <Association Name="FK__TrainerAt__Athle__5BCD9859">
           <End Role="AthleteProfile" Type="Self.AthleteProfile" Multiplicity="1" />
           <End Role="TrainerAthlete" Type="Self.TrainerAthlete" Multiplicity="*" />
           <ReferentialConstraint>
@@ -824,7 +824,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TrainerAt__Train__4301EA8F">
+        <Association Name="FK__TrainerAt__Train__5AD97420">
           <End Role="TrainerProfile" Type="Self.TrainerProfile" Multiplicity="1" />
           <End Role="TrainerAthlete" Type="Self.TrainerAthlete" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1231,11 +1231,11 @@
             <End Role="UserRole" EntitySet="UserRole" />
             <End Role="SystemUser" EntitySet="SystemUser" />
           </AssociationSet>
-          <AssociationSet Name="FK__TrainerAt__Athle__43F60EC8" Association="Self.FK__TrainerAt__Athle__43F60EC8">
+          <AssociationSet Name="FK__TrainerAt__Athle__5BCD9859" Association="Self.FK__TrainerAt__Athle__5BCD9859">
             <End Role="AthleteProfile" EntitySet="AthleteProfile" />
             <End Role="TrainerAthlete" EntitySet="TrainerAthlete" />
           </AssociationSet>
-          <AssociationSet Name="FK__TrainerAt__Train__4301EA8F" Association="Self.FK__TrainerAt__Train__4301EA8F">
+          <AssociationSet Name="FK__TrainerAt__Train__5AD97420" Association="Self.FK__TrainerAt__Train__5AD97420">
             <End Role="TrainerProfile" EntitySet="TrainerProfile" />
             <End Role="TrainerAthlete" EntitySet="TrainerAthlete" />
           </AssociationSet>
@@ -1337,7 +1337,10 @@
     <edmx:ConceptualModels>
       <Schema Namespace="HealthQuestionnaireModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="HealthQuestionnaireEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminProfile" EntityType="HealthQuestionnaireModel.AdminProfile" />
           <EntitySet Name="AllergicHistory" EntityType="HealthQuestionnaireModel.AllergicHistory" />
+          <EntitySet Name="AthleteProfile" EntityType="HealthQuestionnaireModel.AthleteProfile" />
+          <EntitySet Name="AthleteTeam" EntityType="HealthQuestionnaireModel.AthleteTeam" />
           <EntitySet Name="AthleteUser" EntityType="HealthQuestionnaireModel.AthleteUser" />
           <EntitySet Name="AthleticTrainer" EntityType="HealthQuestionnaireModel.AthleticTrainer" />
           <EntitySet Name="CardiovascularScreening" EntityType="HealthQuestionnaireModel.CardiovascularScreening" />
@@ -1353,10 +1356,12 @@
           <EntitySet Name="CurrentInjuryType" EntityType="HealthQuestionnaireModel.CurrentInjuryType" />
           <EntitySet Name="CurrentTreatmentMethod" EntityType="HealthQuestionnaireModel.CurrentTreatmentMethod" />
           <EntitySet Name="DelayedRecall" EntityType="HealthQuestionnaireModel.DelayedRecall" />
+          <EntitySet Name="ErrorLog" EntityType="HealthQuestionnaireModel.ErrorLog" />
           <EntitySet Name="FamilyHistory" EntityType="HealthQuestionnaireModel.FamilyHistory" />
           <EntitySet Name="FemaleQuestionnaire" EntityType="HealthQuestionnaireModel.FemaleQuestionnaire" />
           <EntitySet Name="Gender" EntityType="HealthQuestionnaireModel.Gender" />
           <EntitySet Name="ImmediateMemory" EntityType="HealthQuestionnaireModel.ImmediateMemory" />
+          <EntitySet Name="LoginLog" EntityType="HealthQuestionnaireModel.LoginLog" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="HealthQuestionnaireModel.MedicalandFamilyHistory" />
           <EntitySet Name="OrthopaedicScreening" EntityType="HealthQuestionnaireModel.OrthopaedicScreening" />
           <EntitySet Name="PasswordReset" EntityType="HealthQuestionnaireModel.PasswordReset" />
@@ -1390,11 +1395,33 @@
           <EntitySet Name="ResponseSymptomEvaluation" EntityType="HealthQuestionnaireModel.ResponseSymptomEvaluation" />
           <EntitySet Name="SurgeryHistory" EntityType="HealthQuestionnaireModel.SurgeryHistory" />
           <EntitySet Name="SymptomEvaluation" EntityType="HealthQuestionnaireModel.SymptomEvaluation" />
+          <EntitySet Name="SystemLog" EntityType="HealthQuestionnaireModel.SystemLog" />
+          <EntitySet Name="SystemUser" EntityType="HealthQuestionnaireModel.SystemUser" />
+          <EntitySet Name="Team" EntityType="HealthQuestionnaireModel.Team" />
           <EntitySet Name="TemporaryQuestionnaireData" EntityType="HealthQuestionnaireModel.TemporaryQuestionnaireData" />
           <EntitySet Name="Test_AthleticTrainer" EntityType="HealthQuestionnaireModel.Test_AthleticTrainer" />
           <EntitySet Name="TimedTandemGait" EntityType="HealthQuestionnaireModel.TimedTandemGait" />
+          <EntitySet Name="TrainerProfile" EntityType="HealthQuestionnaireModel.TrainerProfile" />
+          <EntitySet Name="TrainerTeam" EntityType="HealthQuestionnaireModel.TrainerTeam" />
           <EntitySet Name="Treatment" EntityType="HealthQuestionnaireModel.Treatment" />
           <EntitySet Name="TreatmentMethod" EntityType="HealthQuestionnaireModel.TreatmentMethod" />
+          <EntitySet Name="UserRole" EntityType="HealthQuestionnaireModel.UserRole" />
+          <AssociationSet Name="FK__AdminProf__UserI__46D27B73" Association="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="AdminProfile" EntitySet="AdminProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AthletePr__UserI__32CB82C6" Association="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="AthleteProfile" EntitySet="AthleteProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AthleteTeam_AthleteProfile" Association="HealthQuestionnaireModel.FK_AthleteTeam_AthleteProfile">
+            <End Role="AthleteProfile" EntitySet="AthleteProfile" />
+            <End Role="AthleteTeam" EntitySet="AthleteTeam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AthleteTeam_Team" Association="HealthQuestionnaireModel.FK_AthleteTeam_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="AthleteTeam" EntitySet="AthleteTeam" />
+          </AssociationSet>
           <AssociationSet Name="FK_AthleteUser_Gender" Association="HealthQuestionnaireModel.FK_AthleteUser_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="AthleteUser" EntitySet="AthleteUser" />
@@ -1411,9 +1438,17 @@
             <End Role="CurrentInjuryType" EntitySet="CurrentInjuryType" />
             <End Role="CurrentInjuryRecord" EntitySet="CurrentInjuryRecord" />
           </AssociationSet>
+          <AssociationSet Name="FK__ErrorLog__UserID__4E739D3B" Association="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="ErrorLog" EntitySet="ErrorLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_QuestionnaireResponse_Gender" Association="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LoginLog__UserID__52442E1F" Association="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="LoginLog" EntitySet="LoginLog" />
           </AssociationSet>
           <AssociationSet Name="FK__PastInjur__PastI__04459E07" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__04459E07">
             <End Role="PastInjuryCategory" EntitySet="PastInjuryCategory" />
@@ -1491,31 +1526,6 @@
             <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
             <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
           </AssociationSet>
-          <EntitySet Name="AdminProfile" EntityType="HealthQuestionnaireModel.AdminProfile" />
-          <EntitySet Name="AthleteProfile" EntityType="HealthQuestionnaireModel.AthleteProfile" />
-          <EntitySet Name="ErrorLog" EntityType="HealthQuestionnaireModel.ErrorLog" />
-          <EntitySet Name="LoginLog" EntityType="HealthQuestionnaireModel.LoginLog" />
-          <EntitySet Name="SystemLog" EntityType="HealthQuestionnaireModel.SystemLog" />
-          <EntitySet Name="SystemUser" EntityType="HealthQuestionnaireModel.SystemUser" />
-          <EntitySet Name="Team" EntityType="HealthQuestionnaireModel.Team" />
-          <EntitySet Name="TrainerProfile" EntityType="HealthQuestionnaireModel.TrainerProfile" />
-          <EntitySet Name="UserRole" EntityType="HealthQuestionnaireModel.UserRole" />
-          <AssociationSet Name="FK__AdminProf__UserI__46D27B73" Association="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73">
-            <End Role="SystemUser" EntitySet="SystemUser" />
-            <End Role="AdminProfile" EntitySet="AdminProfile" />
-          </AssociationSet>
-          <AssociationSet Name="FK__AthletePr__UserI__32CB82C6" Association="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6">
-            <End Role="SystemUser" EntitySet="SystemUser" />
-            <End Role="AthleteProfile" EntitySet="AthleteProfile" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ErrorLog__UserID__4E739D3B" Association="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B">
-            <End Role="SystemUser" EntitySet="SystemUser" />
-            <End Role="ErrorLog" EntitySet="ErrorLog" />
-          </AssociationSet>
-          <AssociationSet Name="FK__LoginLog__UserID__52442E1F" Association="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F">
-            <End Role="SystemUser" EntitySet="SystemUser" />
-            <End Role="LoginLog" EntitySet="LoginLog" />
-          </AssociationSet>
           <AssociationSet Name="FK__SystemLog__UserI__4AA30C57" Association="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57">
             <End Role="SystemUser" EntitySet="SystemUser" />
             <End Role="SystemLog" EntitySet="SystemLog" />
@@ -1528,19 +1538,28 @@
             <End Role="SystemUser" EntitySet="SystemUser" />
             <End Role="TrainerProfile" EntitySet="TrainerProfile" />
           </AssociationSet>
-          <AssociationSet Name="AthleteTeam" Association="HealthQuestionnaireModel.AthleteTeam">
-            <End Role="AthleteProfile" EntitySet="AthleteProfile" />
+          <AssociationSet Name="FK_TrainerTeam_Team" Association="HealthQuestionnaireModel.FK_TrainerTeam_Team">
             <End Role="Team" EntitySet="Team" />
+            <End Role="TrainerTeam" EntitySet="TrainerTeam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TrainerTeam_TrainerProfile" Association="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile">
+            <End Role="TrainerProfile" EntitySet="TrainerProfile" />
+            <End Role="TrainerTeam" EntitySet="TrainerTeam" />
           </AssociationSet>
           <AssociationSet Name="TrainerAthlete" Association="HealthQuestionnaireModel.TrainerAthlete">
             <End Role="AthleteProfile" EntitySet="AthleteProfile" />
             <End Role="TrainerProfile" EntitySet="TrainerProfile" />
           </AssociationSet>
-          <AssociationSet Name="TrainerTeam" Association="HealthQuestionnaireModel.TrainerTeam">
-            <End Role="Team" EntitySet="Team" />
-            <End Role="TrainerProfile" EntitySet="TrainerProfile" />
-          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="AdminProfile">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="AdminName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73" FromRole="AdminProfile" ToRole="SystemUser" />
+        </EntityType>
         <EntityType Name="AllergicHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -1550,6 +1569,31 @@
           <Property Name="ItemEn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="IsYes" Type="Boolean" Nullable="false" />
           <Property Name="IsNo" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AthleteProfile">
+          <Key>
+            <PropertyRef Name="AthleteID" />
+          </Key>
+          <Property Name="AthleteID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="AthleteNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="GenderID" Type="Int32" />
+          <Property Name="SportSpecialization" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6" FromRole="AthleteProfile" ToRole="SystemUser" />
+          <NavigationProperty Name="AthleteTeam" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_AthleteProfile" FromRole="AthleteProfile" ToRole="AthleteTeam" />
+          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.TrainerAthlete" FromRole="AthleteProfile" ToRole="TrainerProfile" />
+        </EntityType>
+        <EntityType Name="AthleteTeam">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="AthleteID" Type="Int32" Nullable="false" />
+          <Property Name="TeamID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_AthleteProfile" FromRole="AthleteTeam" ToRole="AthleteProfile" />
+          <NavigationProperty Name="Team" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_Team" FromRole="AthleteTeam" ToRole="Team" />
         </EntityType>
         <EntityType Name="AthleteUser">
           <Key>
@@ -1700,6 +1744,17 @@
           <Property Name="Score0" Type="Int32" />
           <Property Name="Score1" Type="Int32" />
         </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="ErrorID" />
+          </Key>
+          <Property Name="ErrorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B" FromRole="ErrorLog" ToRole="SystemUser" />
+        </EntityType>
         <EntityType Name="FamilyHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -1736,6 +1791,17 @@
           <Property Name="FirstTest" Type="Int32" />
           <Property Name="SecondTest" Type="Int32" />
           <Property Name="ThirdTest" Type="Int32" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="LoginID" />
+          </Key>
+          <Property Name="LoginID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserAgent" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F" FromRole="LoginLog" ToRole="SystemUser" />
         </EntityType>
         <EntityType Name="MedicalandFamilyHistory">
           <Key>
@@ -2087,6 +2153,49 @@
           <Property Name="ItemScore5" Type="Int32" />
           <Property Name="ItemScore6" Type="Int32" />
         </EntityType>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Action" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Target" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LogDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57" FromRole="SystemLog" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Salt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdminProfile" Relationship="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73" FromRole="SystemUser" ToRole="AdminProfile" />
+          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6" FromRole="SystemUser" ToRole="AthleteProfile" />
+          <NavigationProperty Name="ErrorLog" Relationship="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B" FromRole="SystemUser" ToRole="ErrorLog" />
+          <NavigationProperty Name="LoginLog" Relationship="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F" FromRole="SystemUser" ToRole="LoginLog" />
+          <NavigationProperty Name="SystemLog" Relationship="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57" FromRole="SystemUser" ToRole="SystemLog" />
+          <NavigationProperty Name="UserRole" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="SystemUser" ToRole="UserRole" />
+          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="SystemUser" ToRole="TrainerProfile" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="TeamID" />
+          </Key>
+          <Property Name="TeamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SportType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AthleteTeam" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_Team" FromRole="Team" ToRole="AthleteTeam" />
+          <NavigationProperty Name="TrainerTeam" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_Team" FromRole="Team" ToRole="TrainerTeam" />
+        </EntityType>
         <EntityType Name="TemporaryQuestionnaireData">
           <Key>
             <PropertyRef Name="TempID" />
@@ -2122,6 +2231,30 @@
           <Property Name="SecondTrialTime" Type="Double" />
           <Property Name="ThirdTrialTime" Type="Double" />
         </EntityType>
+        <EntityType Name="TrainerProfile">
+          <Key>
+            <PropertyRef Name="TrainerID" />
+          </Key>
+          <Property Name="TrainerID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ATName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Expertise" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="TrainerProfile" ToRole="SystemUser" />
+          <NavigationProperty Name="TrainerTeam" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile" FromRole="TrainerProfile" ToRole="TrainerTeam" />
+          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.TrainerAthlete" FromRole="TrainerProfile" ToRole="AthleteProfile" />
+        </EntityType>
+        <EntityType Name="TrainerTeam">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerID" Type="Int32" Nullable="false" />
+          <Property Name="TeamID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Team" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_Team" FromRole="TrainerTeam" ToRole="Team" />
+          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile" FromRole="TrainerTeam" ToRole="TrainerProfile" />
+        </EntityType>
         <EntityType Name="Treatment">
           <Key>
             <PropertyRef Name="ID" />
@@ -2137,6 +2270,62 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Method" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="UserRole" ToRole="SystemUser" />
+        </EntityType>
+        <Association Name="FK__AdminProf__UserI__46D27B73">
+          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.AdminProfile" Role="AdminProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdminProfile">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AthletePr__UserI__32CB82C6">
+          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AthleteProfile">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AthleteTeam_AthleteProfile">
+          <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.AthleteTeam" Role="AthleteTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AthleteProfile">
+              <PropertyRef Name="AthleteID" />
+            </Principal>
+            <Dependent Role="AthleteTeam">
+              <PropertyRef Name="AthleteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AthleteTeam_Team">
+          <End Type="HealthQuestionnaireModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.AthleteTeam" Role="AthleteTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamID" />
+            </Principal>
+            <Dependent Role="AthleteTeam">
+              <PropertyRef Name="TeamID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_AthleteUser_Gender">
           <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.AthleteUser" Role="AthleteUser" Multiplicity="*" />
@@ -2185,6 +2374,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ErrorLog__UserID__4E739D3B">
+          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.ErrorLog" Role="ErrorLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ErrorLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_QuestionnaireResponse_Gender">
           <End Type="HealthQuestionnaireModel.Gender" Role="Gender" Multiplicity="0..1" />
           <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="*" />
@@ -2194,6 +2395,18 @@
             </Principal>
             <Dependent Role="QuestionnaireResponse">
               <PropertyRef Name="GenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LoginLog__UserID__52442E1F">
+          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.LoginLog" Role="LoginLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LoginLog">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2425,165 +2638,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AdminProfile">
-          <Key>
-            <PropertyRef Name="AdminID" />
-          </Key>
-          <Property Name="AdminID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="AdminName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73" FromRole="AdminProfile" ToRole="SystemUser" />
-        </EntityType>
-        <EntityType Name="AthleteProfile">
-          <Key>
-            <PropertyRef Name="AthleteID" />
-          </Key>
-          <Property Name="AthleteID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="AthleteNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDate" Type="DateTime" Precision="0" />
-          <Property Name="GenderID" Type="Int32" />
-          <Property Name="SportSpecialization" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6" FromRole="AthleteProfile" ToRole="SystemUser" />
-          <NavigationProperty Name="Team" Relationship="HealthQuestionnaireModel.AthleteTeam" FromRole="AthleteProfile" ToRole="Team" />
-          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.TrainerAthlete" FromRole="AthleteProfile" ToRole="TrainerProfile" />
-        </EntityType>
-        <EntityType Name="ErrorLog">
-          <Key>
-            <PropertyRef Name="ErrorID" />
-          </Key>
-          <Property Name="ErrorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ErrorDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B" FromRole="ErrorLog" ToRole="SystemUser" />
-        </EntityType>
-        <EntityType Name="LoginLog">
-          <Key>
-            <PropertyRef Name="LoginID" />
-          </Key>
-          <Property Name="LoginID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserAgent" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F" FromRole="LoginLog" ToRole="SystemUser" />
-        </EntityType>
-        <EntityType Name="SystemLog">
-          <Key>
-            <PropertyRef Name="LogID" />
-          </Key>
-          <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Action" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Target" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LogDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57" FromRole="SystemLog" ToRole="SystemUser" />
-        </EntityType>
-        <EntityType Name="SystemUser">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Salt" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RoleID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AdminProfile" Relationship="HealthQuestionnaireModel.FK__AdminProf__UserI__46D27B73" FromRole="SystemUser" ToRole="AdminProfile" />
-          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6" FromRole="SystemUser" ToRole="AthleteProfile" />
-          <NavigationProperty Name="ErrorLog" Relationship="HealthQuestionnaireModel.FK__ErrorLog__UserID__4E739D3B" FromRole="SystemUser" ToRole="ErrorLog" />
-          <NavigationProperty Name="LoginLog" Relationship="HealthQuestionnaireModel.FK__LoginLog__UserID__52442E1F" FromRole="SystemUser" ToRole="LoginLog" />
-          <NavigationProperty Name="SystemLog" Relationship="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57" FromRole="SystemUser" ToRole="SystemLog" />
-          <NavigationProperty Name="UserRole" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="SystemUser" ToRole="UserRole" />
-          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="SystemUser" ToRole="TrainerProfile" />
-        </EntityType>
-        <EntityType Name="Team">
-          <Key>
-            <PropertyRef Name="TeamID" />
-          </Key>
-          <Property Name="TeamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SportType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.AthleteTeam" FromRole="Team" ToRole="AthleteProfile" />
-          <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.TrainerTeam" FromRole="Team" ToRole="TrainerProfile" />
-        </EntityType>
-        <EntityType Name="TrainerProfile">
-          <Key>
-            <PropertyRef Name="TrainerID" />
-          </Key>
-          <Property Name="TrainerID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="ATName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Expertise" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="TrainerProfile" ToRole="SystemUser" />
-          <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.TrainerAthlete" FromRole="TrainerProfile" ToRole="AthleteProfile" />
-          <NavigationProperty Name="Team" Relationship="HealthQuestionnaireModel.TrainerTeam" FromRole="TrainerProfile" ToRole="Team" />
-        </EntityType>
-        <EntityType Name="UserRole">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="UserRole" ToRole="SystemUser" />
-        </EntityType>
-        <Association Name="FK__AdminProf__UserI__46D27B73">
-          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.AdminProfile" Role="AdminProfile" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SystemUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="AdminProfile">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__AthletePr__UserI__32CB82C6">
-          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SystemUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="AthleteProfile">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ErrorLog__UserID__4E739D3B">
-          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
-          <End Type="HealthQuestionnaireModel.ErrorLog" Role="ErrorLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SystemUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="ErrorLog">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__LoginLog__UserID__52442E1F">
-          <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.LoginLog" Role="LoginLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SystemUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="LoginLog">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__SystemLog__UserI__4AA30C57">
           <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
           <End Type="HealthQuestionnaireModel.SystemLog" Role="SystemLog" Multiplicity="*" />
@@ -2620,16 +2674,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="AthleteTeam">
-          <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="*" />
-          <End Type="HealthQuestionnaireModel.Team" Role="Team" Multiplicity="*" />
+        <Association Name="FK_TrainerTeam_Team">
+          <End Type="HealthQuestionnaireModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.TrainerTeam" Role="TrainerTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamID" />
+            </Principal>
+            <Dependent Role="TrainerTeam">
+              <PropertyRef Name="TeamID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TrainerTeam_TrainerProfile">
+          <End Type="HealthQuestionnaireModel.TrainerProfile" Role="TrainerProfile" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.TrainerTeam" Role="TrainerTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerProfile">
+              <PropertyRef Name="TrainerID" />
+            </Principal>
+            <Dependent Role="TrainerTeam">
+              <PropertyRef Name="TrainerID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="TrainerAthlete">
           <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="*" />
-          <End Type="HealthQuestionnaireModel.TrainerProfile" Role="TrainerProfile" Multiplicity="*" />
-        </Association>
-        <Association Name="TrainerTeam">
-          <End Type="HealthQuestionnaireModel.Team" Role="Team" Multiplicity="*" />
           <End Type="HealthQuestionnaireModel.TrainerProfile" Role="TrainerProfile" Multiplicity="*" />
         </Association>
         </Schema>
@@ -2638,6 +2708,15 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HealthQuestionnaireModelStoreContainer" CdmEntityContainer="HealthQuestionnaireEntities">
+          <EntitySetMapping Name="AdminProfile">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AdminProfile">
+              <MappingFragment StoreEntitySet="AdminProfile">
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="AllergicHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.AllergicHistory">
               <MappingFragment StoreEntitySet="AllergicHistory">
@@ -2646,6 +2725,28 @@
                 <ScalarProperty Name="ItemEn" ColumnName="ItemEn" />
                 <ScalarProperty Name="ItemZh" ColumnName="ItemZh" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AthleteProfile">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleteProfile">
+              <MappingFragment StoreEntitySet="AthleteProfile">
+                <ScalarProperty Name="SportSpecialization" ColumnName="SportSpecialization" />
+                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AthleteNumber" ColumnName="AthleteNumber" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AthleteTeam">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleteTeam">
+              <MappingFragment StoreEntitySet="AthleteTeam">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+                <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2806,6 +2907,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLog">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ErrorLog">
+              <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="ErrorDate" ColumnName="ErrorDate" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ErrorID" ColumnName="ErrorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="FamilyHistory">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.FamilyHistory">
               <MappingFragment StoreEntitySet="FamilyHistory">
@@ -2842,6 +2954,17 @@
                 <ScalarProperty Name="FirstTest" ColumnName="FirstTest" />
                 <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginLog">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.LoginLog">
+              <MappingFragment StoreEntitySet="LoginLog">
+                <ScalarProperty Name="UserAgent" ColumnName="UserAgent" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3190,6 +3313,42 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SystemLog">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SystemLog">
+              <MappingFragment StoreEntitySet="SystemLog">
+                <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUser">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Team">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Team">
+              <MappingFragment StoreEntitySet="Team">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SportType" ColumnName="SportType" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TemporaryQuestionnaireData">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.TemporaryQuestionnaireData">
               <MappingFragment StoreEntitySet="TemporaryQuestionnaireData">
@@ -3227,6 +3386,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TrainerProfile">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TrainerProfile">
+              <MappingFragment StoreEntitySet="TrainerProfile">
+                <ScalarProperty Name="Expertise" ColumnName="Expertise" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ATName" ColumnName="ATName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainerTeam">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TrainerTeam">
+              <MappingFragment StoreEntitySet="TrainerTeam">
+                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+                <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Treatment">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.Treatment">
               <MappingFragment StoreEntitySet="Treatment">
@@ -3244,98 +3424,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AdminProfile">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AdminProfile">
-              <MappingFragment StoreEntitySet="AdminProfile">
-                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AthleteProfile">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.AthleteProfile">
-              <MappingFragment StoreEntitySet="AthleteProfile">
-                <ScalarProperty Name="SportSpecialization" ColumnName="SportSpecialization" />
-                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
-                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="AthleteNumber" ColumnName="AthleteNumber" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ErrorLog">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ErrorLog">
-              <MappingFragment StoreEntitySet="ErrorLog">
-                <ScalarProperty Name="ErrorDate" ColumnName="ErrorDate" />
-                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="ErrorID" ColumnName="ErrorID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LoginLog">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.LoginLog">
-              <MappingFragment StoreEntitySet="LoginLog">
-                <ScalarProperty Name="UserAgent" ColumnName="UserAgent" />
-                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
-                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SystemLog">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SystemLog">
-              <MappingFragment StoreEntitySet="SystemLog">
-                <ScalarProperty Name="LogDate" ColumnName="LogDate" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="Target" ColumnName="Target" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="LogID" ColumnName="LogID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SystemUser">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SystemUser">
-              <MappingFragment StoreEntitySet="SystemUser">
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Salt" ColumnName="Salt" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Team">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.Team">
-              <MappingFragment StoreEntitySet="Team">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="SportType" ColumnName="SportType" />
-                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
-                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TrainerProfile">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TrainerProfile">
-              <MappingFragment StoreEntitySet="TrainerProfile">
-                <ScalarProperty Name="Expertise" ColumnName="Expertise" />
-                <ScalarProperty Name="Department" ColumnName="Department" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ATName" ColumnName="ATName" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserRole">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
@@ -3344,28 +3432,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="AthleteTeam" TypeName="HealthQuestionnaireModel.AthleteTeam" StoreEntitySet="AthleteTeam">
-            <EndProperty Name="Team">
-              <ScalarProperty Name="TeamID" ColumnName="TeamID" />
-            </EndProperty>
-            <EndProperty Name="AthleteProfile">
-              <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
-            </EndProperty>
-          </AssociationSetMapping>
           <AssociationSetMapping Name="TrainerAthlete" TypeName="HealthQuestionnaireModel.TrainerAthlete" StoreEntitySet="TrainerAthlete">
             <EndProperty Name="TrainerProfile">
               <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
             </EndProperty>
             <EndProperty Name="AthleteProfile">
               <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="TrainerTeam" TypeName="HealthQuestionnaireModel.TrainerTeam" StoreEntitySet="TrainerTeam">
-            <EndProperty Name="TrainerProfile">
-              <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
-            </EndProperty>
-            <EndProperty Name="Team">
-              <ScalarProperty Name="TeamID" ColumnName="TeamID" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

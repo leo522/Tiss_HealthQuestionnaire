@@ -366,7 +366,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     case "trainer":
                         return RedirectToAction("Main", "MedicalEvaluation");
                     case "admin":
-                        return RedirectToAction("Dashboard", "Admin");
+                        return RedirectToAction("SelectAthlete", "AdminQuestionnaire");
                     default:
                         ViewBag.ErrorMessage = "身份錯誤";
                         return View("Login");
