@@ -45,7 +45,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterAthlete(string userName, string password, string email, string athleteNumber, string sportSpecialization, DateTime birthDate, int genderID)
+        public ActionResult RegisterAthlete(string athleteNumber, string userName, string password, string email, string sportSpecialization, DateTime birthDate, int genderID)
         {
             try
             {
@@ -107,9 +107,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
-                ViewBag.GenderList = _db.Gender.ToList();
+                //string errorMsg = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                //ViewBag.ErrorMessage = "系統錯誤: " + errorMsg;
+                ViewBag.ErrorMessage = "系統錯誤: 註冊失敗";
+                ViewBag.GenderList = _db.Gender.ToList();     
                 return View("RegisterAthlete");
+                throw ex;
             }
         }
         #endregion
@@ -189,8 +192,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                ViewBag.ErrorMessage = "系統錯誤: 註冊失敗";
                 return View("RegisterTrainer");
+                throw ex;
             }
         }
         #endregion
@@ -265,8 +269,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                ViewBag.ErrorMessage = "系統錯誤: 註冊失敗";
                 return View("RegisterAdmin");
+
+                throw ex;
             }
         }
         #endregion
@@ -329,7 +335,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View("Login");
                 }
 
-                var user = _db.SystemUser.FirstOrDefault(u => u.UserName == account);
+                SystemUser user = null;
+
+                if (role == "athlete")
+                {
+                    var athlete = _db.AthleteProfile.FirstOrDefault(a => a.AthleteNumber == account);
+                    if (athlete != null)
+                    {
+                        user = _db.SystemUser.FirstOrDefault(u => u.UserID == athlete.UserID);
+                    }
+                }
+                else
+                {
+                    user = _db.SystemUser.FirstOrDefault(u => u.UserName == account);
+                }
+
                 if (user == null)
                 {
                     ViewBag.ErrorMessage = "查無此帳號";
@@ -374,8 +394,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "系統錯誤: " + ex.Message;
+                ViewBag.ErrorMessage = "錯誤: 查無此帳號";
                 return View("Error");
+
+                throw ex;
             }
         }
         #endregion

@@ -27,12 +27,12 @@
           <Key>
             <PropertyRef Name="AthleteID" />
           </Key>
-          <Property Name="AthleteID" Type="int" Nullable="false" />
+          <Property Name="AthleteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="AthleteNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="BirthDate" Type="date" />
-          <Property Name="GenderID" Type="int" />
+          <Property Name="GenderID" Type="int" Nullable="false" />
           <Property Name="SportSpecialization" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AthleteTeam">
@@ -1574,12 +1574,12 @@
           <Key>
             <PropertyRef Name="AthleteID" />
           </Key>
-          <Property Name="AthleteID" Type="Int32" Nullable="false" />
+          <Property Name="AthleteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="AthleteNumber" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BirthDate" Type="DateTime" Precision="0" />
-          <Property Name="GenderID" Type="Int32" />
+          <Property Name="GenderID" Type="Int32" Nullable="false" />
           <Property Name="SportSpecialization" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__AthletePr__UserI__32CB82C6" FromRole="AthleteProfile" ToRole="SystemUser" />
           <NavigationProperty Name="AthleteTeam" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_AthleteProfile" FromRole="AthleteProfile" ToRole="AthleteTeam" />

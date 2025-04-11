@@ -26,7 +26,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public string AthleteNumber { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> BirthDate { get; set; }
-        public Nullable<int> GenderID { get; set; }
+        public int GenderID { get; set; }
         public string SportSpecialization { get; set; }
     
         public virtual SystemUser SystemUser { get; set; }

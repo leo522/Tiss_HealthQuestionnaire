@@ -25,6 +25,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
             try
             {
                 var user = GetLoggedInUser();
+
                 if (user == null)
                     return RedirectToAction("Login", "Account");
 
@@ -273,14 +274,15 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #endregion
 
         #region 主頁優化方法
-        private AthleteUser GetLoggedInUser()
+        private AthleteProfile GetLoggedInUser()
         {
-            string username = Session["UserName"] as string;
-            if (string.IsNullOrEmpty(username)) return null;
-            return _db.AthleteUser.FirstOrDefault(u => u.Name == username);
+            var userId = Session["UserID"] as int?;
+            if (!userId.HasValue) return null;
+
+            return _db.AthleteProfile.FirstOrDefault(a => a.UserID == userId.Value);
         }
 
-        private void SetUserViewBag(AthleteUser user)
+        private void SetUserViewBag(AthleteProfile user)
         {
             ViewBag.Specialist = user.SportSpecialization;
             ViewBag.FillName = user.Name;
