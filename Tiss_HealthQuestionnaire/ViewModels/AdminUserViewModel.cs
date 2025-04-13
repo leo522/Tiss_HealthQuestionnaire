@@ -12,8 +12,20 @@ namespace Tiss_HealthQuestionnaire.ViewModels
             public string UserName { get; set; }
             public string Email { get; set; }
             public string RoleName { get; set; }
+            public string RoleDisplayName => GetRoleDisplayName(RoleName);
             public bool IsActive { get; set; }
             public DateTime CreatedDate { get; set; }
+
+        private string GetRoleDisplayName(string role)
+        {
+            switch (role?.ToLower())
+            {
+                case "athlete": return "選手";
+                case "trainer": return "防護員";
+                case "admin": return "管理員";
+                default: return role;
+            }
+        }
     }
     #endregion
 }

@@ -1,0 +1,54 @@
+﻿@model List<Tiss_HealthQuestionnaire.ViewModels.AdminUserViewModel>
+@{
+    ViewBag.Title = "防護員帳號審核";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<link rel="icon" href="~/img/favicon.svg" />
+
+<h1 class="text-2xl font-bold mb-4">待審核防護員帳號</h1>
+
+@using (Html.BeginForm("BatchApproveReject", "AdminUser", FormMethod.Post))
+{
+    <table class="table table-bordered table-striped table-responsive">
+        <thead class="thead-light">
+            <tr>
+                <th><input type="checkbox" id="selectAll" onclick="toggleAll(this)" /></th>
+                <th>帳號</th>
+                <th>Email</th>
+                <th>建立時間</th>
+                <th>拒絕原因</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="SelectedUserIDs" value="@Model[i].UserID" />
+                        @Html.Hidden($"UserList[{i}].UserID", Model[i].UserID)
+                    </td>
+                    <td>@Model[i].UserName</td>
+                    <td>@Model[i].Email</td>
+                    <td>@Model[i].CreatedDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <input type="text" name="RejectReasons" class="form-control" placeholder="若拒絕，請填寫原因" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <button type="submit" name="actionType" value="approve" class="btn btn-success">核准勾選</button>
+        <button type="submit" name="actionType" value="reject" class="btn btn-danger ml-2">拒絕勾選</button>
+    </div>
+}
+
+<script>
+    function toggleAll(source) {
+        checkboxes = document.getElementsByName('selectedIds');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>

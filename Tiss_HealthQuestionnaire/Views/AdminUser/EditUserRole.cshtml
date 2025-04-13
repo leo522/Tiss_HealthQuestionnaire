@@ -4,19 +4,45 @@
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <link rel="icon" href="~/img/favicon.svg" />
-<h1 class="text-xl font-semibold mb-4">編輯角色：@Model.UserName</h1>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">編輯角色</h1>
+            <p class="mt-2 text-gray-600">@Model.UserName</p>
+        </div>
 
-    <div class="form-group">
-        <label for="RoleID">角色</label>
-        @Html.DropDownListFor(model => model.RoleID, (SelectList)ViewBag.RoleList, "請選擇角色", new { @class = "form-control" })
-        @Html.HiddenFor(model => model.UserID)
-        @Html.HiddenFor(model => model.UserName)
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "space-y-6" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="space-y-4">
+                <div class="form-group">
+                    <label for="RoleID" class="block text-sm font-medium text-gray-700 mb-2">角色</label>
+                    <div class="relative">
+                        @Html.DropDownListFor(model => model.RoleID,
+                            (SelectList)ViewBag.RoleList,
+                            "請選擇角色",
+                            new
+                                 {
+                                @class = "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-2 px-3"
+                            })
+                    </div>
+                    @Html.HiddenFor(model => model.UserID)
+                    @Html.HiddenFor(model => model.UserName)
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-4 mt-8">
+                <a href="@Url.Action("UserList", "AdminUser")"
+                   class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    取消
+                </a>
+                <button type="submit"
+                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    儲存變更
+                </button>
+            </div>
+        }
     </div>
-
-    <button type="submit" class="btn btn-primary">儲存變更</button>
-    <a href="@Url.Action("UserList", "AdminUser")" class="btn btn-secondary ml-2">取消</a>
-}
+</div>

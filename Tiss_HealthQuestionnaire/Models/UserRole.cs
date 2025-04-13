@@ -22,6 +22,7 @@ namespace Tiss_HealthQuestionnaire.Models
     
         public int RoleID { get; set; }
         public string RoleName { get; set; }
+        public bool NeedApproval { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SystemUser> SystemUser { get; set; }

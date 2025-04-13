@@ -575,6 +575,7 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" />
           <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="IsApproved" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -667,6 +668,7 @@
           </Key>
           <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NeedApproval" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK__AdminProf__UserI__46D27B73">
           <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="1" />
@@ -2184,6 +2186,7 @@
           <NavigationProperty Name="SystemLog" Relationship="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57" FromRole="SystemUser" ToRole="SystemLog" />
           <NavigationProperty Name="UserRole" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="SystemUser" ToRole="UserRole" />
           <NavigationProperty Name="TrainerProfile" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="SystemUser" ToRole="TrainerProfile" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -2277,6 +2280,7 @@
           <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__SystemUse__RoleI__2FEF161B" FromRole="UserRole" ToRole="SystemUser" />
+          <Property Name="NeedApproval" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__AdminProf__UserI__46D27B73">
           <End Type="HealthQuestionnaireModel.SystemUser" Role="SystemUser" Multiplicity="1" />
@@ -3328,6 +3332,7 @@
           <EntitySetMapping Name="SystemUser">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.SystemUser">
               <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -3427,6 +3432,7 @@
           <EntitySetMapping Name="UserRole">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="NeedApproval" ColumnName="NeedApproval" />
                 <ScalarProperty Name="RoleName" ColumnName="RoleName" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
               </MappingFragment>

@@ -107,8 +107,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             }
             catch (Exception ex)
             {
-                //string errorMsg = ex.InnerException?.InnerException?.Message ?? ex.Message;
-                //ViewBag.ErrorMessage = "系統錯誤: " + errorMsg;
                 ViewBag.ErrorMessage = "系統錯誤: 註冊失敗";
                 ViewBag.GenderList = _db.Gender.ToList();     
                 return View("RegisterAthlete");
@@ -158,6 +156,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     Email = email,
                     RoleID = trainerRoleId.Value,
                     IsActive = true,
+                    IsApproved = false,
                     CreatedDate = DateTime.Now
                 };
 
@@ -357,6 +356,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View("Login");
                 }
 
+                if (_db.UserRole.FirstOrDefault(r => r.RoleID == user.RoleID)?.NeedApproval == true && !user.IsApproved)
+                {
+                    ViewBag.ErrorMessage = "您的帳號尚未通過審核，請聯繫管理員。";
+                    ViewBag.Role = role;
+                    return View("Login");
+                }
+
+                if (!user.IsActive)
+                {
+                    ViewBag.ErrorMessage = "帳號已被停用，請聯繫管理員。";
+                    ViewBag.Role = role;
+                    return View("Login");
+                }
+
                 var hashedInputPwd = ComputeSha256Hash(pwd, user.Salt);
                 if (user.Password != hashedInputPwd)
                 {
@@ -386,7 +399,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     case "trainer":
                         return RedirectToAction("Main", "MedicalEvaluation");
                     case "admin":
-                        return RedirectToAction("SelectAthlete", "AdminQuestionnaire");
+                        return RedirectToAction("UserList", "AdminUser");
                     default:
                         ViewBag.ErrorMessage = "身份錯誤";
                         return View("Login");

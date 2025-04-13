@@ -1,0 +1,64 @@
+﻿@model Tiss_HealthQuestionnaire.ViewModels.BatchAthleteCreateViewModel
+@{
+    ViewBag.Title = "新增選手資料";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<h1 class="mb-4">批次新增選手資料</h1>
+
+@using (Html.BeginForm("CreateAthlete", "AdminUser", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>選手編號</th>
+                <th>姓名</th>
+                <th>Email</th>
+                <th>出生日期</th>
+                <th>性別</th>
+                <th>運動專項</th>
+                <th>預設密碼</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Athletes.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.TextBox($"Athletes[{i}].AthleteNumber", Model.Athletes[i].AthleteNumber, new { @class = "form-control", required = "required" })
+                    </td>
+                    <td>
+                        @Html.TextBox($"Athletes[{i}].Name", Model.Athletes[i].Name, new { @class = "form-control", required = "required" })
+                    </td>
+                    <td>
+                        @Html.TextBox($"Athletes[{i}].Email", Model.Athletes[i].Email, new { @class = "form-control" })
+                    </td>
+                    <td>
+                        @Html.TextBox($"Athletes[{i}].BirthDate", Model.Athletes[i].BirthDate?.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+                    </td>
+                    <td>
+                        @Html.DropDownList($"Athletes[{i}].GenderID", new SelectList(ViewBag.GenderList, "GenderID", "GenderName", Model.Athletes[i].GenderID), "請選擇", new { @class = "form-control" })
+                    </td>
+                    <td>
+                        @Html.TextBox($"Athletes[{i}].SportSpecialization", Model.Athletes[i].SportSpecialization, new { @class = "form-control" })
+                    </td>
+                    <td>
+                        <span class="text-muted">預設套用</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="@Url.Action("UserList", "AdminUser")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> 返回系統使用者清單
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> 送出新增
+        </button>
+    </div>
+}
