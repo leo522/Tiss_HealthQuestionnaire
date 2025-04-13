@@ -170,7 +170,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         #region 批量批准拒絕
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult BatchApproveReject(List<int> SelectedUserIDs, string actionType, string[] RejectReasons)
         {
             if (SelectedUserIDs == null || !SelectedUserIDs.Any())

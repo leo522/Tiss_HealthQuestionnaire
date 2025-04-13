@@ -18,9 +18,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                if (Session["TrainerAuthenticated"] == null || !(bool)Session["TrainerAuthenticated"])
+                if (Session["UserRole"] == null || Session["UserRole"].ToString() != "trainer")
                 {
-                    return RedirectToAction("Main", "Questionnaire");
+                    return RedirectToAction("Login", "Account", new { role = "trainer" });
                 }
 
                 var model = new MedicalViewModel

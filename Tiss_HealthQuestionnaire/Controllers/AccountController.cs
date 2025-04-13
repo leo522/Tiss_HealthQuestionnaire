@@ -186,8 +186,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 _db.SaveChanges();
 
-                TempData["RegisterMessage"] = "防護員註冊成功，請登入";
-                return RedirectToAction("Login");
+                TempData["RegisterMessage"] = "防護員身份註冊成功，請待管理員審核";
+                return RedirectToAction("SelectRole");
             }
             catch (Exception ex)
             {
@@ -318,7 +318,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 登入
         public ActionResult Login(string role)
         {
+            if (string.IsNullOrEmpty(role)) return RedirectToAction("SelectRole");
+
+            if (role != "athlete" && role != "trainer" && role != "admin")
+                return RedirectToAction("SelectRole");
+
             ViewBag.Role = role;
+            ViewBag.RoleName = role == "athlete" ? "選手" : role == "trainer" ? "防護員" : "管理員";
+
             return View("Login");
         }
 
@@ -397,7 +404,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     case "athlete":
                         return RedirectToAction("Main", "Questionnaire");
                     case "trainer":
-                        return RedirectToAction("Main", "MedicalEvaluation");
+                        return RedirectToAction("ConcussionMedicalEvaluation", "MedicalEvaluation");
                     case "admin":
                         return RedirectToAction("UserList", "AdminUser");
                     default:
