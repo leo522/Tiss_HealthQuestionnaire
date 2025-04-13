@@ -17,13 +17,13 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 醫療團隊-認知篩檢-短期記憶(2)
-        public List<ImmediateMemory> ImmediateMemoryItems { get; set; }
+        public List<ImmediateMemoryViewModel> ImmediateMemoryItems { get; set; }
         public int ImmediateMemoryTotalScore { get; set; }
         public string CompletionTime { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-專注力(3)
-        public List<Concentration> ConcentrationItems { get; set; }
+        public List<ConcentrationViewModel> ConcentrationItems { get; set; }
         public int ConcentrationTotalScore { get; set; }
         #endregion
 
@@ -35,7 +35,7 @@ namespace Tiss_HealthQuestionnaire.Models
         #endregion
 
         #region 醫療團隊-認知篩檢-延遲記憶(5)
-        public List<DelayedRecall> DelayedRecallItems { get; set; }
+        public List<DelayedRecallViewModel> DelayedRecallItems { get; set; }
         public int DelayedRecallTotalScore { get; set; }
         public string DelayedRecallStartTime { get; set; }
         #endregion
@@ -52,7 +52,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-定位(1)
     public class CognitiveScreeningViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string Question { get; set; }
         public int OrientationScore { get; set; }
         public int ImmediateMemoryScore { get; set; }
@@ -65,7 +65,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-短期記憶(2)
     public class ImmediateMemoryViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string Word { get; set; }
         public int FirstTestScore { get; set; } = 0;
         public int SecondTestScore { get; set; } = 0;
@@ -77,7 +77,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-專注力(3)
     public class ConcentrationViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string ListA { get; set; }
         public string ListB { get; set; }
         public string ListC { get; set; }
@@ -88,7 +88,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-協調與平衡測驗(4)
     public class CoordinationAndBalanceExaminationViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string TestFoot { get; set; }
         public string TestSurface { get; set; }
         public string Footwear { get; set; }
@@ -107,7 +107,7 @@ namespace Tiss_HealthQuestionnaire.Models
     #region 醫療團隊-認知篩檢-延遲記憶(5)
     public class DelayedRecallViewModel
     {
-        public int OrderNumber { get; set; }
+        public int ID { get; set; }
         public string Word { get; set; }
         public int Score { get; set; } = 0;
     }

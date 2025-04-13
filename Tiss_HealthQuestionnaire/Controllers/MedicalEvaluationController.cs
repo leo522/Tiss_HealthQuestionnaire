@@ -9,7 +9,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 {
     public class MedicalEvaluationController : BaseAuthController
     {
-        protected override string[] AllowedRoles => new[] { "trainer", "admin" };
+        protected override string[] AllowedRoles => new[] { "trainer"};
 
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
@@ -100,9 +100,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 var items = _db.ImmediateMemory.ToList();
 
+                var viewModels = items.Select((x, i) => new ImmediateMemoryViewModel
+                {
+                    ID = i + 1,
+                    Word = x.Word,
+                    FirstTestScore = x.FirstTest,
+                    SecondTestScore = x.SecondTest,
+                    ThirdTestScore = x.ThirdTest
+                }).ToList();
+
                 var model = new MedicalViewModel
                 {
-                    ImmediateMemoryItems = items,
+                    ImmediateMemoryItems = viewModels,
                     ImmediateMemoryTotalScore = Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0),
                     CompletionTime = Session["CompletionTime"]?.ToString() ?? "00:00"
                 };
@@ -154,12 +163,22 @@ namespace Tiss_HealthQuestionnaire.Controllers
             try
             {
                 var items = _db.Concentration.ToList();
+
+                var viewModels = items.Select((x, i) => new ConcentrationViewModel
+                {
+                    ID = i + 1,
+                    ListA = x.ListA,
+                    ListB = x.ListB,
+                    ListC = x.ListC,
+                    Score = 0 // 預設為 0
+                }).ToList();
+
                 var model = new MedicalViewModel
                 {
-                    ConcentrationItems = items
+                    ConcentrationItems = viewModels
                 };
 
-                Session["ConcentrationItems"] = items;
+                Session["ConcentrationItems"] = viewModels; // 儲存 ViewModel 清單
                 return View("Concentration", model);
             }
             catch (Exception ex)
@@ -254,9 +273,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
+                var items = _db.DelayedRecall.ToList();
+
+                var viewModels = items.Select((x, i) => new DelayedRecallViewModel
+                {
+                    ID = i + 1,
+                    Word = x.Word,
+                    Score = x.Score1
+                }).ToList();
+
                 var model = new MedicalViewModel
                 {
-                    DelayedRecallItems = _db.DelayedRecall.ToList(),
+                    DelayedRecallItems = viewModels,
                     DelayedRecallStartTime = Session["DelayedRecallStartTime"]?.ToString() ?? "00:00"
                 };
 
@@ -276,14 +304,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var items = _db.DelayedRecall.ToList();
                 int total = 0;
 
-                foreach (var item in items)
+                var viewModels = items.Select((x, i) =>
                 {
-                    int score = int.Parse(form[$"score_{item.ID}"] ?? "0");
+                    int score = int.Parse(form[$"score_{x.ID}"] ?? "0");
                     total += score;
-                }
+                    return new DelayedRecallViewModel
+                    {
+                        ID = i + 1,
+                        Word = x.Word,
+                        Score = score
+                    };
+                }).ToList();
 
                 Session["DelayedRecallTotalScore"] = total;
                 Session["DelayedRecallStartTime"] = form["testStartTime"] ?? "00:00";
+                Session["DelayedRecallViewModels"] = viewModels;
 
                 return RedirectToAction("CognitiveScreeningTotalScore");
             }
@@ -325,131 +360,45 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 醫療團隊-認知篩檢 (1~6)-用不到?!
-        //private void ProcessCognitiveScreening(MedicalViewModel model, FormCollection form)
-        //{
-        //    try
-        //    {
-        //        // 定位 (Orientation)
-        //        var orientationItems = _db.CognitiveScreening.ToList();
-        //        model.CognitiveScreeningItems = new List<CognitiveScreening>();
-        //        model.CognitiveScreeningTotalScore = 0;
+        #region 醫療團隊預覽頁
+        public ActionResult TrainerPreview()
+        {
+            try
+            {
+                var model = new MedicalViewModel
+                {
+                    // 原本的分數
+                    CognitiveScreeningTotalScore = Convert.ToInt32(Session["OrientationScore"] ?? 0),
+                    ImmediateMemoryTotalScore = Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0),
+                    ConcentrationTotalScore = Convert.ToInt32(Session["ConcentrationScore"] ?? 0),
+                    CoordinationAndBalanceTotalErrors = Convert.ToInt32(Session["CoordinationError"] ?? 0),
+                    CoordinationAndBalanceAverageTime = float.Parse(Session["CoordinationAvg"]?.ToString() ?? "0"),
+                    CoordinationAndBalanceFastestTime = float.Parse(Session["CoordinationFast"]?.ToString() ?? "0"),
+                    DelayedRecallTotalScore = Convert.ToInt32(Session["DelayedRecallTotalScore"] ?? 0),
+                    DelayedRecallStartTime = Session["DelayedRecallStartTime"]?.ToString() ?? "00:00",
 
-        //        foreach (var item in orientationItems)
-        //        {
-        //            string answerKey = $"question_{item.ID}";
-        //            var answer = form[answerKey];
-        //            int score = answer == "1" ? 1 : 0;
+                    // 項目內容
+                    CognitiveScreeningItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>,
+                    ImmediateMemoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>,
+                    ConcentrationItems = Session["ConcentrationItems"] as List<ConcentrationViewModel>,
+                    DelayedRecallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>,
 
-        //            model.CognitiveScreeningItems.Add(new CognitiveScreening
-        //            {
-        //                ID = item.ID,
-        //                Question = item.Question,
-        //                AnswerOption1 = score,
-        //                AnswerOption2 = 0
-        //            });
-        //            model.CognitiveScreeningTotalScore += score;
-        //        }
+                    // 總分
+                    CognitiveScreeningTotalScores =
+                Convert.ToInt32(Session["OrientationScore"] ?? 0) +
+                Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0) +
+                Convert.ToInt32(Session["ConcentrationScore"] ?? 0) +
+                Math.Max(0, 30 - Convert.ToInt32(Session["CoordinationError"] ?? 0)) +
+                Convert.ToInt32(Session["DelayedRecallTotalScore"] ?? 0)
+                };
 
-        //        // 短期記憶 (Immediate Memory)
-        //        var immediateMemoryItems = _db.ImmediateMemory.ToList();
-        //        model.ImmediateMemoryItems = new List<ImmediateMemory>();
-        //        model.ImmediateMemoryTotalScore = 0;
-
-        //        foreach (var item in immediateMemoryItems)
-        //        {
-        //            int first = int.Parse(form[$"first_{item.ID}"] ?? "0");
-        //            int second = int.Parse(form[$"second_{item.ID}"] ?? "0");
-        //            int third = int.Parse(form[$"third_{item.ID}"] ?? "0");
-
-        //            model.ImmediateMemoryItems.Add(new ImmediateMemory
-        //            {
-        //                ID = item.ID,
-        //                Word = item.Word,
-        //                FirstTest0 = first,
-        //                SecondTest0 = second,
-        //                ThirdTest1 = third
-        //            });
-        //            model.ImmediateMemoryTotalScore += first + second + third;
-        //        }
-        //        model.CompletionTime = form["CompletionTime"] ?? "00:00";
-
-        //        // 專注力 (Concentration)
-        //        var concentrationItems = _db.Concentration.ToList();
-        //        model.ConcentrationItems = new List<Concentration>();
-        //        model.ConcentrationTotalScore = 0;
-
-        //        foreach (var item in concentrationItems)
-        //        {
-        //            string answerKey = $"response_{item.Id}";
-        //            var answer = form[answerKey];
-        //            int score = answer == "1" ? 1 : 0;
-
-        //            model.ConcentrationItems.Add(new Concentration
-        //            {
-        //                OrderNumber = item.Id,
-        //                ListA = item.ListA,
-        //                ListB = item.ListB,
-        //                ListC = item.ListC
-        //            });
-        //            model.ConcentrationTotalScore += score;
-        //        }
-
-        //        // 協調與平衡測驗 (Coordination and Balance)
-        //        var coordination = new CoordinationAndBalanceExaminationViewModel
-        //        {
-        //            TestFoot = form["TestFoot"],
-        //            TestSurface = form["TestSurface"],
-        //            Footwear = form["Footwear"],
-        //            DoubleLegError = int.Parse(form["DoubleLegError"] ?? "0"),
-        //            TandemError = int.Parse(form["TandemError"] ?? "0"),
-        //            SingleLegError = int.Parse(form["SingleLegError"] ?? "0"),
-        //            FirstTime = float.Parse(form["FirstTime"] ?? "0"),
-        //            SecondTime = float.Parse(form["SecondTime"] ?? "0"),
-        //            ThirdTime = float.Parse(form["ThirdTime"] ?? "0")
-        //        };
-
-        //        coordination.TotalErrors = coordination.DoubleLegError + coordination.TandemError + coordination.SingleLegError;
-        //        coordination.AverageTimes = (coordination.FirstTime + coordination.SecondTime + coordination.ThirdTime) / 3;
-        //        coordination.FastestTimes = Math.Min(coordination.FirstTime, Math.Min(coordination.SecondTime, coordination.ThirdTime));
-
-        //        model.CoordinationAndBalanceItems = new List<CoordinationAndBalanceExaminationViewModel> { coordination };
-        //        model.CoordinationAndBalanceTotalErrors = coordination.TotalErrors;
-        //        model.CoordinationAndBalanceAverageTime = coordination.AverageTimes;
-        //        model.CoordinationAndBalanceFastestTime = coordination.FastestTimes;
-
-
-        //        // 延遲記憶 (Delayed Recall)
-        //        var delayedRecallItems = _db.DelayedRecall.ToList();
-        //        model.DelayedRecallItems = new List<DelayedRecall>();
-        //        model.DelayedRecallTotalScore = 0;
-
-        //        foreach (var item in delayedRecallItems)
-        //        {
-        //            int score = int.Parse(form[$"score_{item.ID}"] ?? "0");
-
-        //            model.DelayedRecallItems.Add(new DelayedRecall
-        //            {
-        //                ID = item.ID,
-        //                Word = item.Word,
-        //                Score0 = score
-        //            });
-        //            model.DelayedRecallTotalScore += score;
-        //        }
-        //        model.DelayedRecallStartTime = form["testStartTime"] ?? "00:00";
-
-        //        // 總分計算
-        //        model.CognitiveScreeningTotalScores =
-        //            model.CognitiveScreeningTotalScore +
-        //            model.ImmediateMemoryTotalScore +
-        //            model.ConcentrationTotalScore +
-        //            model.DelayedRecallTotalScore;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException("處理認知篩檢資料時發生錯誤。", ex);
-        //    }
-        //}
+                return View("TrainerPreview", model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

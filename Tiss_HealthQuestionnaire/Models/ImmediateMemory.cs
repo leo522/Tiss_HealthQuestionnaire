@@ -16,8 +16,8 @@ namespace Tiss_HealthQuestionnaire.Models
     {
         public int ID { get; set; }
         public string Word { get; set; }
-        public Nullable<int> FirstTest { get; set; }
-        public Nullable<int> SecondTest { get; set; }
-        public Nullable<int> ThirdTest { get; set; }
+        public int FirstTest { get; set; }
+        public int SecondTest { get; set; }
+        public int ThirdTest { get; set; }
     }
 }

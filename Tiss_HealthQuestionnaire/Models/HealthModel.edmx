@@ -111,9 +111,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderNumber" Type="int" Nullable="false" />
-          <Property Name="ListA" Type="nvarchar" MaxLength="30" />
-          <Property Name="ListB" Type="nvarchar" MaxLength="30" />
-          <Property Name="ListC" Type="nvarchar" MaxLength="30" />
+          <Property Name="ListA" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ListB" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ListC" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="ConcussionScreening">
           <Key>
@@ -181,9 +181,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Word" Type="nvarchar" MaxLength="50" />
-          <Property Name="Score0" Type="int" />
-          <Property Name="Score1" Type="int" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Score0" Type="int" Nullable="false" />
+          <Property Name="Score1" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -225,10 +225,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Word" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstTest" Type="int" />
-          <Property Name="SecondTest" Type="int" />
-          <Property Name="ThirdTest" Type="int" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstTest" Type="int" Nullable="false" />
+          <Property Name="SecondTest" Type="int" Nullable="false" />
+          <Property Name="ThirdTest" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LoginLog">
           <Key>
@@ -1666,9 +1666,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OrderNumber" Type="Int32" Nullable="false" />
-          <Property Name="ListA" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="ListB" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="ListC" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ListA" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ListB" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ListC" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="ConcussionScreening">
           <Key>
@@ -1742,9 +1742,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Score0" Type="Int32" />
-          <Property Name="Score1" Type="Int32" />
+          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Score0" Type="Int32" Nullable="false" />
+          <Property Name="Score1" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -1789,10 +1789,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FirstTest" Type="Int32" />
-          <Property Name="SecondTest" Type="Int32" />
-          <Property Name="ThirdTest" Type="Int32" />
+          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstTest" Type="Int32" Nullable="false" />
+          <Property Name="SecondTest" Type="Int32" Nullable="false" />
+          <Property Name="ThirdTest" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="LoginLog">
           <Key>

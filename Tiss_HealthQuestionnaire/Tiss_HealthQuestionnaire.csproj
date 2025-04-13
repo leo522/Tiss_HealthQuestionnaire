@@ -239,7 +239,7 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
-    <Compile Include="Models\MedicalViewModel.cs" />
+    <Compile Include="ViewModels\MedicalViewModel.cs" />
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -2670,6 +2670,7 @@
     <Content Include="Views\AdminLog\LogList.cshtml" />
     <Content Include="Views\AdminUser\PendingTrainerList.cshtml" />
     <Content Include="Views\AdminUser\CreateAthlete.cshtml" />
+    <Content Include="Views\MedicalEvaluation\TrainerPreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

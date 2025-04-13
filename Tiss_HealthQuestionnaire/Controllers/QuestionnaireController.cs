@@ -1528,32 +1528,32 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 跳轉到醫療防護團隊題目頁及身分驗證
-        [HttpPost]
-        public ActionResult RedirectToMedicalEvaluation(string userName, string password)
-        {
-            var trainer = _db.Test_AthleticTrainer.FirstOrDefault(at => at.ATName == userName && at.IsActive);
+        //#region 跳轉到醫療防護團隊題目頁及身分驗證
+        //[HttpPost]
+        //public ActionResult RedirectToMedicalEvaluation(string userName, string password)
+        //{
+        //    var trainer = _db.Test_AthleticTrainer.FirstOrDefault(at => at.ATName == userName && at.IsActive);
 
-            if (trainer != null && VerifyPassword(password, trainer.ATNumber))
-            {
-                Session["TrainerAuthenticated"] = true;
-                Session["TrainerUserName"] = userName;
+        //    if (trainer != null && VerifyPassword(password, trainer.ATNumber))
+        //    {
+        //        Session["TrainerAuthenticated"] = true;
+        //        Session["TrainerUserName"] = userName;
 
-                return RedirectToAction("ConcussionMedicalEvaluation", "MedicalEvaluation");
-            }
+        //        return RedirectToAction("ConcussionMedicalEvaluation", "MedicalEvaluation");
+        //    }
 
-            ViewBag.AuthError = "身份驗證失敗，請確認帳號與密碼。";
+        //    ViewBag.AuthError = "身份驗證失敗，請確認帳號與密碼。";
 
-            var user = GetLoggedInUser();
-            var model = CreateQuestionnaireViewModel(user?.GenderID ?? 1);
-            SetUserViewBag(user);
-            return View("Main", model);
-        }
+        //    var user = GetLoggedInUser();
+        //    var model = CreateQuestionnaireViewModel(user?.GenderID ?? 1);
+        //    SetUserViewBag(user);
+        //    return View("Main", model);
+        //}
 
-        private bool VerifyPassword(string inputPassword, string storedPassword)
-        {
-            return inputPassword == storedPassword;
-        }
-        #endregion
+        //private bool VerifyPassword(string inputPassword, string storedPassword)
+        //{
+        //    return inputPassword == storedPassword;
+        //}
+        //#endregion
     }
 }
