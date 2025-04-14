@@ -349,7 +349,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 return RedirectToAction("SelectRole");
 
             ViewBag.Role = role;
-            ViewBag.RoleName = role == "athlete" ? "選手" : role == "trainer" ? "防護員" : "管理員";
+            SetRoleViewBag(role);
 
             return View("Login");
         }
@@ -363,6 +363,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "請填寫所有欄位";
                     ViewBag.Role = role;
+                    SetRoleViewBag(role);
                     return View("Login");
                 }
 
@@ -385,6 +386,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "查無此帳號";
                     ViewBag.Role = role;
+                    SetRoleViewBag(role);
                     return View("Login");
                 }
 
@@ -392,12 +394,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "您的帳號尚未通過審核，請聯繫管理員。";
                     ViewBag.Role = role;
+                    SetRoleViewBag(role);
                     return View("Login");
                 }
 
                 if (!user.IsActive)
                 {
                     ViewBag.ErrorMessage = "帳號已被停用，請聯繫管理員。";
+                    SetRoleViewBag(role);
                     ViewBag.Role = role;
                     return View("Login");
                 }
@@ -406,6 +410,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 if (user.Password != hashedInputPwd)
                 {
                     ViewBag.ErrorMessage = "密碼錯誤";
+                    SetRoleViewBag(role);
                     ViewBag.Role = role;
                     return View("Login");
                 }
@@ -434,16 +439,27 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         return RedirectToAction("UserList", "AdminUser");
                     default:
                         ViewBag.ErrorMessage = "身份錯誤";
+                        ViewBag.Role = role;
+                        SetRoleViewBag(role);
                         return View("Login");
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "錯誤: 查無此帳號";
+                SetRoleViewBag(role);
                 return View("Error");
 
                 throw ex;
             }
+        }
+        #endregion
+
+        #region 登入頁身份欄位顯示唯讀_共用方法
+        private void SetRoleViewBag(string role)
+        {
+            ViewBag.Role = role;
+            ViewBag.RoleName = role == "athlete" ? "選手" : role == "trainer" ? "防護員" : "管理員";
         }
         #endregion
 
