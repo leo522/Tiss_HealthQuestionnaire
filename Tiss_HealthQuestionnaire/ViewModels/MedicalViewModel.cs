@@ -20,6 +20,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<ImmediateMemoryViewModel> ImmediateMemoryItems { get; set; }
         public int ImmediateMemoryTotalScore { get; set; }
         public string CompletionTime { get; set; }
+        public string CompletionTimeDisplay { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-專注力(3)

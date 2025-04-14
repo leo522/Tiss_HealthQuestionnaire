@@ -12,7 +12,19 @@
             <ul class="list-disc pl-6">
                 @foreach (var item in Model.CognitiveScreeningItems)
                 {
-                    <li>@item.Question</li>
+                    <li>
+                        @item.Question
+                        （填答：
+                        @if (item.AnswerOption1 == 1)
+                        {
+                            <span class="text-blue-600 font-semibold">✔ 正確</span>
+                        }
+                        else
+                        {
+                            <span class="text-red-600 font-semibold">✘ 錯誤</span>
+                        }
+                        ）
+                    </li>
                 }
             </ul>
         </div>
@@ -36,7 +48,7 @@
                     }
                 </tbody>
             </table>
-            <p class="mt-2">完成時間：@Model.CompletionTime</p>
+            <p class="mt-2">完成時間：@Model.CompletionTimeDisplay</p>
         </div>
 
         @*專注力*@

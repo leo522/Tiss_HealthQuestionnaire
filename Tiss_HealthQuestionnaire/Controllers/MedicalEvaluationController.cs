@@ -79,10 +79,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     string key = $"question_{item.ID}";
                     int score = form[key] == "1" ? 1 : 0;
+                    item.AnswerOption1 = score;
                     totalScore += score;
                 }
 
                 Session["OrientationScore"] = totalScore;
+                Session["CognitiveScreeningItems"] = questions;
 
                 return RedirectToAction("ImmediateMemory");
             }
@@ -132,7 +134,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 int total = 0;
                 var items = _db.ImmediateMemory.ToList();
 
-                foreach (var item in items)
+                var viewModels = items.Select((item, i) =>
                 {
                     int f = int.Parse(form[$"first_{item.ID}"] ?? "0");
                     int s = int.Parse(form[$"second_{item.ID}"] ?? "0");
@@ -140,13 +142,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                     total += f + s + t;
 
-                    item.FirstTest = f;
-                    item.SecondTest = s;
-                    item.ThirdTest = t;
-                }
+                    return new ImmediateMemoryViewModel
+                    {
+                        ID = item.ID,
+                        Word = item.Word,
+                        FirstTestScore = f,
+                        SecondTestScore = s,
+                        ThirdTestScore = t
+                    };
+                }).ToList();
 
                 Session["ImmediateMemoryScore"] = total;
                 Session["CompletionTime"] = form["CompletionTime"] ?? "00:00";
+                Session["ImmediateMemoryItems"] = viewModels;
 
                 return RedirectToAction("Concentration");
             }
@@ -178,7 +186,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     ConcentrationItems = viewModels
                 };
 
-                Session["ConcentrationItems"] = viewModels; // 儲存 ViewModel 清單
+                Session["ConcentrationItems"] = viewModels;
                 return View("Concentration", model);
             }
             catch (Exception ex)
@@ -192,17 +200,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
-                var questions = Session["ConcentrationItems"] as List<Concentration>;
+                var questions = Session["ConcentrationItems"] as List<ConcentrationViewModel>;
                 int total = 0;
 
                 foreach (var item in questions)
                 {
-                    string key = $"response_{item.Id}";
+                    string key = $"response_{item.ID}";
                     int score = form[key] == "1" ? 1 : 0;
+                    item.Score = score;
                     total += score;
                 }
 
                 Session["ConcentrationScore"] = total;
+                Session["ConcentrationItems"] = questions;
+
                 return RedirectToAction("CoordinationAndBalanceExamination");
             }
             catch (Exception ex)
@@ -258,6 +269,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 Session["CoordinationError"] = errors.TotalErrors;
                 Session["CoordinationAvg"] = errors.AverageTimes;
                 Session["CoordinationFast"] = errors.FastestTimes;
+                Session["CoordinationItems"] = new List<CoordinationAndBalanceExaminationViewModel> { errors };
 
                 return RedirectToAction("DelayedRecall");
             }
@@ -370,6 +382,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     // 原本的分數
                     CognitiveScreeningTotalScore = Convert.ToInt32(Session["OrientationScore"] ?? 0),
                     ImmediateMemoryTotalScore = Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0),
+                    CompletionTime = Session["CompletionTime"]?.ToString() ?? "00:00",
+                    CompletionTimeDisplay = FormatTime(Session["CompletionTime"]?.ToString()),
                     ConcentrationTotalScore = Convert.ToInt32(Session["ConcentrationScore"] ?? 0),
                     CoordinationAndBalanceTotalErrors = Convert.ToInt32(Session["CoordinationError"] ?? 0),
                     CoordinationAndBalanceAverageTime = float.Parse(Session["CoordinationAvg"]?.ToString() ?? "0"),
@@ -385,11 +399,11 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                     // 總分
                     CognitiveScreeningTotalScores =
-                Convert.ToInt32(Session["OrientationScore"] ?? 0) +
-                Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0) +
-                Convert.ToInt32(Session["ConcentrationScore"] ?? 0) +
-                Math.Max(0, 30 - Convert.ToInt32(Session["CoordinationError"] ?? 0)) +
-                Convert.ToInt32(Session["DelayedRecallTotalScore"] ?? 0)
+                        Convert.ToInt32(Session["OrientationScore"] ?? 0) +
+                        Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0) +
+                        Convert.ToInt32(Session["ConcentrationScore"] ?? 0) +
+                        Math.Max(0, 30 - Convert.ToInt32(Session["CoordinationError"] ?? 0)) +
+                        Convert.ToInt32(Session["DelayedRecallTotalScore"] ?? 0)
                 };
 
                 return View("TrainerPreview", model);
@@ -398,6 +412,21 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 throw ex;
             }
+        }
+        #endregion
+
+        #region 顯示時間上午下午格式共用方法
+        private string FormatTime(string timeStr)
+        {
+            if (string.IsNullOrEmpty(timeStr))
+                return "未填寫";
+
+            if (DateTime.TryParseExact(timeStr, "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime dt))
+            {
+                string ampm = dt.Hour < 12 ? "上午" : "下午";
+                return $"{ampm} {dt:hh:mm}";
+            }
+            return "格式錯誤";
         }
         #endregion
     }
