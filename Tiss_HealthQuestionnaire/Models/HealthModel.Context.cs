@@ -87,7 +87,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<SystemUser> SystemUser { get; set; }
         public virtual DbSet<Team> Team { get; set; }
         public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
-        public virtual DbSet<Test_AthleticTrainer> Test_AthleticTrainer { get; set; }
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<TrainerProfile> TrainerProfile { get; set; }
         public virtual DbSet<TrainerTeam> TrainerTeam { get; set; }

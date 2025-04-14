@@ -13,6 +13,7 @@ using Tiss_HealthQuestionnaire.Models;
 using static Tiss_HealthQuestionnaire.Models.AccountViewModel;
 using System.Security.Principal;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
@@ -60,6 +61,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "此帳號名稱已被使用";
                     ViewBag.GenderList = _db.Gender.ToList();
+                    return View();
+                }
+
+                // 電子郵件格式檢查
+                var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!Regex.IsMatch(email, emailPattern))
+                {
+                    ViewBag.ErrorMessage = "電子郵件格式不正確";
                     return View();
                 }
 
@@ -122,7 +131,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterTrainer(string userName, string password, string title, string department, string expertise, string email)
+        public ActionResult RegisterTrainer(string userName, string password, string title, string department, string expertise, string TrainerEmail)
         {
             try
             {
@@ -135,6 +144,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 if (_db.SystemUser.Any(u => u.UserName == userName))
                 {
                     ViewBag.ErrorMessage = "帳號已存在";
+                    return View();
+                }
+
+                // 電子郵件格式檢查
+                var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!Regex.IsMatch(TrainerEmail, emailPattern))
+                {
+                    ViewBag.ErrorMessage = "電子郵件格式不正確";
                     return View();
                 }
 
@@ -153,7 +170,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     UserName = userName,
                     Password = hashedPwd,
                     Salt = salt,
-                    Email = email,
+                    Email = TrainerEmail,
                     RoleID = trainerRoleId.Value,
                     IsActive = true,
                     IsApproved = false,
@@ -170,7 +187,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     ATName = userName,
                     Title = title,
                     Department = department,
-                    Expertise = expertise
+                    Expertise = expertise,
+                    TrainerEmail = TrainerEmail,
                 };
 
                 _db.TrainerProfile.Add(trainerProfile);
@@ -220,6 +238,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "帳號已存在";
                     return View("RegisterAdmin");
+                }
+
+                var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!Regex.IsMatch(email, emailPattern))
+                {
+                    ViewBag.ErrorMessage = "電子郵件格式不正確";
+                    return View();
                 }
 
                 var salt = GenerateSalt();

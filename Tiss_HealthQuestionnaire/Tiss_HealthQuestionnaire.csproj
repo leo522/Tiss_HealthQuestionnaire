@@ -350,9 +350,6 @@
     <Compile Include="Models\TemporaryQuestionnaireData.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Test_AthleticTrainer.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\TimedTandemGait.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
