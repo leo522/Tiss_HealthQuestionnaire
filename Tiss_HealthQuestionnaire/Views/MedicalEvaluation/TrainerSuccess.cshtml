@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "問卷提交成功";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width , inital-scale=1.0" />
+    <title>問卷提交成功</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 p-8 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
+        <img src="~/img/success.jpg" alt="Sucess" class="w-24 mx-auto mb-4" />
+        <h1 class="text-3xl font-bold text-green-600 mb-4">提交成功！</h1>
+        <p class="test-gray-700 text-lg">感謝您的填寫，您的問卷已提交。</p>
+        <div class="mt-6">
+            <a href="@Url.Action("ConcussionMedicalEvaluation","MedicalEvaluation")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">返回首頁</a>
+        </div>
+    </div>
+</body>
+</html>

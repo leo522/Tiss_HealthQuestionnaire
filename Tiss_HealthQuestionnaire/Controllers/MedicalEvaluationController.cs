@@ -429,5 +429,121 @@ namespace Tiss_HealthQuestionnaire.Controllers
             return "格式錯誤";
         }
         #endregion
+
+        #region 防護員問卷存檔
+        [HttpPost]
+        public ActionResult SaveTrainerResponse()
+        {
+            try
+            {
+                int trainerId = Convert.ToInt32(Session["TrainerID"]);
+
+                var trainerResponse = new TrainerQuestionnaireResponse
+                {
+                    TrainerID = trainerId.ToString(),
+                    FillingDate = DateTime.Now,
+                    FillName = Session["UserName"]?.ToString()
+                };
+                _db.TrainerQuestionnaireResponse.Add(trainerResponse);
+                _db.SaveChanges();
+
+                int responseId = trainerResponse.ID;
+
+                var cognitiveItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>;
+                foreach (var item in cognitiveItems)
+                {
+                    _db.ResponseCognitiveScreening.Add(new ResponseCognitiveScreening
+                    {
+                        TrainerQuestionnaireResponseID = responseId,
+                        QuestionNumber = item.ID,
+                        Question = item.Question,
+                        Answer = item.AnswerOption1 == 1
+                    });
+                }
+
+                var memoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>;
+                foreach (var item in memoryItems)
+                {
+                    _db.ResponseImmediateMemory.Add(new ResponseImmediateMemory
+                    {
+                        TrainerQuestionnaireResponseID = responseId,
+                        Word = item.Word,
+                        FirstTestScore = item.FirstTestScore,
+                        SecondTestScore = item.SecondTestScore,
+                        ThirdTestScore = item.ThirdTestScore,
+                        CompletionTime = item.CompletionTime
+                    });
+                }
+
+                var concentrationItems = Session["ConcentrationItems"] as List<ConcentrationViewModel>;
+                foreach (var item in concentrationItems)
+                {
+                    _db.ResponseConcentration.Add(new ResponseConcentration
+                    {
+                        TrainerQuestionnaireResponseID = responseId,
+                        ListA = item.ListA,
+                        ListB = item.ListB,
+                        ListC = item.ListC,
+                        Answer = item.Score == 1,
+                        Score = item.Score
+                    });
+                }
+
+                var coordItem = (Session["CoordinationItems"] as List<CoordinationAndBalanceExaminationViewModel>)?.FirstOrDefault();
+                if (coordItem != null)
+                {
+                    _db.ResponseCoordinationAndBalance.Add(new ResponseCoordinationAndBalance
+                    {
+                        TrainerQuestionnaireResponseID = responseId,
+                        TestFoot = coordItem.TestFoot,
+                        TestSurface = coordItem.TestSurface,
+                        Footwear = coordItem.Footwear,
+                        DoubleLegError = coordItem.DoubleLegError,
+                        TandemError = coordItem.TandemError,
+                        SingleLegError = coordItem.SingleLegError,
+                        TotalErrors = coordItem.TotalErrors,
+                        FirstTime = coordItem.FirstTime,
+                        SecondTime = coordItem.SecondTime,
+                        ThirdTime = coordItem.ThirdTime,
+                        AverageTime = coordItem.AverageTimes,
+                        FastestTime = coordItem.FastestTimes
+                    });
+                }
+
+                var recallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>;
+                foreach (var item in recallItems)
+                {
+                    _db.ResponseDelayedRecall.Add(new ResponseDelayedRecall
+                    {
+                        TrainerQuestionnaireResponseID = responseId,
+                        Word = item.Word,
+                        Score = item.Score,
+                        StartTime = Session["testStartTimeDisplay"]?.ToString()
+                    });
+                }
+
+                _db.SaveChanges();
+
+                TempData["SuccessMessage"] = "問卷填答紀錄已成功儲存。";
+                return RedirectToAction("TrainerSuccess");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        #endregion
+
+        #region 防護員問卷查詢結果頁
+
+        #endregion
+
+        #region 防護員問卷存檔成功畫面 
+        public ActionResult TrainerSuccess()
+        {
+            return View();
+        }
+        #endregion
     }
 }

@@ -411,6 +411,28 @@
           <Property Name="Answer" Type="bit" Nullable="false" />
           <Property Name="QuestionText" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="ResponseCognitiveScreening">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="int" Nullable="false" />
+          <Property Name="QuestionNumber" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Answer" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseConcentration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="int" Nullable="false" />
+          <Property Name="ListA" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ListB" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ListC" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Answer" Type="bit" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ResponseConcussionScreening">
           <Key>
             <PropertyRef Name="ID" />
@@ -420,6 +442,25 @@
           <Property Name="QuestionNumber" Type="int" Nullable="false" />
           <Property Name="Question" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Answer" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResponseCoordinationAndBalance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="int" Nullable="false" />
+          <Property Name="TestFoot" Type="nvarchar" MaxLength="10" />
+          <Property Name="TestSurface" Type="nvarchar" MaxLength="20" />
+          <Property Name="Footwear" Type="nvarchar" MaxLength="20" />
+          <Property Name="DoubleLegError" Type="int" Nullable="false" />
+          <Property Name="TandemError" Type="int" Nullable="false" />
+          <Property Name="SingleLegError" Type="int" Nullable="false" />
+          <Property Name="TotalErrors" Type="int" Nullable="false" />
+          <Property Name="FirstTime" Type="float" Nullable="false" />
+          <Property Name="SecondTime" Type="float" Nullable="false" />
+          <Property Name="ThirdTime" Type="float" Nullable="false" />
+          <Property Name="AverageTime" Type="float" Nullable="false" />
+          <Property Name="FastestTime" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="ResponseCurrentInjuries">
           <Key>
@@ -431,6 +472,16 @@
           <Property Name="Side" Type="nvarchar" MaxLength="10" />
           <Property Name="InjuryType" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Treatment" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ResponseDelayedRecall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="int" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="nvarchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="ResponseFamilyHistory">
           <Key>
@@ -449,6 +500,18 @@
           <Property Name="QuestionnaireResponseID" Type="int" Nullable="false" />
           <Property Name="Question" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Answer" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ResponseImmediateMemory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="int" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstTestScore" Type="int" Nullable="false" />
+          <Property Name="SecondTestScore" Type="int" Nullable="false" />
+          <Property Name="ThirdTestScore" Type="int" Nullable="false" />
+          <Property Name="CompletionTime" Type="nvarchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="ResponseOrthopaedicScreening">
           <Key>
@@ -628,6 +691,15 @@
           <Property Name="Department" Type="nvarchar" MaxLength="50" />
           <Property Name="Expertise" Type="nvarchar" MaxLength="100" />
           <Property Name="TrainerEmail" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TrainerQuestionnaireResponse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrainerID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="FillingDate" Type="datetime" Nullable="false" />
+          <Property Name="FillName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TrainerTeam">
           <Key>
@@ -924,6 +996,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ResponseCognitiveScreening_TrainerResponse">
+          <End Role="TrainerQuestionnaireResponse" Type="Self.TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Role="ResponseCognitiveScreening" Type="Self.ResponseCognitiveScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseCognitiveScreening">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseConcentration_TrainerResponse">
+          <End Role="TrainerQuestionnaireResponse" Type="Self.TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Role="ResponseConcentration" Type="Self.ResponseConcentration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseConcentration">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ResponseConcussionScreening_QuestionnaireResponse">
           <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="1" />
           <End Role="ResponseConcussionScreening" Type="Self.ResponseConcussionScreening" Multiplicity="*" />
@@ -936,6 +1032,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ResponseCoordination_TrainerResponse">
+          <End Role="TrainerQuestionnaireResponse" Type="Self.TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Role="ResponseCoordinationAndBalance" Type="Self.ResponseCoordinationAndBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseCoordinationAndBalance">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ResponseCurrentInjuries_QuestionnaireResponse">
           <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="1" />
           <End Role="ResponseCurrentInjuries" Type="Self.ResponseCurrentInjuries" Multiplicity="*" />
@@ -945,6 +1053,18 @@
             </Principal>
             <Dependent Role="ResponseCurrentInjuries">
               <PropertyRef Name="QuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseDelayedRecall_TrainerResponse">
+          <End Role="TrainerQuestionnaireResponse" Type="Self.TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Role="ResponseDelayedRecall" Type="Self.ResponseDelayedRecall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseDelayedRecall">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -969,6 +1089,18 @@
             </Principal>
             <Dependent Role="ResponseFemaleQuestionnaire">
               <PropertyRef Name="QuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseImmediateMemory_TrainerResponse">
+          <End Role="TrainerQuestionnaireResponse" Type="Self.TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Role="ResponseImmediateMemory" Type="Self.ResponseImmediateMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseImmediateMemory">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1149,10 +1281,15 @@
           <EntitySet Name="QuestionnaireType" EntityType="Self.QuestionnaireType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseAllergicHistory" EntityType="Self.ResponseAllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseCardiovascularScreening" EntityType="Self.ResponseCardiovascularScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseCognitiveScreening" EntityType="Self.ResponseCognitiveScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseConcentration" EntityType="Self.ResponseConcentration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseConcussionScreening" EntityType="Self.ResponseConcussionScreening" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="Self.ResponseCoordinationAndBalance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseCurrentInjuries" EntityType="Self.ResponseCurrentInjuries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseDelayedRecall" EntityType="Self.ResponseDelayedRecall" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseFamilyHistory" EntityType="Self.ResponseFamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="Self.ResponseFemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponseImmediateMemory" EntityType="Self.ResponseImmediateMemory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseOrthopaedicScreening" EntityType="Self.ResponseOrthopaedicScreening" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponsePastDrugs" EntityType="Self.ResponsePastDrugs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponsePastHealth" EntityType="Self.ResponsePastHealth" Schema="dbo" store:Type="Tables" />
@@ -1170,6 +1307,7 @@
           <EntitySet Name="TimedTandemGait" EntityType="Self.TimedTandemGait" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrainerAthlete" EntityType="Self.TrainerAthlete" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrainerProfile" EntityType="Self.TrainerProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrainerQuestionnaireResponse" EntityType="Self.TrainerQuestionnaireResponse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrainerTeam" EntityType="Self.TrainerTeam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Treatment" EntityType="Self.Treatment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TreatmentMethod" EntityType="Self.TreatmentMethod" Schema="dbo" store:Type="Tables" />
@@ -1262,13 +1400,29 @@
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponseCardiovascularScreening" EntitySet="ResponseCardiovascularScreening" />
           </AssociationSet>
+          <AssociationSet Name="FK_ResponseCognitiveScreening_TrainerResponse" Association="Self.FK_ResponseCognitiveScreening_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseCognitiveScreening" EntitySet="ResponseCognitiveScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseConcentration_TrainerResponse" Association="Self.FK_ResponseConcentration_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
+          </AssociationSet>
           <AssociationSet Name="FK_ResponseConcussionScreening_QuestionnaireResponse" Association="Self.FK_ResponseConcussionScreening_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponseConcussionScreening" EntitySet="ResponseConcussionScreening" />
           </AssociationSet>
+          <AssociationSet Name="FK_ResponseCoordination_TrainerResponse" Association="Self.FK_ResponseCoordination_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
+          </AssociationSet>
           <AssociationSet Name="FK_ResponseCurrentInjuries_QuestionnaireResponse" Association="Self.FK_ResponseCurrentInjuries_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponseCurrentInjuries" EntitySet="ResponseCurrentInjuries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseDelayedRecall_TrainerResponse" Association="Self.FK_ResponseDelayedRecall_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
           </AssociationSet>
           <AssociationSet Name="FK_ResponseFamilyHistory_QuestionnaireResponse" Association="Self.FK_ResponseFamilyHistory_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
@@ -1277,6 +1431,10 @@
           <AssociationSet Name="FK_ResponseFemaleQuestionnaire_QuestionnaireResponse" Association="Self.FK_ResponseFemaleQuestionnaire_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponseFemaleQuestionnaire" EntitySet="ResponseFemaleQuestionnaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseImmediateMemory_TrainerResponse" Association="Self.FK_ResponseImmediateMemory_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseImmediateMemory" EntitySet="ResponseImmediateMemory" />
           </AssociationSet>
           <AssociationSet Name="FK_ResponseOrthopaedicScreening_QuestionnaireResponse" Association="Self.FK_ResponseOrthopaedicScreening_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
@@ -1372,10 +1530,15 @@
           <EntitySet Name="QuestionnaireType" EntityType="HealthQuestionnaireModel.QuestionnaireType" />
           <EntitySet Name="ResponseAllergicHistory" EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" />
           <EntitySet Name="ResponseCardiovascularScreening" EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" />
+          <EntitySet Name="ResponseCognitiveScreening" EntityType="HealthQuestionnaireModel.ResponseCognitiveScreening" />
+          <EntitySet Name="ResponseConcentration" EntityType="HealthQuestionnaireModel.ResponseConcentration" />
           <EntitySet Name="ResponseConcussionScreening" EntityType="HealthQuestionnaireModel.ResponseConcussionScreening" />
+          <EntitySet Name="ResponseCoordinationAndBalance" EntityType="HealthQuestionnaireModel.ResponseCoordinationAndBalance" />
           <EntitySet Name="ResponseCurrentInjuries" EntityType="HealthQuestionnaireModel.ResponseCurrentInjuries" />
+          <EntitySet Name="ResponseDelayedRecall" EntityType="HealthQuestionnaireModel.ResponseDelayedRecall" />
           <EntitySet Name="ResponseFamilyHistory" EntityType="HealthQuestionnaireModel.ResponseFamilyHistory" />
           <EntitySet Name="ResponseFemaleQuestionnaire" EntityType="HealthQuestionnaireModel.ResponseFemaleQuestionnaire" />
+          <EntitySet Name="ResponseImmediateMemory" EntityType="HealthQuestionnaireModel.ResponseImmediateMemory" />
           <EntitySet Name="ResponseOrthopaedicScreening" EntityType="HealthQuestionnaireModel.ResponseOrthopaedicScreening" />
           <EntitySet Name="ResponsePastDrugs" EntityType="HealthQuestionnaireModel.ResponsePastDrugs" />
           <EntitySet Name="ResponsePastHealth" EntityType="HealthQuestionnaireModel.ResponsePastHealth" />
@@ -1392,6 +1555,7 @@
           <EntitySet Name="TemporaryQuestionnaireData" EntityType="HealthQuestionnaireModel.TemporaryQuestionnaireData" />
           <EntitySet Name="TimedTandemGait" EntityType="HealthQuestionnaireModel.TimedTandemGait" />
           <EntitySet Name="TrainerProfile" EntityType="HealthQuestionnaireModel.TrainerProfile" />
+          <EntitySet Name="TrainerQuestionnaireResponse" EntityType="HealthQuestionnaireModel.TrainerQuestionnaireResponse" />
           <EntitySet Name="TrainerTeam" EntityType="HealthQuestionnaireModel.TrainerTeam" />
           <EntitySet Name="Treatment" EntityType="HealthQuestionnaireModel.Treatment" />
           <EntitySet Name="TreatmentMethod" EntityType="HealthQuestionnaireModel.TreatmentMethod" />
@@ -1515,6 +1679,26 @@
           <AssociationSet Name="FK_TemporaryQuestionnaireData_QuestionnaireType" Association="HealthQuestionnaireModel.FK_TemporaryQuestionnaireData_QuestionnaireType">
             <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
             <End Role="TemporaryQuestionnaireData" EntitySet="TemporaryQuestionnaireData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseCognitiveScreening_TrainerResponse" Association="HealthQuestionnaireModel.FK_ResponseCognitiveScreening_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseCognitiveScreening" EntitySet="ResponseCognitiveScreening" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseConcentration_TrainerResponse" Association="HealthQuestionnaireModel.FK_ResponseConcentration_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseConcentration" EntitySet="ResponseConcentration" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseCoordination_TrainerResponse" Association="HealthQuestionnaireModel.FK_ResponseCoordination_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseCoordinationAndBalance" EntitySet="ResponseCoordinationAndBalance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseDelayedRecall_TrainerResponse" Association="HealthQuestionnaireModel.FK_ResponseDelayedRecall_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseDelayedRecall" EntitySet="ResponseDelayedRecall" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResponseImmediateMemory_TrainerResponse" Association="HealthQuestionnaireModel.FK_ResponseImmediateMemory_TrainerResponse">
+            <End Role="TrainerQuestionnaireResponse" EntitySet="TrainerQuestionnaireResponse" />
+            <End Role="ResponseImmediateMemory" EntitySet="ResponseImmediateMemory" />
           </AssociationSet>
           <AssociationSet Name="FK__SystemLog__UserI__4AA30C57" Association="HealthQuestionnaireModel.FK__SystemLog__UserI__4AA30C57">
             <End Role="SystemUser" EntitySet="SystemUser" />
@@ -1990,6 +2174,30 @@
           <Property Name="QuestionText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseCardiovascularScreening_QuestionnaireResponse" FromRole="ResponseCardiovascularScreening" ToRole="QuestionnaireResponse" />
         </EntityType>
+        <EntityType Name="ResponseCognitiveScreening">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionNumber" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Answer" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TrainerQuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseCognitiveScreening_TrainerResponse" FromRole="ResponseCognitiveScreening" ToRole="TrainerQuestionnaireResponse" />
+        </EntityType>
+        <EntityType Name="ResponseConcentration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="Int32" Nullable="false" />
+          <Property Name="ListA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ListB" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ListC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Answer" Type="Boolean" Nullable="false" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TrainerQuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseConcentration_TrainerResponse" FromRole="ResponseConcentration" ToRole="TrainerQuestionnaireResponse" />
+        </EntityType>
         <EntityType Name="ResponseConcussionScreening">
           <Key>
             <PropertyRef Name="ID" />
@@ -2000,6 +2208,26 @@
           <Property Name="Question" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Answer" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseConcussionScreening_QuestionnaireResponse" FromRole="ResponseConcussionScreening" ToRole="QuestionnaireResponse" />
+        </EntityType>
+        <EntityType Name="ResponseCoordinationAndBalance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="Int32" Nullable="false" />
+          <Property Name="TestFoot" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TestSurface" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Footwear" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DoubleLegError" Type="Int32" Nullable="false" />
+          <Property Name="TandemError" Type="Int32" Nullable="false" />
+          <Property Name="SingleLegError" Type="Int32" Nullable="false" />
+          <Property Name="TotalErrors" Type="Int32" Nullable="false" />
+          <Property Name="FirstTime" Type="Double" Nullable="false" />
+          <Property Name="SecondTime" Type="Double" Nullable="false" />
+          <Property Name="ThirdTime" Type="Double" Nullable="false" />
+          <Property Name="AverageTime" Type="Double" Nullable="false" />
+          <Property Name="FastestTime" Type="Double" Nullable="false" />
+          <NavigationProperty Name="TrainerQuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseCoordination_TrainerResponse" FromRole="ResponseCoordinationAndBalance" ToRole="TrainerQuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponseCurrentInjuries">
           <Key>
@@ -2012,6 +2240,17 @@
           <Property Name="InjuryType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Treatment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseCurrentInjuries_QuestionnaireResponse" FromRole="ResponseCurrentInjuries" ToRole="QuestionnaireResponse" />
+        </EntityType>
+        <EntityType Name="ResponseDelayedRecall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TrainerQuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseDelayedRecall_TrainerResponse" FromRole="ResponseDelayedRecall" ToRole="TrainerQuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponseFamilyHistory">
           <Key>
@@ -2032,6 +2271,19 @@
           <Property Name="Question" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Answer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseFemaleQuestionnaire_QuestionnaireResponse" FromRole="ResponseFemaleQuestionnaire" ToRole="QuestionnaireResponse" />
+        </EntityType>
+        <EntityType Name="ResponseImmediateMemory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerQuestionnaireResponseID" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstTestScore" Type="Int32" Nullable="false" />
+          <Property Name="SecondTestScore" Type="Int32" Nullable="false" />
+          <Property Name="ThirdTestScore" Type="Int32" Nullable="false" />
+          <Property Name="CompletionTime" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TrainerQuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_ResponseImmediateMemory_TrainerResponse" FromRole="ResponseImmediateMemory" ToRole="TrainerQuestionnaireResponse" />
         </EntityType>
         <EntityType Name="ResponseOrthopaedicScreening">
           <Key>
@@ -2225,6 +2477,20 @@
           <NavigationProperty Name="SystemUser" Relationship="HealthQuestionnaireModel.FK__TrainerPr__UserI__35A7EF71" FromRole="TrainerProfile" ToRole="SystemUser" />
           <NavigationProperty Name="TrainerTeam" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile" FromRole="TrainerProfile" ToRole="TrainerTeam" />
           <NavigationProperty Name="AthleteProfile" Relationship="HealthQuestionnaireModel.TrainerAthlete" FromRole="TrainerProfile" ToRole="AthleteProfile" />
+        </EntityType>
+        <EntityType Name="TrainerQuestionnaireResponse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrainerID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FillingDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FillName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ResponseCognitiveScreening" Relationship="HealthQuestionnaireModel.FK_ResponseCognitiveScreening_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseCognitiveScreening" />
+          <NavigationProperty Name="ResponseConcentration" Relationship="HealthQuestionnaireModel.FK_ResponseConcentration_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseConcentration" />
+          <NavigationProperty Name="ResponseCoordinationAndBalance" Relationship="HealthQuestionnaireModel.FK_ResponseCoordination_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseCoordinationAndBalance" />
+          <NavigationProperty Name="ResponseDelayedRecall" Relationship="HealthQuestionnaireModel.FK_ResponseDelayedRecall_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseDelayedRecall" />
+          <NavigationProperty Name="ResponseImmediateMemory" Relationship="HealthQuestionnaireModel.FK_ResponseImmediateMemory_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseImmediateMemory" />
         </EntityType>
         <EntityType Name="TrainerTeam">
           <Key>
@@ -2617,6 +2883,66 @@
             </Principal>
             <Dependent Role="TemporaryQuestionnaireData">
               <PropertyRef Name="QuestionnaireTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseCognitiveScreening_TrainerResponse">
+          <End Type="HealthQuestionnaireModel.TrainerQuestionnaireResponse" Role="TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseCognitiveScreening" Role="ResponseCognitiveScreening" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseCognitiveScreening">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseConcentration_TrainerResponse">
+          <End Type="HealthQuestionnaireModel.TrainerQuestionnaireResponse" Role="TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseConcentration" Role="ResponseConcentration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseConcentration">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseCoordination_TrainerResponse">
+          <End Type="HealthQuestionnaireModel.TrainerQuestionnaireResponse" Role="TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseCoordinationAndBalance" Role="ResponseCoordinationAndBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseCoordinationAndBalance">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseDelayedRecall_TrainerResponse">
+          <End Type="HealthQuestionnaireModel.TrainerQuestionnaireResponse" Role="TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseDelayedRecall" Role="ResponseDelayedRecall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseDelayedRecall">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResponseImmediateMemory_TrainerResponse">
+          <End Type="HealthQuestionnaireModel.TrainerQuestionnaireResponse" Role="TrainerQuestionnaireResponse" Multiplicity="1" />
+          <End Type="HealthQuestionnaireModel.ResponseImmediateMemory" Role="ResponseImmediateMemory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainerQuestionnaireResponse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ResponseImmediateMemory">
+              <PropertyRef Name="TrainerQuestionnaireResponseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3140,6 +3466,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ResponseCognitiveScreening">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseCognitiveScreening">
+              <MappingFragment StoreEntitySet="ResponseCognitiveScreening">
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="QuestionNumber" ColumnName="QuestionNumber" />
+                <ScalarProperty Name="TrainerQuestionnaireResponseID" ColumnName="TrainerQuestionnaireResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseConcentration">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseConcentration">
+              <MappingFragment StoreEntitySet="ResponseConcentration">
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="ListC" ColumnName="ListC" />
+                <ScalarProperty Name="ListB" ColumnName="ListB" />
+                <ScalarProperty Name="ListA" ColumnName="ListA" />
+                <ScalarProperty Name="TrainerQuestionnaireResponseID" ColumnName="TrainerQuestionnaireResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ResponseConcussionScreening">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseConcussionScreening">
               <MappingFragment StoreEntitySet="ResponseConcussionScreening">
@@ -3147,6 +3497,26 @@
                 <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="QuestionNumber" ColumnName="QuestionNumber" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseCoordinationAndBalance">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseCoordinationAndBalance">
+              <MappingFragment StoreEntitySet="ResponseCoordinationAndBalance">
+                <ScalarProperty Name="FastestTime" ColumnName="FastestTime" />
+                <ScalarProperty Name="AverageTime" ColumnName="AverageTime" />
+                <ScalarProperty Name="ThirdTime" ColumnName="ThirdTime" />
+                <ScalarProperty Name="SecondTime" ColumnName="SecondTime" />
+                <ScalarProperty Name="FirstTime" ColumnName="FirstTime" />
+                <ScalarProperty Name="TotalErrors" ColumnName="TotalErrors" />
+                <ScalarProperty Name="SingleLegError" ColumnName="SingleLegError" />
+                <ScalarProperty Name="TandemError" ColumnName="TandemError" />
+                <ScalarProperty Name="DoubleLegError" ColumnName="DoubleLegError" />
+                <ScalarProperty Name="Footwear" ColumnName="Footwear" />
+                <ScalarProperty Name="TestSurface" ColumnName="TestSurface" />
+                <ScalarProperty Name="TestFoot" ColumnName="TestFoot" />
+                <ScalarProperty Name="TrainerQuestionnaireResponseID" ColumnName="TrainerQuestionnaireResponseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3159,6 +3529,17 @@
                 <ScalarProperty Name="Side" ColumnName="Side" />
                 <ScalarProperty Name="BodyPart" ColumnName="BodyPart" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseDelayedRecall">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseDelayedRecall">
+              <MappingFragment StoreEntitySet="ResponseDelayedRecall">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="TrainerQuestionnaireResponseID" ColumnName="TrainerQuestionnaireResponseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3179,6 +3560,19 @@
                 <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="QuestionnaireResponseID" ColumnName="QuestionnaireResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponseImmediateMemory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.ResponseImmediateMemory">
+              <MappingFragment StoreEntitySet="ResponseImmediateMemory">
+                <ScalarProperty Name="CompletionTime" ColumnName="CompletionTime" />
+                <ScalarProperty Name="ThirdTestScore" ColumnName="ThirdTestScore" />
+                <ScalarProperty Name="SecondTestScore" ColumnName="SecondTestScore" />
+                <ScalarProperty Name="FirstTestScore" ColumnName="FirstTestScore" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="TrainerQuestionnaireResponseID" ColumnName="TrainerQuestionnaireResponseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3367,6 +3761,16 @@
                 <ScalarProperty Name="ATName" ColumnName="ATName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainerQuestionnaireResponse">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.TrainerQuestionnaireResponse">
+              <MappingFragment StoreEntitySet="TrainerQuestionnaireResponse">
+                <ScalarProperty Name="FillName" ColumnName="FillName" />
+                <ScalarProperty Name="FillingDate" ColumnName="FillingDate" />
+                <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

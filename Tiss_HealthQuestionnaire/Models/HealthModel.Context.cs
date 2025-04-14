@@ -69,10 +69,15 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<QuestionnaireType> QuestionnaireType { get; set; }
         public virtual DbSet<ResponseAllergicHistory> ResponseAllergicHistory { get; set; }
         public virtual DbSet<ResponseCardiovascularScreening> ResponseCardiovascularScreening { get; set; }
+        public virtual DbSet<ResponseCognitiveScreening> ResponseCognitiveScreening { get; set; }
+        public virtual DbSet<ResponseConcentration> ResponseConcentration { get; set; }
         public virtual DbSet<ResponseConcussionScreening> ResponseConcussionScreening { get; set; }
+        public virtual DbSet<ResponseCoordinationAndBalance> ResponseCoordinationAndBalance { get; set; }
         public virtual DbSet<ResponseCurrentInjuries> ResponseCurrentInjuries { get; set; }
+        public virtual DbSet<ResponseDelayedRecall> ResponseDelayedRecall { get; set; }
         public virtual DbSet<ResponseFamilyHistory> ResponseFamilyHistory { get; set; }
         public virtual DbSet<ResponseFemaleQuestionnaire> ResponseFemaleQuestionnaire { get; set; }
+        public virtual DbSet<ResponseImmediateMemory> ResponseImmediateMemory { get; set; }
         public virtual DbSet<ResponseOrthopaedicScreening> ResponseOrthopaedicScreening { get; set; }
         public virtual DbSet<ResponsePastDrugs> ResponsePastDrugs { get; set; }
         public virtual DbSet<ResponsePastHealth> ResponsePastHealth { get; set; }
@@ -89,6 +94,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<TemporaryQuestionnaireData> TemporaryQuestionnaireData { get; set; }
         public virtual DbSet<TimedTandemGait> TimedTandemGait { get; set; }
         public virtual DbSet<TrainerProfile> TrainerProfile { get; set; }
+        public virtual DbSet<TrainerQuestionnaireResponse> TrainerQuestionnaireResponse { get; set; }
         public virtual DbSet<TrainerTeam> TrainerTeam { get; set; }
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }

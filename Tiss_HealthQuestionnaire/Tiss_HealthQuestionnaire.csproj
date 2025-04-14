@@ -239,6 +239,24 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MedicalFamilyHistoryViewModel.cs" />
+    <Compile Include="Models\ResponseCognitiveScreening.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponseConcentration.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponseCoordinationAndBalance.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponseDelayedRecall.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponseImmediateMemory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TrainerQuestionnaireResponse.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MedicalViewModel.cs" />
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -2668,6 +2686,7 @@
     <Content Include="Views\AdminUser\PendingTrainerList.cshtml" />
     <Content Include="Views\AdminUser\CreateAthlete.cshtml" />
     <Content Include="Views\MedicalEvaluation\TrainerPreview.cshtml" />
+    <Content Include="Views\MedicalEvaluation\TrainerSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

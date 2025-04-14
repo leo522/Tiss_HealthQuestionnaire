@@ -5,151 +5,153 @@
 <div class="container mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-md p-6">
         <h1 class="text-2xl font-bold text-blue-800 mb-6">醫療團隊 - 認知篩檢問卷填答預覽</h1>
-
-        @*定位*@
-        <div class="mb-10">
-            <h2 class="text-lg font-semibold mb-2">定位 (Orientation)</h2>
-            <ul class="list-disc pl-6">
-                @foreach (var item in Model.CognitiveScreeningItems)
-                {
-                    <li>
-                        @item.Question
-                        （填答：
-                        @if (item.AnswerOption1 == 1)
-                        {
-                            <span class="text-blue-600 font-semibold">✔ 正確</span>
-                        }
-                        else
-                        {
-                            <span class="text-red-600 font-semibold">✘ 錯誤</span>
-                        }
-                        ）
-                    </li>
-                }
-            </ul>
-        </div>
-
-        @*短期記憶*@
-        <div class="mb-10">
-            <h2 class="text-lg font-semibold mb-2">短期記憶 (Immediate Memory)</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr><th>單字</th><th>第一次</th><th>第二次</th><th>第三次</th></tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.ImmediateMemoryItems)
-                    {
-                        <tr>
-                            <td>@item.Word</td>
-                            <td>@item.FirstTestScore</td>
-                            <td>@item.SecondTestScore</td>
-                            <td>@item.ThirdTestScore</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <p class="mt-2">完成時間：@Model.CompletionTimeDisplay</p>
-        </div>
-
-        @*專注力*@
-        <div class="mb-10">
-            <h2 class="text-lg font-semibold mb-2">專注力 (Concentration)</h2>
-            <ul class="list-disc pl-6">
-                @foreach (var item in Model.ConcentrationItems)
-                {
-                    <li>
-                        ListA: @item.ListA, ListB: @item.ListB, ListC: @item.ListC，作答：@(item.Score == 1 ? "Y" : "N")
-                    </li>
-                }
-            </ul>
-        </div>
-
-        @*協調與平衡*@
-        <div class="mb-10">
-            <h2 class="text-lg font-semibold mb-2">協調與平衡測驗 (Coordination and Balance)</h2>
-            @if (Model.CoordinationAndBalanceItems != null && Model.CoordinationAndBalanceItems.Count > 0)
-            {
-                var item = Model.CoordinationAndBalanceItems[0];
+        @using (Html.BeginForm("SaveTrainerResponse", "MedicalEvaluation", FormMethod.Post))
+        {
+            @*定位*@
+            <div class="mb-10">
+                <h2 class="text-lg font-semibold mb-2">定位 (Orientation)</h2>
                 <ul class="list-disc pl-6">
-                    <li>測試腳：@Html.Encode(item.TestFoot)</li>
-                    <li>測試表面：@Html.Encode(item.TestSurface)</li>
-                    <li>穿著鞋子：@Html.Encode(item.Footwear)</li>
-                    <li>雙腳錯誤次數：@Html.Encode(item.DoubleLegError)</li>
-                    <li>交叉腿錯誤次數：@Html.Encode(item.TandemError)</li>
-                    <li>單腳錯誤次數：@Html.Encode(item.SingleLegError)</li>
-                    <li>平均時間：@Html.Encode(item.AverageTimes) 秒</li>
-                    <li>最快時間：@Html.Encode(item.FastestTimes) 秒</li>
-                </ul>
-            }
-        </div>
-
-        @*延遲記憶*@
-        <div class="mb-10">
-            <h2 class="text-lg font-semibold mb-2">延遲記憶 (Delayed Recall)</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr><th>單字</th><th>得分</th></tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.DelayedRecallItems)
+                    @foreach (var item in Model.CognitiveScreeningItems)
                     {
-                        <tr>
-                            <td>@item.Word</td>
-                            <td>@item.Score</td>
-                        </tr>
+                        <li>
+                            @item.Question
+                            （填答：
+                            @if (item.AnswerOption1 == 1)
+                            {
+                                <span class="text-blue-600 font-semibold">✔ 正確</span>
+                            }
+                            else
+                            {
+                                <span class="text-red-600 font-semibold">✘ 錯誤</span>
+                            }
+                            ）
+                        </li>
                     }
-                </tbody>
-            </table>
-            <p class="mt-2">完成時間：@Model.testStartTimeDisplay</p>
-        </div>
+                </ul>
+            </div>
 
-        @*總分統計*@
-        <div class="mb-8">
-            <h2 class="text-lg font-semibold mb-2">總分統計</h2>
-            <table class="min-w-full bg-white border border-gray-300 text-center">
-                <thead class="bg-gray-100 font-bold">
-                    <tr>
-                        <th class="border px-4 py-2">項目</th>
-                        <th class="border px-4 py-2">分數</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border px-4 py-2">定位</td>
-                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 5</td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">短期記憶</td>
-                        <td class="border px-4 py-2">@Model.ImmediateMemoryTotalScore / 30</td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">專注力</td>
-                        <td class="border px-4 py-2">@Model.ConcentrationTotalScore / 4</td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">協調與平衡</td>
-                        <td class="border px-4 py-2">@(30 - Model.CoordinationAndBalanceTotalErrors) / 30</td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">延遲記憶</td>
-                        <td class="border px-4 py-2">@Model.DelayedRecallTotalScore / 10</td>
-                    </tr>
-                    <tr class="bg-gray-100 font-bold">
-                        <td class="border px-4 py-2">總分</td>
-                        <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScores / 79</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            @*短期記憶*@
+            <div class="mb-10">
+                <h2 class="text-lg font-semibold mb-2">短期記憶 (Immediate Memory)</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th>單字</th><th>第一次</th><th>第二次</th><th>第三次</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ImmediateMemoryItems)
+                        {
+                            <tr>
+                                <td>@item.Word</td>
+                                <td>@item.FirstTestScore</td>
+                                <td>@item.SecondTestScore</td>
+                                <td>@item.ThirdTestScore</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="mt-2">完成時間：@Model.CompletionTimeDisplay</p>
+            </div>
 
-        <div class="flex justify-between items-center">
-            <a href="@Url.Action("ConcussionMedicalEvaluation", "MedicalEvaluation")"
-                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-2 rounded shadow">
-                返回醫療評估主頁
-            </a>
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
-                確認送出
-            </button>
-        </div>
+            @*專注力*@
+            <div class="mb-10">
+                <h2 class="text-lg font-semibold mb-2">專注力 (Concentration)</h2>
+                <ul class="list-disc pl-6">
+                    @foreach (var item in Model.ConcentrationItems)
+                    {
+                        <li>
+                            ListA: @item.ListA, ListB: @item.ListB, ListC: @item.ListC，作答：@(item.Score == 1 ? "Y" : "N")
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            @*協調與平衡*@
+            <div class="mb-10">
+                <h2 class="text-lg font-semibold mb-2">協調與平衡測驗 (Coordination and Balance)</h2>
+                @if (Model.CoordinationAndBalanceItems != null && Model.CoordinationAndBalanceItems.Count > 0)
+                {
+                    var item = Model.CoordinationAndBalanceItems[0];
+                    <ul class="list-disc pl-6">
+                        <li>測試腳：@Html.Encode(item.TestFoot)</li>
+                        <li>測試表面：@Html.Encode(item.TestSurface)</li>
+                        <li>穿著鞋子：@Html.Encode(item.Footwear)</li>
+                        <li>雙腳錯誤次數：@Html.Encode(item.DoubleLegError)</li>
+                        <li>交叉腿錯誤次數：@Html.Encode(item.TandemError)</li>
+                        <li>單腳錯誤次數：@Html.Encode(item.SingleLegError)</li>
+                        <li>平均時間：@Html.Encode(item.AverageTimes) 秒</li>
+                        <li>最快時間：@Html.Encode(item.FastestTimes) 秒</li>
+                    </ul>
+                }
+            </div>
+
+            @*延遲記憶*@
+            <div class="mb-10">
+                <h2 class="text-lg font-semibold mb-2">延遲記憶 (Delayed Recall)</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th>單字</th><th>得分</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DelayedRecallItems)
+                        {
+                            <tr>
+                                <td>@item.Word</td>
+                                <td>@item.Score</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="mt-2">完成時間：@Model.testStartTimeDisplay</p>
+            </div>
+
+            @*總分統計*@
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-2">總分統計</h2>
+                <table class="min-w-full bg-white border border-gray-300 text-center">
+                    <thead class="bg-gray-100 font-bold">
+                        <tr>
+                            <th class="border px-4 py-2">項目</th>
+                            <th class="border px-4 py-2">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border px-4 py-2">定位</td>
+                            <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScore / 5</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">短期記憶</td>
+                            <td class="border px-4 py-2">@Model.ImmediateMemoryTotalScore / 30</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">專注力</td>
+                            <td class="border px-4 py-2">@Model.ConcentrationTotalScore / 4</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">協調與平衡</td>
+                            <td class="border px-4 py-2">@(30 - Model.CoordinationAndBalanceTotalErrors) / 30</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">延遲記憶</td>
+                            <td class="border px-4 py-2">@Model.DelayedRecallTotalScore / 10</td>
+                        </tr>
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="border px-4 py-2">總分</td>
+                            <td class="border px-4 py-2">@Model.CognitiveScreeningTotalScores / 79</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <a href="@Url.Action("ConcussionMedicalEvaluation", "MedicalEvaluation")"
+                   class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-2 rounded shadow">
+                    返回醫療評估主頁
+                </a>
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded px-6 py-3">
+                    確認送出
+                </button>
+            </div>
+        }
     </div>
 </div>
