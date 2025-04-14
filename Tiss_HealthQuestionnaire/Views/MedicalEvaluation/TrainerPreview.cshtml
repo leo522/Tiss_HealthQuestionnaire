@@ -71,14 +71,14 @@
             {
                 var item = Model.CoordinationAndBalanceItems[0];
                 <ul class="list-disc pl-6">
-                    <li>測試腳：@item.TestFoot</li>
-                    <li>測試表面：@item.TestSurface</li>
-                    <li>穿著鞋子：@item.Footwear</li>
-                    <li>雙腳錯誤次數：@item.DoubleLegError</li>
-                    <li>交叉腿錯誤次數：@item.TandemError</li>
-                    <li>單腳錯誤次數：@item.SingleLegError</li>
-                    <li>平均時間：@item.AverageTimes 秒</li>
-                    <li>最快時間：@item.FastestTimes 秒</li>
+                    <li>測試腳：@Html.Encode(item.TestFoot)</li>
+                    <li>測試表面：@Html.Encode(item.TestSurface)</li>
+                    <li>穿著鞋子：@Html.Encode(item.Footwear)</li>
+                    <li>雙腳錯誤次數：@Html.Encode(item.DoubleLegError)</li>
+                    <li>交叉腿錯誤次數：@Html.Encode(item.TandemError)</li>
+                    <li>單腳錯誤次數：@Html.Encode(item.SingleLegError)</li>
+                    <li>平均時間：@Html.Encode(item.AverageTimes) 秒</li>
+                    <li>最快時間：@Html.Encode(item.FastestTimes) 秒</li>
                 </ul>
             }
         </div>
@@ -100,6 +100,7 @@
                     }
                 </tbody>
             </table>
+            <p class="mt-2">完成時間：@Model.testStartTimeDisplay</p>
         </div>
 
         @*總分統計*@

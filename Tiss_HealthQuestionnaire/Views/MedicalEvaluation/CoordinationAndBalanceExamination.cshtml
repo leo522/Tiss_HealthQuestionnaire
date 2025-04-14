@@ -2,118 +2,126 @@
 @{
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
-<div class="container mx-auto px-4 py-6">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h1 class="text-2xl font-bold text-blue-800 mb-4">4. 協調與平衡測驗 (Coordination and Balance Examination)</h1>
+    <div class="container mx-auto px-4 py-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-2xl font-bold text-blue-800 mb-6">4. 協調與平衡測驗 (Coordination and Balance Examination)</h1>
+            <form method="post" action="@Url.Action("CoordinationAndBalanceExamination", "MedicalEvaluation")">
+                <!-- 測試基本資料 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block font-medium mb-1">測試腳（非慣用腳）：</label>
+                        <div class="flex gap-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TestFoot" value="左" @(Model.CoordinationAndBalanceItems[0].TestFoot == "左" ? "checked" : "") class="form-radio text-blue-600 h-5 w-5" />
+                                <span class="ml-2">左</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="TestFoot" value="右" @(Model.CoordinationAndBalanceItems[0].TestFoot == "右" ? "checked" : "") class="form-radio text-blue-600 h-5 w-5" />
+                                <span class="ml-2">右</span>
+                            </label>
+                        </div>
+                    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-                <label class="block font-medium mb-1">測試腳（非慣用腳）：</label>
-                <div class="flex gap-6">
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="TestFoot" value="左" @(Model.CoordinationAndBalanceItems[0].TestFoot == "左" ? "checked" : "") class="form-radio h-5 w-5 text-blue-600">
-                        <span class="ml-2">左</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="TestFoot" value="右" @(Model.CoordinationAndBalanceItems[0].TestFoot == "右" ? "checked" : "") class="form-radio h-5 w-5 text-blue-600">
-                        <span class="ml-2">右</span>
-                    </label>
+                    <div>
+                        <label class="block font-medium mb-1">測試平面：</label>
+                        <select name="TestSurface" class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">請選擇測試平面</option>
+                            <option value="硬地" @(Model.CoordinationAndBalanceItems[0].TestSurface == "硬地" ? "selected" : "")>硬地</option>
+                            <option value="訓練場" @(Model.CoordinationAndBalanceItems[0].TestSurface == "訓練場" ? "selected" : "")>訓練場</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-medium mb-1">腳穿著：</label>
+                        <select name="Footwear" class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">請選擇腳穿著</option>
+                            <option value="赤足" @(Model.CoordinationAndBalanceItems[0].Footwear == "赤足" ? "selected" : "")>赤足</option>
+                            <option value="球鞋" @(Model.CoordinationAndBalanceItems[0].Footwear == "球鞋" ? "selected" : "")>球鞋</option>
+                            <option value="貼紮" @(Model.CoordinationAndBalanceItems[0].Footwear == "貼紮" ? "selected" : "")>貼紮</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label class="block font-medium mb-1">測試平面：</label>
-                <select name="TestSurface" class="border border-gray-300 rounded px-3 py-2 w-full">
-                    <option value="">請選擇測試平面</option>
-                    <option value="硬地" @(Model.CoordinationAndBalanceItems[0].TestSurface == "硬地" ? "selected" : "")>硬地</option>
-                    <option value="訓練場" @(Model.CoordinationAndBalanceItems[0].TestSurface == "訓練場" ? "selected" : "")>訓練場</option>
-                </select>
-            </div>
+                <!-- 錯誤扣分 -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-2">🔹 錯誤扣分</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-300 text-center rounded">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-4 py-2">動作</th>
+                                    <th class="border px-4 py-2">錯誤扣分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">雙腳站立</td>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="DoubleLegError" class="error-input w-24 text-center border border-gray-300 rounded" value="@Model.CoordinationAndBalanceItems[0].DoubleLegError" min="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">腳跟前後站立</td>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="TandemError" class="error-input w-24 text-center border border-gray-300 rounded" value="@Model.CoordinationAndBalanceItems[0].TandemError" min="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">單腳站立</td>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="SingleLegError" class="error-input w-24 text-center border border-gray-300 rounded" value="@Model.CoordinationAndBalanceItems[0].SingleLegError" min="0" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-gray-100 font-semibold">
+                                <tr>
+                                    <td class="border px-4 py-2">總錯誤次數</td>
+                                    <td class="border px-4 py-2"><span id="totalErrorCount">0</span> / 30</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
 
-            <div>
-                <label class="block font-medium mb-1">腳穿著：</label>
-                <select name="Footwear" class="border border-gray-300 rounded px-3 py-2 w-full">
-                    <option value="">請選擇腳穿著</option>
-                    <option value="赤足" @(Model.CoordinationAndBalanceItems[0].Footwear == "赤足" ? "selected" : "")>赤足</option>
-                    <option value="球鞋" @(Model.CoordinationAndBalanceItems[0].Footwear == "球鞋" ? "selected" : "")>球鞋</option>
-                    <option value="貼紮" @(Model.CoordinationAndBalanceItems[0].Footwear == "貼紮" ? "selected" : "")>貼紮</option>
-                </select>
-            </div>
+                <!-- 走路測驗 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">🔹 腳跟碰腳尖走路時間測驗</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-300 text-center rounded">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-4 py-2">第一次</th>
+                                    <th class="border px-4 py-2">第二次</th>
+                                    <th class="border px-4 py-2">第三次</th>
+                                    <th class="border px-4 py-2">平均時間</th>
+                                    <th class="border px-4 py-2">最快時間</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="FirstTime" class="time-input w-24 text-center border rounded" value="@Model.CoordinationAndBalanceItems[0].FirstTime"> 秒
+                                    </td>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="SecondTime" class="time-input w-24 text-center border rounded" value="@Model.CoordinationAndBalanceItems[0].SecondTime"> 秒
+                                    </td>
+                                    <td class="border px-4 py-2">
+                                        <input type="number" name="ThirdTime" class="time-input w-24 text-center border rounded" value="@Model.CoordinationAndBalanceItems[0].ThirdTime"> 秒
+                                    </td>
+                                    <td class="border px-4 py-2" id="averageTime">0 秒</td>
+                                    <td class="border px-4 py-2" id="fastestTime">0 秒</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="text-right mt-8">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">下一題</button>
+                </div>
+            </form>
         </div>
-
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-2">🔹 錯誤扣分</h3>
-            <table class="w-full border border-gray-300 text-center rounded">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-2">動作</th>
-                        <th class="border px-4 py-2">錯誤扣分</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border px-4 py-2">雙腳站立</td>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="DoubleLegError" class="error-input border border-gray-300 rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].DoubleLegError" min="0" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">腳跟前後站立</td>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="TandemError" class="error-input border border-gray-300 rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].TandemError" min="0" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border px-4 py-2">單腳站立</td>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="SingleLegError" class="error-input border border-gray-300 rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].SingleLegError" min="0" />
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot class="bg-gray-100 font-semibold">
-                    <tr>
-                        <td class="border px-4 py-2">總錯誤次數</td>
-                        <td class="border px-4 py-2"><span id="totalErrorCount">0</span> / 30</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-2">🔹 腳跟碰腳尖走路時間測驗</h3>
-            <table class="w-full border border-gray-300 text-center rounded">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-2">第一次</th>
-                        <th class="border px-4 py-2">第二次</th>
-                        <th class="border px-4 py-2">第三次</th>
-                        <th class="border px-4 py-2">平均時間</th>
-                        <th class="border px-4 py-2">最快時間</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="FirstTime" class="time-input border rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].FirstTime"> 秒
-                        </td>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="SecondTime" class="time-input border rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].SecondTime"> 秒
-                        </td>
-                        <td class="border px-4 py-2">
-                            <input type="number" name="ThirdTime" class="time-input border rounded w-20 text-center" value="@Model.CoordinationAndBalanceItems[0].ThirdTime"> 秒
-                        </td>
-                        <td class="border px-4 py-2" id="averageTime">0 秒</td>
-                        <td class="border px-4 py-2" id="fastestTime">0 秒</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <form method="post" action="@Url.Action("CoordinationAndBalanceExamination", "MedicalEvaluation")" class="text-right">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">下一題</button>
-        </form>
     </div>
-</div>
 
 <script>
     initializeCoordination();

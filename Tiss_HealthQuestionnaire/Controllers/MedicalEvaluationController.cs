@@ -297,7 +297,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 var model = new MedicalViewModel
                 {
                     DelayedRecallItems = viewModels,
-                    DelayedRecallStartTime = Session["DelayedRecallStartTime"]?.ToString() ?? "00:00"
+                    testStartTimeDisplay = Session["testStartTime"]?.ToString() ?? "00:00"
                 };
 
                 return View("DelayedRecall", model);
@@ -329,7 +329,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }).ToList();
 
                 Session["DelayedRecallTotalScore"] = total;
-                Session["DelayedRecallStartTime"] = form["testStartTime"] ?? "00:00";
+                Session["testStartTimeDisplay"] = form["testStartTime"] ?? "00:00";
                 Session["DelayedRecallViewModels"] = viewModels;
 
                 return RedirectToAction("CognitiveScreeningTotalScore");
@@ -382,19 +382,19 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     // 原本的分數
                     CognitiveScreeningTotalScore = Convert.ToInt32(Session["OrientationScore"] ?? 0),
                     ImmediateMemoryTotalScore = Convert.ToInt32(Session["ImmediateMemoryScore"] ?? 0),
-                    CompletionTime = Session["CompletionTime"]?.ToString() ?? "00:00",
-                    CompletionTimeDisplay = FormatTime(Session["CompletionTime"]?.ToString()),
+                    CompletionTimeDisplay = FormatTime(Session["CompletionTime"]?.ToString()), //短期記憶完成時間
                     ConcentrationTotalScore = Convert.ToInt32(Session["ConcentrationScore"] ?? 0),
                     CoordinationAndBalanceTotalErrors = Convert.ToInt32(Session["CoordinationError"] ?? 0),
                     CoordinationAndBalanceAverageTime = float.Parse(Session["CoordinationAvg"]?.ToString() ?? "0"),
                     CoordinationAndBalanceFastestTime = float.Parse(Session["CoordinationFast"]?.ToString() ?? "0"),
                     DelayedRecallTotalScore = Convert.ToInt32(Session["DelayedRecallTotalScore"] ?? 0),
-                    DelayedRecallStartTime = Session["DelayedRecallStartTime"]?.ToString() ?? "00:00",
+                    testStartTimeDisplay = FormatTime(Session["testStartTimeDisplay"]?.ToString()), //延遲記憶完成時間
 
                     // 項目內容
                     CognitiveScreeningItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>,
                     ImmediateMemoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>,
                     ConcentrationItems = Session["ConcentrationItems"] as List<ConcentrationViewModel>,
+                    CoordinationAndBalanceItems = Session["CoordinationItems"] as List<CoordinationAndBalanceExaminationViewModel>,
                     DelayedRecallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>,
 
                     // 總分

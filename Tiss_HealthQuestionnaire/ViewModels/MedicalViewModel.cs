@@ -39,6 +39,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<DelayedRecallViewModel> DelayedRecallItems { get; set; }
         public int DelayedRecallTotalScore { get; set; }
         public string DelayedRecallStartTime { get; set; }
+        public string testStartTimeDisplay { get; set; }
         #endregion
 
         #region 醫療團隊-認知篩檢-分數總合(6)
