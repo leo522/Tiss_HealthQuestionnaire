@@ -231,7 +231,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterAdmin(string userName, string email, string password)
+        public ActionResult RegisterAdmin(string userName, string email, string password, string inviteCode)
         {
             try
             {
@@ -261,6 +261,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View("RegisterAdmin");
                 }
 
+                var hashedCode = ComputeSha256Hash(inviteCode);
+                var invite = _db.InviteCode.FirstOrDefault(c =>
+                    c.CodeHash == hashedCode &&
+                    c.IsActive &&
+                    (c.ExpiryDate == null || c.ExpiryDate > DateTime.Now) &&
+                    c.UsedCount < c.MaxUsage
+                );
+
+                if (invite == null)
+                {
+                    ViewBag.ErrorMessage = "註冊邀請碼無效、過期或已使用完畢";
+                    return View("RegisterAdmin");
+                }
+
                 using (var scope = new TransactionScope())
                 {
                     var salt = GenerateSalt();
@@ -277,13 +291,20 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         IsActive = true
                     };
                     _db.SystemUser.Add(newSystemUser);
-                    _db.SaveChanges(); // 寫入後才會有 UserID
+                    _db.SaveChanges();
 
                     var adminProfile = new AdminProfile
                     {
                         UserID = newSystemUser.UserID,
                         AdminName = userName
                     };
+
+                    invite.UsedCount++;
+                    if (invite.UsedCount >= invite.MaxUsage)
+                    {
+                        invite.IsActive = false;
+                    }
+
                     _db.AdminProfile.Add(adminProfile);
                     _db.SaveChanges();
 

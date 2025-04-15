@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "建立邀請碼";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>建立邀請碼</h2>
+
+    @using (Html.BeginForm("InviteCodeCreateNew", "InviteCode", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="maxUsage" class="form-label">最大使用次數</label>
+            <input type="number" class="form-control" name="maxUsage" id="maxUsage" value="1" min="1" required />
+        </div>
+        <div class="mb-3">
+            <label for="expiryDate" class="form-label">過期日期 (可選)</label>
+            <input type="date" class="form-control" name="expiryDate" id="expiryDate" />
+        </div>
+        <div class="mb-3">
+            <label for="note" class="form-label">備註 (可選)</label>
+            <input type="text" class="form-control" name="note" id="note" maxlength="100" />
+        </div>
+        <button type="submit" class="btn btn-success">建立邀請碼</button>
+        <a href="@Url.Action("InviteCodeList")" class="btn btn-secondary ms-2">返回清單</a>
+    }
+</div>

@@ -150,6 +150,7 @@
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\BaseAuthController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\InviteCodeController.cs" />
     <Compile Include="Controllers\MedicalEvaluationController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
@@ -247,6 +248,9 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InjuryStatusViewModel.cs" />
+    <Compile Include="Models\InviteCode.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginLog.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -2701,6 +2705,8 @@
     <Content Include="Views\MedicalEvaluation\TrainerPreview.cshtml" />
     <Content Include="Views\MedicalEvaluation\TrainerSuccess.cshtml" />
     <Content Include="Views\MedicalEvaluation\OrthopaedicScreening.cshtml" />
+    <Content Include="Views\InviteCode\InviteCodeList.cshtml" />
+    <Content Include="Views\InviteCode\InviteCodeCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

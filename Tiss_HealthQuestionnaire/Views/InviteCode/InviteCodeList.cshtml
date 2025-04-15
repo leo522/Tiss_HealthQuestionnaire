@@ -1,0 +1,101 @@
+﻿@model List<Tiss_HealthQuestionnaire.Models.InviteCode>
+@{
+    ViewBag.Title = "邀請碼管理清單";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<div class="container mx-auto px-4 py-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-blue-800">邀請碼清單</h1>
+        <a class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" href="@Url.Action("InviteCodeCreate")">建立新邀請碼</a>
+    </div>
+
+    @if (TempData["CreateInviteCode"] != null)
+    {
+        <div class="mb-4">
+            <div id="successMessage" data-code="@TempData["CreateInviteCode"]"></div>
+        </div>
+    }
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded shadow border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2">#</th>
+                    <th class="px-4 py-2">最大使用次數</th>
+                    <th class="px-4 py-2">已使用</th>
+                    <th class="px-4 py-2">過期時間</th>
+                    <th class="px-4 py-2">狀態</th>
+                    <th class="px-4 py-2">備註</th>
+                    <th class="px-4 py-2">邀請碼 QRCode</th>
+                    <th class="px-4 py-2">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="border-t">
+                        <td class="px-4 py-2">@item.ID</td>
+                        <td class="px-4 py-2">@item.MaxUsage</td>
+                        <td class="px-4 py-2">@item.UsedCount</td>
+                        <td class="px-4 py-2">@(item.ExpiryDate?.ToString("yyyy-MM-dd") ?? "無")</td>
+                        <td class="px-4 py-2">
+                            @if (!item.IsActive)
+                            {
+                                <span class="text-gray-400">已停用</span>
+                            }
+                            else if (item.ExpiryDate != null && item.ExpiryDate <= DateTime.Now)
+                            {
+                                <span class="text-yellow-600 font-semibold">已過期</span>
+                            }
+                            else if (item.UsedCount >= item.MaxUsage)
+                            {
+                                <span class="text-blue-600 font-semibold">已用完</span>
+                            }
+                            else
+                            {
+                                <span class="text-green-600 font-semibold">可使用</span>
+                            }
+                        </td>
+                        <td class="px-4 py-2">@item.Note</td>
+                        <td class="px-4 py-2">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=@item.ID" alt="QR Code" class="inline-block" />
+                        </td>
+                        <td class="px-4 py-2">
+                            @if (item.IsActive)
+                            {
+                                using (Html.BeginForm("DisableInviteCode", "InviteCode", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", item.ID)
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">停用</button>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-sm text-gray-500">-</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @if (TempData["CreateInviteCode"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    icon: "success",
+                    title: "邀請碼產生成功",
+                    html: `<strong>@TempData["CreateInviteCode"]</strong><br><br>
+                           <img src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=@TempData["CreateInviteCode"]' alt='QR Code'>`,
+                    confirmButtonText: "確定"
+                });
+            });
+        </script>
+    }
+}

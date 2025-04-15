@@ -120,6 +120,7 @@
         <AssociationConnector Association="HealthQuestionnaireModel.FK_TrainerTeam_Team" />
         <AssociationConnector Association="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile" />
         <AssociationConnector Association="HealthQuestionnaireModel.TrainerAthlete" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.InviteCode" Width="1.5" PointX="12.375" PointY="23.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

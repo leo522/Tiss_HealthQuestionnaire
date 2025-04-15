@@ -230,6 +230,18 @@
           <Property Name="SecondTest" Type="int" Nullable="false" />
           <Property Name="ThirdTest" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="InviteCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodeHash" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="MaxUsage" Type="int" Nullable="false" />
+          <Property Name="UsedCount" Type="int" Nullable="false" />
+          <Property Name="ExpiryDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="LoginLog">
           <Key>
             <PropertyRef Name="LoginID" />
@@ -1261,6 +1273,7 @@
           <EntitySet Name="FemaleQuestionnaire" EntityType="Self.FemaleQuestionnaire" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImmediateMemory" EntityType="Self.ImmediateMemory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InviteCode" EntityType="Self.InviteCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginLog" EntityType="Self.LoginLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicalandFamilyHistory" EntityType="Self.MedicalandFamilyHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrthopaedicScreening" EntityType="Self.OrthopaedicScreening" Schema="dbo" store:Type="Tables" />
@@ -1724,6 +1737,7 @@
             <End Role="AthleteProfile" EntitySet="AthleteProfile" />
             <End Role="TrainerProfile" EntitySet="TrainerProfile" />
           </AssociationSet>
+          <EntitySet Name="InviteCode" EntityType="HealthQuestionnaireModel.InviteCode" />
         </EntityContainer>
         <EntityType Name="AdminProfile">
           <Key>
@@ -3010,6 +3024,18 @@
           <End Type="HealthQuestionnaireModel.AthleteProfile" Role="AthleteProfile" Multiplicity="*" />
           <End Type="HealthQuestionnaireModel.TrainerProfile" Role="TrainerProfile" Multiplicity="*" />
         </Association>
+        <EntityType Name="InviteCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodeHash" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="MaxUsage" Type="Int32" Nullable="false" />
+          <Property Name="UsedCount" Type="Int32" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3817,6 +3843,19 @@
               <ScalarProperty Name="AthleteID" ColumnName="AthleteID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="InviteCode">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.InviteCode">
+              <MappingFragment StoreEntitySet="InviteCode">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="UsedCount" ColumnName="UsedCount" />
+                <ScalarProperty Name="MaxUsage" ColumnName="MaxUsage" />
+                <ScalarProperty Name="CodeHash" ColumnName="CodeHash" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

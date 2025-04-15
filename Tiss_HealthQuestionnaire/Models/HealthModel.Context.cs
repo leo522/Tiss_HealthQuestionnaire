@@ -99,5 +99,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
+        public virtual DbSet<InviteCode> InviteCode { get; set; }
     }
 }
