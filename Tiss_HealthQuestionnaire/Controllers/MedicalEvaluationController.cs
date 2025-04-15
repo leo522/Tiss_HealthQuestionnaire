@@ -372,6 +372,67 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 醫療團隊評估-骨科篩檢
+        public ActionResult OrthopaedicScreening()
+        {
+            try
+            {
+                var items = _db.OrthopaedicScreening.ToList();
+
+                var viewModels = items.Select(x => new OrthopaedicScreeningViewModel
+                {
+                    ID = x.Id,
+                    Instructions = x.Instructions,
+                    ObservationPoints = x.ObservationPoints,
+                    ResultNormal = x.ResultNormal,
+                    ResultAbnormal = x.ResultAbnormal
+                }).ToList();
+
+                var model = new MedicalViewModel
+                {
+                    OrthopaedicScreeningItems = viewModels
+                };
+
+                return View("OrthopaedicScreening", model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult OrthopaedicScreening(FormCollection form)
+        {
+            try
+            {
+                var items = _db.OrthopaedicScreening.ToList();
+
+                var responses = items.Select(x =>
+                {
+                    string result = form[$"OrthopaedicScreeningItems[{x.Id}].Result"];
+                    return new OrthopaedicScreeningViewModel
+                    {
+                        ID = x.Id,
+                        Instructions = x.Instructions,
+                        ObservationPoints = x.ObservationPoints,
+                        ResultNormal = x.ResultNormal,
+                        ResultAbnormal = x.ResultAbnormal,
+                        Result = result
+                    };
+                }).ToList();
+
+                Session["OrthopaedicScreeningItems"] = responses;
+
+                return RedirectToAction("ConcussionMedicalEvaluation"); // 或導向總分頁
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
         #region 醫療團隊預覽頁
         public ActionResult TrainerPreview()
         {

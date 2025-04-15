@@ -182,9 +182,9 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<SymptomEvaluationViewModel> SymptomEvaluationItems { get; set; }
         #endregion
 
-        #region 骨科篩檢
-        public List<OrthopaedicScreeningItmeViewModel> OrthopaedicScreeningItems { get; set; }
-        #endregion
+        //#region 骨科篩檢
+        //public List<OrthopaedicScreeningItmeViewModel> OrthopaedicScreeningItems { get; set; }
+        //#endregion
 
         #region 醫療團隊評估
         public int OrientationScore { get; set; }
@@ -388,18 +388,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ID { get; set; }
         public string SymptomItem { get; set; }
         public int Score { get; set; }
-    }
-    #endregion
-
-    #region 骨科篩檢
-    public class OrthopaedicScreeningItmeViewModel
-    {
-        public int ID { get; set; }
-        public string Instructions { get; set; }
-        public string ObservationPoints { get; set; }
-        public string ResultNormal { get; set; }
-        public string ResultAbnormal { get; set; }
-        public string Result { get; set; }
     }
     #endregion
 }

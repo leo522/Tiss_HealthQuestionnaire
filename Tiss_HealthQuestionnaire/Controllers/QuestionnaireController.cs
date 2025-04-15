@@ -256,21 +256,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 骨科篩檢
-        private List<OrthopaedicScreeningItmeViewModel> GetOrthopaedicScreeningViewModel()
-        {
-            return _db.OrthopaedicScreening.Select(item => new OrthopaedicScreeningItmeViewModel
-            {
-                ID = item.Id,
-                Instructions = item.Instructions,
-                ObservationPoints = item.ObservationPoints,
-                ResultNormal = item.ResultNormal,
-                ResultAbnormal = item.ResultAbnormal,
-                Result = ""
-            }).ToList();
-        }
-        #endregion
-
         #endregion
 
         #region 主頁優化方法
@@ -319,13 +304,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 CardiovascularScreeningItems = GetCardiovascularScreeningViewModel(),
                 ConcussionScreeningItems = GetConcussionScreeningViewModel(),
                 SymptomEvaluationItems = GetSymptomEvaluationViewModel(),
-                OrthopaedicScreeningItems = GetOrthopaedicScreeningViewModel(),
-
-                //CognitiveScreeningItems = _db.CognitiveScreening.ToList(),
-                //ImmediateMemoryItems = _db.ImmediateMemory.ToList(),
-                //ConcentrationItems = _db.Concentration.ToList(),
-                //CoordinationAndBalanceItems = _db.CoordinationAndBalanceExamination.ToList(),
-                //DelayedRecallItems = _db.DelayedRecall.ToList(),
             };
         }
         #endregion
@@ -450,20 +428,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
             return View("SymptomEvaluation", viewModel);
         }
-
-        public ActionResult OrthopaedicScreening()
-        {
-            var questions = _db.OrthopaedicScreening.ToList();
-
-            var viewModel = questions.Select((q, index) => new OrthopaedicScreeningViewModel
-            {
-                OrderNumber = index + 1,
-                Instructions = q.Instructions,
-                ObservationPoints = q.ObservationPoints
-            }).ToList();
-
-            return View("OrthopaedicScreening", viewModel);
-        }
         #endregion
 
         #region 預覽頁
@@ -496,8 +460,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ProcessCardiovascularScreening(model, form);
                 ProcessConcussionScreening(model, form);
                 ProcessSymptomEvaluation(model, form);
-                ProcessCognitiveScreening(model, form); //認知篩檢
-                ProcessOrthopaedicScreening(model, form);
 
                 return View("Preview", model);
             }
@@ -975,71 +937,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
-        #region 骨科篩檢
-        private void ProcessOrthopaedicScreening(QuestionnaireViewModel model, FormCollection form)
-        {
-            model.OrthopaedicScreeningItems = new List<OrthopaedicScreeningItmeViewModel>();
-
-            int index = 0;
-
-            while (form[$"OrthopaedicScreeningItems[{index}].ID"] != null)
-            {
-                string resultValue = form[$"OrthopaedicScreeningItems[{index}].Result"];
-
-                var orthopaedicScreening = new OrthopaedicScreeningItmeViewModel
-                {
-                    ID = int.Parse(form[$"OrthopaedicScreeningItems[{index}].ID"]),
-                    Instructions = form[$"OrthopaedicScreeningItems[{index}].Instructions"],
-                    ObservationPoints = form[$"OrthopaedicScreeningItems[{index}].ObservationPoints"],
-                    ResultNormal = "正常",
-                    ResultAbnormal = "異常",
-                    Result = resultValue
-                };
-
-                model.OrthopaedicScreeningItems.Add(orthopaedicScreening);
-
-                System.Diagnostics.Debug.WriteLine($"OrthopaedicScreeningItems 篩選後數量:{model.OrthopaedicScreeningItems.Count}");
-
-                index++;
-            }
-        }
-        #endregion
-
-        #region 醫療團隊評估
-        private void ProcessCognitiveScreening(QuestionnaireViewModel model, FormCollection form)
-        {
-            model.OrientationScore = int.Parse(form["OrientationScore"] ?? "0");
-            model.ImmediateMemoryScore = int.Parse(form["ImmediateMemoryScore"] ?? "0");
-            model.CompletionTime = form["CompletionTime"] ?? "00:00";
-            model.ConcentrationScore = int.Parse(form["ConcentrationScore"] ?? "0");
-            model.CoordinationErrors = int.Parse(form["CoordinationError"] ?? "0");
-            model.CoordinationAverageTime = float.Parse(form["CoordinationAvg"] ?? "0");
-            model.CoordinationFastestTime = float.Parse(form["CoordinationFast"] ?? "0");
-            model.DelayedRecallScore = int.Parse(form["DelayedRecallTotalScore"] ?? "0");
-            model.CognitiveScreeningTotalScore = int.Parse(form["CognitiveScreeningTotalScores"] ?? "0");
-        }
-        #endregion 
-
-        #region 醫療團隊-認知篩檢 (1~6)
-        [HttpPost]
-        public ActionResult PreviewFromMedical(FormCollection form)
-        {
-            var model = new QuestionnaireViewModel
-            {
-                OrientationScore = int.Parse(form["OrientationScore"] ?? "0"),
-                ImmediateMemoryScore = int.Parse(form["ImmediateMemoryScore"] ?? "0"),
-                CompletionTime = form["CompletionTime"] ?? "00:00",
-                ConcentrationScore = int.Parse(form["ConcentrationScore"] ?? "0"),
-                CoordinationErrors = int.Parse(form["CoordinationError"] ?? "0"),
-                CoordinationAverageTime = float.Parse(form["CoordinationAverageTime"] ?? "0"),
-                CoordinationFastestTime = float.Parse(form["CoordinationFastestTime"] ?? "0"),
-                DelayedRecallScore = int.Parse(form["DelayedRecallTotalScore"] ?? "0"),
-                CognitiveScreeningTotalScore = int.Parse(form["CognitiveScreeningTotalScores"] ?? "0")
-            };
-
-            return View("Preview", model);
-        }
-        #endregion
         #endregion
 
         #region 問卷存檔
@@ -1080,7 +977,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     SaveCardiovascularScreening(model, responseId);
                     SaveConcussionScreening(model, responseId);
                     SaveSymptomEvaluation(model, responseId);
-                    SaveOrthopaedicScreening(model, responseId);
 
                     _db.SaveChanges();
                     transaction.Commit();
@@ -1497,25 +1393,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 };
                 _db.ResponseSymptomEvaluation.Add(symptomEvaluation);
             }
-        }
-        #endregion
-
-        #region 儲存 Orthopaedic Screening (骨科篩檢)
-        private void SaveOrthopaedicScreening(QuestionnaireViewModel model, int responseId)
-        {
-            if (model.OrthopaedicScreeningItems == null || model.OrthopaedicScreeningItems.Count == 0) return;
-
-            var orthopaedicScreeningList = model.OrthopaedicScreeningItems
-                .Select(item => new ResponseOrthopaedicScreening
-                {
-                    QuestionnaireResponseID = responseId,
-                    TestNumber = item.ID,
-                    TestName = item.Instructions,
-                    Observation = item.ObservationPoints,
-                    Result = item.Result == "normal" ? "Normal" : "Abnormal"
-                }).ToList();
-
-            _db.ResponseOrthopaedicScreening.AddRange(orthopaedicScreeningList);
         }
         #endregion
 

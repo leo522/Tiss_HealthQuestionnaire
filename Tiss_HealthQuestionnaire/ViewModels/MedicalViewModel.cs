@@ -46,6 +46,10 @@ namespace Tiss_HealthQuestionnaire.Models
         public int CognitiveScreeningTotalScores { get; set; }
         #endregion
 
+        #region 醫療團隊-骨科篩檢
+        public List<OrthopaedicScreeningViewModel> OrthopaedicScreeningItems { get; set; }
+        #endregion
+
         #region 認知篩檢完成狀態
         public CognitiveStepStatusViewModel CognitiveStepStatus { get; set; }
         #endregion
@@ -123,6 +127,18 @@ namespace Tiss_HealthQuestionnaire.Models
         public int ConcentrationScore { get; set; }
         public int DelayedRecallScore { get; set; }
         public int TotalScore { get; set; }
+    }
+    #endregion
+
+    #region 醫療團隊-骨科篩檢
+    public class OrthopaedicScreeningViewModel
+    {
+        public int ID { get; set; }
+        public string Instructions { get; set; }
+        public string ObservationPoints { get; set; }
+        public string ResultNormal { get; set; }
+        public string ResultAbnormal { get; set; }
+        public string Result { get; set; } // 儲存使用者選擇的結果
     }
     #endregion
 }

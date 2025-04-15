@@ -14,6 +14,7 @@ using static Tiss_HealthQuestionnaire.Models.AccountViewModel;
 using System.Security.Principal;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Transactions;
 
 namespace Tiss_HealthQuestionnaire.Controllers
 {
@@ -64,52 +65,55 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
-                // 電子郵件格式檢查
                 var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(email, emailPattern))
                 {
                     ViewBag.ErrorMessage = "電子郵件格式不正確";
+                    ViewBag.GenderList = _db.Gender.ToList();
                     return View();
                 }
 
-                var salt = GenerateSalt();
-                var hashedPwd = ComputeSha256Hash(password, salt);
-
-                var systemUser = new SystemUser
+                using (var scope = new TransactionScope())
                 {
-                    UserName = userName,
-                    Password = hashedPwd,
-                    Salt = salt,
-                    Email = email,
-                    RoleID = 1, //選手角色
-                    IsActive = true,
-                    CreatedDate = DateTime.Now
-                };
-                _db.SystemUser.Add(systemUser);
-                _db.SaveChanges();
+                    var salt = GenerateSalt();
+                    var hashedPwd = ComputeSha256Hash(password, salt);
 
-                var userId = systemUser.UserID;
-                var athlete = new AthleteProfile
-                {
-                    UserID = userId,
-                    AthleteNumber = athleteNumber,
-                    Name = userName,
-                    BirthDate = birthDate,
-                    GenderID = genderID,
-                    SportSpecialization = sportSpecialization
-                };
-                _db.AthleteProfile.Add(athlete);
-                _db.SaveChanges();
+                    var systemUser = new SystemUser
+                    {
+                        UserName = userName,
+                        Password = hashedPwd,
+                        Salt = salt,
+                        Email = email,
+                        RoleID = 1, //選手角色
+                        IsActive = true,
+                        CreatedDate = DateTime.Now
+                    };
+                    _db.SystemUser.Add(systemUser);
+                    _db.SaveChanges();
 
-                _db.SystemLog.Add(new SystemLog
-                {
-                    UserID = userId,
-                    Action = "RegisterAthlete",
-                    Message = "新選手註冊成功",
-                    LogDate = DateTime.Now
-                });
+                    var userId = systemUser.UserID;
+                    var athlete = new AthleteProfile
+                    {
+                        UserID = userId,
+                        AthleteNumber = athleteNumber,
+                        Name = userName,
+                        BirthDate = birthDate,
+                        GenderID = genderID,
+                        SportSpecialization = sportSpecialization
+                    };
+                    _db.AthleteProfile.Add(athlete);
 
-                _db.SaveChanges();
+                    _db.SystemLog.Add(new SystemLog
+                    {
+                        UserID = userId,
+                        Action = "RegisterAthlete",
+                        Message = "新選手註冊成功",
+                        LogDate = DateTime.Now
+                    });
+
+                    _db.SaveChanges();
+                    scope.Complete();
+                }
 
                 TempData["RegisterMessage"] = "註冊成功，請登入。";
                 return RedirectToAction("Login");
@@ -147,16 +151,12 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
-                // 電子郵件格式檢查
                 var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(TrainerEmail, emailPattern))
                 {
                     ViewBag.ErrorMessage = "電子郵件格式不正確";
                     return View();
                 }
-
-                var salt = GenerateSalt();
-                var hashedPwd = ComputeSha256Hash(password, salt);
 
                 var trainerRoleId = _db.UserRole.FirstOrDefault(r => r.RoleName == "Trainer")?.RoleID;
                 if (trainerRoleId == null)
@@ -165,44 +165,51 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
-                var systemUser = new SystemUser
+                using (var scope = new TransactionScope())
                 {
-                    UserName = userName,
-                    Password = hashedPwd,
-                    Salt = salt,
-                    Email = TrainerEmail,
-                    RoleID = trainerRoleId.Value,
-                    IsActive = true,
-                    IsApproved = false,
-                    CreatedDate = DateTime.Now
-                };
+                    var salt = GenerateSalt();
+                    var hashedPwd = ComputeSha256Hash(password, salt);
 
-                _db.SystemUser.Add(systemUser);
-                _db.SaveChanges();
+                    var systemUser = new SystemUser
+                    {
+                        UserName = userName,
+                        Password = hashedPwd,
+                        Salt = salt,
+                        Email = TrainerEmail,
+                        RoleID = trainerRoleId.Value,
+                        IsActive = true,
+                        IsApproved = false,
+                        CreatedDate = DateTime.Now
+                    };
 
-                var trainerProfile = new TrainerProfile
-                {
-                    TrainerID = systemUser.UserID,
-                    UserID = systemUser.UserID,
-                    ATName = userName,
-                    Title = title,
-                    Department = department,
-                    Expertise = expertise,
-                    TrainerEmail = TrainerEmail,
-                };
+                    _db.SystemUser.Add(systemUser);
+                    _db.SaveChanges();
 
-                _db.TrainerProfile.Add(trainerProfile);
+                    var trainerProfile = new TrainerProfile
+                    {
+                        TrainerID = systemUser.UserID,
+                        UserID = systemUser.UserID,
+                        ATName = userName,
+                        Title = title,
+                        Department = department,
+                        Expertise = expertise,
+                        TrainerEmail = TrainerEmail
+                    };
 
-                _db.SystemLog.Add(new SystemLog
-                {
-                    UserID = systemUser.UserID,
-                    Action = "RegisterTrainer",
-                    Target = userName,
-                    Message = "註冊新防護員帳號",
-                    LogDate = DateTime.Now
-                });
+                    _db.TrainerProfile.Add(trainerProfile);
 
-                _db.SaveChanges();
+                    _db.SystemLog.Add(new SystemLog
+                    {
+                        UserID = systemUser.UserID,
+                        Action = "RegisterTrainer",
+                        Target = userName,
+                        Message = "註冊新防護員帳號",
+                        LogDate = DateTime.Now
+                    });
+
+                    _db.SaveChanges();
+                    scope.Complete();
+                }
 
                 TempData["RegisterMessage"] = "防護員身份註冊成功，請待管理員審核";
                 return RedirectToAction("SelectRole");
@@ -244,11 +251,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 if (!Regex.IsMatch(email, emailPattern))
                 {
                     ViewBag.ErrorMessage = "電子郵件格式不正確";
-                    return View();
+                    return View("RegisterAdmin");
                 }
-
-                var salt = GenerateSalt();
-                var hashedPassword = ComputeSha256Hash(password, salt);
 
                 int adminRoleId = _db.UserRole.FirstOrDefault(r => r.RoleName == "Admin")?.RoleID ?? 0;
                 if (adminRoleId == 0)
@@ -257,36 +261,44 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View("RegisterAdmin");
                 }
 
-                var newSystemUser = new SystemUser
+                using (var scope = new TransactionScope())
                 {
-                    UserName = userName,
-                    Password = hashedPassword,
-                    Salt = salt,
-                    Email = email,
-                    RoleID = adminRoleId,
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
-                };
+                    var salt = GenerateSalt();
+                    var hashedPassword = ComputeSha256Hash(password, salt);
 
-                _db.SystemUser.Add(newSystemUser);
-                _db.SaveChanges();
+                    var newSystemUser = new SystemUser
+                    {
+                        UserName = userName,
+                        Password = hashedPassword,
+                        Salt = salt,
+                        Email = email,
+                        RoleID = adminRoleId,
+                        CreatedDate = DateTime.Now,
+                        IsActive = true
+                    };
+                    _db.SystemUser.Add(newSystemUser);
+                    _db.SaveChanges(); // 寫入後才會有 UserID
 
-                _db.AdminProfile.Add(new AdminProfile
-                {
-                    UserID = newSystemUser.UserID,
-                    AdminName = userName
-                });
-                _db.SaveChanges();
+                    var adminProfile = new AdminProfile
+                    {
+                        UserID = newSystemUser.UserID,
+                        AdminName = userName
+                    };
+                    _db.AdminProfile.Add(adminProfile);
+                    _db.SaveChanges();
 
-                _db.SystemLog.Add(new SystemLog
-                {
-                    UserID = newSystemUser.UserID,
-                    Action = "註冊管理員",
-                    Target = userName,
-                    Message = "成功註冊管理員帳號",
-                    LogDate = DateTime.Now
-                });
-                _db.SaveChanges();
+                    _db.SystemLog.Add(new SystemLog
+                    {
+                        UserID = newSystemUser.UserID,
+                        Action = "註冊管理員",
+                        Target = userName,
+                        Message = "成功註冊管理員帳號",
+                        LogDate = DateTime.Now
+                    });
+                    _db.SaveChanges();
+
+                    scope.Complete();
+                }
 
                 TempData["RegisterMessage"] = "管理員註冊成功，請登入";
                 return RedirectToAction("Login", "Account");
@@ -343,6 +355,9 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 登入
         public ActionResult Login(string role)
         {
+            Session.Clear();
+            Session.Abandon();
+
             if (string.IsNullOrEmpty(role)) return RedirectToAction("SelectRole");
 
             if (role != "athlete" && role != "trainer" && role != "admin")
@@ -542,13 +557,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 登出
         public ActionResult Logout()
         {
-            Session.Remove("LoggedIn");
+            Session.Clear();
+            Session.RemoveAll();
+            Session.Abandon();
 
             FormsAuthentication.SignOut();
 
-            string returnUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : Url.Action("Login", "Account");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+            Response.Cache.SetNoStore();
 
-            return Redirect(returnUrl);
+            return RedirectToAction("SelectRole", "Account");
         }
         #endregion
     }
