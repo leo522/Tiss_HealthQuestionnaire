@@ -143,6 +143,43 @@
                 </table>
             </div>
 
+            @*骨科篩檢*@
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-2">骨科篩檢 (Orthopaedic Screening)</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>檢查指令</th>
+                            <th>觀察重點</th>
+                            <th>結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrthopaedicScreeningItems)
+                        {
+                            <tr>
+                                <td>@item.Instructions</td>
+                                <td>@item.ObservationPoints</td>
+                                <td>
+                                    @if (item.Result == "normal")
+                                    {
+                                        <span class="text-green-600 font-semibold">✔ 正常 (@item.ResultNormal)</span>
+                                    }
+                                    else if (item.Result == "abnormal")
+                                    {
+                                        <span class="text-red-600 font-semibold">✘ 異常 (@item.ResultAbnormal)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-gray-500">未填答</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
             <div class="flex justify-between items-center">
                 <a href="@Url.Action("ConcussionMedicalEvaluation", "MedicalEvaluation")"
                    class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-2 rounded shadow">

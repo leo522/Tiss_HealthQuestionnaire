@@ -24,7 +24,6 @@ namespace Tiss_HealthQuestionnaire.Models
             this.ResponseCurrentInjuries = new HashSet<ResponseCurrentInjuries>();
             this.ResponseFamilyHistory = new HashSet<ResponseFamilyHistory>();
             this.ResponseFemaleQuestionnaire = new HashSet<ResponseFemaleQuestionnaire>();
-            this.ResponseOrthopaedicScreening = new HashSet<ResponseOrthopaedicScreening>();
             this.ResponsePastDrugs = new HashSet<ResponsePastDrugs>();
             this.ResponsePastHealth = new HashSet<ResponsePastHealth>();
             this.ResponsePastHistory = new HashSet<ResponsePastHistory>();
@@ -56,8 +55,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual ICollection<ResponseFamilyHistory> ResponseFamilyHistory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponseFemaleQuestionnaire> ResponseFemaleQuestionnaire { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResponseOrthopaedicScreening> ResponseOrthopaedicScreening { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponsePastDrugs> ResponsePastDrugs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

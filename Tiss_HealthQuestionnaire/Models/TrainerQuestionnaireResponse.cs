@@ -22,6 +22,7 @@ namespace Tiss_HealthQuestionnaire.Models
             this.ResponseCoordinationAndBalance = new HashSet<ResponseCoordinationAndBalance>();
             this.ResponseDelayedRecall = new HashSet<ResponseDelayedRecall>();
             this.ResponseImmediateMemory = new HashSet<ResponseImmediateMemory>();
+            this.ResponseOrthopaedicScreening = new HashSet<ResponseOrthopaedicScreening>();
         }
     
         public int ID { get; set; }
@@ -39,5 +40,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual ICollection<ResponseDelayedRecall> ResponseDelayedRecall { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponseImmediateMemory> ResponseImmediateMemory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ResponseOrthopaedicScreening> ResponseOrthopaedicScreening { get; set; }
     }
 }

@@ -15,12 +15,12 @@ namespace Tiss_HealthQuestionnaire.Models
     public partial class ResponseOrthopaedicScreening
     {
         public int ID { get; set; }
-        public int QuestionnaireResponseID { get; set; }
+        public int TrainerQuestionnaireResponseID { get; set; }
         public int TestNumber { get; set; }
         public string TestName { get; set; }
         public string Observation { get; set; }
         public string Result { get; set; }
     
-        public virtual QuestionnaireResponse QuestionnaireResponse { get; set; }
+        public virtual TrainerQuestionnaireResponse TrainerQuestionnaireResponse { get; set; }
     }
 }

@@ -86,8 +86,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 ConcussionScreeningList = _db.ResponseConcussionScreening.Where(x => x.QuestionnaireResponseID == response.ID).ToList(),
 
                 SymptomEvaluationList = _db.ResponseSymptomEvaluation.Where(x => x.QuestionnaireResponseID == response.ID).ToList(),
-
-                OrthopaedicScreeningList = _db.ResponseOrthopaedicScreening.Where(x => x.QuestionnaireResponseID == response.ID).ToList()
             };
 
             return View(model);

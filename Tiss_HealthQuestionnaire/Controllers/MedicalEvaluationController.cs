@@ -510,6 +510,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 int responseId = trainerResponse.ID;
 
+                //定位
                 var cognitiveItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>;
                 foreach (var item in cognitiveItems)
                 {
@@ -522,6 +523,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
 
+                //短期記憶
                 var memoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>;
                 foreach (var item in memoryItems)
                 {
@@ -550,6 +552,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
 
+                //專注力
                 var coordItem = (Session["CoordinationItems"] as List<CoordinationAndBalanceExaminationViewModel>)?.FirstOrDefault();
                 if (coordItem != null)
                 {
@@ -571,6 +574,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
 
+                //延遲記憶
                 var recallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>;
                 foreach (var item in recallItems)
                 {
@@ -581,6 +585,23 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         Score = item.Score,
                         StartTime = Session["testStartTimeDisplay"]?.ToString()
                     });
+                }
+
+                //骨科篩檢
+                var orthoItems = Session["OrthopaedicScreeningItems"] as List<OrthopaedicScreeningViewModel>;
+                if (orthoItems != null)
+                {
+                    foreach (var item in orthoItems)
+                    {
+                        _db.ResponseOrthopaedicScreening.Add(new ResponseOrthopaedicScreening
+                        {
+                            TrainerQuestionnaireResponseID = responseId,
+                            TestNumber = item.ID,
+                            TestName = item.Instructions,
+                            Observation = item.ObservationPoints,
+                            Result = item.Result
+                        });
+                    }
                 }
 
                 _db.SaveChanges();
