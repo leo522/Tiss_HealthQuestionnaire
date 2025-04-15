@@ -70,7 +70,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     RoleID = r.RoleID,
                     RoleDisplayName = GetRoleDisplayName(r.RoleName)  // 轉換成中文
                 }),
-                    "RoleID","RoleDisplayName", user.RoleID);
+                    "RoleID", "RoleDisplayName", user.RoleID);
 
             var model = new AdminEditRoleViewModel
             {
@@ -89,10 +89,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 ViewBag.RoleList = new SelectList(_db.UserRole.ToList()
                     .Select(r => new
-                {
-                    RoleID = r.RoleID,
-                    RoleDisplayName = GetRoleDisplayName(r.RoleName)
-                }), "RoleID","RoleDisplayName", model.RoleID);
+                    {
+                        RoleID = r.RoleID,
+                        RoleDisplayName = GetRoleDisplayName(r.RoleName)
+                    }), "RoleID", "RoleDisplayName", model.RoleID);
 
                 return View(model);
             }
@@ -230,7 +230,8 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             ViewBag.GenderList = _db.Gender
         .ToList()
-        .Select(g => new {
+        .Select(g => new
+        {
             GenderID = g.GenderID,
             GenderName = g.Male == true ? "男" : "女"
         }).ToList();
@@ -249,20 +250,17 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             if (!ModelState.IsValid || model.Athletes == null || !model.Athletes.Any())
             {
-                ViewBag.GenderList = _db.Gender
-    .ToList()
-    .Select(g => new
-    {
-        GenderID = g.GenderID,
-        GenderName = g.Male.HasValue ? (g.Male.Value ? "男" : "女") : "未指定"
-    })
-    .ToList();
+                ViewBag.GenderList = _db.Gender.ToList().Select(g => new
+                {
+                    GenderID = g.GenderID,
+                    GenderName = g.Male.HasValue ? (g.Male.Value ? "男" : "女") : "未指定"
+                }).ToList();
 
                 return View(model);
             }
 
             var athleteRoleId = _db.UserRole.FirstOrDefault(r => r.RoleName == "Athlete")?.RoleID ?? 1;
-            const string defaultPassword = "Athlete@123";
+            const string defaultPassword = "123456";
 
             foreach (var a in model.Athletes)
             {

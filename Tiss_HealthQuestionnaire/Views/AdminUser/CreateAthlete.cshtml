@@ -1,16 +1,16 @@
 ﻿@model Tiss_HealthQuestionnaire.ViewModels.BatchAthleteCreateViewModel
 @{
-    ViewBag.Title = "新增選手資料";
+    ViewBag.Title = "批次新增選手資料";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 
-<h1 class="mb-4">批次新增選手資料</h1>
+<h1 class="mb-4 text-xl font-bold">批次新增選手資料</h1>
 
-@using (Html.BeginForm("CreateAthlete", "AdminUser", FormMethod.Post))
+@using (Html.BeginForm("CreateAthlete", "AdminUser", FormMethod.Post, new { id = "athleteForm" }))
 {
     @Html.AntiForgeryToken()
 
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="athleteTable">
         <thead class="table-light">
             <tr>
                 <th>選手編號</th>
@@ -20,37 +20,15 @@
                 <th>性別</th>
                 <th>運動專項</th>
                 <th>預設密碼</th>
+                <th>操作</th>
             </tr>
         </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Athletes.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @Html.TextBox($"Athletes[{i}].AthleteNumber", Model.Athletes[i].AthleteNumber, new { @class = "form-control", required = "required" })
-                    </td>
-                    <td>
-                        @Html.TextBox($"Athletes[{i}].Name", Model.Athletes[i].Name, new { @class = "form-control", required = "required" })
-                    </td>
-                    <td>
-                        @Html.TextBox($"Athletes[{i}].Email", Model.Athletes[i].Email, new { @class = "form-control" })
-                    </td>
-                    <td>
-                        @Html.TextBox($"Athletes[{i}].BirthDate", Model.Athletes[i].BirthDate?.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
-                    </td>
-                    <td>
-                        @Html.DropDownList($"Athletes[{i}].GenderID", new SelectList(ViewBag.GenderList, "GenderID", "GenderName", Model.Athletes[i].GenderID), "請選擇", new { @class = "form-control" })
-                    </td>
-                    <td>
-                        @Html.TextBox($"Athletes[{i}].SportSpecialization", Model.Athletes[i].SportSpecialization, new { @class = "form-control" })
-                    </td>
-                    <td>
-                        <span class="text-muted">預設套用</span>
-                    </td>
-                </tr>
-            }
+        <tbody id="athleteTbody">
+            <!-- 初始列由 JS 動態載入 -->
         </tbody>
     </table>
+
+    <button type="button" class="btn btn-secondary mb-3" onclick="addRow()">新增一列</button>
 
     <div class="d-flex justify-content-between mt-4">
         <a href="@Url.Action("UserList", "AdminUser")" class="btn btn-outline-secondary">
@@ -61,4 +39,79 @@
             <i class="bi bi-save"></i> 送出新增
         </button>
     </div>
+}
+
+@section Scripts {
+    <script>
+        let index = 0;
+        const genderList = @Html.Raw(Json.Encode(ViewBag.GenderList));
+
+        function addRow() {
+            const tbody = document.getElementById("athleteTbody");
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input type="text" name="Athletes[${index}].AthleteNumber" class="form-control" required></td>
+                <td><input type="text" name="Athletes[${index}].Name" class="form-control" required></td>
+                <td><input type="email" name="Athletes[${index}].Email" class="form-control"></td>
+                <td><input type="date" name="Athletes[${index}].BirthDate" class="form-control"></td>
+                <td>
+                    <select name="Athletes[${index}].GenderID" class="form-control" required>
+                        <option value="">請選擇</option>
+                        ${genderList.map(g => `<option value="${g.GenderID}">${g.GenderName}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input type="text" name="Athletes[${index}].SportSpecialization" class="form-control"></td>
+                <td> <input type="text" class="form-control text-muted" value="已套用預設密碼" readonly /></td>
+                <td><button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">移除</button></td>
+            `;
+            tbody.appendChild(row);
+            index++;
+        }
+
+        function removeRow(btn) {
+            btn.closest("tr").remove();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            for (let i = 0; i < 3; i++) addRow();
+        });
+
+        // SweetAlert2 + 驗證檢查
+        document.getElementById("athleteForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const rows = document.querySelectorAll("#athleteTbody tr");
+            if (rows.length === 0) {
+                Swal.fire("請至少新增一筆選手資料", "", "warning");
+                return;
+            }
+
+            for (const row of rows) {
+                const inputs = row.querySelectorAll("input[required], select[required]");
+                for (const input of inputs) {
+                    if (!input.value.trim()) {
+                        input.classList.add("border", "border-red-500");
+                        Swal.fire("請完整填寫所有欄位", "", "warning");
+                        return;
+                    } else {
+                        input.classList.remove("border", "border-red-500");
+                    }
+                }
+            }
+
+            // SweetAlert2 確認送出
+            Swal.fire({
+                title: "確定送出這些選手資料？",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "送出",
+                cancelButtonText: "取消"
+            }).then(result => {
+                if (result.isConfirmed) {
+                    e.target.submit(); // 真正送出表單
+                }
+            });
+        });
+    </script>
 }
