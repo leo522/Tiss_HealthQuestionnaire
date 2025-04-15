@@ -12,25 +12,19 @@ namespace Tiss_HealthQuestionnaire.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Team
+    public partial class SportTypeCategory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Team()
+        public SportTypeCategory()
         {
-            this.AthleteTeam = new HashSet<AthleteTeam>();
-            this.TrainerTeam = new HashSet<TrainerTeam>();
+            this.Team = new HashSet<Team>();
         }
     
-        public int TeamID { get; set; }
-        public string TeamName { get; set; }
-        public string SportType { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public Nullable<int> SportTypeID { get; set; }
+        public int SportTypeID { get; set; }
+        public string SportTypeName { get; set; }
+        public string SportGroup { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AthleteTeam> AthleteTeam { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TrainerTeam> TrainerTeam { get; set; }
-        public virtual SportTypeCategory SportTypeCategory { get; set; }
+        public virtual ICollection<Team> Team { get; set; }
     }
 }

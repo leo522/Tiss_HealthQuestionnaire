@@ -603,6 +603,14 @@
           <Property Name="Symptom" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Severity" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="SportTypeCategory">
+          <Key>
+            <PropertyRef Name="SportTypeID" />
+          </Key>
+          <Property Name="SportTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SportTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SportGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="SurgeryHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -660,6 +668,7 @@
           <Property Name="TeamName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SportType" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="SportTypeID" Type="int" />
         </EntityType>
         <EntityType Name="TemporaryQuestionnaireData">
           <Key>
@@ -1212,6 +1221,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Team_SportTypeCategory">
+          <End Role="SportTypeCategory" Type="Self.SportTypeCategory" Multiplicity="0..1" />
+          <End Role="Team" Type="Self.Team" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SportTypeCategory">
+              <PropertyRef Name="SportTypeID" />
+            </Principal>
+            <Dependent Role="Team">
+              <PropertyRef Name="SportTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TemporaryQuestionnaireData_QuestionnaireType">
           <End Role="QuestionnaireType" Type="Self.QuestionnaireType" Multiplicity="0..1" />
           <End Role="TemporaryQuestionnaireData" Type="Self.TemporaryQuestionnaireData" Multiplicity="*" />
@@ -1311,6 +1332,7 @@
           <EntitySet Name="ResponsePastSupplements" EntityType="Self.ResponsePastSupplements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponsePresentIllness" EntityType="Self.ResponsePresentIllness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseSymptomEvaluation" EntityType="Self.ResponseSymptomEvaluation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SportTypeCategory" EntityType="Self.SportTypeCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SurgeryHistory" EntityType="Self.SurgeryHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SymptomEvaluation" EntityType="Self.SymptomEvaluation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SystemLog" EntityType="Self.SystemLog" Schema="dbo" store:Type="Tables" />
@@ -1480,6 +1502,10 @@
           <AssociationSet Name="FK_ResponseSymptomEvaluation_QuestionnaireResponse" Association="Self.FK_ResponseSymptomEvaluation_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
             <End Role="ResponseSymptomEvaluation" EntitySet="ResponseSymptomEvaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Team_SportTypeCategory" Association="Self.FK_Team_SportTypeCategory">
+            <End Role="SportTypeCategory" EntitySet="SportTypeCategory" />
+            <End Role="Team" EntitySet="Team" />
           </AssociationSet>
           <AssociationSet Name="FK_TemporaryQuestionnaireData_QuestionnaireType" Association="Self.FK_TemporaryQuestionnaireData_QuestionnaireType">
             <End Role="QuestionnaireType" EntitySet="QuestionnaireType" />
@@ -1738,6 +1764,11 @@
             <End Role="TrainerProfile" EntitySet="TrainerProfile" />
           </AssociationSet>
           <EntitySet Name="InviteCode" EntityType="HealthQuestionnaireModel.InviteCode" />
+          <EntitySet Name="SportTypeCategory" EntityType="HealthQuestionnaireModel.SportTypeCategory" />
+          <AssociationSet Name="FK_Team_SportTypeCategory" Association="HealthQuestionnaireModel.FK_Team_SportTypeCategory">
+            <End Role="SportTypeCategory" EntitySet="SportTypeCategory" />
+            <End Role="Team" EntitySet="Team" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminProfile">
           <Key>
@@ -2451,6 +2482,8 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AthleteTeam" Relationship="HealthQuestionnaireModel.FK_AthleteTeam_Team" FromRole="Team" ToRole="AthleteTeam" />
           <NavigationProperty Name="TrainerTeam" Relationship="HealthQuestionnaireModel.FK_TrainerTeam_Team" FromRole="Team" ToRole="TrainerTeam" />
+          <Property Name="SportTypeID" Type="Int32" />
+          <NavigationProperty Name="SportTypeCategory" Relationship="HealthQuestionnaireModel.FK_Team_SportTypeCategory" FromRole="Team" ToRole="SportTypeCategory" />
         </EntityType>
         <EntityType Name="TemporaryQuestionnaireData">
           <Key>
@@ -3036,6 +3069,27 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="SportTypeCategory">
+          <Key>
+            <PropertyRef Name="SportTypeID" />
+          </Key>
+          <Property Name="SportTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SportTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SportGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Team" Relationship="HealthQuestionnaireModel.FK_Team_SportTypeCategory" FromRole="SportTypeCategory" ToRole="Team" />
+        </EntityType>
+        <Association Name="FK_Team_SportTypeCategory">
+          <End Type="HealthQuestionnaireModel.SportTypeCategory" Role="SportTypeCategory" Multiplicity="0..1" />
+          <End Type="HealthQuestionnaireModel.Team" Role="Team" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SportTypeCategory">
+              <PropertyRef Name="SportTypeID" />
+            </Principal>
+            <Dependent Role="Team">
+              <PropertyRef Name="SportTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3745,6 +3799,7 @@
           <EntitySetMapping Name="Team">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.Team">
               <MappingFragment StoreEntitySet="Team">
+                <ScalarProperty Name="SportTypeID" ColumnName="SportTypeID" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="SportType" ColumnName="SportType" />
                 <ScalarProperty Name="TeamName" ColumnName="TeamName" />
@@ -3853,6 +3908,15 @@
                 <ScalarProperty Name="MaxUsage" ColumnName="MaxUsage" />
                 <ScalarProperty Name="CodeHash" ColumnName="CodeHash" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SportTypeCategory">
+            <EntityTypeMapping TypeName="HealthQuestionnaireModel.SportTypeCategory">
+              <MappingFragment StoreEntitySet="SportTypeCategory">
+                <ScalarProperty Name="SportGroup" ColumnName="SportGroup" />
+                <ScalarProperty Name="SportTypeName" ColumnName="SportTypeName" />
+                <ScalarProperty Name="SportTypeID" ColumnName="SportTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

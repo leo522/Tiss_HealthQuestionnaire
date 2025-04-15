@@ -121,6 +121,8 @@
         <AssociationConnector Association="HealthQuestionnaireModel.FK_TrainerTeam_TrainerProfile" />
         <AssociationConnector Association="HealthQuestionnaireModel.TrainerAthlete" />
         <EntityTypeShape EntityType="HealthQuestionnaireModel.InviteCode" Width="1.5" PointX="12.375" PointY="23.75" />
+        <EntityTypeShape EntityType="HealthQuestionnaireModel.SportTypeCategory" Width="1.5" PointX="12.25" PointY="27.625" />
+        <AssociationConnector Association="HealthQuestionnaireModel.FK_Team_SportTypeCategory" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

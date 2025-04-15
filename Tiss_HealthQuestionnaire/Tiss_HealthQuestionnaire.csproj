@@ -273,6 +273,9 @@
     <Compile Include="Models\ResponseImmediateMemory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SportTypeCategory.cs">
+      <DependentUpon>HealthModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TrainerQuestionnaireResponse.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
