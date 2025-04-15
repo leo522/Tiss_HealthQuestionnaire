@@ -10,6 +10,7 @@ namespace Tiss_HealthQuestionnaire.ViewModels
 	{
         public int TeamID { get; set; }
         public string TeamName { get; set; }
+        public int? SportTypeID { get; set; }
         public string SportType { get; set; }
         public DateTime CreatedDate { get; set; }
     }

@@ -49,6 +49,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<FemaleQuestionnaire> FemaleQuestionnaire { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<ImmediateMemory> ImmediateMemory { get; set; }
+        public virtual DbSet<InviteCode> InviteCode { get; set; }
         public virtual DbSet<LoginLog> LoginLog { get; set; }
         public virtual DbSet<MedicalandFamilyHistory> MedicalandFamilyHistory { get; set; }
         public virtual DbSet<OrthopaedicScreening> OrthopaedicScreening { get; set; }
@@ -86,6 +87,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<ResponsePastSupplements> ResponsePastSupplements { get; set; }
         public virtual DbSet<ResponsePresentIllness> ResponsePresentIllness { get; set; }
         public virtual DbSet<ResponseSymptomEvaluation> ResponseSymptomEvaluation { get; set; }
+        public virtual DbSet<SportTypeCategory> SportTypeCategory { get; set; }
         public virtual DbSet<SurgeryHistory> SurgeryHistory { get; set; }
         public virtual DbSet<SymptomEvaluation> SymptomEvaluation { get; set; }
         public virtual DbSet<SystemLog> SystemLog { get; set; }
@@ -99,7 +101,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<Treatment> Treatment { get; set; }
         public virtual DbSet<TreatmentMethod> TreatmentMethod { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
-        public virtual DbSet<InviteCode> InviteCode { get; set; }
-        public virtual DbSet<SportTypeCategory> SportTypeCategory { get; set; }
     }
 }

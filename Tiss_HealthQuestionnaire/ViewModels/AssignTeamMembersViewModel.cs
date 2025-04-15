@@ -6,17 +6,17 @@ using Tiss_HealthQuestionnaire.Models;
 
 namespace Tiss_HealthQuestionnaire.ViewModels
 {
-    #region 刪除隊伍
+    #region 指派選手與防護員至隊伍
     public class AssignTeamMembersViewModel
     {
         public int TeamID { get; set; }
         public string TeamName { get; set; }
 
-        public List<int> SelectedAthleteIDs { get; set; }
-        public List<int> SelectedTrainerIDs { get; set; }
+        public List<int> SelectedAthleteIDs { get; set; } = new List<int>();
+        public List<int> SelectedTrainerIDs { get; set; } = new List<int>();
 
-        public List<AthleteProfile> AllAthletes { get; set; } = new List<AthleteProfile>();
-        public List<TrainerProfile> AllTrainers { get; set; } = new List<TrainerProfile>();
+        public List<AthleteOption> AllAthletes { get; set; } = new List<AthleteOption>();
+        public List<TrainerOption> AllTrainers { get; set; } = new List<TrainerOption>();
     }
 
     public class AthleteOption

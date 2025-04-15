@@ -1,0 +1,20 @@
+﻿@model List<Tiss_HealthQuestionnaire.ViewModels.TrainerTeamInfoViewModel>
+@{
+    ViewBag.Title = "防護員對應隊伍與選手清單";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<h1 class="text-xl font-bold mb-4">防護員對應隊伍與選手清單</h1>
+
+@foreach (var trainer in Model)
+{
+    <div class="mb-5">
+        <h3 class="text-lg font-semibold text-blue-700">@trainer.TrainerName</h3>
+        @foreach (var team in trainer.Teams)
+        {
+            <div class="ml-4 mb-2">
+                <strong>隊伍：</strong> @team.TeamName <br />
+                <strong>選手：</strong> @string.Join(", ", team.AthleteNames)
+            </div>
+        }
+    </div>
+}

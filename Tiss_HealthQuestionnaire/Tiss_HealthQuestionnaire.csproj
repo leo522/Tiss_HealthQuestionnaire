@@ -414,6 +414,7 @@
     <Compile Include="ViewModels\AssignTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\BatchAthleteCreateViewModel.cs" />
     <Compile Include="ViewModels\TeamViewModel.cs" />
+    <Compile Include="ViewModels\TrainerTeamInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -2710,6 +2711,7 @@
     <Content Include="Views\MedicalEvaluation\OrthopaedicScreening.cshtml" />
     <Content Include="Views\InviteCode\InviteCodeList.cshtml" />
     <Content Include="Views\InviteCode\InviteCodeCreate.cshtml" />
+    <Content Include="Views\AdminTeam\TrainerTeamDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
