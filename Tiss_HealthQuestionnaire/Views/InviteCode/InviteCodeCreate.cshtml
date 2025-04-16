@@ -11,7 +11,7 @@
                     <h4 class="mb-0">建立邀請碼</h4>
                 </div>
                 <div class="card-body p-4">
-                    @using (Html.BeginForm("InviteCodeCreateNew", "InviteCode", FormMethod.Post))
+                    @using (Html.BeginForm("CreateInviteCode", "InviteCode", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         
