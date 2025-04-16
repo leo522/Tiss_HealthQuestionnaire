@@ -1,132 +1,162 @@
 ﻿@model List<Tiss_HealthQuestionnaire.ViewModels.AdminUserViewModel>
 @{
-    ViewBag.Title = "使用者清單";
+    ViewBag.Title = "系統儀表板";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <link rel="icon" href="~/img/favicon.svg" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-<div class="container mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div class="flex items-center">
-            <h1 class="text-3xl font-bold text-gray-800">系統使用者清單</h1>
+<div class="flex h-screen bg-gray-100">
+    <!-- 側邊導航欄 -->
+    <div class="w-64 bg-white shadow-lg">
+        <div class="p-4">
+            <h2 class="text-xl font-bold text-gray-800">系統管理</h2>
         </div>
-        
-        <div class="flex flex-wrap gap-2">
-            <a href="@Url.Action("PendingTrainerList", "AdminUser")" class="inline-flex items-center px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                防護員帳號審核
+        <nav class="mt-4">
+            <a href="@Url.Action("UserList", "AdminUser")" class="flex items-center px-4 py-3 text-gray-700 bg-blue-50 border-l-4 border-blue-500">
+                <i class="fas fa-users mr-3 w-5 text-center"></i>
+                使用者管理
             </a>
-            <a href="@Url.Action("SelectAthlete", "AdminQuestionnaire")" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                查詢選手問卷填答記錄
+            <a href="@Url.Action("PendingTrainerList", "AdminUser")" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-user-check mr-3 w-5 text-center"></i>
+                防護員審核
             </a>
-            <a href="@Url.Action("CreateAthlete", "AdminUser")" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-                新增選手資料
+            <a href="@Url.Action("SelectAthlete", "AdminQuestionnaire")" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-clipboard-list mr-3 w-5 text-center"></i>
+                問卷記錄
             </a>
-            <a href="@Url.Action("InviteCodeList", "InviteCode")" class="inline-flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                </svg>
-                驗證碼清單
+            <a href="@Url.Action("TeamList", "AdminTeam")" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-users-cog mr-3 w-5 text-center"></i>
+                隊伍管理
             </a>
-            <a href="@Url.Action("TeamList", "AdminTeam")" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                隊伍清單
+            <a href="@Url.Action("InviteCodeList", "InviteCode")" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-key mr-3 w-5 text-center"></i>
+                驗證碼管理
             </a>
-            <a href="@Url.Action("LogList", "AdminLog")" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                操作記錄查詢
+            <a href="@Url.Action("LogList", "AdminLog")" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-history mr-3 w-5 text-center"></i>
+                操作記錄
             </a>
-        </div>
+        </nav>
     </div>
 
-    <div class="mb-6">
-        <div class="relative">
-            <input type="text" id="searchInput" class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" placeholder="搜尋使用者...">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+    <!-- 主要內容區域 -->
+    <div class="flex-1 overflow-auto">
+        <div class="p-8">
+            <!-- 統計卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-sm font-medium text-gray-500">總使用者數</h3>
+                            <p class="text-2xl font-semibold text-gray-900">@Model.Count</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 text-green-600">
+                            <i class="fas fa-user-check text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-sm font-medium text-gray-500">啟用帳號</h3>
+                            <p class="text-2xl font-semibold text-gray-900">@Model.Count(u => u.IsActive)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-clock text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-sm font-medium text-gray-500">待審核防護員</h3>
+                            <p class="text-2xl font-semibold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 使用者列表 -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">使用者清單</h2>
+                        <a href="@Url.Action("CreateAthlete", "AdminUser")" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            新增選手
+                        </a>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="relative">
+                            <input type="text" id="searchInput" class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" placeholder="搜尋使用者...">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        @foreach (var user in Model)
+                        {
+                            <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow duration-300">
+                                <div class="flex items-center mb-4">
+                                    <div class="p-3 bg-blue-100 rounded-full mr-4">
+                                        <i class="fas fa-user text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800">@user.UserName</h3>
+                                        <p class="text-sm text-gray-600">@user.Email</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            <i class="fas fa-user-tag mr-2"></i>
+                                            @user.RoleDisplayName
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-calendar-alt mr-2"></i>
+                                        建立時間：@user.CreatedDate.ToString("yyyy-MM-dd")
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium @(user.IsActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
+                                            <i class="fas @(user.IsActive ? "fa-check-circle" : "fa-times-circle") mr-2"></i>
+                                            @(user.IsActive ? "啟用" : "停用")
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex space-x-2">
+                                    @using (Html.BeginForm("ToggleUserStatus", "AdminUser", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("id", user.UserID)
+                                        <button type="submit" class="flex-1 inline-flex items-center justify-center px-4 py-2 @(user.IsActive ? "bg-red-100 text-red-700 hover:bg-red-200" : "bg-green-100 text-green-700 hover:bg-green-200") rounded-lg transition-colors duration-300">
+                                            <i class="fas @(user.IsActive ? "fa-user-slash" : "fa-user-check") mr-2"></i>
+                                            @(user.IsActive ? "停用" : "啟用")
+                                        </button>
+                                    }
+                                    <a href="@Url.Action("EditUserRole", "AdminUser", new { id = user.UserID })"
+                                       class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors duration-300">
+                                        <i class="fas fa-user-edit mr-2"></i>
+                                        編輯角色
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        @foreach (var user in Model)
-        {
-            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-full mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800">@user.UserName</h3>
-                        <p class="text-sm text-gray-600">@user.Email</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            @user.RoleDisplayName
-                        </span>
-                    </div>
-
-                    <div class="flex items-center text-sm text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        建立時間：@user.CreatedDate.ToString("yyyy-MM-dd")
-                    </div>
-
-                    <div class="flex items-center">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium @(user.IsActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="@(user.IsActive ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z")" />
-                            </svg>
-                            @(user.IsActive ? "啟用" : "停用")
-                        </span>
-                    </div>
-                </div>
-
-                <div class="mt-4 flex space-x-2">
-                    @using (Html.BeginForm("ToggleUserStatus", "AdminUser", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.Hidden("id", user.UserID)
-                        <button type="submit" class="flex-1 inline-flex items-center justify-center px-4 py-2 @(user.IsActive ? "bg-red-100 text-red-700 hover:bg-red-200" : "bg-green-100 text-green-700 hover:bg-green-200") rounded-lg transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="@(user.IsActive ? "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" : "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z")" />
-                            </svg>
-                            @(user.IsActive ? "停用" : "啟用")
-                        </button>
-                    }
-                    <a href="@Url.Action("EditUserRole", "AdminUser", new { id = user.UserID })"
-                       class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        編輯角色
-                    </a>
-                </div>
-            </div>
-        }
     </div>
 </div>
 

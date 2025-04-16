@@ -3,25 +3,74 @@
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 
-<div class="container mt-4">
-    <h2>建立邀請碼</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">建立邀請碼</h4>
+                </div>
+                <div class="card-body p-4">
+                    @using (Html.BeginForm("InviteCodeCreateNew", "InviteCode", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-4">
+                            <label for="maxUsage" class="form-label fw-bold">最大使用次數</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control form-control-lg" 
+                                       name="maxUsage" id="maxUsage" 
+                                       value="1" min="1" required 
+                                       placeholder="請輸入最大使用次數" />
+                                <span class="input-group-text">次</span>
+                            </div>
+                            <div class="form-text text-muted">設定此邀請碼最多可被使用的次數</div>
+                        </div>
 
-    @using (Html.BeginForm("InviteCodeCreateNew", "InviteCode", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <div class="mb-3">
-            <label for="maxUsage" class="form-label">最大使用次數</label>
-            <input type="number" class="form-control" name="maxUsage" id="maxUsage" value="1" min="1" required />
+                        <div class="mb-4">
+                            <label for="expiryDate" class="form-label fw-bold">過期日期</label>
+                            <input type="date" class="form-control form-control-lg" 
+                                   name="expiryDate" id="expiryDate" 
+                                   placeholder="選擇過期日期" />
+                            <div class="form-text text-muted">可選，若不設定則永久有效</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="note" class="form-label fw-bold">備註</label>
+                            <textarea class="form-control form-control-lg" 
+                                      name="note" id="note" 
+                                      maxlength="100" rows="3"
+                                      placeholder="請輸入備註說明（選填）"></textarea>
+                            <div class="form-text text-muted">最多可輸入100個字元</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a href="@Url.Action("InviteCodeList")" class="btn btn-outline-secondary btn-lg px-4">
+                                返回清單
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                建立邀請碼
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="expiryDate" class="form-label">過期日期 (可選)</label>
-            <input type="date" class="form-control" name="expiryDate" id="expiryDate" />
-        </div>
-        <div class="mb-3">
-            <label for="note" class="form-label">備註 (可選)</label>
-            <input type="text" class="form-control" name="note" id="note" maxlength="100" />
-        </div>
-        <button type="submit" class="btn btn-success">建立邀請碼</button>
-        <a href="@Url.Action("InviteCodeList")" class="btn btn-secondary ms-2">返回清單</a>
-    }
+    </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 1rem;
+    }
+    .card-header {
+        border-radius: 1rem 1rem 0 0 !important;
+    }
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    .btn {
+        border-radius: 0.5rem;
+    }
+</style>
