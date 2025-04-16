@@ -534,30 +534,31 @@ namespace Tiss_HealthQuestionnaire.Controllers
 
                 var newSalt = GenerateSalt();
                 var newHashedPwd = ComputeSha256Hash(newPassword, newSalt);
+                SystemUser user = null;
 
                 if (role == "athlete")
                 {
-                    var user = _db.AthleteUser.FirstOrDefault(u => u.AthleteNumber == account);
-                    if (user == null)
+                    var athlete = _db.AthleteProfile.FirstOrDefault(a => a.AthleteNumber == account);
+
+                    if (athlete == null)
                     {
                         ViewBag.ErrorMessage = "查無此選手帳號";
                         return View();
                     }
 
-                    user.Salt = newSalt;
-                    user.Password = newHashedPwd;
+                    user = _db.SystemUser.Find(athlete.UserID);
                 }
                 else if (role == "trainer")
                 {
-                    var trainer = _db.AthleticTrainer.FirstOrDefault(t => t.ATName == account);
+                    var trainer = _db.TrainerProfile.FirstOrDefault(t => t.ATName == account);
+
                     if (trainer == null)
                     {
                         ViewBag.ErrorMessage = "查無此防護員帳號";
                         return View();
                     }
 
-                    trainer.Salt = newSalt;
-                    trainer.Password = newHashedPwd;
+                    user = _db.SystemUser.Find(trainer.UserID);
                 }
                 else
                 {
@@ -565,8 +566,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     return View();
                 }
 
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = "無法對應使用者帳號";
+                    return View();
+                }
+
+                user.Salt = newSalt;
+                user.Password = newHashedPwd;
+
                 _db.SaveChanges();
                 ViewBag.Message = "密碼重設成功，請重新登入";
+
                 return View();
             }
             catch (Exception ex)
