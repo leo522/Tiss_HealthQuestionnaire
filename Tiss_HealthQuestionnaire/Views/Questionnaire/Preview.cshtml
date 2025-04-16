@@ -679,55 +679,7 @@
                     </div>
                 }
             </div>
-
-            @*骨科篩檢*@
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold text-blue-600 mb-4">骨科篩檢 (Orthopaedic Screening)</h2>
-                @if (Model.OrthopaedicScreeningItems != null && Model.OrthopaedicScreeningItems.Any())
-                {
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 p-2">項次</th>
-                                <th class="border border-gray-300 p-2">指示操作</th>
-                                <th class="border border-gray-300 p-2">觀察重點</th>
-                                <th class="border border-gray-300 p-2">結果</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var detail in Model.OrthopaedicScreeningItems)
-                            {
-                                var responseText = "未填寫";
-                                var textColorClass = "text-gray-500";
-
-                                if (!string.IsNullOrEmpty(detail.ResultNormal) && !string.IsNullOrEmpty(detail.ResultAbnormal))
-                                {
-                                    responseText = detail.Result == "normal" ? "正常" : (detail.Result == "abnormal" ? "異常" : "未填寫");
-                                    textColorClass = detail.Result == "normal" ? "text-black-600" : (detail.Result == "abnormal" ? "text-red-600" : "text-gray-500");
-                                }
-
-                                <tr>
-                                    <td class="border border-gray-300 p-2 text-center">@detail.ID</td>
-                                    <td class="border border-gray-300 p-2">@detail.Instructions</td>
-                                    <td class="border border-gray-300 p-2">@detail.ObservationPoints</td>
-                                    <td class="border border-gray-300 p-2 text-center font-semibold @textColorClass">
-                                        @responseText
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-                @for (int i = 0; i < Model.OrthopaedicScreeningItems.Count; i++)
-                {
-                    var item = Model.OrthopaedicScreeningItems[i];
-
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].ID" value="@item.ID" />
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].Instructions" value="@item.Instructions" />
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].ObservationPoints" value="@item.ObservationPoints" />
-                    <input type="hidden" name="OrthopaedicScreeningItems[@i].Result" value="@item.Result" />
-                }
-            </div>
+            
             <div class="flex justify-between items-center mt-6">
                 <a href="@Url.Action("Main")" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded px-6 py-3">
                     返回編輯

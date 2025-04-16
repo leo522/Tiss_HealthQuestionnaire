@@ -107,6 +107,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     {
                         UserID = userId,
                         Action = "RegisterAthlete",
+                        Target = userName,
                         Message = "新選手註冊成功",
                         LogDate = DateTime.Now
                     });
@@ -461,6 +462,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     UserID = user.UserID,
                     Action = "登入",
                     Message = $"使用者 {user.UserName} 成功登入 ({roleName})",
+                    Target = user.UserName,
                     LogDate = DateTime.Now
                 });
                 _db.SaveChanges();

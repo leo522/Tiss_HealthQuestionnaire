@@ -1,0 +1,116 @@
+@model Tiss_HealthQuestionnaire.ViewModels.LogListViewModel
+@{
+    ViewBag.Title = "系統操作紀錄";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <a href="@Url.Action("Index", "AdminTeam")" class="text-blue-600 hover:text-blue-800 text-lg font-medium">← 返回管理頁面</a>
+        <h1 class="text-3xl font-bold text-gray-800 mt-2">系統操作紀錄</h1>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">搜尋操作者</label>
+                    <input type="text" id="searchUser" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="輸入操作者名稱">
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">操作類型</label>
+                    <select id="actionType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">全部</option>
+                        <option value="Create">新增</option>
+                        <option value="Update">修改</option>
+                        <option value="Delete">刪除</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">日期範圍</label>
+                    <div class="flex gap-2">
+                        <input type="date" id="startDate" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="flex items-center text-gray-500">至</span>
+                        <input type="date" id="endDate" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作時間</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作者</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作類型</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作內容</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP位址</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var log in Model.Logs)
+                    {
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@log.ActionTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@log.UserName</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    @(log.ActionType == "Create" ? "bg-green-100 text-green-800" : 
+                                      log.ActionType == "Update" ? "bg-blue-100 text-blue-800" : 
+                                      "bg-red-100 text-red-800")">
+                                    @log.ActionType
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500">@log.ActionContent</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@log.IPAddress</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+                顯示第 <span class="font-medium">@Model.PaginationInfo.StartItem</span> 到 <span class="font-medium">@Model.PaginationInfo.EndItem</span> 筆，共 <span class="font-medium">@Model.PaginationInfo.TotalItems</span> 筆
+            </div>
+            <div class="flex space-x-2">
+                @if (Model.PaginationInfo.HasPreviousPage)
+                {
+                    <a href="@Url.Action("LogList", new { page = Model.PaginationInfo.CurrentPage - 1 })" 
+                       class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+                        上一頁
+                    </a>
+                }
+                @if (Model.PaginationInfo.HasNextPage)
+                {
+                    <a href="@Url.Action("LogList", new { page = Model.PaginationInfo.CurrentPage + 1 })" 
+                       class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+                        下一頁
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // 搜尋功能
+            $('#searchUser, #actionType, #startDate, #endDate').on('change', function () {
+                filterLogs();
+            });
+
+            function filterLogs() {
+                const searchUser = $('#searchUser').val();
+                const actionType = $('#actionType').val();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+
+                // 這裡可以加入AJAX請求來過濾資料
+                // 或者使用現有的分頁機制
+            }
+        });
+    </script>
+} 

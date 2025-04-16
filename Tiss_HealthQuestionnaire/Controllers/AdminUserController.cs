@@ -160,6 +160,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 UserID = user.UserID,
                 Action = "審核防護員",
                 Message = $"帳號 {user.UserName} 已通過審核",
+                Target = user.UserName,
                 LogDate = DateTime.Now
             });
 
@@ -299,6 +300,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     UserID = systemUser.UserID,
                     Action = "批次新增選手",
                     Message = $"由管理員新增選手：{a.Name}",
+                    Target = systemUser.UserName,
                     LogDate = DateTime.Now
                 });
             }

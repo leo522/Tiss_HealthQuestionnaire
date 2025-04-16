@@ -15,43 +15,57 @@ namespace Tiss_HealthQuestionnaire.Controllers
         private HealthQuestionnaireEntities _db = new HealthQuestionnaireEntities();
 
         #region 操作紀錄清單查詢
-        public ActionResult LogList(string userName = null, string action = null, DateTime? startDate = null, DateTime? endDate = null)
+        [HttpGet]
+        public ActionResult LogList()
         {
-            var logs = _db.SystemLog.AsQueryable();
+            return View(new AdminLogFilterViewModel());
+        }
 
-            if (!string.IsNullOrWhiteSpace(userName))
-                logs = logs.Where(l => l.Target.Contains(userName));
-
-            if (!string.IsNullOrWhiteSpace(action))
-                logs = logs.Where(l => l.Action.Contains(action));
-
-            if (startDate.HasValue)
-                logs = logs.Where(l => l.LogDate >= startDate);
-
-            if (endDate.HasValue)
-                logs = logs.Where(l => l.LogDate <= endDate);
-
-            var results = logs
-                .OrderByDescending(l => l.LogDate)
-                .Select(l => new AdminLogItemViewModel
-                {
-                    UserName = l.SystemUser.UserName,
-                    Action = l.Action,
-                    Target = l.Target,
-                    Message = l.Message,
-                    LogDate = l.LogDate
-                }).ToList();
-
-            var model = new AdminLogFilterViewModel
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogList(string userName = null, DateTime? startDate = null, DateTime? endDate = null)
+        {
+            try
             {
-                UserName = userName,
-                Action = action,
-                StartDate = startDate,
-                EndDate = endDate,
-                Results = results
-            };
+                var model = new AdminLogFilterViewModel
+                {
+                    UserName = userName,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Results = new List<AdminLogItemViewModel>() // 預設空結果
+                };
 
-            return View(model);
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    return View(model);
+                }
+
+                var logs = _db.SystemLog.AsQueryable();
+
+                logs = logs.Where(g =>
+                    (g.SystemUser.UserName != null && g.SystemUser.UserName.Contains(userName)) ||
+                    (g.Target != null && g.Target.Contains(userName)));
+
+                if (startDate.HasValue) logs = logs.Where(g => g.LogDate >= startDate);
+                if (endDate.HasValue) logs = logs.Where(g => g.LogDate <= endDate);
+
+                model.Results = logs
+                    .OrderByDescending(g => g.LogDate)
+                    .Select(g => new AdminLogItemViewModel
+                    {
+                        UserName = g.SystemUser.UserName,
+                        Action = g.Action,
+                        Target = g.Target,
+                        Message = g.Message,
+                        LogDate = g.LogDate
+                    }).ToList();
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }
