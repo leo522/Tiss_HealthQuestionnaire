@@ -4,24 +4,75 @@
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <link rel="icon" href="~/img/favicon.svg" />
-<h1 class="text-2xl font-bold mb-4">編輯隊伍</h1>
-@using (Html.BeginForm("EditTeam", "AdminTeam", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.TeamID)
 
-    <div class="form-group">
-        <label for="TeamName">隊伍名稱</label>
-        @Html.TextBoxFor(m => m.TeamName, new { @class = "form-control", placeholder = "請輸入隊伍名稱" })
-        @Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
+<div class="container mx-auto px-4 py-8">
+    <div class="flex items-center mb-8">
+        <a href="@Url.Action("TeamList", "AdminTeam")" class="mr-4 text-gray-600 hover:text-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <h1 class="text-3xl font-bold text-gray-800">編輯隊伍</h1>
     </div>
 
-    <div class="form-group">
-        <label for="SportType">運動類別</label>
-        @Html.TextBoxFor(m => m.SportType, new { @class = "form-control", placeholder = "請輸入運動類別" })
-        @Html.ValidationMessageFor(m => m.SportType, "", new { @class = "text-danger" })
-    </div>
+    @using (Html.BeginForm("EditTeam", "AdminTeam", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.TeamID)
 
-    <button type="submit" class="btn btn-primary">更新</button>
-    <a href="@Url.Action("TeamList", "AdminTeam")" class="btn btn-secondary ml-2">返回</a>
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <div class="space-y-6">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-blue-100 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <label for="TeamName" class="block text-lg font-medium text-gray-700">隊伍名稱</label>
+                    </div>
+                    @Html.TextBoxFor(m => m.TeamName, new { 
+                        @class = "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500",
+                        placeholder = "請輸入隊伍名稱"
+                    })
+                    @Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "mt-2 text-sm text-red-600" })
+                </div>
+
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <label for="SportType" class="block text-lg font-medium text-gray-700">運動類別</label>
+                    </div>
+                    @Html.TextBoxFor(m => m.SportType, new { 
+                        @class = "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500",
+                        placeholder = "請輸入運動類別"
+                    })
+                    @Html.ValidationMessageFor(m => m.SportType, "", new { @class = "mt-2 text-sm text-red-600" })
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end space-x-4">
+                <a href="@Url.Action("TeamList", "AdminTeam")" class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    取消
+                </a>
+                <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    更新
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

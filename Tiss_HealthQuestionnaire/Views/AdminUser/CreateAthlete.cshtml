@@ -3,43 +3,69 @@
     ViewBag.Title = "批次新增選手資料";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
+<link rel="icon" href="~/img/favicon.svg" />
 
-<h1 class="mb-4 text-xl font-bold">批次新增選手資料</h1>
-
-@using (Html.BeginForm("CreateAthlete", "AdminUser", FormMethod.Post, new { id = "athleteForm" }))
-{
-    @Html.AntiForgeryToken()
-
-    <table class="table table-bordered" id="athleteTable">
-        <thead class="table-light">
-            <tr>
-                <th>選手編號</th>
-                <th>姓名</th>
-                <th>Email</th>
-                <th>出生日期</th>
-                <th>性別</th>
-                <th>運動專項</th>
-                <th>預設密碼</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody id="athleteTbody">
-            <!-- 初始列由 JS 動態載入 -->
-        </tbody>
-    </table>
-
-    <button type="button" class="btn btn-secondary mb-3" onclick="addRow()">新增一列</button>
-
-    <div class="d-flex justify-content-between mt-4">
-        <a href="@Url.Action("UserList", "AdminUser")" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> 返回系統使用者清單
+<div class="container mx-auto px-4 py-8">
+    <div class="flex items-center mb-8">
+        <a href="@Url.Action("UserList", "AdminUser")" class="mr-4 text-gray-600 hover:text-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
         </a>
-
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save"></i> 送出新增
-        </button>
+        <h1 class="text-3xl font-bold text-gray-800">批次新增選手資料</h1>
     </div>
-}
+
+    @using (Html.BeginForm("CreateAthlete", "AdminUser", FormMethod.Post, new { id = "athleteForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">選手編號</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">出生日期</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">性別</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">運動專項</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">預設密碼</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="athleteTbody" class="bg-white divide-y divide-gray-200">
+                        <!-- 初始列由 JS 動態載入 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <button type="button" onclick="addRow()" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    新增一列
+                </button>
+            </div>
+
+            <div class="mt-8 flex justify-end space-x-4">
+                <a href="@Url.Action("UserList", "AdminUser")" class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    返回系統使用者清單
+                </a>
+                <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    送出新增
+                </button>
+            </div>
+        </div>
+    }
+</div>
 
 @section Scripts {
     <script>
@@ -50,20 +76,50 @@
             const tbody = document.getElementById("athleteTbody");
 
             const row = document.createElement("tr");
+            row.className = "hover:bg-gray-50";
             row.innerHTML = `
-                <td><input type="text" name="Athletes[${index}].AthleteNumber" class="form-control" required></td>
-                <td><input type="text" name="Athletes[${index}].Name" class="form-control" required></td>
-                <td><input type="email" name="Athletes[${index}].Email" class="form-control"></td>
-                <td><input type="date" name="Athletes[${index}].BirthDate" class="form-control"></td>
-                <td>
-                    <select name="Athletes[${index}].GenderID" class="form-control" required>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="text" name="Athletes[${index}].AthleteNumber" 
+                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                           required>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="text" name="Athletes[${index}].Name" 
+                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                           required>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="email" name="Athletes[${index}].Email" 
+                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="date" name="Athletes[${index}].BirthDate" 
+                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <select name="Athletes[${index}].GenderID" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                            required>
                         <option value="">請選擇</option>
                         ${genderList.map(g => `<option value="${g.GenderID}">${g.GenderName}</option>`).join('')}
                     </select>
                 </td>
-                <td><input type="text" name="Athletes[${index}].SportSpecialization" class="form-control"></td>
-                <td> <input type="text" class="form-control text-muted" value="已套用預設密碼" readonly /></td>
-                <td><button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">移除</button></td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="text" name="Athletes[${index}].SportSpecialization" 
+                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-500" 
+                           value="已套用預設密碼" readonly>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button type="button" onclick="removeRow(this)" 
+                            class="text-red-600 hover:text-red-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </td>
             `;
             tbody.appendChild(row);
             index++;
@@ -91,11 +147,11 @@
                 const inputs = row.querySelectorAll("input[required], select[required]");
                 for (const input of inputs) {
                     if (!input.value.trim()) {
-                        input.classList.add("border", "border-red-500");
+                        input.classList.add("border-red-500");
                         Swal.fire("請完整填寫所有欄位", "", "warning");
                         return;
                     } else {
-                        input.classList.remove("border", "border-red-500");
+                        input.classList.remove("border-red-500");
                     }
                 }
             }
