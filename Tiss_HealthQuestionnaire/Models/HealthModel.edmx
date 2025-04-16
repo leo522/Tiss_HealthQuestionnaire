@@ -383,16 +383,6 @@
           <Property Name="Specialty" Type="nvarchar" MaxLength="50" />
           <Property Name="FillName" Type="nvarchar" MaxLength="20" />
         </EntityType>
-        <EntityType Name="QuestionnaireResponseDetails">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ResponseID" Type="int" Nullable="false" />
-          <Property Name="QuestionnaireType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="QuestionID" Type="int" Nullable="false" />
-          <Property Name="Answer" Type="nvarchar" MaxLength="150" />
-        </EntityType>
         <EntityType Name="QuestionnaireType">
           <Key>
             <PropertyRef Name="Id" />
@@ -720,6 +710,7 @@
           <Property Name="TrainerID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="FillingDate" Type="datetime" Nullable="false" />
           <Property Name="FillName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalScore" Type="int" />
         </EntityType>
         <EntityType Name="TrainerTeam">
           <Key>
@@ -977,18 +968,6 @@
             </Principal>
             <Dependent Role="QuestionnaireResponse">
               <PropertyRef Name="GenderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_QuestionnaireResponseDetails_Response">
-          <End Role="QuestionnaireResponse" Type="Self.QuestionnaireResponse" Multiplicity="1" />
-          <End Role="QuestionnaireResponseDetails" Type="Self.QuestionnaireResponseDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="QuestionnaireResponse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponseDetails">
-              <PropertyRef Name="ResponseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1310,7 +1289,6 @@
           <EntitySet Name="PastTreatmentMethod" EntityType="Self.PastTreatmentMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PresentIllness" EntityType="Self.PresentIllness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireResponse" EntityType="Self.QuestionnaireResponse" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="QuestionnaireResponseDetails" EntityType="Self.QuestionnaireResponseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionnaireType" EntityType="Self.QuestionnaireType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseAllergicHistory" EntityType="Self.ResponseAllergicHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResponseCardiovascularScreening" EntityType="Self.ResponseCardiovascularScreening" Schema="dbo" store:Type="Tables" />
@@ -1421,10 +1399,6 @@
           <AssociationSet Name="FK_QuestionnaireResponse_Gender" Association="Self.FK_QuestionnaireResponse_Gender">
             <End Role="Gender" EntitySet="Gender" />
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
-          </AssociationSet>
-          <AssociationSet Name="FK_QuestionnaireResponseDetails_Response" Association="Self.FK_QuestionnaireResponseDetails_Response">
-            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
-            <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_ResponseAllergicHistory_QuestionnaireResponse" Association="Self.FK_ResponseAllergicHistory_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
@@ -1565,7 +1539,6 @@
           <EntitySet Name="PastTreatmentMethod" EntityType="HealthQuestionnaireModel.PastTreatmentMethod" />
           <EntitySet Name="PresentIllness" EntityType="HealthQuestionnaireModel.PresentIllness" />
           <EntitySet Name="QuestionnaireResponse" EntityType="HealthQuestionnaireModel.QuestionnaireResponse" />
-          <EntitySet Name="QuestionnaireResponseDetails" EntityType="HealthQuestionnaireModel.QuestionnaireResponseDetails" />
           <EntitySet Name="QuestionnaireType" EntityType="HealthQuestionnaireModel.QuestionnaireType" />
           <EntitySet Name="ResponseAllergicHistory" EntityType="HealthQuestionnaireModel.ResponseAllergicHistory" />
           <EntitySet Name="ResponseCardiovascularScreening" EntityType="HealthQuestionnaireModel.ResponseCardiovascularScreening" />
@@ -1655,10 +1628,6 @@
           <AssociationSet Name="FK__PastInjur__PastI__1293BD5E" Association="HealthQuestionnaireModel.FK__PastInjur__PastI__1293BD5E">
             <End Role="PastInjuryType" EntitySet="PastInjuryType" />
             <End Role="PastInjuryRecord" EntitySet="PastInjuryRecord" />
-          </AssociationSet>
-          <AssociationSet Name="FK_QuestionnaireResponseDetails_Response" Association="HealthQuestionnaireModel.FK_QuestionnaireResponseDetails_Response">
-            <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
-            <End Role="QuestionnaireResponseDetails" EntitySet="QuestionnaireResponseDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_ResponseAllergicHistory_QuestionnaireResponse" Association="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse">
             <End Role="QuestionnaireResponse" EntitySet="QuestionnaireResponse" />
@@ -2170,7 +2139,6 @@
           <Property Name="Specialty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FillName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Gender" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponse_Gender" FromRole="QuestionnaireResponse" ToRole="Gender" />
-          <NavigationProperty Name="QuestionnaireResponseDetails" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponseDetails_Response" FromRole="QuestionnaireResponse" ToRole="QuestionnaireResponseDetails" />
           <NavigationProperty Name="ResponseAllergicHistory" Relationship="HealthQuestionnaireModel.FK_ResponseAllergicHistory_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponseAllergicHistory" />
           <NavigationProperty Name="ResponseCardiovascularScreening" Relationship="HealthQuestionnaireModel.FK_ResponseCardiovascularScreening_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponseCardiovascularScreening" />
           <NavigationProperty Name="ResponseConcussionScreening" Relationship="HealthQuestionnaireModel.FK_ResponseConcussionScreening_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponseConcussionScreening" />
@@ -2184,17 +2152,6 @@
           <NavigationProperty Name="ResponsePastSupplements" Relationship="HealthQuestionnaireModel.FK_ResponsePastSupplements_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponsePastSupplements" />
           <NavigationProperty Name="ResponsePresentIllness" Relationship="HealthQuestionnaireModel.FK_ResponsePresentIllness_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponsePresentIllness" />
           <NavigationProperty Name="ResponseSymptomEvaluation" Relationship="HealthQuestionnaireModel.FK_ResponseSymptomEvaluation_QuestionnaireResponse" FromRole="QuestionnaireResponse" ToRole="ResponseSymptomEvaluation" />
-        </EntityType>
-        <EntityType Name="QuestionnaireResponseDetails">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ResponseID" Type="Int32" Nullable="false" />
-          <Property Name="QuestionnaireType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="QuestionID" Type="Int32" Nullable="false" />
-          <Property Name="Answer" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="QuestionnaireResponse" Relationship="HealthQuestionnaireModel.FK_QuestionnaireResponseDetails_Response" FromRole="QuestionnaireResponseDetails" ToRole="QuestionnaireResponse" />
         </EntityType>
         <EntityType Name="QuestionnaireType">
           <Key>
@@ -2551,6 +2508,7 @@
           <Property Name="TrainerID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="FillingDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="FillName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalScore" Type="Int32" />
           <NavigationProperty Name="ResponseCognitiveScreening" Relationship="HealthQuestionnaireModel.FK_ResponseCognitiveScreening_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseCognitiveScreening" />
           <NavigationProperty Name="ResponseConcentration" Relationship="HealthQuestionnaireModel.FK_ResponseConcentration_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseConcentration" />
           <NavigationProperty Name="ResponseCoordinationAndBalance" Relationship="HealthQuestionnaireModel.FK_ResponseCoordination_TrainerResponse" FromRole="TrainerQuestionnaireResponse" ToRole="ResponseCoordinationAndBalance" />
@@ -2757,18 +2715,6 @@
             </Principal>
             <Dependent Role="PastInjuryRecord">
               <PropertyRef Name="PastInjuryTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_QuestionnaireResponseDetails_Response">
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponse" Role="QuestionnaireResponse" Multiplicity="1" />
-          <End Type="HealthQuestionnaireModel.QuestionnaireResponseDetails" Role="QuestionnaireResponseDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="QuestionnaireResponse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="QuestionnaireResponseDetails">
-              <PropertyRef Name="ResponseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3513,17 +3459,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="QuestionnaireResponseDetails">
-            <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireResponseDetails">
-              <MappingFragment StoreEntitySet="QuestionnaireResponseDetails">
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-                <ScalarProperty Name="QuestionnaireType" ColumnName="QuestionnaireType" />
-                <ScalarProperty Name="ResponseID" ColumnName="ResponseID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="QuestionnaireType">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.QuestionnaireType">
               <MappingFragment StoreEntitySet="QuestionnaireType">
@@ -3867,6 +3802,7 @@
           <EntitySetMapping Name="TrainerQuestionnaireResponse">
             <EntityTypeMapping TypeName="HealthQuestionnaireModel.TrainerQuestionnaireResponse">
               <MappingFragment StoreEntitySet="TrainerQuestionnaireResponse">
+                <ScalarProperty Name="TotalScore" ColumnName="TotalScore" />
                 <ScalarProperty Name="FillName" ColumnName="FillName" />
                 <ScalarProperty Name="FillingDate" ColumnName="FillingDate" />
                 <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />

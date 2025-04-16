@@ -42,6 +42,13 @@ namespace Tiss_HealthQuestionnaire.Controllers
             if (user == null) return HttpNotFound();
 
             user.IsActive = !user.IsActive;
+
+            if (user.IsActive && user.IsApproved == false)
+            {
+                user.IsApproved = true;
+            }
+
+
             _db.SaveChanges();
 
             _db.SystemLog.Add(new SystemLog

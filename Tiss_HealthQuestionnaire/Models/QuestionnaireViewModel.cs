@@ -181,22 +181,6 @@ namespace Tiss_HealthQuestionnaire.Models
         #region 症狀自我評估-選手自填(2)
         public List<SymptomEvaluationViewModel> SymptomEvaluationItems { get; set; }
         #endregion
-
-        //#region 骨科篩檢
-        //public List<OrthopaedicScreeningItmeViewModel> OrthopaedicScreeningItems { get; set; }
-        //#endregion
-
-        #region 醫療團隊評估
-        public int OrientationScore { get; set; }
-        public int ImmediateMemoryScore { get; set; }
-        public string CompletionTime { get; set; }
-        public int ConcentrationScore { get; set; }
-        public int CoordinationErrors { get; set; }
-        public float CoordinationAverageTime { get; set; }
-        public float CoordinationFastestTime { get; set; }
-        public int DelayedRecallScore { get; set; }
-        public int CognitiveScreeningTotalScore { get; set; }
-        #endregion
     }
 
     #region 過去健康檢查病史

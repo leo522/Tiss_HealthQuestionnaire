@@ -29,6 +29,7 @@ namespace Tiss_HealthQuestionnaire.Models
         public string TrainerID { get; set; }
         public System.DateTime FillingDate { get; set; }
         public string FillName { get; set; }
+        public Nullable<int> TotalScore { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponseCognitiveScreening> ResponseCognitiveScreening { get; set; }

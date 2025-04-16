@@ -160,7 +160,7 @@
     <Compile Include="Models\AdminProfile.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AdminViewResponseViewModel.cs" />
+    <Compile Include="ViewModels\AdminViewAthleteResponseViewModel.cs" />
     <Compile Include="Models\AllergicHistory.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
@@ -279,6 +279,7 @@
     <Compile Include="Models\TrainerQuestionnaireResponse.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AdminViewTrainerResponseViewModel.cs" />
     <Compile Include="ViewModels\MedicalViewModel.cs" />
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -320,9 +321,6 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionnaireResponse.cs">
-      <DependentUpon>HealthModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\QuestionnaireResponseDetails.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionnaireType.cs">
@@ -2695,7 +2693,6 @@
     <Content Include="Views\Account\RegisterAthlete.cshtml" />
     <Content Include="Views\Account\RegisterTrainer.cshtml" />
     <Content Include="Views\AdminQuestionnaire\SelectAthlete.cshtml" />
-    <Content Include="Views\AdminQuestionnaire\ViewFullResponse.cshtml" />
     <Content Include="Views\Account\RegisterAdmin.cshtml" />
     <Content Include="Views\AdminUser\UserList.cshtml" />
     <Content Include="Views\AdminUser\EditUserRole.cshtml" />
@@ -2712,6 +2709,9 @@
     <Content Include="Views\InviteCode\InviteCodeList.cshtml" />
     <Content Include="Views\InviteCode\InviteCodeCreate.cshtml" />
     <Content Include="Views\AdminTeam\TrainerTeamDetails.cshtml" />
+    <Content Include="Views\AdminQuestionnaire\SelectTrainer.cshtml" />
+    <Content Include="Views\AdminQuestionnaire\ViewFullAthleteResponse.cshtml" />
+    <Content Include="Views\AdminQuestionnaire\ViewFullTrainerResponse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

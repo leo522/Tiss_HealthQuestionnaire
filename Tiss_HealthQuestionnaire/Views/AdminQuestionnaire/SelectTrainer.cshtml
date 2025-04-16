@@ -1,35 +1,35 @@
 ﻿@{
-    ViewBag.Title = "選擇選手與填寫日期";
+    ViewBag.Title = "選擇防護員與填寫日期";
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 
 <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">選手問卷填答紀錄查詢</h1>
-            <p class="text-gray-600">請選擇選手及填寫日期以查看詳細內容</p>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">防護員問卷填答紀錄查詢</h1>
+            <p class="text-gray-600">請選擇防護員及填寫日期以查看詳細內容</p>
         </div>
 
         <div class="bg-white p-8 rounded-xl shadow-lg">
-            @using (Html.BeginForm("ViewFullAthleteResponse", "AdminQuestionnaire", FormMethod.Post, new { id = "viewForm" }))
+            @using (Html.BeginForm("ViewFullTrainerResponse", "AdminQuestionnaire", FormMethod.Post, new { id = "viewForm" }))
             {
                 @Html.AntiForgeryToken()
 
                 <div class="space-y-6">
                     <div class="space-y-2">
-                        <label for="athleteSelect" class="block text-sm font-medium text-gray-700">選擇選手</label>
+                        <label for="trainerSelect" class="block text-sm font-medium text-gray-700">選擇防護員</label>
                         <div class="relative">
-                            <select id="athleteSelect" name="athleteId" 
+                            <select id="trainerSelect" name="trainerId"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none bg-white">
-                                <option value="">請選擇選手</option>
-                                @foreach (var item in ViewBag.AthleteList as List<SelectListItem>)
+                                <option value="">請選擇防護員</option>
+                                @foreach (var item in ViewBag.TrainerList as List<SelectListItem>)
                                 {
                                     <option value="@item.Value">@item.Text</option>
                                 }
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                         </div>
@@ -38,19 +38,19 @@
                     <div class="space-y-2">
                         <label for="dateSelect" class="block text-sm font-medium text-gray-700">選擇填寫日期</label>
                         <div class="relative">
-                            <select id="dateSelect" name="responseId" 
+                            <select id="dateSelect" name="responseId"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none bg-white" disabled>
-                                <option value="">請先選擇選手</option>
+                                <option value="">請先選擇防護員</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" id="viewBtn" 
+                    <button type="submit" id="viewBtn"
                             class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             disabled>
                         查看填答內容
@@ -63,7 +63,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const athleteSelect = document.getElementById("athleteSelect");
+        const athleteSelect = document.getElementById("trainerSelect");
         const dateSelect = document.getElementById("dateSelect");
         const viewBtn = document.getElementById("viewBtn");
 
@@ -74,7 +74,7 @@
 
             if (!athleteId) {
                 dateSelect.disabled = true;
-                dateSelect.innerHTML = "<option value=''>請先選擇選手</option>";
+                dateSelect.innerHTML = "<option value=''>請先選擇防護員</option>";
                 return;
             }
 
@@ -82,7 +82,7 @@
             dateSelect.disabled = true;
             dateSelect.innerHTML = "<option value=''>載入中...</option>";
 
-            fetch(`/AdminQuestionnaire/LoadFillingDates?athleteId=${athleteId}`)
+            fetch(`/AdminQuestionnaire/LoadTrainerFillingDates?trainerId=${trainerId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.length === 0) {

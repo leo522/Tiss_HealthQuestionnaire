@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Tiss_HealthQuestionnaire.Models;
 
-namespace Tiss_HealthQuestionnaire.Models
+namespace Tiss_HealthQuestionnaire.ViewModels
 {
-	public class AdminViewResponseViewModel
-	{
-        // 主問卷基本資料
+    #region 選手問卷填答資料
+    public class AdminViewAthleteResponseViewModel
+    {
         public int ResponseId { get; set; }
         public string AthleteID { get; set; }
         public string FillName { get; set; }
@@ -29,7 +30,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public List<ResponseCardiovascularScreening> CardiovascularList { get; set; }
         public List<ResponseConcussionScreening> ConcussionScreeningList { get; set; }
         public List<ResponseSymptomEvaluation> SymptomEvaluationList { get; set; }
-        public List<ResponseOrthopaedicScreening> OrthopaedicScreeningList { get; set; }
     }
 
     public class AdminPastHealthItem
@@ -57,4 +57,5 @@ namespace Tiss_HealthQuestionnaire.Models
         public string Symptom { get; set; }
         public int Severity { get; set; }
     }
+    #endregion
 }

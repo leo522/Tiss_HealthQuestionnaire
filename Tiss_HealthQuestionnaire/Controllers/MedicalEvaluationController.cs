@@ -499,19 +499,33 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 int trainerId = Convert.ToInt32(Session["TrainerID"]);
 
+                // ===== 計算總分 =====
+                int totalScore = 0;
+                var cognitiveItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>;
+                var memoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>;
+                var concentrationItems = Session["ConcentrationItems"] as List<ConcentrationViewModel>;
+                var coordItem = (Session["CoordinationItems"] as List<CoordinationAndBalanceExaminationViewModel>)?.FirstOrDefault();
+                var recallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>;
+
+                totalScore += cognitiveItems?.Count(x => x.AnswerOption1 == 1) ?? 0;
+                totalScore += memoryItems?.Sum(x => x.FirstTestScore + x.SecondTestScore + x.ThirdTestScore) ?? 0;
+                totalScore += concentrationItems?.Sum(x => x.Score) ?? 0;
+                totalScore += recallItems?.Sum(x => x.Score) ?? 0;
+                totalScore += Math.Max(0, 30 - (coordItem?.TotalErrors ?? 0));
+
                 var trainerResponse = new TrainerQuestionnaireResponse
                 {
                     TrainerID = trainerId.ToString(),
                     FillingDate = DateTime.Now,
                     FillName = Session["UserName"]?.ToString()
                 };
+
                 _db.TrainerQuestionnaireResponse.Add(trainerResponse);
                 _db.SaveChanges();
 
                 int responseId = trainerResponse.ID;
 
                 //定位
-                var cognitiveItems = Session["CognitiveScreeningItems"] as List<CognitiveScreening>;
                 foreach (var item in cognitiveItems)
                 {
                     _db.ResponseCognitiveScreening.Add(new ResponseCognitiveScreening
@@ -524,7 +538,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
 
                 //短期記憶
-                var memoryItems = Session["ImmediateMemoryItems"] as List<ImmediateMemoryViewModel>;
                 foreach (var item in memoryItems)
                 {
                     _db.ResponseImmediateMemory.Add(new ResponseImmediateMemory
@@ -538,7 +551,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
 
-                var concentrationItems = Session["ConcentrationItems"] as List<ConcentrationViewModel>;
+                //專注力
                 foreach (var item in concentrationItems)
                 {
                     _db.ResponseConcentration.Add(new ResponseConcentration
@@ -552,8 +565,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     });
                 }
 
-                //專注力
-                var coordItem = (Session["CoordinationItems"] as List<CoordinationAndBalanceExaminationViewModel>)?.FirstOrDefault();
+                //協調與平衡測驗
                 if (coordItem != null)
                 {
                     _db.ResponseCoordinationAndBalance.Add(new ResponseCoordinationAndBalance
@@ -575,7 +587,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 }
 
                 //延遲記憶
-                var recallItems = Session["DelayedRecallViewModels"] as List<DelayedRecallViewModel>;
                 foreach (var item in recallItems)
                 {
                     _db.ResponseDelayedRecall.Add(new ResponseDelayedRecall
@@ -613,7 +624,6 @@ namespace Tiss_HealthQuestionnaire.Controllers
             {
                 throw ex;
             }
-
         }
         #endregion
 

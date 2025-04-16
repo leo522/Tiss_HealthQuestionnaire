@@ -17,7 +17,6 @@ namespace Tiss_HealthQuestionnaire.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public QuestionnaireResponse()
         {
-            this.QuestionnaireResponseDetails = new HashSet<QuestionnaireResponseDetails>();
             this.ResponseAllergicHistory = new HashSet<ResponseAllergicHistory>();
             this.ResponseCardiovascularScreening = new HashSet<ResponseCardiovascularScreening>();
             this.ResponseConcussionScreening = new HashSet<ResponseConcussionScreening>();
@@ -41,8 +40,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public string FillName { get; set; }
     
         public virtual Gender Gender { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponseAllergicHistory> ResponseAllergicHistory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

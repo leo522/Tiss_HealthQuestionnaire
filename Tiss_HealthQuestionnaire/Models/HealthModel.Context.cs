@@ -66,7 +66,6 @@ namespace Tiss_HealthQuestionnaire.Models
         public virtual DbSet<PastTreatmentMethod> PastTreatmentMethod { get; set; }
         public virtual DbSet<PresentIllness> PresentIllness { get; set; }
         public virtual DbSet<QuestionnaireResponse> QuestionnaireResponse { get; set; }
-        public virtual DbSet<QuestionnaireResponseDetails> QuestionnaireResponseDetails { get; set; }
         public virtual DbSet<QuestionnaireType> QuestionnaireType { get; set; }
         public virtual DbSet<ResponseAllergicHistory> ResponseAllergicHistory { get; set; }
         public virtual DbSet<ResponseCardiovascularScreening> ResponseCardiovascularScreening { get; set; }

@@ -1,0 +1,147 @@
+﻿@model Tiss_HealthQuestionnaire.ViewModels.AdminViewTrainerResponseViewModel
+@{
+    ViewBag.Title = "防護員問卷填寫記錄檢視";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">防護員問卷填寫紀錄</h1>
+        <a href="@Url.Action("SelectTrainer", "AdminQuestionnaire")"
+           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            返回選擇頁
+        </a>
+    </div>
+
+    @*基本資料*@
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+                <p class="text-base text-gray-500">填寫日期</p>
+                <p class="text-xl font-medium">@Model.FillingDate.ToString("yyyy-MM-dd")</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-base text-gray-500">選手編號</p>
+                <p class="text-xl font-medium">@Model.TrainerID</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-base text-gray-500">填寫人</p>
+                <p class="text-xl font-medium">@Model.FillName</p>
+            </div>
+        </div>
+    </div>
+
+    @*1.定位*@
+    @if (Model.CognitiveScreeningList != null && Model.CognitiveScreeningList.Any())
+    {
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">定位</h2>
+            <ul class="list-disc pl-6">
+                @foreach (var q in Model.CognitiveScreeningList)
+                {
+                    <li>@q.Question - <strong>@(q.Answer ? "正確" : "錯誤")</strong></li>
+                }
+            </ul>
+        </div>
+    }
+
+    @*2.短期記憶*@
+    @if (Model.ImmediateMemoryList != null && Model.ImmediateMemoryList.Any())
+    {
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">短期記憶</h2>
+            <table class="table-auto w-full text-left">
+                <thead><tr><th>單字</th><th>第一次</th><th>第二次</th><th>第三次</th></tr></thead>
+                <tbody>
+                    @foreach (var m in Model.ImmediateMemoryList)
+                    {
+                        <tr>
+                            <td>@m.Word</td>
+                            <td>@m.FirstTestScore</td>
+                            <td>@m.SecondTestScore</td>
+                            <td>@m.ThirdTestScore</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @*3.專注力*@
+    @if (Model.ConcentrationList != null && Model.ConcentrationList.Any())
+    {
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">專注力</h2>
+            <table class="table-auto w-full text-left">
+                <thead><tr><th>數列A</th><th>數列B</th><th>數列C</th><th>作答</th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.ConcentrationList)
+                    {
+                        <tr>
+                            <td>@c.ListA</td>
+                            <td>@c.ListB</td>
+                            <td>@c.ListC</td>
+                            <td>@(c.Score == 1 ? "是" : "否")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @*4.協調與平衡測驗*@
+    @if (Model.CoordinationAndBalanceList != null && Model.CoordinationAndBalanceList.Any())
+    {
+        var cb = Model.CoordinationAndBalanceList.First();
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">協調與平衡測驗</h2>
+            <p>測試腳：@cb.TestFoot</p>
+            <p>測試平面：@cb.TestSurface</p>
+            <p>穿著狀況：@cb.Footwear</p>
+            <p>錯誤次數（雙腳）：@cb.DoubleLegError，交叉腳：@cb.TandemError，單腳：@cb.SingleLegError</p>
+            <p>平均時間：@cb.AverageTime 秒，最快時間：@cb.FastestTime 秒</p>
+        </div>
+    }
+
+    @*5.延遲記憶*@
+    @if (Model.DelayedRecallList != null && Model.DelayedRecallList.Any())
+    {
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">延遲記憶</h2>
+            <table class="table-auto w-full text-left">
+                <thead><tr><th>單字</th><th>得分</th></tr></thead>
+                <tbody>
+                    @foreach (var r in Model.DelayedRecallList)
+                    {
+                        <tr>
+                            <td>@r.Word</td>
+                            <td>@r.Score</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @*6.認知篩檢分數總合*@
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-blue-200">
+        <h2 class="text-2xl font-bold mb-4 text-blue-800">總分統計</h2>
+        <p class="text-xl font-semibold text-blue-900">本次問卷總得分：@Model.TotalScore 分</p>
+    </div>
+
+    @*7.骨科篩檢*@
+    @if (Model.OrthopaedicScreeningList != null && Model.OrthopaedicScreeningList.Any())
+    {
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border">
+            <h2 class="text-2xl font-bold mb-4">骨科篩檢</h2>
+            <ul class="list-disc pl-6">
+                @foreach (var t in Model.OrthopaedicScreeningList)
+                {
+                    <li>
+                        <strong>@t.TestName</strong> - 結果：@t.Result
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
