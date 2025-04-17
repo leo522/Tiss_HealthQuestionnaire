@@ -1,0 +1,72 @@
+﻿@model Tiss_HealthQuestionnaire.ViewModels.ChangeUserPwdViewModel
+@{
+    ViewBag.Title = "角色密碼變更管理";
+    Layout = "~/Views/Shared/_HealthLayout.cshtml";
+}
+<link href="~/css/ChangeUserPwdStyle.css" rel="stylesheet" />
+<div class="password-change-container">
+    <div class="mb-8">
+        <a href="@Url.Action("UserList", "AdminUser")" class="text-blue-600 hover:text-blue-800 text-lg font-medium">← 返回隊伍列表</a>
+        <h1 class="text-3xl font-bold text-gray-800 mt-2">角色密碼變更管理</h1>
+    </div>
+    @*<h2 class="form-title">角色密碼變更管理</h2>*@
+
+    @using (Html.BeginForm("ChangeUsersPwd", "AdminUser", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="form-label" for="role">角色</label>
+            <div class="select-wrapper">
+                @Html.DropDownListFor(m => m.SelectedRole, new SelectList(ViewBag.RoleList, "Value", "Text", Model?.SelectedRole), "請選擇", new { @class = "form-control", onchange = "this.form.submit();" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="account">帳號</label>
+            <div class="select-wrapper">
+                @Html.DropDownListFor(m => m.SelectedAccount, new SelectList(ViewBag.AccountList as List<SelectListItem> ?? new List<SelectListItem>(), "Value", "Text", Model?.SelectedAccount), "請選擇帳號", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="newPassword">新密碼</label>
+            <input type="password" class="form-control" name="NewPassword" required placeholder="請輸入新密碼" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="confirmPassword">確認新密碼</label>
+            <input type="password" class="form-control" name="ConfirmPassword" required placeholder="請再次輸入新密碼" />
+        </div>
+
+        <button type="submit" name="doChange" value="1" class="btn-primary">變更密碼</button>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @* 顯示錯誤訊息 *@
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: errorMessage,
+                    confirmButtonText: '確定'
+                });
+            }
+
+            @* 顯示成功訊息 *@
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '成功',
+                    text: successMessage,
+                    confirmButtonText: '確定'
+                });
+            }
+        });
+    </script>
+}

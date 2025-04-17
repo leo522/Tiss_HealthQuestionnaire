@@ -280,6 +280,7 @@
       <DependentUpon>HealthModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AdminViewTrainerResponseViewModel.cs" />
+    <Compile Include="ViewModels\ChangeUserPwdViewModel.cs" />
     <Compile Include="ViewModels\MedicalViewModel.cs" />
     <Compile Include="Models\OrthopaedicScreening.cs">
       <DependentUpon>HealthModel.tt</DependentUpon>
@@ -431,6 +432,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="css\ChangeUserPwdStyle.css" />
     <Content Include="css\loginStyle.css" />
     <Content Include="css\mainStyle.css" />
     <Content Include="css\registerStyle.css" />
@@ -2712,6 +2714,7 @@
     <Content Include="Views\AdminQuestionnaire\SelectTrainer.cshtml" />
     <Content Include="Views\AdminQuestionnaire\ViewFullAthleteResponse.cshtml" />
     <Content Include="Views\AdminQuestionnaire\ViewFullTrainerResponse.cshtml" />
+    <Content Include="Views\AdminUser\ChangeUsersPwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -318,6 +318,131 @@ namespace Tiss_HealthQuestionnaire.Controllers
         }
         #endregion
 
+        #region 修改全部角色的密碼
+        public ActionResult ChangeUsersPwd()
+        {
+            ViewBag.RoleList = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "選手", Value = "athlete" },
+                new SelectListItem { Text = "防護員", Value = "trainer" }
+            };
+
+            ViewBag.AccountList = new List<SelectListItem>(); // 初始為空
+            return View(new ChangeUserPwdViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeUsersPwd(ChangeUserPwdViewModel model, string doChange)
+        {
+            ViewBag.RoleList = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "選手", Value = "athlete" },
+        new SelectListItem { Text = "防護員", Value = "trainer" }
+    };
+
+            // 若只改變角色下拉選單，就回傳帳號清單，不進行密碼變更
+            if (string.IsNullOrEmpty(doChange))
+            {
+                if (model.SelectedRole == "athlete")
+                {
+                    ViewBag.AccountList = _db.AthleteProfile.ToList()
+                    .Select(a => new SelectListItem
+                    {
+                        Value = a.AthleteNumber,
+                        Text = $"{a.AthleteNumber} - {a.Name}"
+                    }).ToList();
+
+                }
+                else if (model.SelectedRole == "trainer")
+                {
+                    ViewBag.AccountList = _db.TrainerProfile.ToList()
+                    .Select(t => new SelectListItem
+                    {
+                        Value = t.ATName,
+                        Text = $"{t.ATName} - {t.TrainerEmail}"
+                    }).ToList();
+                }
+                else
+                {
+                    ViewBag.AccountList = new List<SelectListItem>();
+                }
+
+                return View(model);
+            }
+
+            // 驗證表單欄位
+            if (string.IsNullOrWhiteSpace(model.SelectedRole) || string.IsNullOrWhiteSpace(model.SelectedAccount) ||
+                string.IsNullOrWhiteSpace(model.NewPassword) || string.IsNullOrWhiteSpace(model.ConfirmPassword))
+            {
+                ViewBag.ErrorMessage = "請填寫完整欄位";
+                return View(model);
+            }
+
+            if (model.NewPassword != model.ConfirmPassword)
+            {
+                ViewBag.ErrorMessage = "兩次密碼不一致";
+                return View(model);
+            }
+
+            if (model.NewPassword.Length < 6)
+            {
+                ViewBag.ErrorMessage = "密碼長度至少 6 位";
+                return View(model);
+            }
+
+            // 執行變更密碼
+            var salt = GenerateSalt();
+            var hash = ComputeSha256Hash(model.NewPassword, salt);
+            SystemUser user = null;
+
+            if (model.SelectedRole == "athlete")
+            {
+                var athlete = _db.AthleteProfile.FirstOrDefault(a => a.AthleteNumber == model.SelectedAccount);
+                if (athlete == null)
+                {
+                    ViewBag.ErrorMessage = "找不到該選手帳號";
+                    return View(model);
+                }
+                user = _db.SystemUser.Find(athlete.UserID);
+            }
+            else if (model.SelectedRole == "trainer")
+            {
+                var trainer = _db.TrainerProfile.FirstOrDefault(t => t.ATName == model.SelectedAccount);
+                if (trainer == null)
+                {
+                    ViewBag.ErrorMessage = "找不到該防護員帳號";
+                    return View(model);
+                }
+                user = _db.SystemUser.Find(trainer.UserID);
+            }
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "找不到對應的使用者";
+                return View(model);
+            }
+
+            user.Salt = salt;
+            user.Password = hash;
+
+            _db.SystemLog.Add(new SystemLog
+            {
+                UserID = user.UserID,
+                Action = "管理員變更密碼",
+                Target = user.UserName,
+                Message = $"由管理員重設 {model.SelectedRole} 密碼",
+                LogDate = DateTime.Now
+            });
+
+            _db.SaveChanges();
+
+            TempData["SuccessMessage"] = "密碼重設成功";
+
+            return RedirectToAction("ChangeUsersPwd");
+        }
+        #endregion
+
         #region 密碼加密 + Salt
         private static string GenerateSalt()
         {
