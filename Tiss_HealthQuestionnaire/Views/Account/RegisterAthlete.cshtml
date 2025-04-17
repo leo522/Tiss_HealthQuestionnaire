@@ -47,10 +47,21 @@
                 <label for="BirthDate" title="出生日期">出生日期</label>
                 <input type="date" class="form-control" id="BirthDate" name="birthDate" placeholder="請輸入出生日期" required>
             </div>
+            @*<div class="form-group">
+                    <label for="SportSpecialization" title="運動專項">運動專項</label>
+                    <input type="text" class="form-control" id="SportSpecialization" name="sportSpecialization" placeholder="請輸入運動專項" required>
+                </div>*@
             <div class="form-group">
-                <label for="SportSpecialization" title="運動專項">運動專項</label>
-                <input type="text" class="form-control" id="SportSpecialization" name="sportSpecialization" placeholder="請輸入運動專項" required>
+                <label for="SportSpecialization" title="運動專項">運動項目</label>
+                <select class="form-control" id="SportSpecialization" name="sportSpecialization" required>
+                    <option value="">請選擇運動項目</option>
+                    @foreach (var item in ViewBag.SportTypeList as List<SelectListItem>)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
             </div>
+
             <button type="submit" class="btn btn-primary btn-block" title="註冊">註冊</button>
         </form>
         @if (ViewBag.ErrorMessage != null)

@@ -43,6 +43,14 @@ namespace Tiss_HealthQuestionnaire.Controllers
         public ActionResult RegisterAthlete()
         {
             ViewBag.GenderList = _db.Gender.ToList();
+
+            ViewBag.SportTypeList = _db.SportTypeCategory
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.SportTypeID.ToString(),
+                        Text = s.SportTypeName
+                    }).ToList();
+
             return View();
         }
 
@@ -51,10 +59,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
         {
             try
             {
+                ViewBag.GenderList = _db.Gender.ToList();
+                ViewBag.SportTypeList = _db.SportTypeCategory.Select(s => new SelectListItem
+                {
+                    Value = s.SportTypeID.ToString(),
+                    Text = s.SportTypeName
+                }).ToList();
+
                 if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 {
                     ViewBag.ErrorMessage = "密碼長度至少為6位數";
                     ViewBag.GenderList = _db.Gender.ToList();
+                    ViewBag.TeamList = _db.Team.OrderBy(t => t.TeamName).Select(t => new SelectListItem { Value = t.TeamID.ToString(), Text = t.TeamName }).ToList();
                     return View();
                 }
 
@@ -62,6 +78,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "此帳號名稱已被使用";
                     ViewBag.GenderList = _db.Gender.ToList();
+                    ViewBag.TeamList = _db.Team.OrderBy(t => t.TeamName).Select(t => new SelectListItem { Value = t.TeamID.ToString(), Text = t.TeamName }).ToList();
                     return View();
                 }
 
@@ -70,6 +87,7 @@ namespace Tiss_HealthQuestionnaire.Controllers
                 {
                     ViewBag.ErrorMessage = "電子郵件格式不正確";
                     ViewBag.GenderList = _db.Gender.ToList();
+                    ViewBag.TeamList = _db.Team.OrderBy(t => t.TeamName).Select(t => new SelectListItem { Value = t.TeamID.ToString(), Text = t.TeamName }).ToList();
                     return View();
                 }
 
@@ -91,7 +109,10 @@ namespace Tiss_HealthQuestionnaire.Controllers
                     _db.SystemUser.Add(systemUser);
                     _db.SaveChanges();
 
+                    var sportTypeId = int.Parse(sportSpecialization);
+
                     var userId = systemUser.UserID;
+
                     var athlete = new AthleteProfile
                     {
                         UserID = userId,
@@ -102,6 +123,18 @@ namespace Tiss_HealthQuestionnaire.Controllers
                         SportSpecialization = sportSpecialization
                     };
                     _db.AthleteProfile.Add(athlete);
+                    _db.SaveChanges();
+
+                    var athleteId = athlete.AthleteID;
+                    var team = _db.Team.FirstOrDefault(t => t.SportTypeID.ToString() == sportSpecialization);
+                    if (team != null)
+                    {
+                        _db.AthleteTeam.Add(new AthleteTeam
+                        {
+                            AthleteID = athleteId,
+                            TeamID = team.TeamID
+                        });
+                    }
 
                     _db.SystemLog.Add(new SystemLog
                     {
