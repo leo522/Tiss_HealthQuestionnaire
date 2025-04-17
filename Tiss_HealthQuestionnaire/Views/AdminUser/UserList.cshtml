@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_HealthLayout.cshtml";
 }
 <link rel="icon" href="~/img/favicon.svg" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
 <div class="flex h-screen bg-gray-100">
     <!-- 側邊導航欄 -->
@@ -102,7 +101,14 @@
                             新增選手
                         </a>
                     </div>
-
+                    @using (Html.BeginForm("UserList", "AdminUser", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="mb-6 flex items-center gap-4">
+                            <label for="teamId" class="font-medium text-gray-700">選擇隊伍：</label>
+                            @Html.DropDownList("teamId", (SelectList)ViewBag.TeamList, "請選擇隊伍", new { @class = "form-control", onchange = "this.form.submit();" })
+                        </div>
+                    }
                     <div class="mb-6">
                         <div class="relative">
                             <input type="text" id="searchInput" class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" placeholder="搜尋使用者...">

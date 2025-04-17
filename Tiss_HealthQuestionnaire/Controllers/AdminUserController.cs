@@ -19,18 +19,61 @@ namespace Tiss_HealthQuestionnaire.Controllers
         #region 使用者清單總覽
         public ActionResult UserList()
         {
-            var users = _db.SystemUser
-                .Select(u => new AdminUserViewModel
-                {
-                    UserID = u.UserID,
-                    UserName = u.UserName,
-                    Email = u.Email,
-                    RoleName = u.UserRole.RoleName,
-                    IsActive = u.IsActive,
-                    CreatedDate = u.CreatedDate
-                }).ToList();
+            var users = GetFilteredUsers(null);
+
+            ViewBag.TeamList = new SelectList(_db.Team.OrderBy(t => t.TeamName).ToList(), "TeamID", "TeamName");
 
             return View(users);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserList(int? teamId)
+        {
+            try
+            {
+                var users = GetFilteredUsers(teamId);
+
+                ViewBag.TeamList = new SelectList(_db.Team.OrderBy(t => t.TeamName).ToList(), "TeamID", "TeamName", teamId);
+
+                return View(users);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region 角色清單篩選方法
+        private List<AdminUserViewModel> GetFilteredUsers(int? teamId)
+        {
+            var userQuery = _db.SystemUser.AsQueryable();
+
+            if (teamId.HasValue)
+            {
+                var athleteIds = _db.AthleteTeam.Where(at => at.TeamID == teamId.Value).Select(at => at.AthleteID).ToList();
+
+                var userIds = _db.AthleteProfile.Where(ap => athleteIds.Contains(ap.AthleteID)).Select(ap => ap.UserID).ToList();
+
+                userQuery = userQuery.Where(u => u.UserRole.RoleName == "athlete" && userIds.Contains(u.UserID));
+            }
+            else
+            {
+                userQuery = userQuery.Where(u => u.UserRole.RoleName != "athlete");
+            }
+
+            var result = userQuery.Select(u => new AdminUserViewModel
+            {
+                UserID = u.UserID,
+                UserName = u.UserName,
+                Email = u.Email,
+                RoleName = u.UserRole.RoleName,
+                IsActive = u.IsActive,
+                CreatedDate = u.CreatedDate
+            }).ToList();
+
+            return result;
         }
         #endregion
 
