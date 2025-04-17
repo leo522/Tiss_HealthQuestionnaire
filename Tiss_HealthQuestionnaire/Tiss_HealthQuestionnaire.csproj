@@ -2539,9 +2539,11 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\500.jpg" />
+    <Content Include="img\backing.png" />
     <Content Include="img\favicon.svg" />
     <Content Include="img\logo.svg" />
     <Content Include="img\Mantenance.jpg" />
+    <Content Include="img\NSTClogo.png" />
     <Content Include="img\success.jpg" />
     <Content Include="img\WebError.jpg" />
     <Content Include="img\問卷404.jpg" />
